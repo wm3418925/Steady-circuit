@@ -1,0 +1,471 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (P.R.C.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\稳恒电路.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""l.chs\\afxres.rc""          // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\idr_main.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MY_DIALOG DIALOGEX 0, 0, 459, 331
+STYLE DS_CENTER | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_VISIBLE | 
+    WS_CAPTION | WS_VSCROLL | WS_HSCROLL | WS_SYSMENU | WS_THICKFRAME
+EXSTYLE WS_EX_ACCEPTFILES | WS_EX_APPWINDOW
+MENU IDR_MAINFRAME
+FONT 9, "宋体", 0, 0, 0x1
+BEGIN
+END
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 170, 195
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "简要使用说明 (具体使用说明见 ""使用说明书"" )"
+FONT 14, "宋体"
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,12,170,20,20
+    LTEXT           "稳恒电路 1.2 版    版权所有 (C)2011",IDC_STATIC,12,140,
+                    141,8,SS_NOPREFIX
+    LTEXT           "安徽师范大学 学生 : 学号0715075",IDC_STATIC,28,153,125,
+                    8
+    LTEXT           "遇到错误和意见建议，欢迎指出。",IDC_STATIC,38,166,115,8
+    LTEXT           "适用于稳恒电流教学,下面是基本使用方法:",IDC_STATIC,8,10,
+                    159,12
+    LTEXT           "添加需要的物体(电阻,电源,灯泡,电容器,开关),添加结点帮助连线;",
+                    IDC_STATIC,8,25,159,18
+    LTEXT           "给各个元件填入必须的电学信息,编辑成为想要的电路.(注意保存,方便下次使用);",
+                    IDC_STATIC,8,46,159,18
+    LTEXT           "点击菜单计算,计算电流大小和方向,右击导线和电学元件可以查看电流大小和方向;",
+                    IDC_STATIC,8,67,159,19
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,0,130,170,1
+    LTEXT           "联系人邮箱 ：591593903@qq.com",IDC_STATIC,38,179,115,8
+    LTEXT           "在保持输入限制下,可以点击导线或结点,设置为计算电势差起点.按照提示字符1,2,3,4可以移动计算电势差结束位置.点击菜单显示电势差,可以查看2个位置的电势差.",
+                    IDC_STATIC,8,89,159,33
+END
+
+IDD_PROPERTY DIALOG DISCARDABLE  0, 0, 37, 14
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+FONT 10, "System"
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,1,0,6,6
+    PUSHBUTTON      "取消",IDCANCEL,11,0,6,6
+    LTEXT           "",IDC_STATIC_MODELTEXT,23,0,8,8
+END
+
+IDD_SEARCH DIALOG DISCARDABLE  0, 0, 217, 143
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "查找"
+FONT 10, "System"
+BEGIN
+    DEFPUSHBUTTON   "查找下一个",IDOK,8,121,46,13
+    PUSHBUTTON      "取消",IDCANCEL,65,121,46,13
+    LTEXT           "查找范围:",IDC_STATIC,8,8,35,8
+    LTEXT           "查找依据:",IDC_STATIC,8,24,35,8
+    COMBOBOX        IDC_COMBO_CTRL_TYPE,178,8,36,55,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO_SEARCH_RANGE,54,8,57,62,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO_SEARCH_BY,54,24,57,30,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "电学元件类型:",IDC_STATIC,121,8,51,8
+    LTEXT           "关键字:",IDC_STATIC,8,40,27,8
+    CONTROL         "全词匹配",IDC_ISWHOLEWORD,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,8,56,48,10
+    CONTROL         "区分大小写",IDC_ISMATCHCASE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,8,74,56,10
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,8,92,103,21
+    LTEXT           "方向:",IDC_STATIC,11,98,19,8
+    CONTROL         "前一个",IDC_DIRPRE,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP,35,98,36,10
+    CONTROL         "后一个",IDC_DIRNEXT,"Button",BS_AUTORADIOBUTTON,74,98,
+                    35,10
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,12
+ PRODUCTVERSION 1,2,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080404b0"
+        BEGIN
+            VALUE "Comments", "适用于初中高中物理电学教学。版权所有，严禁用于商业用途。有BUG，欢迎指出。联系人 QQ ：591593903\0"
+            VALUE "CompanyName", "安徽师范大学 07计本学生 ,学号0715075\0"
+            VALUE "FileDescription", "稳恒电路 基础类应用程序\0"
+            VALUE "FileVersion", "1, 0, 0, 12\0"
+            VALUE "InternalName", "稳恒电路\0"
+            VALUE "LegalCopyright", "版权所有 (C) 2010\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "稳恒电路.EXE\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "稳恒电路 应用程序\0"
+            VALUE "ProductVersion", "1, 2, 0, 0\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_SOURCE              BITMAP  DISCARDABLE     "res\\bmp00001.bmp"
+IDB_RESIST              BITMAP  DISCARDABLE     "res\\bmp00002.bmp"
+IDB_CAPA                BITMAP  DISCARDABLE     "res\\bmp00004.bmp"
+IDB_BULB                BITMAP  DISCARDABLE     "res\\bmp00003.bmp"
+IDB_CRUN                BITMAP  DISCARDABLE     "res\\bitmap2.bmp"
+IDB_SMALLCRUN           BITMAP  DISCARDABLE     "res\\bitmap1.bmp"
+IDB_BULB_SHINE          BITMAP  DISCARDABLE     "res\\bmp10003.bmp"
+IDB_SWITCH              BITMAP  DISCARDABLE     "res\\bmp00005.bmp"
+IDB_SWITCH_CLOSE        BITMAP  DISCARDABLE     "res\\bmp10005.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU PRELOAD DISCARDABLE 
+BEGIN
+    POPUP "文件(&F)"
+    BEGIN
+        MENUITEM "新建(&N)\tCtrl+N",            IDM_FILE_NEW
+        MENUITEM "打开(&O)\tCtrl+O",            IDM_FILE_OPEN
+        MENUITEM "保存(&S)\tCtrl+S",            IDM_FILE_SAVE
+        MENUITEM "另存为(&A)",                  IDM_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+        MENUITEM "保存电路图片(&P)",            IDM_SAVEASPIC
+        MENUITEM SEPARATOR
+        MENUITEM "退出(&E)\tALT+F4",            IDM_EXIT
+    END
+    POPUP "编辑(&E)"
+    BEGIN
+        MENUITEM "撤销(&U)\tCtrl+Z",            IDM_UNDO, GRAYED
+        MENUITEM "重复(&R)\tCtrl+Y",            IDM_REDO, GRAYED
+        MENUITEM SEPARATOR
+        POPUP "添加物体(&A)"
+        BEGIN
+            MENUITEM "添加结点(&P)",                IDM_ADD_CRUNODE
+            MENUITEM "添加电源(&S)",                IDM_ADD_SOURCE
+            MENUITEM "添加电阻(&R)",                IDM_ADD_RESIST
+            MENUITEM "添加灯泡(&B)",                IDM_ADD_BULB
+            MENUITEM "添加电容器(&C)",              IDM_ADD_CAPA
+            MENUITEM "添加开关(&W)",                IDM_ADD_SWITCH
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "剪切选定物体(&T)\tCtrl+X",    IDM_FOCUSBODY_CUT, GRAYED
+        MENUITEM "复制选定物体(&C)\tCtrl+C",    IDM_FOCUSBODY_COPY, GRAYED
+        MENUITEM "删除选定物体(&D)\tDelete",    IDM_FOCUSBODY_DELETE, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "选定物体属性(&P)\tCtrl+P",    IDM_FOCUSBODY_PROPERTY
+        , GRAYED
+        MENUITEM "电学元件类型(&T)\tCtrl+T",    IDM_FOCUSBODY_CHANGECTRLSTYLE
+        , GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "顺时针旋转90°(&1)\tCtrl+1",  IDM_FOCUSBODY_ROTATE1
+        , GRAYED
+        MENUITEM "旋转180°(&2)\tCtrl+2",       IDM_FOCUSBODY_ROTATE2
+        , GRAYED
+        MENUITEM "逆时针旋转90°(&3)\tCtrl+3",  IDM_FOCUSBODY_ROTATE3
+        , GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "查找(F)\tCtrl+F",             IDM_SEARCH
+    END
+    POPUP "设置(&S)"
+    BEGIN
+        MENUITEM "方向键灵敏度(&S)",            IDM_SETMOVEBODYSENSE
+        MENUITEM "导线合并临界距离(&L)",        IDM_SETLEAVEOUTDIS
+        MENUITEM SEPARATOR
+        MENUITEM "标签颜色(&T)",                IDM_SETTEXTCOLOR
+        MENUITEM "选定导线样式(&1)",            IDM_SETFOCUSLEADSTYLE
+        MENUITEM "选定结点颜色(&2)",            IDM_SETFOCUSCRUNCOLOR
+        MENUITEM "选定电学元件颜色(&3)",        IDM_SETFOCUSCTRLCOLOR
+    END
+    POPUP "测试(&T)"
+    BEGIN
+        MENUITEM "保存电路(&T)",                IDM_SAVETOTEXTFILE
+        MENUITEM "计算过程(&C)",                IDM_MAKEMAP
+    END
+    POPUP "计算(&C)"
+    BEGIN
+        MENUITEM "计算电流(&I)\tCtrl+I",        IDM_COUNTI
+        MENUITEM "查看电流(&L)\tCtrl+L",        IDM_FOCUSBODY_SHOWELEC
+        , GRAYED
+        MENUITEM "显示电势差(&U)\tCtrl+U",      IDM_SHOWPRESSURE, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "解除输入限制(&R)\tCtrl+R",    IDM_RELEASE, GRAYED
+    END
+    POPUP "帮助(&H)"
+    BEGIN
+        MENUITEM "简要说明(&A)",                IDM_ABOUT
+    END
+END
+
+IDR_BODYPRO MENU DISCARDABLE 
+BEGIN
+    POPUP "物体属性"
+    BEGIN
+        MENUITEM "剪切(&T)\tCtrl+X",            IDM_POSBODY_CUT
+        MENUITEM "复制(&C)\tCtrl+C",            IDM_POSBODY_COPY
+        MENUITEM "删除(&D)\tDelete",            IDM_POSBODY_DELETE
+        MENUITEM SEPARATOR
+        MENUITEM "属性(&P)\tCtrl+P",            IDM_POSBODY_PROPERTY
+    END
+END
+
+IDR_LEADPRO MENU DISCARDABLE 
+BEGIN
+    POPUP "导线属性"
+    BEGIN
+        MENUITEM "导线颜色(&C)\tCtrl+P",        IDM_POSBODY_PROPERTY
+        MENUITEM "删除导线(&D)\tDelete",        IDM_DELETELEAD
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_CURSOR_HAND         CURSOR  DISCARDABLE     "res\\hand.cur"
+IDC_CURSOR_SHOWCONNECT  CURSOR  DISCARDABLE     "res\\showConnect.cur"
+IDC_CURSOR_HORZ_LEAD    CURSOR  DISCARDABLE     "res\\horzLead.cur"
+IDC_CURSOR_VERT_LEAD    CURSOR  DISCARDABLE     "res\\vertLead.cur"
+IDC_CURSOR_ADDCRUN      CURSOR  DISCARDABLE     "res\\addCrun.cur"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_SEARCH DLGINIT
+BEGIN
+    IDC_COMBO_SEARCH_RANGE, 0x403, 9, 0
+0xf9cb, 0xd0d3, 0xefce, 0xe5cc, "\000" 
+    IDC_COMBO_SEARCH_RANGE, 0x403, 5, 0
+0xbcb5, 0xdfcf, "\000" 
+    IDC_COMBO_SEARCH_RANGE, 0x403, 5, 0
+0xe1bd, 0xe3b5, "\000" 
+    IDC_COMBO_SEARCH_RANGE, 0x403, 13, 0
+0xf9cb, 0xd0d3, 0xe7b5, 0xa7d1, 0xaad4, 0xfebc, "\000" 
+    IDC_COMBO_SEARCH_RANGE, 0x403, 13, 0
+0xb3c4, 0xd6d6, 0xe7b5, 0xa7d1, 0xaad4, 0xfebc, "\000" 
+    IDC_COMBO_SEARCH_BY, 0x403, 11, 0
+0xfbc3, 0xc6b3, 0xb128, 0xc7ea, 0x29a9, "\000" 
+    IDC_COMBO_SEARCH_BY, 0x403, 5, 0
+0xf2d0, 0xc5ba, "\000" 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_MY_DIALOG, DIALOG
+    BEGIN
+        RIGHTMARGIN, 448
+        BOTTOMMARGIN, 320
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_ABOUTBOX            "关于 稳恒电路(&A)..."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_FOCUSBODY_COPY      "复制选定物体\n复制以后可以随时使用\n选定物体的颜色区别于其他物体"
+    IDM_FOCUSBODY_CUT       "剪切选定物体\n剪切以后可以随时使用\n选定物体的颜色区别于其他物体"
+    IDM_FOCUSBODY_DELETE    "删除选定物体\n删除物体会删除连接他的导线"
+    IDM_POSBODY_CUT         "剪切右击物体\n剪切以后可以随时使用"
+    IDM_POSBODY_COPY        "复制右击物体\n复制以后可以随时使用"
+    IDM_POSBODY_DELETE      "删除右击物体\n删除物体会删除连接他的导线"
+    IDM_ADD_CRUNODE         "设置添加结点，下次鼠标点击添加"
+    IDM_ADD_SOURCE          "设置添加电源，下次鼠标点击添加"
+    IDM_ADD_RESIST          "设置添加电阻器，下次鼠标点击添加"
+    IDM_ADD_BULB            "设置添加小灯泡，下次鼠标点击添加"
+    IDM_ADD_CAPA            "设置添加电容器，下次鼠标点击添加"
+    IDM_ADD_SWITCH          "设置添加开关，下次鼠标点击添加"
+    IDM_UNDO                "撤销上次操作\n快捷键""CTRL+Z"""
+    IDM_REDO                "重复上次操作\n快捷键""CTRL+Y"""
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_PASTE               "粘贴复制或者剪切的物体,快捷键""CTRL+V""\n程序的剪切板是独立的"
+    IDM_POSBODY_ROTATE1     "顺时针旋转电学元件90°"
+    IDM_POSBODY_ROTATE2     "旋转电学元件180°"
+    IDM_POSBODY_ROTATE3     "逆时针旋转电学元件90°"
+    IDM_POSBODY_SHOWELEC    "显示流过物体的电流大小和方向"
+    IDM_DELETELEAD          "删除导线"
+    IDM_POSBODY_CHANGECTRLSTYLE 
+                            "改变电学元件的类型，新类型会丢失原来的类型数据\n比如电源转换为灯泡会丢失原来的电压电阻"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_POSBODY_PROPERTY    "查看和修改物体的属性"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_COUNTI              "计算电流\n计算电流后会进入编辑限制状态，保证电路不会更改\n继续编辑选择菜单""解除输入限制"""
+    IDM_SHOWPRESSURE        "显示您选择的电势差起始和结尾电势差(U0-U1)\n起始和结尾物体都是紫色,结尾物体周围有数字"
+    IDM_RELEASE             "解除输入限制,可以继续编辑电路"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_FILE_SAVE_AS        "另存为电路文件(.wan)"
+    IDM_EXIT                "退出程序\n退出之前建议保存文件\n文件保存电路信息和设置信息"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_FILE_NEW            "新建电路文件(.wan)"
+    IDM_FILE_OPEN           "打开电路文件(.wan)"
+    IDM_FILE_SAVE           "保存电路文件(.wan)"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_SETMOVEBODYSENSE    "设置方向键移动物体的距离"
+    IDM_SETLEAVEOUTDIS      "设置一段导线,平行相邻两段的融合临界距离"
+    IDM_SETTEXTCOLOR        "设置标签(名称)的颜色"
+    IDM_SETFOCUSCRUNCOLOR   "设置选定结点颜色\n不能设置为黑色,黑色失去了意义"
+    IDM_SETFOCUSCTRLCOLOR   "设置选定电学元件颜色\n不能设置为黑色"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_ABOUT               "简要说明,详细说明请查看""使用说明书"""
+END
+
+#endif    // Chinese (P.R.C.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE 4, 2
+#pragma code_page(936)
+#endif //_WIN32
+#include "res\稳恒电路.rc2"  // non-Microsoft Visual C++ edited resources
+#include "l.chs\afxres.rc"          // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
