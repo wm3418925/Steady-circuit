@@ -1278,12 +1278,27 @@ void LEAD::SaveToTextFile(FILE * fp)const
 {
 	ASSERT(fp != NULL);
 
-	const LEADSTEP * temp = &coord;
-	fprintf(fp, "导线 Init Order = %d :\n", GetInitOrder());
+	const LEADSTEP * temp;
+
+	//fprintf(fp, "导线 Init Order = %d :\n", GetInitOrder());
+
+	fprintf(fp, "x:[");
+	temp = &coord;
 	while(temp)
 	{
-		fprintf(fp, "x=%d,y=%d  ", temp->pos.x, temp->pos.y);
+		fprintf(fp, "%d", temp->pos.x);
 		temp = temp->next;
+		if (temp) fputc(',', fp);
 	}
-	fputc('\n', fp);
+	fprintf(fp, "],\n");
+
+	fprintf(fp, "y:[");
+	temp = &coord;
+	while(temp)
+	{
+		fprintf(fp, "%d", temp->pos.y);
+		temp = temp->next;
+		if (temp) fputc(',', fp);
+	}
+	fprintf(fp, "],\n");
 }

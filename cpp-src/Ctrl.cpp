@@ -396,30 +396,30 @@ void CTRL::SaveToTextFile(FILE * fp)const
 {
 	ASSERT(fp != NULL);
 
-	fprintf(fp, "name == %s\n", name);
-	fprintf(fp, "Init Order  == %d\n", GetInitOrder());
+	//fprintf(fp, "name == %s\n", name);
+	//fprintf(fp, "Init Order  == %d\n", GetInitOrder());
 
 	switch(style)
 	{
 	case SOURCE:
-		fprintf(fp, "%s	%f\n", DATA_NOTE[DATA_NOTE_PRESS], ((SOURCEDATA*)data)->pressure);
-		fprintf(fp, "%s	%f\n", DATA_NOTE[DATA_NOTE_RESIST], ((SOURCEDATA*)data)->resist);
+		fprintf(fp, "press:%f,", ((SOURCEDATA*)data)->pressure);
+		fprintf(fp, "resist:%f,", ((SOURCEDATA*)data)->resist);
 		break;
 	case RESIST:
-		fprintf(fp, "%s	%f\n", DATA_NOTE[DATA_NOTE_RESIST], ((RESISTDATA*)data)->resist);
+		fprintf(fp, "resist:%f,", ((RESISTDATA*)data)->resist);
 		break;
 	case BULB:
-		fprintf(fp, "%s	%f\n", DATA_NOTE[DATA_NOTE_RATING], ((BULBDATA*)data)->rating);
-		fprintf(fp, "%s	%f\n", DATA_NOTE[DATA_NOTE_RESIST], ((BULBDATA*)data)->resist);
+		fprintf(fp, "rating:%f,", ((BULBDATA*)data)->rating);
+		fprintf(fp, "resist:%f,", ((BULBDATA*)data)->resist);
 		break;
 	case CAPA:
-		fprintf(fp, "%s	%f\n",DATA_NOTE[DATA_NOTE_CAPA],((CAPACITYDATA*)data)->capa);
+		fprintf(fp, "capa:%f,", ((CAPACITYDATA*)data)->capa);
 		break;
 	case SWITCH:
 		if(((SWITCHDATA*)data)->onOff)
-			fputs("Switch is on.\n", fp);
+			fputs("closed:true,", fp);
 		else
-			fputs("Switch is off.\n", fp);
+			fputs("closed:false,", fp);
 		break;
 	}
 }

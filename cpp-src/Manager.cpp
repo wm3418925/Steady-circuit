@@ -3746,45 +3746,55 @@ void Manager::SaveCircuitInfoToTextFile()
 	FILE * fp = fopen("D:\\data.txt", "w");
 	if(fp == NULL) return;
 
-	fprintf(fp, "\n结点信息--------------------------------------------------------\n");
-	fprintf(fp, "crun_num==%d\n\n", crunNum);
+	fprintf(fp, "cruns:[\n");
 	for(i=0; i<crunNum; i++)
 	{
-		fprintf(fp, "\tcrun[%d]->x==%d,y==%d\n", i, crun[i]->coord.x, crun[i]->coord.y);
-		fprintf(fp, "\tname==%s\n", crun[i]->name);
+		fprintf(fp, "{id:%d,x:%d,y:%d,", crun[i]->GetInitOrder(), crun[i]->coord.x, crun[i]->coord.y);
+		fprintf(fp, "name:\"%s\",lead:[", crun[i]->name);
 		for(int j=0; j<4; j++)
 		{
-			if(crun[i]->lead[j]) fprintf(fp, "lead[%d]==%d\t", j, crun[i]->lead[j]->GetInitOrder());
-			else fprintf(fp, "lead[%d]==NULL\t", j);
+			if(crun[i]->lead[j]) fprintf(fp, "%d", crun[i]->lead[j]->GetInitOrder());
+			else fprintf(fp, "null");
+			if (j!=4-1) fprintf(fp, ",");
 		}
-		fputc('\n', fp);fputc('\n', fp);
-	}
+		fprintf(fp, "]}\n");
 
-	fprintf(fp, "\n导线信息--------------------------------------------------------\n");
-	fprintf(fp, "lead_num==%d\n\n", leadNum);
+		if (i != crunNum-1) fprintf(fp, ",");
+	}
+	fprintf(fp, "],\n");
+
+	fprintf(fp, "leads:[\n");
 	for(i=0; i<leadNum; ++i)
 	{
+		fprintf(fp, "{id:%d,", (int)lead[i]->GetInitOrder());
 		lead[i]->SaveToTextFile(fp);
-		fprintf(fp, "color==%d\n", (int)lead[i]->color);
-		fprintf(fp, "第1点连接  : ");	lead[i]->conBody[0].SaveToTextFile(fp);
-		fprintf(fp, "第2点连接  : ");	lead[i]->conBody[1].SaveToTextFile(fp);
-		fputc('\n', fp);
-	}
+		fprintf(fp, "color:%d,", (int)lead[i]->color);
+		fprintf(fp, "conBody[");	lead[i]->conBody[0].SaveToTextFile(fp);
+		fprintf(fp, ",");	lead[i]->conBody[1].SaveToTextFile(fp);
+		fprintf(fp, "]}\n");
 
-	fprintf(fp,"\n控件信息--------------------------------------------------------\n");
-	fprintf(fp, "ctrl_num==%d\n\n", ctrlNum);
+		if (i != leadNum-1) fprintf(fp, ",");
+	}
+	fprintf(fp, "],\n");
+
+	fprintf(fp, "ctrls:[\n", ctrlNum);
+	const char * ctrlStyleStr[] = {"source","resistance","bulb","capa","switch"}; 
 	for(i=0; i<ctrlNum; ++i)
 	{
-		fprintf(fp, "ctrl[%d]-> x=%d, y=%d\n", i, ctrl[i]->coord.x, ctrl[i]->coord.y);
-		if(ctrl[i]->lead[0])fprintf(fp, "左边连接到lead[%d]\n", ctrl[i]->lead[0]->GetInitOrder());
-		else fputs("左边没有连接\n", fp);
-		if(ctrl[i]->lead[1])fprintf(fp, "右边连接到lead[%d]\n", ctrl[i]->lead[1]->GetInitOrder());
-		else fputs("右边没有连接\n", fp);
-		fprintf(fp, "style = %d\n", ctrl[i]->GetStyle());
+		fprintf(fp, "{id:%d,x:%d,y:%d,", ctrl[i]->GetInitOrder(), ctrl[i]->coord.x, ctrl[i]->coord.y);
+		fprintf(fp, "name:\"%s\",lead:[", ctrl[i]->name);
+		if(ctrl[i]->lead[0])fprintf(fp, "%d,", ctrl[i]->lead[0]->GetInitOrder());
+		else fputs("-1,", fp);
+		if(ctrl[i]->lead[1])fprintf(fp, "%d],", ctrl[i]->lead[1]->GetInitOrder());
+		else fputs("-1],", fp);
 
 		ctrl[i]->SaveToTextFile(fp);
-		fputc('\n', fp);
+
+		fprintf(fp, "style:\"%s\"}", ctrlStyleStr[ctrl[i]->GetStyle()]);
+		
+		if (i != leadNum-1) fprintf(fp, ",");
 	}
+	fprintf(fp, "]\n}\n");
 
 	fclose(fp);
 }
