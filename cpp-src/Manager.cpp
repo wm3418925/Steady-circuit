@@ -3746,7 +3746,7 @@ void Manager::SaveCircuitInfoToTextFile()
 	FILE * fp = fopen("D:\\data.txt", "w");
 	if(fp == NULL) return;
 
-	fprintf(fp, "cruns:[\n");
+	fprintf(fp, "{\ncruns:[\n");
 	for(i=0; i<crunNum; i++)
 	{
 		fprintf(fp, "{id:%d,x:%d,y:%d,", crun[i]->GetInitOrder(), crun[i]->coord.x, crun[i]->coord.y);
@@ -3754,7 +3754,7 @@ void Manager::SaveCircuitInfoToTextFile()
 		for(int j=0; j<4; j++)
 		{
 			if(crun[i]->lead[j]) fprintf(fp, "%d", crun[i]->lead[j]->GetInitOrder());
-			else fprintf(fp, "null");
+			else fprintf(fp, "-1");
 			if (j!=4-1) fprintf(fp, ",");
 		}
 		fprintf(fp, "]}\n");
