@@ -116,8 +116,8 @@ ComputeMgr.CollectCircuitInfo = function()
 	ComputeMgr.groupNum = 0;	//组数,同一组的在一个连通图中,分组建立方程
 	ComputeMgr.circuNum = 0;	//线路数
 	group = new Array(ComputeMgr.crunNum);		//组数不会超过crunNum
-	ComputeMgr.crun2 = genrateArrayWithElementInitFunc(CRUN2.createNew, ComputeMgr.crunNum);		//用于计算的结点
-	ComputeMgr.circu = genrateArrayWithElementInitFunc(CIRCU.createNew, ComputeMgr.crunNum*2);	//线路数不会超过crunNum*2
+	ComputeMgr.crun2 = genrateArrayWithElementInitFunc(CRUN2.CreateNew, ComputeMgr.crunNum);		//用于计算的结点
+	ComputeMgr.circu = genrateArrayWithElementInitFunc(CIRCU.CreateNew, ComputeMgr.crunNum*2);	//线路数不会超过crunNum*2
 	for (i=ComputeMgr.crunNum-1; i>=0; --i)group[i] = i;
 
 	//2，检索电路,以结点为头和尾-----------------------------------
@@ -337,7 +337,7 @@ ComputeMgr.CreateEquation = function()
 	ComputeMgr.maps = maps = new Array(ComputeMgr.groupNum);
 	for (i=ComputeMgr.groupNum-1; i>=0; --i)
 	{
-		maps[i] = CRUNMAP.createNew(mapsSizeArray[i]);
+		maps[i] = CRUNMAP.CreateNew(mapsSizeArray[i]);
 		maps[i].size = 0;
 	}
 	for (i=crunNum-1; i>=0; --i) if (ComputeMgr.crun2[i].group >= 0)
@@ -399,7 +399,7 @@ ComputeMgr.CreateEquation = function()
 		size = nowMap.size;
 
 		outPutBuf = new Array(nowMap.circuNum+1);	//初始化输出到方程的数组
-		ComputeMgr.equation[group] = Equation.createNew(size, nowMap.circuNum);	//初始化方程类
+		ComputeMgr.equation[group] = Equation.CreateNew(size, nowMap.circuNum);	//初始化方程类
 
 		for (j=size-2; j>=0; --j) for (k=size-1; k>j; --k)
 		{
@@ -513,7 +513,7 @@ ComputeMgr.CreateEquation = function()
 			i = CONVERT(j, k, size);
 			if (nowMap.direct[i] <= 0) continue;
 			
-			roads = genrateArrayWithElementInitFunc(ROAD.createNew, size);
+			roads = genrateArrayWithElementInitFunc(ROAD.CreateNew, size);
 			ZeroArray(outPutBuf);	//缓存清零
 
 			//获得路径,建立方程

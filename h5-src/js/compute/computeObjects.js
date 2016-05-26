@@ -21,7 +21,7 @@ UNCOUNTABLEELEC	= 8;	//含有无法计算的分支
 var CRUN2 = {
 	//CIRCU * c[4];     //指向的线路
 	//int group;        //属于的群,由连接的导线,节点,控件组成
-	createNew: function() {
+	CreateNew: function() {
         var c = new Array(4);
 		c[0] = c[1] = c[2] = c[3] = null;   
 
@@ -31,7 +31,7 @@ var CRUN2 = {
 };
 
 var CIRCU = {	//线路,不包括结点,由结点连接,电流方向为from->to
-	createNew: function() {
+	CreateNew: function() {
         var newObj = {
             eleNum:0,				//线路电流编号,默认编号是地址编号
 	        pressure:0,		        //起点与终点的电势差(U0 - U1)
@@ -64,7 +64,7 @@ var CIRCU = {	//线路,不包括结点,由结点连接,电流方向为from->to
 };
 
 var ROADSTEP = { //2个结点之间路径上的一个结点
-    createNew: function() {
+    CreateNew: function() {
         var newObj = {
 	        crunNum:0,
 	        next:null,
@@ -75,7 +75,7 @@ var ROADSTEP = { //2个结点之间路径上的一个结点
 };
 
 var ROAD = {
-    createNew: function() {
+    CreateNew: function() {
         var newObj = {
 	        first:null,
 	        last:null
@@ -101,11 +101,11 @@ var ROAD = {
 	    if (road.first == null) return;
 
 	    temp = road.first;
-	    now = newRoad.first = ROADSTEP.createNew();
+	    now = newRoad.first = ROADSTEP.CreateNew();
 	    now.crunNum = temp.crunNum;
 	    now.pre = null;
 	    if (temp.next) {
-		    now.next = ROADSTEP.createNew();
+		    now.next = ROADSTEP.CreateNew();
 		    pre = now;
 		    now = now.next;
 		    now.pre = pre;
@@ -120,7 +120,7 @@ var ROAD = {
 	    while (temp) {
 		    now.crunNum = temp.crunNum;
 		    if (temp.next) {
-			    now.next = ROADSTEP.createNew();
+			    now.next = ROADSTEP.CreateNew();
 			    pre = now;
 			    now = now.next;
 			    now.pre = pre;
@@ -166,13 +166,13 @@ var ROAD = {
 	    var now;
 
 	    if (road.first) {
-		    road.last.next = now = ROADSTEP.createNew();
+		    road.last.next = now = ROADSTEP.CreateNew();
 		    now.pre = road.last;
 		    road.last = now;
 		    now.crunNum = crunNum;
 		    now.next = null;
 	    } else {
-		    road.first = road.last = now = ROADSTEP.createNew();
+		    road.first = road.last = now = ROADSTEP.CreateNew();
 		    now.crunNum = crunNum;
 		    now.next = now.pre = null;
 	    }
@@ -195,7 +195,7 @@ var CRUNMAP = {
 	int * dir;				//连接2个结点的第一个线路相对于序号小的结点的导线编号(0,1,2,3)
     */
 
-    createNew: function(size) {
+    CreateNew: function(size) {
         var bufSize = size*(size-1)/2;
         var newObj = {
             "size":         size,
@@ -220,7 +220,7 @@ var Equation = {
 	int * c;			//c[i]存储第i行第一个不是0的数
 */
 
-	createNew: function(/*int */crunNum, /*int */eleNum)
+	CreateNew: function(/*int */crunNum, /*int */eleNum)
     {
 	    gotoRow = 0;
 	    m = -1;
@@ -279,21 +279,21 @@ var Equation = {
     {
 	    /*int*/var i, j;
 
-	    fprintf(fp, "已输入到 第 %d 行 .\n\n", gotoRow);
+	    console.log("已输入到 第 %d 行 .\n\n", gotoRow);
 
-	    fputs("x数组(解):\n", fp);
-	    for(i=0; i<n-1; ++i) fprintf(fp, "%6.2f ", x[i]);
+	    console.log("x数组(解):\n");
+	    for(i=0; i<n-1; ++i) console.log("%6.2f ", x[i]);
 
-	    fputs("\n\nc数组(某一行第一个不是0的数的位置):\n", fp);
-	    for(i=0; i<m; ++i) fprintf(fp, "%3d ", c[i]);
+	    console.log("\n\nc数组(某一行第一个不是0的数的位置):\n");
+	    for(i=0; i<m; ++i) console.log("%3d ", c[i]);
 
-	    fputs("\n\na数组(主数组,存储n元一次方程):\n", fp);
+	    console.log("\n\na数组(主数组,存储n元一次方程):\n");
 	    for(i=0; i<m; ++i)
 	    {
-		    for(j=0; j<n; ++j) fprintf(fp, "%6.2f ", a[i][j]);
-		    fputc('\n', fp);
+		    for(j=0; j<n; ++j) console.log("%6.2f ", a[i][j]);
+		    console.log('\n');
 	    }
-	    fputc('\n', fp);
+	    console.log('\n');
     },
 
     /*ELEC_STATE*/Count: function()
