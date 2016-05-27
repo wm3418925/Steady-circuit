@@ -130,6 +130,7 @@ CRUN * CRUN::Clone(CLONE_PURPOSE cp)const
 //拷贝控件结点信息到新的结点
 {
 	CRUN * newCrun = new CRUN(num, coord);
+	newCrun->isPaintName = newCrun->isPaintName;
 	strcpy(newCrun->name, name);
 
 	if(CLONE_FOR_USE != cp)
