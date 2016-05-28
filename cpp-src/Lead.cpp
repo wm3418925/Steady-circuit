@@ -93,12 +93,6 @@ unsigned long LEAD::GetInitOrder()const
 	return initNum;
 }
 
-void CTRL::ResetInitNum()
-//重置初始化次序
-{
-	CTRL::s_initNum = 1;
-}
-
 void LEAD::ResetInitNum()
 //重置初始化次序
 {

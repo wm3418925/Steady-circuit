@@ -151,6 +151,12 @@ unsigned long CTRL::GetInitOrder()const
 	return initNum;
 }
 
+void CTRL::ResetInitNum()
+//重置初始化次序
+{
+	CTRL::s_initNum = 1;
+}
+
 BODY_TYPE CTRL::GetStyle()const
 //获得控件类型
 {
