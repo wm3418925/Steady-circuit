@@ -33,14 +33,14 @@ var CRUN2 = {
 var CIRCU = {	//线路,不包括结点,由结点连接,电流方向为from->to
 	CreateNew: function() {
         var newObj = {
-            eleNum:0,				//线路电流编号,默认编号是地址编号
+            eleIndex:0,				//线路电流编号,默认编号是地址编号
 	        pressure:0,		        //起点与终点的电势差(U0 - U1)
 	        resistance:0,		    //电阻(一般>=0, <0代表无穷大,断路)
 	        elecDir:NORMALELEC,		//电流状态标记
 	        elec:0,     			//线路电流大小
 	        from:null, to:null,		//起点和终点结点
 	        dirFrom:0, dirTo:0,	    //起点和终点结点的方向
-	        numInGroup:0			//在群组内的序号
+	        indexInGroup:0			//在群组内的序号
          };
 
          return newObj;
@@ -66,9 +66,9 @@ var CIRCU = {	//线路,不包括结点,由结点连接,电流方向为from->to
 var ROADSTEP = { //2个结点之间路径上的一个结点
     CreateNew: function() {
         var newObj = {
-	        crunNum:0,
-	        next:null,
-	        pre:null
+	        crunIndex:0,
+			pre:null,
+	        next:null
         };
         return newObj;
     }
@@ -102,7 +102,7 @@ var ROAD = {
 
 	    temp = road.first;
 	    now = newRoad.first = ROADSTEP.CreateNew();
-	    now.crunNum = temp.crunNum;
+	    now.crunIndex = temp.crunIndex;
 	    now.pre = null;
 	    if (temp.next) {
 		    now.next = ROADSTEP.CreateNew();
@@ -118,7 +118,7 @@ var ROAD = {
 	    }
 
 	    while (temp) {
-		    now.crunNum = temp.crunNum;
+		    now.crunIndex = temp.crunIndex;
 		    if (temp.next) {
 			    now.next = ROADSTEP.CreateNew();
 			    pre = now;
@@ -138,7 +138,7 @@ var ROAD = {
     HaveRoadPoint: function(road, point) {
 	    var now = road.first;
 	    while (now) {
-		    if(now.crunNum == point)
+		    if(now.crunIndex == point)
 			    return true;
 		    now = now.next;
 	    }
@@ -152,8 +152,8 @@ var ROAD = {
 	    var pre = road.first;
 	    var now = pre.next;
 	    while (now != null) {
-		    if (pre.crunNum == from && now.crunNum == to 
-			    || pre.crunNum == to && now.crunNum == from)
+		    if (pre.crunIndex == from && now.crunIndex == to 
+			    || pre.crunIndex == to && now.crunIndex == from)
 			    return true;
 		    pre = now;
 		    now = now.next;
@@ -162,18 +162,18 @@ var ROAD = {
     },
 
     //在最后加入结点
-    InsertPointAtTail: function(road, crunNum) {
+    InsertPointAtTail: function(road, crunIndex) {
 	    var now;
 
 	    if (road.first) {
 		    road.last.next = now = ROADSTEP.CreateNew();
 		    now.pre = road.last;
 		    road.last = now;
-		    now.crunNum = crunNum;
+		    now.crunIndex = crunIndex;
 		    now.next = null;
 	    } else {
 		    road.first = road.last = now = ROADSTEP.CreateNew();
-		    now.crunNum = crunNum;
+		    now.crunIndex = crunIndex;
 		    now.next = now.pre = null;
 	    }
     }
@@ -182,8 +182,8 @@ var ROAD = {
 //包含每两个结点之间是否直接连接
 var CRUNMAP = {
 	/*int size;			//包含的结点数
-	int circuNum;		//包含的线路数
-	int * crunTOorder;	//离散的结点编号对应到 0 ~ size-1
+	int circuitCount;	//包含的线路数
+	int * crunOrderMap;	//离散的结点编号对应到 0 ~ size-1
 
 	//-1 有间接连接 ;
 	//0  无连接(目前没有找到路径) ;
@@ -191,19 +191,19 @@ var CRUNMAP = {
 	//2  有多条路径,或者只有一条有直接连接,但是找到了路径 ;
 	char *	direct;
 
-	CIRCU ** firstcircu;	//连接2个结点的第一个线路
+	CIRCU ** firstCircuit;	//连接2个结点的第一个线路
 	int * dir;				//连接2个结点的第一个线路相对于序号小的结点的导线编号(0,1,2,3)
     */
 
     CreateNew: function(size) {
         var bufSize = size*(size-1)/2;
         var newObj = {
-            "size":         size,
-            "circuNum":     0,
-	        "crunTOorder":  new Array(size),
-            "direct":       new Array(bufSize),
-		    "firstcircu":   new Array(bufSize),
-		    "dir":          new Array(bufSize)
+            "size":			size,
+            "circuitCount":	0,
+	        "crunOrderMap":	new Array(size),
+            "direct":		new Array(bufSize),
+		    "firstCircuit":	new Array(bufSize),
+		    "dir":			new Array(bufSize)
         };
         return newObj;
     }
@@ -220,8 +220,7 @@ var Equation = {
 	int * c;			//c[i]存储第i行第一个不是0的数
 */
 
-	CreateNew: function(/*int */crunNum, /*int */eleNum)
-    {
+	CreateNew: function(/*int */crunCount, /*int */eleCount) {
 	    gotoRow = 0;
 	    m = -1;
 	    n = 0;
@@ -229,12 +228,12 @@ var Equation = {
 	    x = NULL;
 	    a = NULL;
 
-	    if(eleNum <= 0 || crunNum <= 0) return;	//无需初始化
+	    if(eleCount <= 0 || crunCount <= 0) return;	//无需初始化
 
-	    m = eleNum + crunNum - 1;
-	    n = eleNum + 1;
+	    m = eleCount + crunCount - 1;
+	    n = eleCount + 1;
 
-	    x = new Array(eleNum);
+	    x = new Array(eleCount);
 	    zeroArray(x);
 	
 	    c = new Array(m);

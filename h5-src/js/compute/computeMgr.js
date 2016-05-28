@@ -56,9 +56,8 @@ ComputeMgr.CombineGroup = function(
 ComputeMgr.PutIntoBuf = function(/*int */fromGroup,
 							/*int */toGroup,
 							/*CRUNMAP * */map,
-							/*double * */buf)
+							/*double * */buf) {
 //将from,to结点第一个连接线路的电流电阻放入缓冲
-{
 	/*int*/var i;
 	/*CIRCU **/var c;
 	ASSERT(map != null && buf != null);
@@ -68,17 +67,14 @@ ComputeMgr.PutIntoBuf = function(/*int */fromGroup,
 	else
 		i = CONVERT(toGroup, fromGroup, map.size);
 
-	c = map.firstcircu[i];
+	c = map.firstCircuit[i];
 
-	if (indexOfArray(ComputeMgr.crun2, c.from) == map.crunTOorder[fromGroup])
-	{
-		buf[ c.numInGroup ]  =  c.resistance;
-		buf[ map.circuNum ] += c.pressure;
-	}
-	else 
-	{
-		buf[ c.numInGroup ]  = -c.resistance;
-		buf[ map.circuNum ] -= c.pressure;
+	if (indexOfArray(ComputeMgr.crun2, c.from) == map.crunOrderMap[fromGroup]) {
+		buf[ c.indexInGroup ]  =  c.resistance;
+		buf[ map.circuitCount ] += c.pressure;
+	} else {
+		buf[ c.indexInGroup ]  = -c.resistance;
+		buf[ map.circuitCount ] -= c.pressure;
 	}
 };
 
@@ -94,9 +90,9 @@ ComputeMgr.CreateCrunEquation = function(/*CRUN2 * */inputCrun2, /*double * */bu
 		++ connectNum;
 
 		if (inputCrun2 == tempCircu[i].from && i == tempCircu[i].dirFrom)
-			buf[tempCircu[i].numInGroup] += 1;
+			buf[tempCircu[i].indexInGroup] += 1;
 		else
-			buf[tempCircu[i].numInGroup] -= 1;
+			buf[tempCircu[i].indexInGroup] -= 1;
 	}
 
 	return connectNum;
@@ -108,20 +104,20 @@ ComputeMgr.CollectCircuitInfo = function()
 	/*Pointer*/var now, pre;	//当前的物体
 	/*int*/var dir;			    //下一个物体在当前物体的方向
 	/*int*/var i, j, tempVar;	//循环变量
-	/*int*/var endCrunNum;		//线路结束结点编号
+	/*int*/var endCrunIndex;	//线路结束结点编号
 	/*int **/var group;		    //物体分组
 	/*int*/var groupSize = 0;	//当前使用的group数组的大小
 
 	//1,初始化----------------------------------------------------
-	ComputeMgr.groupNum = 0;	//组数,同一组的在一个连通图中,分组建立方程
-	ComputeMgr.circuNum = 0;	//线路数
-	group = new Array(ComputeMgr.crunNum);		//组数不会超过crunNum
-	ComputeMgr.crun2 = genrateArrayWithElementInitFunc(CRUN2.CreateNew, ComputeMgr.crunNum);		//用于计算的结点
-	ComputeMgr.circu = genrateArrayWithElementInitFunc(CIRCU.CreateNew, ComputeMgr.crunNum*2);	//线路数不会超过crunNum*2
-	for (i=ComputeMgr.crunNum-1; i>=0; --i)group[i] = i;
+	ComputeMgr.groupCount = 0;	//组数,同一组的在一个连通图中,分组建立方程
+	ComputeMgr.circuitCount = 0;	//线路数
+	group = new Array(ComputeMgr.crunCount);		//组数不会超过ComputeMgr.crunCount
+	ComputeMgr.crun2 = genrateArrayWithElementInitFunc(CRUN2.CreateNew, ComputeMgr.crunCount);		//用于计算的结点
+	ComputeMgr.circu = genrateArrayWithElementInitFunc(CIRCU.CreateNew, ComputeMgr.crunCount*2);	//线路数不会超过ComputeMgr.crunCount*2
+	for (i=ComputeMgr.crunCount-1; i>=0; --i)group[i] = i;
 
 	//2，检索电路,以结点为头和尾-----------------------------------
-	for (i=ComputeMgr.crunNum-1; i>=0; --i) if (crun[i].GetConnectNum() >= 3)
+	for (i=ComputeMgr.crunCount-1; i>=0; --i) if (crun[i].GetConnectNum() >= 3)
 	//满足结点连接导线个数至少是3,否则结点不需要检索
 	//0--结点是孤立的;1--结点断路;2--结点相当于导线
 		for (j=0; j<4; ++j) if (crun[i].lead[j] && ComputeMgr.crun2[i].c[j] == null)
@@ -130,8 +126,8 @@ ComputeMgr.CollectCircuitInfo = function()
 		now = lead[j];
 		dir = true1AndFalse0(now.conBody[0] == crun[i]);
 
-		ComputeMgr.circu[ComputeMgr.circuNum].resistance = 0;	//电阻清0
-		ComputeMgr.circu[ComputeMgr.circuNum].pressure   = 0;	//电压清0
+		ComputeMgr.circu[ComputeMgr.circuitCount].resistance = 0;	//电阻清0
+		ComputeMgr.circu[ComputeMgr.circuitCount].pressure   = 0;	//电压清0
 
 		while (true)	//遇到下一个连接物体不是2个的结点结束
 		{
@@ -142,11 +138,11 @@ ComputeMgr.CollectCircuitInfo = function()
 				//处理控件
 				if (now.resist < 0 || now.lead[dir] == null)	//断路了
 				{
-					ComputeMgr.circu[ComputeMgr.circuNum].resistance = -1;
+					ComputeMgr.circu[ComputeMgr.circuitCount].resistance = -1;
 					break;
 				}
-				ComputeMgr.circu[ComputeMgr.circuNum].resistance += now.resist;
-				ComputeMgr.circu[ComputeMgr.circuNum].pressure   += GetPress(now, 1-dir);	//方向相反
+				ComputeMgr.circu[ComputeMgr.circuitCount].resistance += now.resist;
+				ComputeMgr.circu[ComputeMgr.circuitCount].pressure   += now.GetPressure(1-dir);	//方向相反
 
 				//到下一个物体
 				now = pre.lead[dir];
@@ -175,7 +171,7 @@ ComputeMgr.CollectCircuitInfo = function()
 					}
 					else if (tempVar == 1)	//断路
 					{
-						ComputeMgr.circu[ComputeMgr.circuNum].resistance = -1;
+						ComputeMgr.circu[ComputeMgr.circuitCount].resistance = -1;
 						break;	//断路返回
 					}
 					else
@@ -202,46 +198,46 @@ ComputeMgr.CollectCircuitInfo = function()
 			}
 		}//while (true)
 
-		if (ComputeMgr.circu[ComputeMgr.circuNum].resistance >= 0)
+		if (ComputeMgr.circu[ComputeMgr.circuitCount].resistance >= 0)
 		{
-			endCrunNum = now.num;
+			endCrunIndex = now.num;
 
-			ComputeMgr.circu[ComputeMgr.circuNum].eleNum = circuNum;
-			ComputeMgr.circu[ComputeMgr.circuNum].from = ComputeMgr.crun2[i];
-			ComputeMgr.circu[ComputeMgr.circuNum].dirFrom = j;
-			ComputeMgr.circu[ComputeMgr.circuNum].to = ComputeMgr.crun2[endCrunNum];
-			ComputeMgr.circu[ComputeMgr.circuNum].dirTo = dir;
-			ComputeMgr.crun2[endCrunNum].c[dir] = ComputeMgr.crun2[i].c[j] = ComputeMgr.circu[ComputeMgr.circuNum];
-			++ ComputeMgr.circuNum;	//不是断路,计入有效线路
+			ComputeMgr.circu[ComputeMgr.circuitCount].eleIndex = ComputeMgr.circuitCount;
+			ComputeMgr.circu[ComputeMgr.circuitCount].from = ComputeMgr.crun2[i];
+			ComputeMgr.circu[ComputeMgr.circuitCount].dirFrom = j;
+			ComputeMgr.circu[ComputeMgr.circuitCount].to = ComputeMgr.crun2[endCrunIndex];
+			ComputeMgr.circu[ComputeMgr.circuitCount].dirTo = dir;
+			ComputeMgr.crun2[endCrunIndex].c[dir] = ComputeMgr.crun2[i].c[j] = ComputeMgr.circu[ComputeMgr.circuitCount];
+			++ ComputeMgr.circuitCount;	//不是断路,计入有效线路
 
 			if (ComputeMgr.crun2[i].group >= 0)
 			{
-				if (ComputeMgr.crun2[endCrunNum].group >= 0 && group[ComputeMgr.crun2[i].group] == group[ComputeMgr.crun2[endCrunNum].group])
+				if (ComputeMgr.crun2[endCrunIndex].group >= 0 && group[ComputeMgr.crun2[i].group] == group[ComputeMgr.crun2[endCrunIndex].group])
 					continue;
-				if (ComputeMgr.crun2[endCrunNum].group >= 0)	//group合并
+				if (ComputeMgr.crun2[endCrunIndex].group >= 0)	//group合并
 				{
-					CombineGroup(   group[ComputeMgr.crun2[endCrunNum].group],
+					CombineGroup(   group[ComputeMgr.crun2[endCrunIndex].group],
 									group[ComputeMgr.crun2[i].group],
 									group,
 									groupSize);
-					--ComputeMgr.groupNum;	//合并
+					--ComputeMgr.groupCount;	//合并
 				}
 				else	//继承连接物体的group
 				{
-					ComputeMgr.crun2[endCrunNum].group = ComputeMgr.crun2[i].group;
+					ComputeMgr.crun2[endCrunIndex].group = ComputeMgr.crun2[i].group;
 				}
 			}
 			else
 			{
-				if (ComputeMgr.crun2[endCrunNum].group>=0)	//继承连接物体的group
+				if (ComputeMgr.crun2[endCrunIndex].group>=0)	//继承连接物体的group
 				{
-					ComputeMgr.crun2[i].group=ComputeMgr.crun2[endCrunNum].group;
+					ComputeMgr.crun2[i].group=ComputeMgr.crun2[endCrunIndex].group;
 				}
 				else	//建立新的group
 				{
-					ComputeMgr.crun2[i].group = ComputeMgr.crun2[endCrunNum].group = groupSize;
+					ComputeMgr.crun2[i].group = ComputeMgr.crun2[endCrunIndex].group = groupSize;
 					++groupSize;
-					++ComputeMgr.groupNum;	//建立新的
+					++ComputeMgr.groupCount;	//建立新的
 				}
 			}
 
@@ -251,7 +247,7 @@ ComputeMgr.CollectCircuitInfo = function()
 
 	//3,将group排列成从0开始的连续数字-----------------------------------
 	dir = 0;
-	for (i=ComputeMgr.groupNum-1; i>=0; --i)
+	for (i=ComputeMgr.groupCount-1; i>=0; --i)
 	{
 		for (; dir<groupSize; ++dir) if (group[dir] >= 0) break;
 		for (j=dir+1; j<groupSize; ++j) if (group[j]==group[dir]) group[j] = -i - 1;
@@ -262,9 +258,9 @@ ComputeMgr.CollectCircuitInfo = function()
 
 	//4,以上WmMgr.crun2的group不是真正的组队标志,而是指向group数组的指针-------
 	//现在转化为真正的组队标志
-	for (i=crunNum-1; i>=0; --i) if (ComputeMgr.crun2[i].group >= 0) ComputeMgr.crun2[i].group = group[ComputeMgr.crun2[i].group];
+	for (i=ComputeMgr.crunCount-1; i>=0; --i) if (ComputeMgr.crun2[i].group >= 0) ComputeMgr.crun2[i].group = group[ComputeMgr.crun2[i].group];
 
-	//delete [] group;
+	group = null;//delete [] group;
 };
 
 /*bool*/ComputeMgr.FindRoad = function(/*const CRUNMAP * */map, /*ROAD * */roads, /*int */j, /*int */k)
@@ -316,7 +312,7 @@ ComputeMgr.CollectCircuitInfo = function()
 
 
 	state = interFlag[k];
-	//delete [] interFlag;
+	interFlag = null;//delete [] interFlag;
 	return state;	//返回是否找到 j.k 的线路
 }
 
@@ -329,35 +325,35 @@ ComputeMgr.CreateEquation = function()
 
 	//1 初始化maps---------------------------------------------------------
 	//1.1 初始化每个group的crun成员个数
-    var mapsSizeArray = new Array(ComputeMgr.groupNum);
+    var mapsSizeArray = new Array(ComputeMgr.groupCount);
     zeroArray(mapsSizeArray);
-    for (i=crunNum-1; i>=0; --i) if (ComputeMgr.crun2[i].group >= 0)
+    for (i=ComputeMgr.crunCount-1; i>=0; --i) if (ComputeMgr.crun2[i].group >= 0)
 		++ mapsSizeArray[ComputeMgr.crun2[i].group];
 
-	ComputeMgr.maps = maps = new Array(ComputeMgr.groupNum);
-	for (i=ComputeMgr.groupNum-1; i>=0; --i)
+	ComputeMgr.maps = maps = new Array(ComputeMgr.groupCount);
+	for (i=ComputeMgr.groupCount-1; i>=0; --i)
 	{
 		maps[i] = CRUNMAP.CreateNew(mapsSizeArray[i]);
 		maps[i].size = 0;
 	}
-	for (i=crunNum-1; i>=0; --i) if (ComputeMgr.crun2[i].group >= 0)
+	for (i=ComputeMgr.crunCount-1; i>=0; --i) if (ComputeMgr.crun2[i].group >= 0)
 	{
 		nowMap = maps[ComputeMgr.crun2[i].group];
-		nowMap.crunTOorder[nowMap.size] = i;
+		nowMap.crunOrderMap[nowMap.size] = i;
 		++nowMap.size;
 	}
 
 	//1.2 初始化每个group的WmMgr.circu成员个数
-	for (i=ComputeMgr.groupNum-1; i>=0; --i) maps[i].circuNum = 0;
-	for (i=ComputeMgr.circuNum-1; i>=0; --i)
+	for (i=ComputeMgr.groupCount-1; i>=0; --i) maps[i].circuitCount = 0;
+	for (i=ComputeMgr.circuitCount-1; i>=0; --i)
 	{
 		nowMap = maps[ComputeMgr.circu[i].from.group];
-		ComputeMgr.circu[i].numInGroup = nowMap.circuNum;
-		++nowMap.circuNum;
+		ComputeMgr.circu[i].indexInGroup = nowMap.circuitCount;
+		++nowMap.circuitCount;
 	}
 
 	//1.3 初始化每个group的direct成员个数
-	for (group=ComputeMgr.groupNum-1; group>=0; --group)
+	for (group=ComputeMgr.groupCount-1; group>=0; --group)
 	{
 		nowMap = maps[group];
 		size = nowMap.size;
@@ -365,12 +361,12 @@ ComputeMgr.CreateEquation = function()
 		for (j=size-2; j>=0; --j) for (k=size-1; k>j; --k)
 		{
 			i = CONVERT(j, k, size);
-			nowMap.direct[i] = GetCrun2ConnectNum(nowMap.crunTOorder[j], nowMap.crunTOorder[k]);
+			nowMap.direct[i] = GetCrun2ConnectNum(nowMap.crunOrderMap[j], nowMap.crunOrderMap[k]);
 		}
 	}
 
 	//1.4  初始化连接2个结点的第一个线路
-	for (group=ComputeMgr.groupNum-1; group>=0; --group)
+	for (group=ComputeMgr.groupCount-1; group>=0; --group)
 	{
 		nowMap = maps[group];
 		size = nowMap.size;
@@ -378,8 +374,8 @@ ComputeMgr.CreateEquation = function()
 		for (j=size-2; j>=0; --j) for (k=size-1; k>j; --k)
 		{
 			i = CONVERT(j, k, size);
-            var crunfc = GetCrun2FirstCircu(nowMap.crunTOorder[j], nowMap.crunTOorder[k]);
-			nowMap.firstcircu[i] = crunfc.c;
+            var crunfc = GetCrun2FirstCircu(nowMap.crunOrderMap[j], nowMap.crunOrderMap[k]);
+			nowMap.firstCircuit[i] = crunfc.c;
             nowMap.dir[i] = crunfc.dir;
 		}
 	}
@@ -392,14 +388,14 @@ ComputeMgr.CreateEquation = function()
 	/*CRUN2 **/var crunNum1, crunNum2;
 	/*int*/var connect, firstConnect, nextConnect;
 
-	ComputeMgr.equation = new Array(ComputeMgr.groupNum);	//申请指针
-	for (group=ComputeMgr.groupNum-1; group>=0; --group)
+	ComputeMgr.equation = new Array(ComputeMgr.groupCount);	//申请指针
+	for (group=ComputeMgr.groupCount-1; group>=0; --group)
 	{
 		nowMap = maps[group];
 		size = nowMap.size;
 
-		outPutBuf = new Array(nowMap.circuNum+1);	//初始化输出到方程的数组
-		ComputeMgr.equation[group] = Equation.CreateNew(size, nowMap.circuNum);	//初始化方程类
+		outPutBuf = new Array(nowMap.circuitCount+1);	//初始化输出到方程的数组
+		ComputeMgr.equation[group] = Equation.CreateNew(size, nowMap.circuitCount);	//初始化方程类
 
 		for (j=size-2; j>=0; --j) for (k=size-1; k>j; --k)
 		{
@@ -407,20 +403,20 @@ ComputeMgr.CreateEquation = function()
 			i = CONVERT(j, k, size);
 			if (nowMap.direct[i] < 2) continue;
 
-			crunNum1 = ComputeMgr.crun2[nowMap.crunTOorder[j]];
-			crunNum2 = ComputeMgr.crun2[nowMap.crunTOorder[k]];
+			crunNum1 = ComputeMgr.crun2[nowMap.crunOrderMap[j]];
+			crunNum2 = ComputeMgr.crun2[nowMap.crunOrderMap[k]];
 			firstConnect = nowMap.dir[i];	//第一个连线
 
 			//获取并保存部分线路数据
 			if (crunNum1.c[firstConnect].from == crunNum2)
 			{
-				outPutBuf[crunNum1.c[firstConnect].numInGroup] =
+				outPutBuf[crunNum1.c[firstConnect].indexInGroup] =
 					-crunNum1.c[firstConnect].resistance;
 				saveForBuf = -crunNum1.c[firstConnect].pressure;
 			}
 			else
 			{
-				outPutBuf[crunNum1.c[firstConnect].numInGroup] =
+				outPutBuf[crunNum1.c[firstConnect].indexInGroup] =
 					crunNum1.c[firstConnect].resistance;
 				saveForBuf = crunNum1.c[firstConnect].pressure;
 			}
@@ -440,19 +436,19 @@ ComputeMgr.CreateEquation = function()
 					++ nextConnect;
 
 				//2,将电阻,电压计入
-				outPutBuf[nowMap.circuNum] = saveForBuf;	//写入保存的数据
+				outPutBuf[nowMap.circuitCount] = saveForBuf;	//写入保存的数据
 				if (crunNum1.c[nextConnect].from == crunNum2)
 				{
-					outPutBuf[crunNum1.c[nextConnect].numInGroup] =
+					outPutBuf[crunNum1.c[nextConnect].indexInGroup] =
 						crunNum1.c[nextConnect].resistance;
-					outPutBuf[nowMap.circuNum] += 
+					outPutBuf[nowMap.circuitCount] += 
 						crunNum1.c[nextConnect].pressure;
 				}
 				else
 				{
-					outPutBuf[crunNum1.c[nextConnect].numInGroup] =
+					outPutBuf[crunNum1.c[nextConnect].indexInGroup] =
 						- crunNum1.c[nextConnect].resistance;
-					outPutBuf[nowMap.circuNum] -= 
+					outPutBuf[nowMap.circuitCount] -= 
 						crunNum1.c[nextConnect].pressure;
 				}
 
@@ -460,51 +456,51 @@ ComputeMgr.CreateEquation = function()
 				ComputeMgr.equation[group].InputARow(outPutBuf);
 
 				//4,恢复
-				outPutBuf[crunNum1.c[nextConnect].numInGroup] = 0;
+				outPutBuf[crunNum1.c[nextConnect].indexInGroup] = 0;
 
 				//5,下一个
 				++ nextConnect;
 			}
 		}
 
-		//delete [] outPutBuf;	//释放缓存
+		outPutBuf = null;//delete [] outPutBuf;	//释放缓存
 	}//for (group
 
 
 	//3 仅包含一个结点的环路,直接计算结果放入方程  ----------------------
-	for (i=ComputeMgr.circuNum-1; i>=0; --i) if (ComputeMgr.circu[i].from == ComputeMgr.circu[i].to)
+	for (i=ComputeMgr.circuitCount-1; i>=0; --i) if (ComputeMgr.circu[i].from == ComputeMgr.circu[i].to)
 	{
 		//初始化缓存
 		group  = ComputeMgr.circu[i].from.group;
 		nowMap = maps[group];
-		outPutBuf = new Array(nowMap.circuNum+1);	//输出到方程的缓存
+		outPutBuf = new Array(nowMap.circuitCount+1);	//输出到方程的缓存
 		ZeroArray(outPutBuf);	//缓存清零
 
 		if (IsFloatZero(ComputeMgr.circu[i].resistance) && IsFloatZero(ComputeMgr.circu[i].pressure))
 		{//电阻电压都是0;设电阻为1,电压为0
-			outPutBuf[ComputeMgr.circu[i].numInGroup]	= 1;
-			outPutBuf[nowMap.circuNum]		= 0;
+			outPutBuf[ComputeMgr.circu[i].indexInGroup]	= 1;
+			outPutBuf[nowMap.circuitCount]		= 0;
 		}
 		else
 		{//正常情况或短路情况
-			outPutBuf[ComputeMgr.circu[i].numInGroup]	= ComputeMgr.circu[i].resistance;
-			outPutBuf[nowMap.circuNum]		= ComputeMgr.circu[i].pressure;
+			outPutBuf[ComputeMgr.circu[i].indexInGroup]	= ComputeMgr.circu[i].resistance;
+			outPutBuf[nowMap.circuitCount]		= ComputeMgr.circu[i].pressure;
 		}
 
 		ComputeMgr.equation[group].InputARow(outPutBuf);	//输入方程的一行
 
-		//delete [] outPutBuf;	//释放缓存
+		outPutBuf = null;//delete [] outPutBuf;	//释放缓存
 	}
 
 
 	//4	有直接线路连接的2个结点, 形成一个环路，		---------------------
 	//	该环路包含一次这个连接它们的线路,			---------------------
 	//	由环路信息得出方程 .						---------------------
-	for (group=ComputeMgr.groupNum-1; group>=0; --group)
+	for (group=ComputeMgr.groupCount-1; group>=0; --group)
 	{
 		nowMap = maps[group];
 		size = nowMap.size;
-		outPutBuf = new Array(nowMap.circuNum+1);	//输出到方程的缓存
+		outPutBuf = new Array(nowMap.circuitCount+1);	//输出到方程的缓存
 		/*ROAD **/var roads ;
 
 		for (j=size-2; j>=0; --j) for (k=size-1; k>j; --k)
@@ -525,18 +521,18 @@ ComputeMgr.CreateEquation = function()
 				if (prep == null) continue;	//出错
 
 				nowp = prep.next;
-				PutIntoBuf(j, prep.crunNum, nowMap, outPutBuf);
+				PutIntoBuf(j, prep.crunIndex, nowMap, outPutBuf);
 
 				while (nowp != null)
 				{
-					PutIntoBuf(prep.crunNum, nowp.crunNum, nowMap, outPutBuf);
+					PutIntoBuf(prep.crunIndex, nowp.crunIndex, nowMap, outPutBuf);
 
 					//下一个
 					prep = nowp;
 					nowp = nowp.next;
 				}
 
-				PutIntoBuf(prep.crunNum, k, nowMap, outPutBuf);
+				PutIntoBuf(prep.crunIndex, k, nowMap, outPutBuf);
 
 				PutIntoBuf(k, j, nowMap, outPutBuf);	//最后加入j到k的第一个线路
 
@@ -545,34 +541,34 @@ ComputeMgr.CreateEquation = function()
 			else if (1 == nowMap.direct[i])	//没有路径,该导线电流是0
 			{
 				//导线电流设为0
-				outPutBuf[nowMap.firstcircu[i].numInGroup] = 1;
-				outPutBuf[nowMap.circuNum] = 0;
+				outPutBuf[nowMap.firstCircuit[i].indexInGroup] = 1;
+				outPutBuf[nowMap.circuitCount] = 0;
 
 				ComputeMgr.equation[group].InputARow(outPutBuf);	//输入方程
 			}
 
-			//delete [] roads;
+			roads = null;//delete [] roads;
 		}
 
-		//delete [] outPutBuf;	//释放缓存
+		outPutBuf = null;//delete [] outPutBuf;	//释放缓存
 	}//for (group
 
 
 	//5形成结点方程------------------------------------------------------
-	for (group=ComputeMgr.groupNum-1; group>=0; --group)
+	for (group=ComputeMgr.groupCount-1; group>=0; --group)
 	{
 		nowMap = maps[group];
 		size = nowMap.size;
-		outPutBuf = new Array(nowMap.circuNum+1);	//输出到方程的缓存
+		outPutBuf = new Array(nowMap.circuitCount+1);	//输出到方程的缓存
 
 		for (k=size-2; k>=0; --k)	//只需输入k-1个结点方程
 		{
 			ZeroArray(outPutBuf);	//缓存清零
-			if (CreateCrunEquation(ComputeMgr.crun2[nowMap.crunTOorder[k]], outPutBuf))	//建立方程
+			if (CreateCrunEquation(ComputeMgr.crun2[nowMap.crunOrderMap[k]], outPutBuf))	//建立方程
 				ComputeMgr.equation[group].InputARow(outPutBuf);	//输入方程
 		}
 
-		//delete [] outPutBuf;	//释放缓存
+		outPutBuf = null;//delete [] outPutBuf;	//释放缓存
 	}
 };
 
@@ -723,7 +719,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 			if (UNKNOWNELEC == flag)	//获得电压电阻
 			{
 				resist	+= now.resist;
-				press	+= now.GetPress(1-dir);	//方向相反
+				press	+= now.GetPressure(1-dir);	//方向相反
 			}
 			else if (NORMALELEC == flag)	//放入正常电流信息
 			{
@@ -811,7 +807,7 @@ ComputeMgr.DistributeAnswer = function()
 	for (i=ctrlNum-1; i>=0; --i) ctrl[i].elecDir = UNKNOWNELEC;
 
 	//2,将WmMgr.circu的结果分布到每个线路中的物体
-	for (i=ComputeMgr.circuNum-1; i>=0; --i)
+	for (i=ComputeMgr.circuitCount-1; i>=0; --i)
 	{
 		//1,找到线路的起点,end做临时变量
 		end = crun[indexOfArray(ComputeMgr.crun2, ComputeMgr.circu[i].from)];
@@ -828,10 +824,9 @@ ComputeMgr.DistributeAnswer = function()
 	}
 
 	//清除WmMgr.circu,ComputeMgr.crun2的内存
-	//delete [] ComputeMgr.circu;
-	//delete [] ComputeMgr.crun2;
 	ComputeMgr.circu = null;
-	ComputeMgr.circuNum = 0;
+	ComputeMgr.circuitCount = 0;
+	ComputeMgr.crun2 = null;
 
 	//3,找到孤立控件,将电流信息设置为断路
 	for (i=ctrlNum-1; i>=0; --i) if (!ctrl[i].lead[0] && !ctrl[i].lead[1])
@@ -855,7 +850,7 @@ ComputeMgr.DistributeAnswer = function()
 		//3,遍历线路
 		TravelCircuitFindOpenBody(now, dir);
 	}
-	for (i=crunNum-1; i>=0; --i) if (1 == crun[i].GetConnectNum())
+	for (i=ComputeMgr.crunCount-1; i>=0; --i) if (1 == crun[i].GetConnectNum())
 	{
 		//1,找到线路的起点
 		for (dir=0;dir<4;dir++) if (crun[i].lead[dir]) break;
@@ -940,33 +935,33 @@ ComputeMgr.ComputeElec = function()
 	CollectCircuitInfo();	//遍历一次电路,获得每个群组的线路电学信息
 	CreateEquation();		//根据线路信息,分群组建立方程
 
-	for (group=0; group<ComputeMgr.groupNum; ++group)	//分群组计算
+	for (group=0; group<ComputeMgr.groupCount; ++group)	//分群组计算
 	{
 		flag = ComputeMgr.equation[group].Count();	//计算方程
 
 		if (NORMALELEC == flag)	//线路正常
 		{
 			ans = ComputeMgr.equation[group].GetAnswer();	//获得结果数组指针
-			for (i=ComputeMgr.circuNum-1; i>=0; --i) if (group == ComputeMgr.circu[i].from.group)
+			for (i=ComputeMgr.circuitCount-1; i>=0; --i) if (group == ComputeMgr.circu[i].from.group)
 			{
 				ComputeMgr.circu[i].elecDir = NORMALELEC;
-				ComputeMgr.circu[i].elec = ans[ComputeMgr.circu[i].numInGroup];
+				ComputeMgr.circu[i].elec = ans[ComputeMgr.circu[i].indexInGroup];
 				ComputeMgr.circu[i].ConvertWhenElecLessZero();	//当电流负数时改为正数,并调转电流方向
 			}
 		}
 		else	//短路或无法确定电流
 		{
-			for (i=ComputeMgr.circuNum-1; i>=0; --i) if (group == ComputeMgr.circu[i].from.group)
+			for (i=ComputeMgr.circuitCount-1; i>=0; --i) if (group == ComputeMgr.circu[i].from.group)
 			{
 				ComputeMgr.circu[i].elecDir = flag;
 			}
 		}
 
-		//ComputeMgr.maps[group].Uninit();	//删除一个线路图
-		//delete ComputeMgr.equation[group];	//删除一个方程
+		ComputeMgr.maps[group] = null;//ComputeMgr.maps[group].Uninit();	//删除一个线路图
+		ComputeMgr.equation[group] = null;//delete ComputeMgr.equation[group];	//删除一个方程
 	}
 
-	//delete [] ComputeMgr.maps;		//删除线路图数组
-	//delete [] ComputeMgr.equation;	//删除方程数组指针
+	ComputeMgr.maps = null;//delete [] ComputeMgr.maps;		//删除线路图数组
+	ComputeMgr.equation = null;//delete [] ComputeMgr.equation;	//删除方程数组指针
 	DistributeAnswer();	//将结果分布到每个物体,函数中释放了WmMgr.circu和WmMgr.crun2
 };
