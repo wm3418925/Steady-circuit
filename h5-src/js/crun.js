@@ -1,49 +1,49 @@
 //结点类
 var CRUN = {
-	//节点全局初始化次序
+
+	//全局初始化次序
 	globalInitOrder: 1,
 	//重置全局初始化次序
 	ResetGlobalInitNum: function() {
-		return (globalInitOrder = 1);
+		return (CRUN.globalInitOrder = 1);
 	},
 
-	CreateNew: function(memIdx, x, y) {
-		var initOrder = globalInitOrder++;
+	
+	CreateNew: function(memberIdx, x, y) {
+		var initOrder = CRUN.globalInitOrder++;
 		var newObj = {
 			initOrder : initOrder,		//初始化序号
-			index : memIdx,				//在节点数组中序号
+			index : memberIdx,			//在数组中序号
 			isPaintName : false,		//默认不显示结点标签
 			name : "Crun" + initOrder,	//默认名称
 			x:x, y:y,					//坐标
-			lead:[null,null,null,null]	//结点连接导线的位置,0↑,1↓,2←,3→*/
+			lead:[null,null,null,null]	//连接导线的位置,0↑,1↓,2←,3→*/
 		};
         return newObj;
 	},
 
-	//保存节点信息到json
-	GenerateStoreJsonObj: function(jsonObj) {
-		ASSERT(jsonObj != null);
-
+	//保存信息到json
+	GenerateStoreJsonObj: function() {
 		var leadIndexArray = new Array();
 		for (var i=0; i<4; ++i) {
-			if (lead[i])
+			if (lead[i] != null)
 				leadIndexArray.push(lead[i].index);
 			else 
 				leadIndexArray.push(-1);
 		}
 		
-		var newObj = {
+		return {
 			index : this.index,
 			isPaintName : this.isPaintName,
 			name : this.name,
 			x : this.x, y:this.y,
 			lead : leadIndexArray
 		};
-        return newObj;
 	},
-	//从json读取结点信息
+	//从json读取信息
 	ReadFromStoreJsonObj: function(jsonObj, allLead) {
 		ASSERT(jsonObj != null);
+		ASSERT(allLead != null);
 
 		var leadArray = new Array();
 		for (var i=0; i<4; ++i) {
@@ -105,16 +105,16 @@ var CRUN = {
 
 		if (CLONE_FOR_USE != clonePurpose) {
 			newCrun.initOrder = this.initOrder;
-			--globalInitOrder;
+			--CRUN.globalInitOrder;
 		}
 		return newCrun;
 	},
 
 	//和CProperty交互
-	GetDataList: function (LISTDATA * list) {
-		list.Init(2);
-		list.SetAMember(TITLE_NOTE, name);
-		list.SetAMember(TITLESHOW_NOTE, isPaintName);
+	GetDataList: function (list) {
+		list.Init(this, 2);
+		list.SetAMember(TITLE_NOTE, "name");
+		list.SetAMember(TITLESHOW_NOTE, "isPaintName");
 	},
 
 	//寻找导线在哪个方向
