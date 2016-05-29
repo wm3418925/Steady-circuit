@@ -110,9 +110,9 @@ var LEAD = {
 		
 		// 获得连接点坐标
 		var nowPos = this.coord[atState];
-		var nowNextPos = this.coord[atState+1];
+		var nownext1Pos = this.coord[atState+1];
 		var dividePos = {x:pos.x, y:pos.y};
-		if (nowPos.x == nowNextPos.x)	//在竖线上
+		if (nowPos.x == nownext1Pos.x)	//在竖线上
 			dividePos.x = nowPos.x;
 		else	//在横线上
 			dividePos.y = nowPos.y;
@@ -258,39 +258,36 @@ var LEAD = {
 		ASSERT(this.coord.length >= 2);
 		
 		//初始化变量 -------------------------------------------------------
-		vardir = conBody[0].GetConnectPosDir();
+		var dir = conBody[0].GetConnectPosDir();
 		var dirSum = dir + conBody[1].GetConnectPosDir();
 		
 		var oppositeFlag = (dirSum == 3 || dirSum == 7);
 		var dis2 = 15;
-		if (dir & 1) dis2 = -15;
+		if (dir & 1 != 0) dis2 = -15;
 		
-		var next = coord[1];
+		var next1 = coord[1];
 		var next2 = null;
 		if (this.coord.length >= 3)
 			next2 = coord[2];
 		
-		var temp, now, theLast;
+		var theLast;
 
 		//判断执行条件 -----------------------------------------------------
 		switch (dir) {
 		case 1:	//上连接点
-			if (this.coord[0].x != next.x || this.coord[0].y >= next.y)
+			if (this.coord[0].x != next1.x || this.coord[0].y >= next1.y)
 				return;
 			break;
-
 		case 2:	//下连接点
-			if (this.coord[0].x != next.x || this.coord[0].y <= next.y)
+			if (this.coord[0].x != next1.x || this.coord[0].y <= next1.y)
 				return;
 			break;
-
 		case 3:	//左连接点
-			if (this.coord[0].y != next.y || this.coord[0].x >= next.x)
+			if (this.coord[0].y != next1.y || this.coord[0].x >= next1.x)
 				return;
 			break;
-
 		case 4:	//右连接点
-			if (this.coord[0].y != next.y || this.coord[0].x <= next.x)
+			if (this.coord[0].y != next1.y || this.coord[0].x <= next1.x)
 				return;
 			break;
 		}
@@ -307,10 +304,10 @@ var LEAD = {
 				theLast = this.coord[1];
 				this.coord.push({x:theLast.x - dis, y:theLast.y});
 				theLast = this.coord[2];
-				this.coord.push({x:theLast.x, y:theLast.y - dis2*2 + next.y - this.coord[0].y});
+				this.coord.push({x:theLast.x, y:theLast.y - dis2*2 + next1.y - this.coord[0].y});
 				theLast = this.coord[3];
 				this.coord.push({x:theLast.x + dis, y:theLast.y});
-				this.coord.push(next);
+				this.coord.push(next1);
 				return;
 
 			case 3:	//左连接点
@@ -322,10 +319,10 @@ var LEAD = {
 				theLast = this.coord[1];
 				this.coord.push({y:theLast.y - dis, x:theLast.x});
 				theLast = this.coord[2];
-				this.coord.push({y:theLast.y, x:theLast.x - dis2*2 + next.x - this.coord[0].x});
+				this.coord.push({y:theLast.y, x:theLast.x - dis2*2 + next1.x - this.coord[0].x});
 				theLast = this.coord[3];
 				this.coord.push({y:theLast.y + dis, x:theLast.x});
-				this.coord.push(next);
+				this.coord.push(next1);
 				return;
 			}
 		}
@@ -403,7 +400,7 @@ var LEAD = {
 				this.coord.push({x:GetPosFit(theLast.x, next2.x, dis, false), y:theLast.y});
 				
 				theLast = this.coord[1];
-				this.coord.push({x:theLast.x, y:next.y});
+				this.coord.push({x:theLast.x, y:next1.y});
 				this.coord.push(next2);
 				this.coord.push(next3);
 				return;
@@ -416,7 +413,7 @@ var LEAD = {
 				this.coord.push({y:GetPosFit(theLast.y, next2.y, dis, false), x:theLast.x});
 				
 				theLast = this.coord[1];
-				this.coord.push({y:theLast.y, x:next.x});
+				this.coord.push({y:theLast.y, x:next1.x});
 				this.coord.push(next2);
 				this.coord.push(next3);
 				return;
@@ -428,12 +425,12 @@ var LEAD = {
 			switch (dir) {
 			case 1:	//上连接点
 			case 2:	//下连接点
-				next2.y = next.y = this.coord[0].y + dis2;
+				next2.y = next1.y = this.coord[0].y + dis2;
 				return;
 
 			case 3:	//左连接点
 			case 4:	//右连接点
-				next2.x = next.x = this.coord[0].x + dis2;
+				next2.x = next1.x = this.coord[0].x + dis2;
 				return;
 			}
 		}
@@ -441,45 +438,41 @@ var LEAD = {
 
 	//使导线不遮挡连接的第2个物体
 	FitEnd: function(dis) {
-		ASSERT(coord.next != null);
+		ASSERT(this.coord.length >= 2);
 		
 		//初始化变量 -------------------------------------------------------
-		LEADSTEP * temp, * now, * pre1, * pre2, * next, * next2;
-		const int dir = conBody[1].GetConnectPosDir();
-		const int dirOther = conBody[0].GetConnectPosDir();
+		var dir = conBody[1].GetConnectPosDir();
+		var dirOther = conBody[0].GetConnectPosDir();
 		int dis2 = 15;
-		if (dir & 1) dis2 = -15;
+		if ((dir & 1) != 0) dis2 = -15;
 
-		pre2 = null;
-		pre1 = &coord;
-		now  = coord.next;
-		while (now.next != null)
-		{
-			pre2 = pre1;
-			pre1 = now;
-			now = now.next;
-		}
-		next = coord.next;
-		next2 = next.next;
+		var pre2 = null;
+		if (this.coord.length >= 3)
+			pre2 = this.coord[this.coord.length-3];
+		var pre1 = this.coord[this.coord.length-2];
+		var now = this.coord[this.coord.length-1];
+		
+		var next1 = this.coord[1];
+		var next2 = null;
+		if (this.coord.length >= 3)
+			next2 = this.coord[2];
+		
+		var theLast;
 
 		//判断执行条件 -----------------------------------------------------
-		switch(dir)
-		{
+		switch (dir) {
 		case 1:	//上连接点
 			if (now.x != pre1.x || now.y >= pre1.y)
 				return;
 			break;
-
 		case 2:	//下连接点
 			if (now.x != pre1.x || now.y <= pre1.y)
 				return;
 			break;
-
 		case 3:	//左连接点
 			if (now.y != pre1.y || now.x >= pre1.x)
 				return;
 			break;
-
 		case 4:	//右连接点
 			if (now.y != pre1.y || now.x <= pre1.x)
 				return;
@@ -487,141 +480,119 @@ var LEAD = {
 		}
 
 		//导线只有2个节点 ---------------------------------------------------
-		if (next2 == null)
-		{
-			switch(dir)
-			{
+		if (this.coord.length == 2) {
+			switch (dir) {
 			case 1:	//上连接点
 			case 2:	//下连接点
-				coord.next = temp = {};
-				temp.y = this.coord[0].y;
+				this.coord.length = 1;
+				
+				theLast = this.coord[0];
+				var tempX;
 				if (dirOther == 4)
-					temp.x = this.coord[0].x - dis;
+					tempX = theLast.x - dis;
 				else
-					temp.x = this.coord[0].x + dis;
-				now = temp;
-
-				now.next = temp = {};
-				temp.x = now.x;
-				temp.y = next.y + dis2;
-				now = temp;
-
-				now.next = temp = {};
-				temp.y = now.y;
-				temp.x = next.x;
-
-				temp.next = next;
+					tempX = theLast.x + dis;
+				this.coord.push({x:tempX, y:theLast.y});
+				
+				theLast = this.coord[1];
+				this.coord.push({x:theLast.x, y:next1.y + dis2});
+				theLast = this.coord[2];
+				this.coord.push({x:next1.x, y:theLast.y});
+				this.coord.push(next1);
 				return;
 
 			case 3:	//左连接点
 			case 4:	//右连接点
-				coord.next = temp = {};
-				temp.x = this.coord[0].x;
+				this.coord.length = 1;
+				
+				theLast = this.coord[0];
+				var tempY;
 				if (dirOther == 2)
-					temp.y = this.coord[0].y - dis;
+					tempY = theLast.y - dis;
 				else
-					temp.y = this.coord[0].y + dis;
-				now = temp;
-
-				now.next = temp = {};
-				temp.y = now.y;
-				temp.x = next.x + dis2;
-				now = temp;
-
-				now.next = temp = {};
-				temp.x = now.x;
-				temp.y = next.y;
-
-				temp.next = next;
+					tempY = theLast.y + dis;
+				this.coord.push({y:tempY, x:theLast.x});
+				
+				theLast = this.coord[1];
+				this.coord.push({y:theLast.y, x:next1.x + dis2});
+				theLast = this.coord[2];
+				this.coord.push({y:next1.y, x:theLast.x});
+				this.coord.push(next1);
 				return;
 			}
 		}
 
 		//导线只有3个节点 ---------------------------------------------------
-		else if (next2.next == null)
-		{
-			switch(dir)
-			{
+		else if (this.coord.length == 3) {
+			switch (dir) {
 			case 1:	//上连接点
 			case 2:	//下连接点
-				//next.x
+				//next1.x
 				if (dirOther == 4)
-					next.x = next2.x + dis;
+					next1.x = next2.x + dis;
 				else if (dirOther == 3)
-					next.x = next2.x - dis;
+					next1.x = next2.x - dis;
 				else
-					next.x = GetPosFit(this.coord[0].x, next2.x, dis, true);
+					next1.x = GetPosFit(this.coord[0].x, next2.x, dis, true);
 
-				//add point
-				next.next = temp = {};
-				temp.x = next.x;
-				temp.y = next2.y;
-				temp.next = next2;
+				this.coord.length = 2;
+				this.coord.push({x:next1.x, y:next2.y});
+				this.coord.push(next2);
 				return;
 
 			case 3:	//左连接点
 			case 4:	//右连接点
-				//next.y
+				//next1.y
 				if (dirOther == 2)
-					next.y = next2.y + dis;
+					next1.y = next2.y + dis;
 				else if (dirOther == 1)
-					next.y = next2.y - dis;
+					next1.y = next2.y - dis;
 				else
-					next.y = GetPosFit(this.coord[0].y, next2.y, dis, true);
+					next1.y = GetPosFit(this.coord[0].y, next2.y, dis, true);
 
-				//add point
-				next.next = temp = {};
-				temp.y = next.y;
-				temp.x = next2.x;
-				temp.next = next2;
+				this.coord.length = 2;
+				this.coord.push({x:next2.x, y:next1.y});
+				this.coord.push(next2);
 				return;
 			}
 		}
 		
 		//导线只有4个节点 ----------------------------------------------
-		else if (next2.next.next == null)
-		{
-			switch(dir)
-			{
+		else if (this.coord.length == 4) {
+			switch (dir) {
 			case 1:	//上连接点
 			case 2:	//下连接点
-				if (dirOther == 3 || dirOther == 4)
-				{
+				if (dirOther == 3 || dirOther == 4) {
 					pre1.y = pre2.y = now.y + dis2;
-				}
-				else //dir != dirOther
-				{
-					next2.next = temp = {};
-					temp.next = now;
-
-					temp.y = now.y;
+				} else { //dir != dirOther
+					this.coord.length = 3;
+					
+					temp = {y: now.y};
 					next2.x = temp.x = GetPosFit(this.coord[0].x, next2.x, dis, true);
+					this.coord.push(temp);
+					this.coord.push(now);
 				}
 				return;
 
 			case 3:	//左连接点
 			case 4:	//右连接点
-				if (dirOther == 1 || dirOther == 2)
-				{
+				if (dirOther == 1 || dirOther == 2) {
 					pre1.x = pre2.x = now.x + dis2;
-				}
-				else //dir != dirOther
-				{
-					next2.next = temp = {};
-					temp.next = now;
-
-					temp.x = now.x;
+				} else { //dir != dirOther
+					this.coord.length = 3;
+					
+					temp = {x: now.x};
 					next2.y = temp.y = GetPosFit(this.coord[0].y, next2.y, dis, true);
+					this.coord.push(temp);
+					this.coord.push(now);
 				}
 				return;
 			}
 		}
 
 		//导线至少有5个节点 --------------------------------------------
-		else
-		{
-			switch(dir)
-			{
+		else {
+			switch (dir) {
 			case 1:	//上连接点
 			case 2:	//下连接点
 				pre1.y = pre2.y = now.y + dis2;
@@ -653,338 +624,275 @@ var LEAD = {
 	},
 
 	//移动导线
-	Move: function(int dir, POINT pos, const int dis) {
-		LEADSTEP * pre2 = null;
-		LEADSTEP * pre  = &coord;
-		LEADSTEP * now  = pre.next;
-		LEADSTEP * next = null;
-		int i = -2;
+	Move: function(dir, pos, dis) {
+		var pre2 = null;
+		var pre1 = this.coord[0];
+		var now = this.coord[1];
+		var next1 = null;
+		var isNext1TheLast;
+		var currentIndex = 1;
+		
 		int inter = 0;
 
 		//1,找到指针----------------------------------
-		while (now != null)
-		{
-			if (pre.x == now.x)	//在竖线上
-			{
+		int i = -2;
+		while (true) {
+			if (pre1.x == now.x) {	//在竖线上
 				if (i == dir) break;
-			}
-			else	//在横线上
-			{
+			} else {	//在横线上
 				if (i-1 == dir) break;
 			}
-			pre2 = pre;
-			pre = now;
-			now = now.next;
+			
+			++currentIndex;
+			if (currentIndex >= this.coord.length) return false;	//没有找到
+			
+			pre2 = pre1;
+			pre1 = now;
+			now = this.coord.[currentIndex];
+			
 			i -= 2;
 		}
-		if (now == null) return false;	//没有找到
-		else next = now.next;
+		next1 = null;
+		if (currentIndex+1 < this.coord.length)
+			next1 = this.coord.[currentIndex+1];
+		isNext1TheLast = (currentIndex+1 == this.coord.length-1);
 
 		//2重新设置竖线坐标--------------------------
-		if (pre.x == now.x)	//在竖线上
-		{
-			if (pos.x == pre.x) return false;	//无需改变
+		if (pre1.x == now.x) {	//在竖线上
+			if (pos.x == pre1.x) return false;	//无需改变
 
 			//2.1处理pre是头.........................
-			if (pre2 == null)	//pre是头
-			{
-				if (next != null)	//now不是结尾
-				{
-					inter = pos.x - next.x;
-					if (inter < 0)inter = -inter;
+			if (pre2 == null) {	//pre1是头
+				if (next1 != null) {	//now不是结尾
+					inter = pos.x - next1.x;
+					if (inter < 0) inter = -inter;
 				}
 
-				if (next != null && inter <= dis)	//now不是结尾
-				{
-					if (next.next != null)	//next不是结尾
-					{
-						delete now;
-						pre.next = next;
-						next.y = pre.y;
+				if (next1 != null && inter <= dis) {	//now不是结尾
+					if (!isNext1TheLast) {	//next1不是结尾
+						next1.y = pre1.y;
+						
+						this.coord.splice(currentIndex, 1);
+					} else {	//next1是结尾
+						now.x = next1.x;
+						now.y = pre1.y;
 					}
-					else	//next是结尾
-					{
-						now.x = next.x;
-						now.y = pre.y;
-					}
-				}
-				else if (next != null)	//now不是结尾
-				{
-					pre2  = {};
-					pre2.x = pos.x;
-					pre2.y = pre.y;
-					pre2.next = now;
-
-					pre.next = pre2;
-
+				} else if (next1 != null) {	//now不是结尾
+					var tmp = {x: pos.x, y: pre1.y};
 					now.x = pos.x;
-				}
-				else	//now是结尾
-				{
-					pre2 = {};
-					pre2.x = pos.x;
-					pre2.y = pre.y;
-
-					next = {};
-					next.x = pos.x;
-					next.y = now.y;
-
-					pre.next = pre2;
-					pre2.next = next;
-					next.next = now;
+					this.coord.splice(currentIndex, 0, tmp);	// 在now之前插入tmp
+				} else {	//now是结尾
+					var tmp1  = {x: pos.x, y: pre1.y};
+					var tmp2 = {x: pos.x, y: now.y};
+					
+					this.coord.splice(1, 0, tmp1, tmp2);	//在pre1后面插入元素
 				}
 
-				goto end;
+				CleanLead(); return true;
 			}//以下pre不是头
 
 			//2.2处理now是结尾.........................
-			if (next == null)	//now是结尾
-			{
+			if (next1 == null) {	//now是结尾
 				inter = pos.x - pre2.x;
 				if (inter < 0)inter = -inter;
 
-				if (inter <= dis)
-				{
-					if (pre2 != &coord)	//pre2不是头
-					{
-						delete pre;
+				if (inter <= dis) {
+					if (pre2 != coord[0]) {	//pre2不是头
+						delete pre1;
 						pre2.next = now;
 						pre2.y = now.y;
+					} else {	//pre2是头
+						pre1.x = pre2.x;
+						pre1.y = now.y;
 					}
-					else	//pre2是头
-					{
-						pre.x = pre2.x;
-						pre.y = now.y;
-					}
-				}
-				else
-				{
-					next  = {};
-					next.x = pos.x;
-					next.y = now.y;
+				} else {
+					next1  = {};
+					next1.x = pos.x;
+					next1.y = now.y;
 
-					pre.x = pos.x;
+					pre1.x = pos.x;
 
-					pre.next = next;
-					next.next = now;
+					pre1.next = next1;
+					next1.next = now;
 				}
 
-				goto end;
+				CleanLead(); return true;
 			}//以下now不是结尾
 
 			//2.3处理与前面合并..........................
 			inter = pos.x - pre2.x;
-			if (inter < 0)inter = -inter;
+			if (inter < 0) inter = -inter;
 
-			if (inter <= dis)	//导线合并
-			{
-				if (pre2 != &coord)	//pre2不是头
-				{
-					delete pre;
+			if (inter <= dis) {	//导线合并
+				if (pre2 != coord[0]) {	//pre2不是头
+					delete pre1;
 					delete now;
-					pre2.next = next;
-					pre2.y = next.y;
-				}
-				else	//pre2是头
-				{
-					delete pre;
+					pre2.next = next1;
+					pre2.y = next1.y;
+				} else {	//pre2是头
+					delete pre1;
 					pre2.next = now;
 					now.x = pre2.x;
 
-					if (now.x == next.x && now.y == next.y)
-					{
+					if (now.x == next1.x && now.y == next1.y) {
 						delete now;
-						pre2.next = next;
+						pre2.next = next1;
 					}
 				}
 				
-				goto end;
+				CleanLead(); return true;
 			}
 
 			//2.4处理与后面合并..........................
-			inter = pos.x - next.x;
-			if (inter < 0)inter = -inter;
+			inter = pos.x - next1.x;
+			if (inter < 0) inter = -inter;
 
-			if (inter <= dis)	//导线合并
-			{
-				if (next.next != null)	//next不是结尾
-				{
-					delete pre;
+			if (inter <= dis) {	//导线合并
+				if (!isNext1TheLast) {	//next1不是结尾
+					delete pre1;
 					delete now;
-					pre2.next = next;
-					next.y = pre2.y;
-				}
-				else	//next是结尾
-				{
+					pre2.next = next1;
+					next1.y = pre2.y;
+				} else {	//next1是结尾
 					delete now;
-					pre.next = next;
-					pre.x = next.x;
+					pre1.next = next1;
+					pre1.x = next1.x;
 				}
-				goto end;
+				CleanLead(); return true;
 			}
 
 			//2.5处理其他情况..........................
 			now.x = pos.x;
-			pre.x = pos.x;
-			goto end;
+			pre1.x = pos.x;
+			CleanLead(); return true;
 
 		}//重新设置竖线坐标
 
 		//3重新设置横线坐标--------------------------
-		if (pre.y == now.y)	//在横线上
-		{
-			if (pos.y == pre.y) return false;	//无需改变
+		if (pre1.y == now.y) {	//在横线上
+			if (pos.y == pre1.y) return false;	//无需改变
 
 			//3.1处理pre是头.........................
-			if (pre2 == null)	//pre是头
-			{
-				if (next != null)	//now不是结尾
-				{
-					inter = pos.y - next.y;
+			if (pre2 == null) {	//pre是头
+				if (next1 != null) {	//now不是结尾
+					inter = pos.y - next1.y;
 					if (inter < 0)inter = -inter;
 				}
 
-				if (next != null && inter <= dis)	//now不是结尾
-				{
-					if (next.next != null)	//next不是结尾
-					{
+				if (next1 != null && inter <= dis) {	//now不是结尾
+					if (!isNext1TheLast) {	//next1不是结尾
 						delete now;
-						pre.next = next;
-						next.x = pre.x;
+						pre1.next = next1;
+						next1.x = pre1.x;
+					} else {	//next1是结尾
+						now.y = next1.y;
+						now.x = pre1.x;
 					}
-					else	//next是结尾
-					{
-						now.y = next.y;
-						now.x = pre.x;
-					}
-				}
-				else if (next != null)	//now不是结尾
-				{
+				} else if (next1 != null) {	//now不是结尾
 					pre2  = {};
 					pre2.y = pos.y;
-					pre2.x = pre.x;
+					pre2.x = pre1.x;
 					pre2.next = now;
 
-					pre.next = pre2;
+					pre1.next = pre2;
 
 					now.y = pos.y;
-				}
-				else	//now是结尾
-				{
+				} else {	//now是结尾
 					pre2 = {};
 					pre2.y = pos.y;
-					pre2.x = pre.x;
+					pre2.x = pre1.x;
 
-					next = {};
-					next.y = pos.y;
-					next.x = now.x;
+					next1 = {};
+					next1.y = pos.y;
+					next1.x = now.x;
 
-					pre.next = pre2;
-					pre2.next = next;
-					next.next = now;
+					pre1.next = pre2;
+					pre2.next = next1;
+					next1.next = now;
 				}
 
-				goto end;
+				CleanLead(); return true;
 			}//以下pre不是头
 
 			//3.2处理now是结尾.........................
-			if (next == null)	//now是结尾
-			{
+			if (next1 == null) {	//now是结尾
 				inter = pos.y - pre2.y;
 				if (inter < 0)inter = -inter;
 
-				if (inter <= dis)
-				{
-					if (pre2 != &coord)	//pre2不是头
-					{
-						delete pre;
+				if (inter <= dis) {
+					if (pre2 != &coord) {	//pre2不是头
+						delete pre1;
 						pre2.next = now;
 						pre2.x = now.x;
+					} else {	//pre2是头
+						pre1.y = pre2.y;
+						pre1.x = now.x;
 					}
-					else	//pre2是头
-					{
-						pre.y = pre2.y;
-						pre.x = now.x;
-					}
-				}
-				else
-				{
-					next  = {};
-					next.y = pos.y;
-					next.x = now.x;
+				} else {
+					next1  = {};
+					next1.y = pos.y;
+					next1.x = now.x;
 
-					pre.y = pos.y;
+					pre1.y = pos.y;
 
-					pre.next = next;
-					next.next = now;
+					pre1.next = next1;
+					next1.next = now;
 				}
 
-				goto end;
+				CleanLead(); return true;
 			}//以下now不是结尾
 
 			//3.3处理与前面合并..........................
 			inter = pos.y - pre2.y;
-			if (inter < 0)inter = -inter;
+			if (inter < 0) inter = -inter;
 
-			if (inter <= dis)	//导线合并
-			{
-				if (pre2 != &coord)	//pre2不是头
-				{
-					delete pre;
+			if (inter <= dis) {	//导线合并
+				if (pre2 != coord[0]) {	//pre2不是头
+					delete pre1;
 					delete now;
-					pre2.next = next;
-					pre2.x = next.x;
-				}
-				else	//pre2是头
-				{
-					delete pre;
+					pre2.next = next1;
+					pre2.x = next1.x;
+				} else {	//pre2是头
+					delete pre1;
 					pre2.next = now;
 					now.y = pre2.y;
 
-					if (now.x == next.x && now.y == next.y)
-					{
+					if (now.x == next1.x && now.y == next1.y) {
 						delete now;
-						pre2.next = next;
+						pre2.next = next1;
 					}
 				}
 
-				goto end;
+				CleanLead(); return true;
 			}
 
 			//3.4处理与后面合并..........................
-			inter = pos.y - next.y;
-			if (inter < 0)inter = -inter;
+			inter = pos.y - next1.y;
+			if (inter < 0) inter = -inter;
 
-			if (inter <= dis)	//导线合并
-			{
-				if (next.next != null)	//next不是结尾
-				{
-					delete pre;
+			if (inter <= dis) {	//导线合并
+				if (!isNext1TheLast) {	//next1不是结尾
+					delete pre1;
 					delete now;
-					pre2.next = next;
-					next.x = pre2.x;
-				}
-				else	//next是结尾
-				{
+					pre2.next = next1;
+					next1.x = pre2.x;
+				} else {	//next1是结尾
 					delete now;
-					pre.next = next;
-					pre.y = next.y;
+					pre1.next = next1;
+					pre1.y = next1.y;
 				}
-				goto end;
+				CleanLead(); return true;
 			}
 
 			//3.5处理其他情况..........................
 			now.y = pos.y;
-			pre.y = pos.y;
-			goto end;
+			pre1.y = pos.y;
+			CleanLead(); return true;
 
 		}	//重新设置横线坐标
 
-	end:
 
 		CleanLead();	//删除有相同坐标的导线结点
-		//MakeFit();		//美化导线
-
 		return true;
 	},
 
