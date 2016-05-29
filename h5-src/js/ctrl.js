@@ -34,22 +34,23 @@ var DATA_NOTE = new Array(
 var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定义时需要添加新类型的处理代码
 
 	//节点全局初始化次序
-	global: 1,
+	globalInitOrder: 1,
 	//重置全局初始化次序
 	ResetGlobalInitNum: function() {
-		return (CTRL.global = 1);
+		return (CTRL.globalInitOrder = 1);
 	},
 	
 	
 	CreateNew: function(long memberIdx, x , y, ctrlStyle) {
 		ASSERT(ctrlStyle >= 0 && ctrlStyle < CTRL_TYPE_COUNT);
 		
-		var  = CTRL.global++;
+		var initOrder = CTRL.globalInitOrder++;
 		var newObj = {
-			 : ,		//初始化序号
+			initOrder : initOrder,		//初始化序号
 			index : memberIdx,			//在控件数组中序号
+			
 			isPaintName : true,			//默认显示结点标签
-			name : "Ctrl" + ,	//默认名称
+			name : "Ctrl" + initOrder,	//默认名称
 			x : x, y : y,				//坐标
 			lead : [null,null],			//结点连接导线的位置,0↑,1↓,2←,3→*/
 			
@@ -72,8 +73,8 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定义时需要添加新类型的处
 		CloneCtrlData(newCtrl, this);
 
 		if (CLONE_FOR_USE != clonePurpose) {
-			newCtrl. = this.;
-			--CTRL.global;
+			newCtrl.initOrder = this.initOrder;
+			--CTRL.globalInitOrder;
 		}
 		return newCtrl;
 	},
@@ -88,7 +89,6 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定义时需要添加新类型的处
 		}
 
 		var storeJsonObj = {
-			index : this.index,
 			isPaintName : this.isPaintName,
 			name : this.name,
 			x : this.x, y:this.y,
@@ -100,19 +100,18 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定义时需要添加新类型的处
 		return CloneCtrlData(storeJsonObj, this);
 	},
 	//从json读取信息
-	ReadFromStoreJsonObj: function(jsonObj, allLead) {
+	ReadFromStoreJsonObj: function(jsonObj, leadList) {
 		ASSERT(jsonObj != null);
-		ASSERT(allLead != null);
+		ASSERT(leadList != null);
 
 		var leadArray = new Array();
 		for (var i=0; i<2; ++i) {
 			if (jsonObj.lead[i] >= 0)
-				leadArray.push(allLead[jsonObj.lead[i]]);
+				leadArray.push(leadList[jsonObj.lead[i]]);
 			else 
 				leadArray.push(null);
 		}
 		
-		this.index = jsonObj.index;
 		this.isPaintName = jsonObj.isPaintName;
 		this.name = jsonObj.name;
 		this.x = jsonObj.x; this.y = jsonObj.y;

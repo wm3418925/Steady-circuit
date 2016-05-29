@@ -124,7 +124,7 @@ ComputeMgr.CollectCircuitInfo = function()
 	//满足当前方向有导线连接 而且 没有检索过(ComputeMgr.crun2[i].c[j] == null)
 	{
 		now = lead[j];
-		dir = true1AndFalse0(now.conBody[0] == crun[i]);
+		dir = true1AndFalse0(now.conBody[0].p == crun[i]);
 
 		ComputeMgr.circu[ComputeMgr.circuitCount].resistance = 0;	//电阻清0
 		ComputeMgr.circu[ComputeMgr.circuitCount].pressure   = 0;	//电压清0
@@ -146,11 +146,11 @@ ComputeMgr.CollectCircuitInfo = function()
 
 				//到下一个物体
 				now = pre.lead[dir];
-				dir = true1AndFalse0(now.conBody[0] == pre);
+				dir = true1AndFalse0(now.conBody[0].p == pre);
 			}
 			else	//导线,到下一个物体
 			{
-				now = pre.conBody[dir];
+				now = pre.conBody[dir].p;
 				if (IsOnCrun(now))	//遇到连接物体不是2个的结点结束
 				{
 					tempVar = now.GetConnectNum();
@@ -167,7 +167,7 @@ ComputeMgr.CollectCircuitInfo = function()
 						//转到结点连接的另一个导线
 						pre = now;
 						now = pre.lead[dir];
-						dir = true1AndFalse0(now.conBody[0] == pre);
+						dir = true1AndFalse0(now.conBody[0].p == pre);
 					}
 					else if (tempVar == 1)	//断路
 					{
@@ -599,7 +599,7 @@ ComputeMgr.TravelCircuitPutElec = function(/*Pointer */now,
 
 			//到下一个物体
 			now = pre.lead[dir];
-			dir = true1AndFalse0(now.conBody[0] == pre);
+			dir = true1AndFalse0(now.conBody[0].p == pre);
 		}
 		else	//导线,到下一个物体
 		{
@@ -613,7 +613,7 @@ ComputeMgr.TravelCircuitPutElec = function(/*Pointer */now,
 				now.elecDir = flag;
 			}
 
-			now = now.conBody[dir];
+			now = now.conBody[dir].p;
 			if (IsOnCrun(now))	//遇到终点(last结点)结束
 			{
 				if (now == last) break;	//到达终点
@@ -625,7 +625,7 @@ ComputeMgr.TravelCircuitPutElec = function(/*Pointer */now,
 					//指针指向结点连接的另一个导线
 					pre = now;
 					now = pre.lead[dir];
-					dir = true1AndFalse0(now.conBody[0] == pre);
+					dir = true1AndFalse0(now.conBody[0].p == pre);
 				}
 			}
 			else if (IsOnLead(now))
@@ -661,7 +661,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 			//到下一个物体
 			now = pre.lead[dir];
 			if (now == null) break;	//结束遍历
-			dir = true1AndFalse0(now.conBody[0] == pre);
+			dir = true1AndFalse0(now.conBody[0].p == pre);
 		}
 		else	//导线,到下一个物体
 		{
@@ -669,7 +669,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 			now.elecDir = OPENELEC;
 			now.elec = 0;
 
-			now = now.conBody[dir];
+			now = now.conBody[dir].p;
 			if (IsOnCrun(now))	//遇到终点(last结点)结束
 			{
 				if (2 != now.GetConnectNum())	//到达终点
@@ -684,7 +684,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 					//指针指向结点连接的另一个导线
 					pre = now;
 					now = pre.lead[dir];
-					dir = true1AndFalse0(now.conBody[0] == pre);
+					dir = true1AndFalse0(now.conBody[0].p == pre);
 				}
 			}
 			else if (IsOnLead(now))
@@ -734,7 +734,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 			//到下一个物体
 			now = pre.lead[dir]);
 			if (now == null) return ERRORELEC;	//结束遍历,这种情况是错误
-			dir = true1AndFalse0(now.conBody[0] == pre);
+			dir = true1AndFalse0(now.conBody[0].p == pre);
 		}
 		else	//导线,到下一个物体
 		{
@@ -748,7 +748,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 				now.elecDir = flag;
 			}
 
-			now = now.conBody[dir];
+			now = now.conBody[dir].p;
 			if (IsOnCrun(now))	//此时结点一定连接2个导线,跳过,相当于导线
 			{
 				//找到结点连接的另一个导线
@@ -757,7 +757,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 				//指针指向结点连接的另一个导线
 				pre = now;
 				now = pre.lead[dir];
-				dir = true1AndFalse0(now.conBody[0] == pre);
+				dir = true1AndFalse0(now.conBody[0].p == pre);
 			}
 			else if (IsOnLead(now))
 			{
@@ -814,7 +814,7 @@ ComputeMgr.DistributeAnswer = function()
 		now = end.lead[ComputeMgr.circu[i].dirFrom];
 
 		//2,确定查找方向,end做临时变量
-		dir = true1AndFalse0(now.conBody[0] == end);
+		dir = true1AndFalse0(now.conBody[0].p == end);
 
 		//3,找到线路的终点,end存放终点结点指针
 		end = crun[indexOfArray(ComputeMgr.crun2, ComputeMgr.circu[i].to)];
@@ -857,7 +857,7 @@ ComputeMgr.DistributeAnswer = function()
 		now = crun[i].lead[dir];
 
 		//2,确定查找方向
-		dir = true1AndFalse0(now.conBody[0] == crun[i]);
+		dir = true1AndFalse0(now.conBody[0].p == crun[i]);
 
 		//3,遍历线路
 		TravelCircuitFindOpenBody(now, dir);

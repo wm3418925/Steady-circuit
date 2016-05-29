@@ -1,3 +1,5 @@
+function true1AndFalse0(flag) { if (flag) return 1; else return 0; }
+
 function zeroArray(array) {
     for (var i = array.length - 1; i >= 0; --i) array[i] = 0;
 }
@@ -14,14 +16,21 @@ function genrateArrayWithElementInitFunc(initFunc, size) {
     return a;
 }
 
-function true1AndFalse0(flag) { if (flag) return 1; else return 0; }
-
 function arrayCopyAll(to, from) {
     for (var i = from.length - 1; i >= 0; --i) to[i] = from[i];
 }
 
 function arrayCopyWithSize(to, from, size) {
     for (var i = size - 1; i >= 0; --i) to[i] = from[i];
+}
+
+// 深度复制对象
+function deepCopy(source) { 
+	var result = {};
+	for (var key in source) {
+		result[key] = typeof source[key]==='object'? deepCopy(source[key]) : source[key];
+	}
+	return result;
 }
 
 
