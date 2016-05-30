@@ -856,86 +856,67 @@ var LEAD = {
 
 	//连接物体坐标改变,更新导线位置
 	RefreshPos: function() {
-		POINT from, to;
-		LEADSTEP * now;
-		LEADSTEP * p1, * p2, * p3;
-
 		//重新获得两个端点坐标
-		conBody[0].GetPosFromBody(from);
-		conBody[1].GetPosFromBody(to);
+		var from = conBody[0].GetPosFromBody();
+		var to = conBody[1].GetPosFromBody();
 
 		//初始化
-		if (coord.next == null || coord.next.next == null) {
+		if (this.coord.length <= 2) {
 			EasyInitPos(from, to);
 			MakeFit();	//美化导线
 			return;
 		}
 
-		now = &coord;
-		
+
 		//起点坐标改变
-		if (from.x != now.x || from.y != now.y)
-		{
-			p1 = now.next;
-			p2 = p1.next;
-			if (p2 != null) p3 = p2.next;
-			else p3 = null;
-			
-			if (p1.x != now.x || p1.y != now.y)
-			{//前2个坐标不同
-				if (p1.x == now.x)
-					p1.x = from.x;
+		var coord0 = this.coord[0];
+		var coord1 = this.coord[1];
+		var coord2 = this.coord[2];
+		
+		if (from.x != coord0.x || from.y != coord0.y) {
+			if (coord1.x != coord0.x || coord1.y != coord0.y) {	//第0,1的坐标不同
+				if (coord1.x == coord0.x)
+					coord1.x = from.x;
 				else
-					p1.y = from.y;
-				now.pos = from;
-			}
-			else if (p1.x != p2.x || p1.y != p2.y)
-			{//第2,3个坐标不同
-				if (p1.x == p2.x)
-					p1.y = from.y;
+					coord1.y = from.y;
+				coord0.x = from.x;
+				coord0.y = from.y;
+			} else if (coord1.x != coord2.x || coord1.y != coord2.y) {	//第1,2的坐标不同
+				if (coord1.x == coord2.x)
+					coord1.y = from.y;
 				else
-					p1.x = from.x;
-				now.pos = from;
-			}
-			else
-			{
+					coord1.x = from.x;
+				coord0.x = from.x;
+				coord0.y = from.y;
+			} else {
 				EasyInitPos(from, to);	//初始化
 				MakeFit();	//美化导线
 				return;
 			}
 		}
 		
-		//得到终点坐标
-		p1 = p2 = p3 = null;
-		while (now.next != null)
-		{
-			p3 = p2;
-			p2 = p1;
-			p1 = now;
-			now = now.next;
-		}
-		
+
 		//终点坐标改变
-		if (to.x != now.x || to.y != now.y)
-		{
-			if (p1.x != now.x || p1.y != now.y)
-			{//后2个坐标不同
-				if (p1.x == now.x)
-					p1.x = to.x;
+		var last2 = this.coord[this.coord.length-3];
+		var last1 = this.coord[this.coord.length-2];
+		var last0 = this.coord[this.coord.length-1];
+		
+		if (to.x != last0.x || to.y != last0.y) {
+			if (last1.x != last0.x || last1.y != last0.y) {	//后2个坐标不同
+				if (last1.x == last0.x)
+					last1.x = to.x;
 				else
-					p1.y = to.y;
-				now.pos = to;
-			}
-			else if (p1.x != p2.x || p1.y != p2.y)
-			{//倒数2,3个坐标不同
-				if (p1.x == p2.x)
-					p1.y = to.y;
+					last1.y = to.y;
+				last0.x = to.x;
+				last0.y = to.y;
+			} else if (last1.x != last2.x || last1.y != last2.y) {	//倒数2,3个坐标不同
+				if (last1.x == last2.x)
+					last1.y = to.y;
 				else
-					p1.x = to.x;
-				now.pos = to;
-			}
-			else
-			{
+					last1.x = to.x;
+				last0.x = to.x;
+				last0.y = to.y;
+			} else {
 				EasyInitPos(from, to);	//初始化
 				MakeFit();	//美化导线
 				return;
@@ -947,25 +928,23 @@ var LEAD = {
 	},
 
 	//画导线
-	PaintLead: function(CDC * dc) {
-		ASSERT(dc != null);
+	PaintLead: function(cxt) {
+		ASSERT(cxt != null);
 
-		const LEADSTEP * temp = &coord;
-		dc.MoveTo(temp.pos);
-		temp = temp.next;
-		while (temp != null)
-		{
-			dc.LineTo(temp.pos);
-			temp = temp.next;
+		cxt.moveTo(this.coord[0]);
+		for (var index=1; index < this.coord.length; ++index;) {
+			cxt.lineTo(this.coord[index]);
 		}
 	},
 
 	//获得导线开始位置和结尾坐标
-	GetStartEndPos: function(POINT &pos1, POINT &pos2) {
-		const LEADSTEP * temp = &coord;
-		while (temp.next != null) temp = temp.next;
-		pos1 = coord.pos;
-		pos2 = temp.pos;
+	GetStartEndPos: function(startPos, endPos) {
+		startPos.x = this.coord[0].x;
+		startPos.y = this.coord[0].y;
+		
+		var e = this.coord[this.coord.length-1];
+		endPos.x = e.x;
+		endPos.y = e.y;
 	}
 
 };

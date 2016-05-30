@@ -1117,7 +1117,7 @@ void LEAD::RefreshPos()
 {
 	POINT from, to;
 	LEADSTEP * now;
-	LEADSTEP * p1, * p2, * p3;
+	LEADSTEP * p1, * p2;
 
 	//重新获得两个端点坐标
 	conBody[0].GetPosFromBody(from);
@@ -1138,8 +1138,6 @@ void LEAD::RefreshPos()
 	{
 		p1 = now->next;
 		p2 = p1->next;
-		if(p2 != NULL) p3 = p2->next;
-		else p3 = NULL;
 		
 		if(p1->pos.x != now->pos.x || p1->pos.y != now->pos.y)
 		{//前2个坐标不同
@@ -1166,10 +1164,9 @@ void LEAD::RefreshPos()
 	}
 	
 	//得到终点坐标
-	p1 = p2 = p3 = NULL;
-	while(now->next != NULL)
+	p1 = p2 = NULL;
+	while (now->next != NULL)
 	{
-		p3 = p2;
 		p2 = p1;
 		p1 = now;
 		now = now->next;
