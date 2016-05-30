@@ -672,7 +672,7 @@ var LEAD = {
 					if (!isNext1TheLast) {	//next1不是结尾
 						next1.y = pre1.y;
 						
-						this.coord.splice(currentIndex, 1);
+						this.coord.splice(currentIndex, 1);	// 删除now
 					} else {	//next1是结尾
 						now.x = next1.x;
 						now.y = pre1.y;
@@ -680,12 +680,12 @@ var LEAD = {
 				} else if (next1 != null) {	//now不是结尾
 					var tmp = {x: pos.x, y: pre1.y};
 					now.x = pos.x;
-					this.coord.splice(currentIndex, 0, tmp);	// 在now之前插入tmp
+					this.coord.splice(currentIndex, 0, tmp);	// 在pre1后面插入tmp
 				} else {	//now是结尾
 					var tmp1  = {x: pos.x, y: pre1.y};
 					var tmp2 = {x: pos.x, y: now.y};
 					
-					this.coord.splice(1, 0, tmp1, tmp2);	//在pre1后面插入元素
+					this.coord.splice(currentIndex, 0, tmp1, tmp2);	//在pre1后面插入元素
 				}
 
 				CleanLead(); return true;
@@ -694,26 +694,20 @@ var LEAD = {
 			//2.2处理now是结尾.........................
 			if (next1 == null) {	//now是结尾
 				inter = pos.x - pre2.x;
-				if (inter < 0)inter = -inter;
+				if (inter < 0) inter = -inter;
 
 				if (inter <= dis) {
 					if (pre2 != coord[0]) {	//pre2不是头
-						delete pre1;
-						pre2.next = now;
 						pre2.y = now.y;
+						this.coord.splice(currentIndex-1, 1);	// 删除pre1
 					} else {	//pre2是头
 						pre1.x = pre2.x;
 						pre1.y = now.y;
 					}
 				} else {
-					next1  = {};
-					next1.x = pos.x;
-					next1.y = now.y;
-
 					pre1.x = pos.x;
-
-					pre1.next = next1;
-					next1.next = now;
+					var tmp  = {x: pos.x, y: now.y};
+					this.coord.splice(currentIndex-1, 0, tmp);	//在pre1后面插入元素
 				}
 
 				CleanLead(); return true;
@@ -725,18 +719,15 @@ var LEAD = {
 
 			if (inter <= dis) {	//导线合并
 				if (pre2 != coord[0]) {	//pre2不是头
-					delete pre1;
-					delete now;
-					pre2.next = next1;
 					pre2.y = next1.y;
+					this.coord.splice(currentIndex-1, 2);	// 删除pre1,now
 				} else {	//pre2是头
-					delete pre1;
-					pre2.next = now;
 					now.x = pre2.x;
 
 					if (now.x == next1.x && now.y == next1.y) {
-						delete now;
-						pre2.next = next1;
+						this.coord.splice(currentIndex-1, 2);	// 删除pre1,now
+					} else  {
+						this.coord.splice(currentIndex-1, 1);	// 删除pre1
 					}
 				}
 				
@@ -749,14 +740,11 @@ var LEAD = {
 
 			if (inter <= dis) {	//导线合并
 				if (!isNext1TheLast) {	//next1不是结尾
-					delete pre1;
-					delete now;
-					pre2.next = next1;
 					next1.y = pre2.y;
+					this.coord.splice(currentIndex-1, 2);	// 删除pre1,now
 				} else {	//next1是结尾
-					delete now;
-					pre1.next = next1;
 					pre1.x = next1.x;
+					this.coord.splice(currentIndex, 1);	// 删除now
 				}
 				CleanLead(); return true;
 			}
@@ -776,39 +764,22 @@ var LEAD = {
 			if (pre2 == null) {	//pre是头
 				if (next1 != null) {	//now不是结尾
 					inter = pos.y - next1.y;
-					if (inter < 0)inter = -inter;
+					if (inter < 0) inter = -inter;
 				}
 
 				if (next1 != null && inter <= dis) {	//now不是结尾
 					if (!isNext1TheLast) {	//next1不是结尾
-						delete now;
-						pre1.next = next1;
 						next1.x = pre1.x;
+						this.coord.splice(currentIndex, 1);	// 删除now
 					} else {	//next1是结尾
 						now.y = next1.y;
 						now.x = pre1.x;
 					}
 				} else if (next1 != null) {	//now不是结尾
-					pre2  = {};
-					pre2.y = pos.y;
-					pre2.x = pre1.x;
-					pre2.next = now;
-
-					pre1.next = pre2;
-
 					now.y = pos.y;
+					this.coord.splice(currentIndex-1, 0, {x:pre1.x, y:pos.y});	//在pre1后面插入元素
 				} else {	//now是结尾
-					pre2 = {};
-					pre2.y = pos.y;
-					pre2.x = pre1.x;
-
-					next1 = {};
-					next1.y = pos.y;
-					next1.x = now.x;
-
-					pre1.next = pre2;
-					pre2.next = next1;
-					next1.next = now;
+					this.coord.splice(currentIndex-1, 0, {x:pre1.x, y:pos.y}, {x:now.x, y:pos.y});	//在pre1后面插入元素
 				}
 
 				CleanLead(); return true;
@@ -817,26 +788,19 @@ var LEAD = {
 			//3.2处理now是结尾.........................
 			if (next1 == null) {	//now是结尾
 				inter = pos.y - pre2.y;
-				if (inter < 0)inter = -inter;
+				if (inter < 0) inter = -inter;
 
 				if (inter <= dis) {
 					if (pre2 != &coord) {	//pre2不是头
-						delete pre1;
-						pre2.next = now;
 						pre2.x = now.x;
+						this.coord.splice(currentIndex-1, 1);	// 删除pre1
 					} else {	//pre2是头
 						pre1.y = pre2.y;
 						pre1.x = now.x;
 					}
 				} else {
-					next1  = {};
-					next1.y = pos.y;
-					next1.x = now.x;
-
 					pre1.y = pos.y;
-
-					pre1.next = next1;
-					next1.next = now;
+					this.coord.splice(currentIndex-1, 0, {x:now.x, y:pos.y});	//在pre1后面插入元素
 				}
 
 				CleanLead(); return true;
@@ -848,18 +812,15 @@ var LEAD = {
 
 			if (inter <= dis) {	//导线合并
 				if (pre2 != coord[0]) {	//pre2不是头
-					delete pre1;
-					delete now;
-					pre2.next = next1;
 					pre2.x = next1.x;
+					this.coord.splice(currentIndex-1, 2);	// 删除pre1,now
 				} else {	//pre2是头
-					delete pre1;
-					pre2.next = now;
 					now.y = pre2.y;
-
+					
 					if (now.x == next1.x && now.y == next1.y) {
-						delete now;
-						pre2.next = next1;
+						this.coord.splice(currentIndex-1, 2);	// 删除pre1,now
+					} else {
+						this.coord.splice(currentIndex-1, 1);	// 删除pre1
 					}
 				}
 
@@ -872,14 +833,11 @@ var LEAD = {
 
 			if (inter <= dis) {	//导线合并
 				if (!isNext1TheLast) {	//next1不是结尾
-					delete pre1;
-					delete now;
-					pre2.next = next1;
 					next1.x = pre2.x;
+					this.coord.splice(currentIndex-1, 2);	// 删除pre1,now
 				} else {	//next1是结尾
-					delete now;
-					pre1.next = next1;
 					pre1.y = next1.y;
+					this.coord.splice(currentIndex, 1);	// 删除now
 				}
 				CleanLead(); return true;
 			}
