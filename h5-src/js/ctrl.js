@@ -15,9 +15,6 @@ var PRESSURE_TYPE[CTRL_TYPE_COUNT] = new Array(true, false, false, false, false)
 //标记控件是否有电阻(1可以有电阻,-1断路,0无电阻)
 var RESISTANCE_TYPE[CTRL_TYPE_COUNT] = new Array(1, 1, 1, -1, 1);
 
-//控件数据项个数
-var DATA_ITEM_COUNT[CTRL_TYPE_COUNT] = new Array(2, 1, 2, 1, 1);
-
 //每个电学属性对应的说明
 var DATA_NOTE = new Array(
 	"电阻            (欧姆-Ω)"	,
@@ -311,32 +308,32 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定义时需要添加新类型的处
 
 	//@与CProperty交换信息
 	GetDataList: function(list) {
-		list.Init(this, 2 + DATA_ITEM_COUNT[style]);
+		list.SetDataParent(this);
 
-		list.SetAMember(TITLE_NOTE, "name");
-		list.SetAMember(TITLESHOW_NOTE, "isPaintName");
+		list.SetAMember(DATA_TYPE_string, TITLE_NOTE, "name");
+		list.SetAMember(DATA_TYPE_bool, TITLESHOW_NOTE, "isPaintName");
 
 		switch (style) {
 		case SOURCE:
-			list.SetAMember(DATA_NOTE[DATA_NOTE_PRESS], "pressure");
-			list.SetAMember(DATA_NOTE[DATA_NOTE_RESIST], "resist");
+			list.SetAMember(DATA_TYPE_float, DATA_NOTE[DATA_NOTE_PRESS], "pressure");
+			list.SetAMember(DATA_TYPE_float, DATA_NOTE[DATA_NOTE_RESIST], "resist");
 			break;
 
 		case RESIST:
-			list.SetAMember(DATA_NOTE[DATA_NOTE_RESIST], "resist");
+			list.SetAMember(DATA_TYPE_float, DATA_NOTE[DATA_NOTE_RESIST], "resist");
 			break;
 
 		case BULB:
-			list.SetAMember(DATA_NOTE[DATA_NOTE_RATING], "rating");
-			list.SetAMember(DATA_NOTE[DATA_NOTE_RESIST], "resist");
+			list.SetAMember(DATA_TYPE_float, DATA_NOTE[DATA_NOTE_RATING], "rating");
+			list.SetAMember(DATA_TYPE_float, DATA_NOTE[DATA_NOTE_RESIST], "resist");
 			break;
 
 		case CAPA:
-			list.SetAMember(DATA_NOTE[DATA_NOTE_CAPA], "capa");
+			list.SetAMember(DATA_TYPE_float, DATA_NOTE[DATA_NOTE_CAPA], "capa");
 			break;
 
 		case SWITCH:
-			list.SetAMember(DATA_NOTE[DATA_NOTE_SWITCHONOFF], "closed");
+			list.SetAMember(DATA_TYPE_bool, DATA_NOTE[DATA_NOTE_SWITCHONOFF], "closed");
 			// 当修改完毕需要立即更新resist
 			break;
 		}

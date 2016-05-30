@@ -111,9 +111,9 @@ var CRUN = {
 
 	//和CProperty交互
 	GetDataList: function (list) {
-		list.Init(this, 2);
-		list.SetAMember(TITLE_NOTE, "name");
-		list.SetAMember(TITLESHOW_NOTE, "isPaintName");
+		list.SetDataParent(this);
+		list.SetAMember(DATA_TYPE_string, TITLE_NOTE, "name");
+		list.SetAMember(DATA_TYPE_bool, TITLESHOW_NOTE, "isPaintName");
 	},
 
 	//寻找导线在哪个方向

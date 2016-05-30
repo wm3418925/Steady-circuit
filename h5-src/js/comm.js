@@ -66,7 +66,7 @@ function IsElecError(/*const ELEC_STATE */e)	//电流是否不正常
 	return e < NORMALELEC || e > OPENELEC;
 }
 
-/*bool*/function IsFloat(/*const char * */str)	//判断字符串是否是浮点数据
+/*bool*/function IsStrPositiveFloat(/*const char * */str)	//判断字符串是否是正数
 {
 	/*int*/var count = 0;
 

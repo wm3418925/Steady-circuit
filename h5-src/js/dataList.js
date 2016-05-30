@@ -13,30 +13,30 @@ var ERROR_ENUMNOTALLOWED	= 7;	//枚举在一些情况下不允许一些值(如:焦点物体颜色不能
 // 处理类型属性
 var ENUM_DATA_HANLDER = {
 	
-	CreateNew: function(enumType, int * dataPoint) {
-		var note;
+	CreateNew: function(enumType, memeberName) {
+		var noteList;
 		switch (enumType) {
 		case CTRL_TYPE_ENUM:	//控件类型
-			note = CTRL_TYPE_NAMES;
+			noteList = CTRL_TYPE_NAMES;
 			break;
 		case LEAD_STYLE_ENUM:	//导线样式
-			note = LEAD_STYLE_NAMES;
+			noteList = LEAD_STYLE_NAMES;
 			break;
 		}
 		
-		return {"data": dataPoint, "note":note};
+		return {"memeberName": memeberName, "noteList":noteList};
 	},
 
-	GetDataPoint: function() {
-		return data;
+	GetMemeberName: function() {
+		return memeberName;
 	},
 
 	GetOptionCount: function() {
-		return note.length;
+		return noteList.length;
 	},
 
 	GetOptionNoteList: function() {
-		return note;
+		return noteList;
 	}
 };
 
@@ -44,52 +44,56 @@ var LISTDATA = {	//数据列表信息类
 
 	CreateNew: function() {
 		return {
-			dataType: new Array(),	//每个数据项类型
-			minData: new Array(),	//如果是short,int,long等整型数据,有最小值
-			maxData: new Array(),	//如果是short,int,long等整型数据,有最大值
-			dataPoint: new Array(),	//数据
-			noteText: new Array()};	//每个数据项类型提示信息
+			dataParent : null,
+			dataTypeList: new Array(),		//每个数据项类型
+			dataMinList: new Array(),		//如果是short,int,long等整型数据,有最小值
+			dataMaxList: new Array(),		//如果是short,int,long等整型数据,有最大值
+			memeberNameList: new Array(),	//数据
+			noteTextList: new Array()};		//每个数据项类型提示信息
+	},
+	SetDataParent: function(dataParent) {
+		this.dataParent = dataParent;
 	},
 
 	Unint: function() {
-		dataType = null;
-		minData = null;
-		maxData = null;
-		dataPoint = null;
-		noteText = null;
+		dataTypeList = null;
+		dataMinList = null;
+		dataMaxList = null;
+		memeberNameList = null;
+		noteTextList = null;
 	},
 
 	GetListSize() {
-		return dataPoint.length;
+		return memeberNameList.length;
 	},
 
 	//设置列表的一项, dataType != DATA_TYPE_enum, 当min>max表示没有大小限制
-	void SetAMember(DATA_STYLE dataType, note, data, min/*1*/, max/*0*/) {
+	void SetAMember(dataType, note, data, min/*1*/, max/*0*/) {
 		ASSERT(dataType != DATA_TYPE_enum);
 		if (min == undefined || max == undefined) {
 			min = 1;
 			max = 0;
 		}
 
-		dataType.push(dataType);
-		minData.push(min);
-		maxData.push(max);
-		noteText.push(note);
-		dataPoint.push(data);
+		dataTypeList.push(dataType);
+		dataMinList.push(min);
+		dataMaxList.push(max);
+		noteTextList.push(note);
+		memeberNameList.push(data);
 	},
 
-	//设置style == DATA_TYPE_enum 的一项, dataPoint 指向一个 ENUM_DATA_HANLDER
+	//设置style == DATA_TYPE_enum 的一项, memeberNameList 指向一个 ENUM_DATA_HANLDER
 	void SetAEnumMember(note, data, enumType, min/*1*/, max/*0*/) {
 		if (min == undefined || max == undefined) {
 			min = 1;
 			max = 0;
 		}
 		
-		dataType.push(DATA_TYPE_enum);
-		minData.push(min);
-		maxData.push(max);
-		noteText.push(note);
-		dataPoint.push(ENUM_DATA_HANLDER.CreateNew(enumType, data));
+		dataTypeList.push(DATA_TYPE_enum);
+		dataMinList.push(min);
+		dataMaxList.push(max);
+		noteTextList.push(note);
+		memeberNameList.push(ENUM_DATA_HANLDER.CreateNew(enumType, data));
 	},
 
 	//检查一行: row--行, chData--字符串数据, enumData--枚举数据
@@ -97,12 +101,12 @@ var LISTDATA = {	//数据列表信息类
 		var chData;
 		var enumData;
 
-		switch (dataType[row]) {
+		switch (dataTypeList[row]) {
 		case DATA_TYPE_float:
 			chData = pageElement.value;
 			if (chData == null || chData.length == 0)
 				return ERROR_STRNULL;
-			else if (!IsFloatZero(chData))
+			else if (!IsStrPositiveFloat(chData))
 				return ERROR_FLOATMIX;
 			break;
 
@@ -112,19 +116,19 @@ var LISTDATA = {	//数据列表信息类
 				return ERROR_STRNULL;
 			} else if (!IsUnsignedInteger(chData)) {
 				return ERROR_UINTMIX;
-			} else if (minData[row] <= maxData[row]) {	//有大小限制
+			} else if (dataMinList[row] <= dataMaxList[row]) {	//有大小限制
 				enumData = parseInt(chData);
-				if (enumData < minData[row] || enumData > maxData[row])
+				if (enumData < dataMinList[row] || enumData > dataMaxList[row])
 					return ERROR_UINTOVER;
 			}
 			break;
 
 		case DATA_TYPE_enum:
 			enumData = pageElement.selectedIndex;
-			if (enumData < 0 || enumData >= ((ENUM_STYLE*)dataPoint[row])->GetStyleNum()) {
+			if (enumData < 0 || enumData >= memeberNameList[row].GetOptionCount()) {
 				return ERROR_ENUMOVER;
-			} else if (minData[row] <= maxData[row]) {	//有大小限制
-				if (enumData < minData[row] || enumData > maxData[row])
+			} else if (dataMinList[row] <= dataMaxList[row]) {	//有大小限制
+				if (enumData < dataMinList[row] || enumData > dataMaxList[row])
 					return ERROR_ENUMNOTALLOWED;
 			}
 			break;
@@ -138,10 +142,10 @@ var LISTDATA = {	//数据列表信息类
 	},
 
 	//将控件用户修改的信息保存到指针指向的物体
-	void SaveAMember(int row, pageElement) {
+	void SaveAMember(row, pageElement) {
 		var tmpData;
 
-		switch (dataType[row]) {
+		switch (dataTypeList[row]) {
 		case DATA_TYPE_float:
 			tmpData = parseFloat(pageElement.value);
 			break;
@@ -159,7 +163,10 @@ var LISTDATA = {	//数据列表信息类
 			break;
 		}
 		
-		dataPoint[row].setValue(tmpData);
+		if (dataTypeList[row] == DATA_TYPE_enum)
+			dataParent[eval(memeberNameList[row].GetMemeberName())] = tmpData;
+		else
+			dataParent[eval(memeberNameList[row])] = tmpData;
 	}
 
 };
