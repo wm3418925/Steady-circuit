@@ -4,9 +4,9 @@ void Manager::Help(POINT pos)
 {
 	char note[128];
 
-	motiNum = 0;
+	motiCount = 0;
 	MotivateAll(pos);
-	motiNum = 0;
+	motiCount = 0;
 
 	if(!motiBody[0].IsOnAny())
 	{

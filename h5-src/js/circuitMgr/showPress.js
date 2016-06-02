@@ -11,9 +11,9 @@ void Manager::ClearPressBody()
 bool Manager::SetStartBody(POINT pos)
 //设置计算电势差的起始位置
 {
-	motiNum = 0;
+	motiCount = 0;
 	if(!MotivateAll(pos)) return false;	//没有点击物体
-	motiNum = 0;
+	motiCount = 0;
 
 	if(motiBody[0].IsOnLead())
 	{

@@ -8,7 +8,7 @@ void Manager::SaveCircuitInfoToTextFile()
 	if(fp == NULL) return;
 
 	fprintf(fp, "{\ncruns:[\n");
-	for(i=0; i<crunNum; i++)
+	for(i=0; i<crunCount; i++)
 	{
 		fprintf(fp, "{id:%d,x:%d,y:%d,", crun[i]->GetInitOrder(), crun[i]->coord.x, crun[i]->coord.y);
 		fprintf(fp, "name:\"%s\",lead:[", crun[i]->name);
@@ -20,12 +20,12 @@ void Manager::SaveCircuitInfoToTextFile()
 		}
 		fprintf(fp, "]}\n");
 
-		if (i != crunNum-1) fprintf(fp, ",");
+		if (i != crunCount-1) fprintf(fp, ",");
 	}
 	fprintf(fp, "],\n");
 
 	fprintf(fp, "leads:[\n");
-	for(i=0; i<leadNum; ++i)
+	for(i=0; i<leadCount; ++i)
 	{
 		fprintf(fp, "{id:%d,", (int)lead[i]->GetInitOrder());
 		lead[i]->SaveToTextFile(fp);
@@ -34,13 +34,13 @@ void Manager::SaveCircuitInfoToTextFile()
 		fprintf(fp, ",");	lead[i]->conBody[1].SaveToTextFile(fp);
 		fprintf(fp, "]}\n");
 
-		if (i != leadNum-1) fprintf(fp, ",");
+		if (i != leadCount-1) fprintf(fp, ",");
 	}
 	fprintf(fp, "],\n");
 
-	fprintf(fp, "ctrls:[\n", ctrlNum);
+	fprintf(fp, "ctrls:[\n", ctrlCount);
 	const char * ctrlStyleStr[] = {"source","resistance","bulb","capa","switch"}; 
-	for(i=0; i<ctrlNum; ++i)
+	for(i=0; i<ctrlCount; ++i)
 	{
 		fprintf(fp, "{id:%d,x:%d,y:%d,", ctrl[i]->GetInitOrder(), ctrl[i]->coord.x, ctrl[i]->coord.y);
 		fprintf(fp, "name:\"%s\",lead:[", ctrl[i]->name);
@@ -53,7 +53,7 @@ void Manager::SaveCircuitInfoToTextFile()
 
 		fprintf(fp, "style:\"%s\"}", ctrlStyleStr[ctrl[i]->GetStyle()]);
 		
-		if (i != leadNum-1) fprintf(fp, ",");
+		if (i != leadCount-1) fprintf(fp, ",");
 	}
 	fprintf(fp, "]\n}\n");
 
@@ -70,7 +70,7 @@ void Manager::SaveCountInfoToTextFile()
 
 	CollectCircuitInfo();
 
-	for(i=0; i<crunNum; ++i)
+	for(i=0; i<crunCount; ++i)
 	{
 		fprintf(fp, "crun[%d]:\n", i);
 		fprintf(fp, "\tgroup = %d\n", crun2[i].group);

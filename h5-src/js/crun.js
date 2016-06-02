@@ -4,7 +4,7 @@ var CRUN = {
 	//全局初始化次序
 	globalInitOrder: 1,
 	//重置全局初始化次序
-	ResetGlobalInitNum: function() {
+	ResetGlobalInitOrder: function() {
 		return (CRUN.globalInitOrder = 1);
 	},
 

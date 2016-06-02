@@ -18,7 +18,7 @@ CDC * Manager::GetCtrlPaintHandle(const CTRL * c)
 	else if(c->SwitchOnOff(false))	//开关闭合
 			paintMenDc = ctrlDcMem + IDB_SWITCH_CLOSE - IDB_SOURCE;
 
-	return paintMenDc + c->dir * CTRL_BITMAP_TYPE_NUM;	//位图和旋转角度有关系
+	return paintMenDc + c->dir * CTRL_BITMAP_TYPE_COUNT;	//位图和旋转角度有关系
 }
 
 void Manager::GetName(const Pointer &pointer, char * str)const
@@ -72,7 +72,7 @@ void Manager::ClearCircuitState()
 {
 	FocusBodyClear(NULL);	//焦点
 	ClearPressBody();		//显示电势差
-	motiNum = 0;			//激活物体数量
+	motiCount = 0;			//激活物体数量
 	addState = BODY_NO;		//添加物体类型
 	lastMoveOnBody.Clear();	//鼠标上次移动到的物体
 	lButtonDownState = 0;	//鼠标左击状态
@@ -89,9 +89,9 @@ Pointer Manager::GetBodyPointer(FOCUS_OR_POS &body)
 	}
 	else
 	{
-		motiNum = 0;
+		motiCount = 0;
 		MotivateAll(body.pos);
-		motiNum = 0;
+		motiCount = 0;
 		pointer = motiBody[0];
 	}
 

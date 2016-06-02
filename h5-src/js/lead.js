@@ -5,7 +5,7 @@ var LEAD = {
 	//全局初始化次序
 	globalInitOrder: 1,
 	//重置全局初始化次序
-	ResetGlobalInitNum: function() {
+	ResetGlobalInitOrder: function() {
 		return (LEAD.globalInitOrder = 1);
 	},
 
@@ -931,9 +931,9 @@ var LEAD = {
 	PaintLead: function(cxt) {
 		ASSERT(cxt != null);
 
-		cxt.moveTo(this.coord[0]);
+		cxt.moveTo(this.coord[0].x, this.coord[0].y);
 		for (var index=1; index < this.coord.length; ++index;) {
-			cxt.lineTo(this.coord[index]);
+			cxt.lineTo(this.coord[index].x, this.coord[index].y);
 		}
 	},
 

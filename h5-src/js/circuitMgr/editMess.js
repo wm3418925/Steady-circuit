@@ -5,11 +5,11 @@ bool Manager::AddBody(POINT pos)
 	BODY_TYPE temp = addState;
 
 	addState = BODY_NO;	//不再添加物体
-	dc->DPtoLP(&pos);
+	ctx->DPtoLP(&pos);
 
 	if(BODY_CRUN == temp)
 	{
-		if(crunNum >= MAXCRUNNUM)
+		if(crunCount >= MAX_CRUN_COUNT)
 		{
 			wndPointer->MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
 			return false;
@@ -22,7 +22,7 @@ bool Manager::AddBody(POINT pos)
 	}
 	else if(Pointer::IsCtrl(temp))
 	{
-		if(ctrlNum >= MAXCTRLNUM)
+		if(ctrlCount >= MAX_CTRL_COUNT)
 		{
 			wndPointer->MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
 			return false;
@@ -151,7 +151,7 @@ bool Manager::PosBodyClone(const Pointer * body, POINT firstPos, POINT lastPos)
 	if(body->IsOnCrun())
 	{
 		//验证
-		if(crunNum >= MAXCRUNNUM)
+		if(crunCount >= MAX_CRUN_COUNT)
 		{
 			wndPointer->MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
 			return false;
@@ -161,22 +161,22 @@ bool Manager::PosBodyClone(const Pointer * body, POINT firstPos, POINT lastPos)
 		CloneCircuitBeforeChange();
 
 		//编辑电路
-		crun[crunNum] = body->p2->Clone(CLONE_FOR_USE);
-		crun[crunNum]->coord.x += inter.x;
-		crun[crunNum]->coord.y += inter.y;
-		crun[crunNum]->num = crunNum;
-		++crunNum;
+		crun[crunCount] = body->p2->Clone(CLONE_FOR_USE);
+		crun[crunCount]->coord.x += inter.x;
+		crun[crunCount]->coord.y += inter.y;
+		crun[crunCount]->num = crunCount;
+		++crunCount;
 
 		//将新的电路信息保存到容器
 		PutCircuitToVector();
 
 		//重绘电路
-		PaintCrun(crun[crunNum-1], true);
+		PaintCrun(crun[crunCount-1], true);
 	}
 	else //if(body->IsOnCtrl())
 	{
 		//验证
-		if(ctrlNum >= MAXCTRLNUM)
+		if(ctrlCount >= MAX_CTRL_COUNT)
 		{
 			wndPointer->MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
 			return false;
@@ -186,17 +186,17 @@ bool Manager::PosBodyClone(const Pointer * body, POINT firstPos, POINT lastPos)
 		CloneCircuitBeforeChange();
 
 		//编辑部分
-		ctrl[ctrlNum] = body->p3->Clone(CLONE_FOR_USE);
-		ctrl[ctrlNum]->coord.x += inter.x;
-		ctrl[ctrlNum]->coord.y += inter.y;
-		ctrl[ctrlNum]->num = ctrlNum;
-		++ctrlNum;
+		ctrl[ctrlCount] = body->p3->Clone(CLONE_FOR_USE);
+		ctrl[ctrlCount]->coord.x += inter.x;
+		ctrl[ctrlCount]->coord.y += inter.y;
+		ctrl[ctrlCount]->num = ctrlCount;
+		++ctrlCount;
 
 		//将新的电路信息保存到容器
 		PutCircuitToVector();
 
 		//重绘电路
-		PaintCtrl(ctrl[ctrlNum-1], true);
+		PaintCtrl(ctrl[ctrlCount-1], true);
 	}
 
 	return true;

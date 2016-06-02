@@ -129,7 +129,7 @@ bool Manager::FocusBodyPaint(const Pointer * newFocus)
 void Manager::FocusBodyChangeUseTab()
 //用户按Tab键切换焦点处理
 {
-	const int bodyNum = crunNum + ctrlNum;
+	const int bodyNum = crunCount + ctrlCount;
 	Pointer newFocus;
 	int num;
 
@@ -137,22 +137,22 @@ void Manager::FocusBodyChangeUseTab()
 
 	if(focusBody.IsOnLead())	//当前焦点是导线
 	{
-		num = (focusBody.p1->num + 1) % leadNum;
+		num = (focusBody.p1->num + 1) % leadCount;
 		newFocus.SetOnLead(lead[num]);
 	}
 	else if(focusBody.IsOnCrun())	//当前焦点是结点
 	{
-		num = (focusBody.p2->num + 1) % crunNum;
+		num = (focusBody.p2->num + 1) % crunCount;
 		newFocus.SetOnCrun(crun[num], true);
 	}
 	else if(focusBody.IsOnCtrl())	//当前焦点是控件
 	{
-		num = (focusBody.p3->num + 1) % ctrlNum;
+		num = (focusBody.p3->num + 1) % ctrlCount;
 		newFocus.SetOnCtrl(ctrl[num], true);
 	}
 	else	//没有设定焦点
 	{
-		if(crunNum > 0)
+		if(crunCount > 0)
 			newFocus.SetOnCrun(crun[0], true);
 		else
 			newFocus.SetOnCtrl(ctrl[0], true);
@@ -164,7 +164,7 @@ void Manager::FocusBodyChangeUseTab()
 bool Manager::FocusBodyMove(int dir)
 //用户按上下左右键移动焦点物体
 {
-	motiNum = 0;
+	motiCount = 0;
 	if(!focusBody.IsOnBody()) return false;
 
 	POINT fromPos, toPos;

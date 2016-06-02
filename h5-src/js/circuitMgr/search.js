@@ -23,7 +23,7 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 			if(isSearchLead)
 				j = focusBody.p1->num + 1;
 			else
-				j = leadNum;
+				j = leadCount;
 		}
 		else if(isAfterFocus && isSearchLead)
 		{
@@ -35,10 +35,10 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 		}
 		else
 		{
-			j = leadNum;
+			j = leadCount;
 		}
 
-		for(; j<leadNum; ++j)
+		for(; j<leadCount; ++j)
 		{
 			itoa(lead[j]->GetInitOrder(), str, 10);
 			isMatch = kmp.IsMatch(str);
@@ -61,7 +61,7 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 			if(isSearchCrun)
 				j = focusBody.p2->num + 1;
 			else
-				j = crunNum;
+				j = crunCount;
 		}
 		else if(isAfterFocus && isSearchCrun)
 		{
@@ -73,10 +73,10 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 		}
 		else
 		{
-			j = crunNum;
+			j = crunCount;
 		}
 
-		for(; j<crunNum; ++j)
+		for(; j<crunCount; ++j)
 		{
 			if(searchBy == SEARCH_BY_NAME)
 			{
@@ -106,7 +106,7 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 			if(isSearchCtrl)
 				j = focusBody.p3->num + 1;
 			else
-				j = ctrlNum;
+				j = ctrlCount;
 		}
 		else if(isAfterFocus && isSearchCtrl)
 		{
@@ -118,10 +118,10 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 		}
 		else
 		{
-			j = ctrlNum;
+			j = ctrlCount;
 		}
 
-		for(; j<ctrlNum; ++j)
+		for(; j<ctrlCount; ++j)
 		{
 			if(range == BODY_ALL || range == BODY_ALLCTRL || ctrl[j]->GetStyle() == range)
 			{
@@ -177,7 +177,7 @@ bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 		}
 		else if(isAfterFocus && isSearchCtrl)
 		{
-			j = ctrlNum-1;
+			j = ctrlCount-1;
 		}
 		else if(isAfterFocus && !isSearchCtrl && focusBody.IsOnCtrl())
 		{
@@ -225,7 +225,7 @@ bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 		}
 		else if(isAfterFocus && isSearchCrun)
 		{
-			j = crunNum - 1;
+			j = crunCount - 1;
 		}
 		else if(isAfterFocus && !isSearchCrun && focusBody.IsOnCrun())
 		{
@@ -270,7 +270,7 @@ bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 		}
 		else if(isAfterFocus && isSearchLead)
 		{
-			j = leadNum - 1;
+			j = leadCount - 1;
 		}
 		else if(isAfterFocus && !isSearchLead && focusBody.IsOnLead())
 		{

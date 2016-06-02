@@ -5,7 +5,7 @@ void Manager::SetViewOrig(int xPos, int yPos)
 {
 	viewOrig.x = xPos * mouseWheelSense.cx;
 	viewOrig.y = yPos * mouseWheelSense.cy;
-	dc->SetViewportOrg(-viewOrig.x, -viewOrig.y);
+	ctx->SetViewportOrg(-viewOrig.x, -viewOrig.y);
 }
 
 void Manager::SetMoveBodySense()
@@ -49,7 +49,7 @@ void Manager::SetTextColor()
 
 	if(preColor != textColor)
 	{
-		dc->SetTextColor(LEADCOLOR[textColor]);
+		ctx->SetTextColor(LEADCOLOR[textColor]);
 		PaintAll();
 	}
 }

@@ -2,7 +2,7 @@
 bool Manager::ShowAddLead(POINT pos)
 //连接导线过程显示
 {
-	if(1 != motiNum) return false;
+	if(1 != motiCount) return false;
 
 	Pointer * body = motiBody;
 	POINT firstPos;
@@ -10,18 +10,18 @@ bool Manager::ShowAddLead(POINT pos)
 	if(!body->IsOnConnectPos()) return false;
 
 	PaintAll();		//先刷新
-	motiNum = 1;	//还原变量
+	motiCount = 1;	//还原变量
 
 	//dc移动到起点
-	dc->DPtoLP(&pos);
-	dc->MoveTo(pos);
+	Manager.ctx->DPtoLP(&pos);
+	Manager.ctx->MoveTo(pos);
 
 	//设置黑色画笔
-	dc->SelectStockObject(BLACK_PEN);
+	Manager.ctx->SelectStockObject(BLACK_PEN);
 
 	//画直线
 	body->GetPosFromBody(firstPos);
-	dc->LineTo(firstPos);
+	Manager.ctx->LineTo(firstPos);
 
 	return true;
 }
@@ -32,10 +32,10 @@ bool Manager::ShowAddBody(POINT point)
 	if(addState == BODY_CRUN)
 	{
 		if(lastMoveOnPos.x > -100)
-			dc->BitBlt(lastMoveOnPos.x-DD, lastMoveOnPos.y-DD, DD*2, DD*2, &crunDcMem, 0, 0, SRCINVERT);
-		dc->DPtoLP(&point);
+			Manager.ctx->BitBlt(lastMoveOnPos.x-DD, lastMoveOnPos.y-DD, DD*2, DD*2, &crunDcMem, 0, 0, SRCINVERT);
+		Manager.ctx->DPtoLP(&point);
 		lastMoveOnPos = point;
-		dc->BitBlt(lastMoveOnPos.x-DD, lastMoveOnPos.y-DD, DD*2, DD*2, &crunDcMem, 0, 0, SRCINVERT);
+		Manager.ctx->BitBlt(lastMoveOnPos.x-DD, lastMoveOnPos.y-DD, DD*2, DD*2, &crunDcMem, 0, 0, SRCINVERT);
 
 		::SetCursor(hcAddCrun);
 		return true;
@@ -44,10 +44,10 @@ bool Manager::ShowAddBody(POINT point)
 	{
 		CDC * tempDc = ctrlDcMem + addState;
 		if(lastMoveOnPos.x > -100)
-			dc->BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, BODYSIZE.cx, BODYSIZE.cy, tempDc, 0, 0, SRCINVERT);
-		dc->DPtoLP(&point);
+			Manager.ctx->BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, BODYSIZE.cx, BODYSIZE.cy, tempDc, 0, 0, SRCINVERT);
+		Manager.ctx->DPtoLP(&point);
 		lastMoveOnPos = point;
-		dc->BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, BODYSIZE.cx, BODYSIZE.cy, tempDc, 0, 0, SRCINVERT);
+		Manager.ctx->BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, BODYSIZE.cx, BODYSIZE.cy, tempDc, 0, 0, SRCINVERT);
 
 		::SetCursor(NULL);
 		return true;
@@ -61,10 +61,10 @@ bool Manager::ShowAddBody(POINT point)
 bool Manager::ShowMoveBody(POINT pos, bool isLButtonDown)
 //移动物体过程显示,lastMoveOnPos.x初始值设为-100,在LButtonDown和PaintAll中设置
 {
-	ASSERT(motiNum >= 0 && motiNum <= 2);
-	if(motiNum == 0) return false;
+	ASSERT(motiCount >= 0 && motiCount <= 2);
+	if(motiCount == 0) return false;
 
-	Pointer * body = motiBody + motiNum - 1;
+	Pointer * body = motiBody + motiCount - 1;
 	POINT bodyPos = {0, 0};
 
 	if(!body->IsOnBody()) return false;
@@ -75,7 +75,7 @@ bool Manager::ShowMoveBody(POINT pos, bool isLButtonDown)
 	}
 
 	//获得物体坐标
-	dc->DPtoLP(&pos);
+	Manager.ctx->DPtoLP(&pos);
 	if(body->IsOnCrun()) bodyPos = body->p2->coord;
 	else if(body->IsOnCtrl()) bodyPos = body->p3->coord;
 
@@ -100,9 +100,9 @@ bool Manager::ShowMoveBody(POINT pos, bool isLButtonDown)
 bool Manager::ShowMoveLead(bool isLButtonDown)
 //移动导线过程显示
 {
-	ASSERT(motiNum>=0 && motiNum<=2);
+	ASSERT(motiCount>=0 && motiCount<=2);
 
-	if(motiNum == 0 || !motiBody[motiNum-1].IsOnLead())
+	if(motiCount == 0 || !motiBody[motiCount-1].IsOnLead())
 	{
 		return false;
 	}
@@ -112,7 +112,7 @@ bool Manager::ShowMoveLead(bool isLButtonDown)
 		return true;
 	}
 
-	if(motiBody[motiNum-1].IsOnHoriLead())
+	if(motiBody[motiCount-1].IsOnHoriLead())
 		SetCursor(hcMoveHorz);	//在横线,鼠标变成"上下指针"
 	else 
 		SetCursor(hcMoveVert);	//在竖线,鼠标变成"左右指针"
@@ -126,24 +126,24 @@ BODY_TYPE Manager::PosBodyPaintRect(POINT pos)
 {
 	Pointer * body = motiBody; //&motiBody[0]
 
-	motiNum = 0;
+	motiCount = 0;
 	MotivateAll(pos);
-	motiNum = 0;
+	motiCount = 0;
 
 	if(!body->IsOnAny()) return BODY_NO;
 
 	if(body->IsOnConnectPos()) body->SetAtState(-1);
 
-	if(body->IsOnBody()) dc->SelectObject(hp + BLUE);
+	if(body->IsOnBody()) Manager.ctx->SelectObject(hp + BLUE);
 
 	if(body->IsOnCrun())
 	{
-		dc->Rectangle(body->p2->coord.x-DD-2, body->p2->coord.y-DD-2, 
+		Manager.ctx->Rectangle(body->p2->coord.x-DD-2, body->p2->coord.y-DD-2, 
 			body->p2->coord.x+DD+2, body->p2->coord.y+DD+2);
 	}
 	else if(body->IsOnCtrl())
 	{
-		dc->Rectangle(body->p3->coord.x-2, body->p3->coord.y-2, 
+		Manager.ctx->Rectangle(body->p3->coord.x-2, body->p3->coord.y-2, 
 			body->p3->coord.x+BODYSIZE.cx+2, body->p3->coord.y+BODYSIZE.cy+2);
 	}
 

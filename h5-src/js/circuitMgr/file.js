@@ -26,20 +26,20 @@ bool Manager::SaveFile(const char * newFile)
 	fwrite(&i, sizeof(long), 1, fp);
 
 	//2保存物体数量
-	fwrite(&crunNum, sizeof(short), 1, fp);
-	fwrite(&ctrlNum, sizeof(short), 1, fp);
-	fwrite(&leadNum, sizeof(short), 1, fp);
+	fwrite(&crunCount, sizeof(short), 1, fp);
+	fwrite(&ctrlCount, sizeof(short), 1, fp);
+	fwrite(&leadCount, sizeof(short), 1, fp);
 
 	//3保存结点
-	for(i = crunNum-1; i >= 0; --i)
+	for(i = crunCount-1; i >= 0; --i)
 		crun[i]->SaveToFile(fp);
 
 	//4保存控件
-	for(i = ctrlNum-1; i >= 0; --i)
+	for(i = ctrlCount-1; i >= 0; --i)
 		ctrl[i]->SaveToFile(fp);
 
 	//5保存导线
-	for(i = leadNum-1; i >= 0; --i)
+	for(i = leadCount-1; i >= 0; --i)
 		lead[i]->SaveToFile(fp);
 
 	//6保存其他变量
@@ -91,37 +91,37 @@ bool Manager::ReadFile(const char * newFile)
 	try	//可能因为文件问题而发生错误
 	{
 		//2读取物体数量
-		fread(&crunNum, sizeof(short), 1, fp);
-		fread(&ctrlNum, sizeof(short), 1, fp);
-		fread(&leadNum, sizeof(short), 1, fp);
+		fread(&crunCount, sizeof(short), 1, fp);
+		fread(&ctrlCount, sizeof(short), 1, fp);
+		fread(&leadCount, sizeof(short), 1, fp);
 
 		//检查读取的物体数量是否在允许的范围之内
-		if(crunNum < 0 || leadNum < 0 || ctrlNum < 0)
+		if(crunCount < 0 || leadCount < 0 || ctrlCount < 0)
 			goto READFILEERROR;
-		if(crunNum>MAXCRUNNUM || leadNum>MAXLEADNUM || ctrlNum>MAXCTRLNUM)
+		if(crunCount>MAX_CRUN_COUNT || leadCount>MAX_LEAD_COUNT || ctrlCount>MAX_CTRL_COUNT)
 			goto READFILEERROR;
 
 		//为每个物体申请内存空间
-		for(i = crunNum-1; i >= 0; --i)
+		for(i = crunCount-1; i >= 0; --i)
 			crun[i] = new CRUN(i, pos1);
-		for(i = ctrlNum-1; i >= 0; --i)
+		for(i = ctrlCount-1; i >= 0; --i)
 			ctrl[i] = new CTRL(i, pos1, SOURCE, false);
-		for(i = leadNum-1; i >= 0; --i)
+		for(i = leadCount-1; i >= 0; --i)
 			lead[i] = new LEAD(i, motiBody[0],motiBody[1], false);
 
 		//3读取结点
 		CRUN::ResetInitNum();
-		for(i = crunNum-1; i >= 0; --i)
+		for(i = crunCount-1; i >= 0; --i)
 			crun[i]->ReadFromFile(fp, lead);
 
 		//4读取控件
 		CTRL::ResetInitNum();
-		for(i = ctrlNum-1; i >= 0; --i)
+		for(i = ctrlCount-1; i >= 0; --i)
 			ctrl[i]->ReadFromFile(fp, lead);
 
 		//5读取导线
 		LEAD::ResetInitNum();
-		for(i = leadNum-1; i >= 0; --i)
+		for(i = leadCount-1; i >= 0; --i)
 			lead[i]->ReadFromFile(fp, lead, crun, ctrl);
 
 		//6读取其他变量
@@ -135,8 +135,8 @@ bool Manager::ReadFile(const char * newFile)
 		FocusBodySet(body);								//设置焦点物体
 		fread(&viewOrig, sizeof(POINT), 1, fp);			//视角初始坐标
 
-		dc->SetTextColor(LEADCOLOR[textColor]);								//初始化字体颜色
-		dc->SetViewportOrg(-viewOrig.x, -viewOrig.y);						//初始化视角初始坐标
+		ctx->SetTextColor(LEADCOLOR[textColor]);								//初始化字体颜色
+		ctx->SetViewportOrg(-viewOrig.x, -viewOrig.y);						//初始化视角初始坐标
 		wndPointer->SetScrollPos(SB_HORZ, viewOrig.x/mouseWheelSense.cx);	//初始化水平滚动条
 		wndPointer->SetScrollPos(SB_VERT, viewOrig.y/mouseWheelSense.cy);	//初始化竖直滚动条
 
@@ -161,6 +161,6 @@ void Manager::CreateFile()
 	fileName[0] = '\0';											//路径清空
 	ClearCircuitState();										//清除电路状态信息
 	DeleteVector(circuitVector.begin(), circuitVector.end());	//清除容器保存的电路信息
-	leadNum = crunNum = ctrlNum = 0;							//物体数量设为0
+	leadCount = crunCount = ctrlCount = 0;							//物体数量设为0
 	PutCircuitToVector();										//将当前空电路信息保存到容器
 }

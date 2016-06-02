@@ -3,54 +3,54 @@
 void Manager::AddCtrl(POINT pos, BODY_TYPE style)
 //添加控件
 {
-	ASSERT(ctrlNum < MAXCTRLNUM);
+	ASSERT(ctrlCount < MAX_CTRL_COUNT);
 
-	ctrl[ctrlNum] = new CTRL(ctrlNum, pos, style);
-	++ ctrlNum;
+	ctrl[ctrlCount] = new CTRL(ctrlCount, pos, style);
+	++ ctrlCount;
 
-	PaintCtrlText(ctrl[ctrlNum-1]);
+	PaintCtrlText(ctrl[ctrlCount-1]);
 	Pointer newFocus;
-	newFocus.SetOnCtrl(ctrl[ctrlNum-1], 1);
+	newFocus.SetOnCtrl(ctrl[ctrlCount-1], 1);
 	FocusBodyPaint(&newFocus);
 }
 
 void Manager::AddCrun(POINT pos)
 //添加结点
 {
-	ASSERT(crunNum < MAXCRUNNUM);
+	ASSERT(crunCount < MAX_CRUN_COUNT);
 
-	crun[crunNum] = new CRUN(crunNum, pos);
-	++ crunNum;
+	crun[crunCount] = new CRUN(crunCount, pos);
+	++ crunCount;
 
-	PaintCrunText(crun[crunNum-1]);
+	PaintCrunText(crun[crunCount-1]);
 	Pointer newFocus;
-	newFocus.SetOnCrun(crun[crunNum-1], 1);
+	newFocus.SetOnCrun(crun[crunCount-1], 1);
 	FocusBodyPaint(&newFocus);
 }
 
 void Manager::AddLead(Pointer a, Pointer b)
 //用导线连接2个物体
 {
-	ASSERT(leadNum < MAXLEADNUM);						//导线够用
+	ASSERT(leadCount < MAX_LEAD_COUNT);						//导线够用
 	ASSERT(a.IsOnConnectPos() && b.IsOnConnectPos());	//连接点
 	ASSERT(!a.IsBodySame(&b));							//不是同一个物体
 
 	//添加导线
-	lead[leadNum] = new LEAD(leadNum, a, b);
-	++leadNum;
+	lead[leadCount] = new LEAD(leadCount, a, b);
+	++leadCount;
 
 	//连接物体指向导线
 	if(a.IsOnCrun())
-		a.p2->lead[a.GetLeadNum()] = lead[leadNum-1];
+		a.p2->lead[a.GetLeadNum()] = lead[leadCount-1];
 	else 
-		a.p3->lead[a.GetLeadNum()] = lead[leadNum-1];
+		a.p3->lead[a.GetLeadNum()] = lead[leadCount-1];
 	if(b.IsOnCrun())
-		b.p2->lead[b.GetLeadNum()] = lead[leadNum-1];
+		b.p2->lead[b.GetLeadNum()] = lead[leadCount-1];
 	else 
-		b.p3->lead[b.GetLeadNum()] = lead[leadNum-1];
+		b.p3->lead[b.GetLeadNum()] = lead[leadCount-1];
 
 	//显示添加的导线
-	PaintLead(lead[leadNum-1]);
+	PaintLead(lead[leadCount-1]);
 }
 
 void Manager::DeleteLead(LEAD * l)
@@ -75,13 +75,13 @@ void Manager::DeleteLead(LEAD * l)
 
 	//删除导线
 	delete l;
-	if(num != leadNum-1)
+	if(num != leadCount-1)
 	{
-		lead[num] = lead[leadNum-1];
+		lead[num] = lead[leadCount-1];
 		lead[num]->num = num;
 	}
-	lead[leadNum-1] = NULL;
-	--leadNum;
+	lead[leadCount-1] = NULL;
+	--leadCount;
 }
 
 void Manager::DeleteSingleBody(Pointer pointer)
@@ -96,25 +96,25 @@ void Manager::DeleteSingleBody(Pointer pointer)
 	{
 		num = pointer.p2->num;
 		delete pointer.p2;
-		if(num != crunNum-1)
+		if(num != crunCount-1)
 		{
-			crun[num] = crun[crunNum-1];
+			crun[num] = crun[crunCount-1];
 			crun[num]->num = num;
 		}
-		crun[crunNum-1] = NULL;
-		--crunNum;
+		crun[crunCount-1] = NULL;
+		--crunCount;
 	}
 	else //if(pointer.IsOnCtrl())
 	{
 		num = pointer.p3->num;
 		delete pointer.p3;
-		if(num != ctrlNum-1)
+		if(num != ctrlCount-1)
 		{
-			ctrl[num] = ctrl[ctrlNum-1];
+			ctrl[num] = ctrl[ctrlCount-1];
 			ctrl[num]->num = num;
 		}
-		ctrl[ctrlNum-1] = NULL;
-		--ctrlNum;
+		ctrl[ctrlCount-1] = NULL;
+		--ctrlCount;
 	}
 }
 
@@ -155,9 +155,9 @@ bool Manager::ConnectBodyLead(POINT posb)
 	LEADSTEP newLeadPosx, newLeadPosy;
 
 	//1,检查函数运行条件
-	ASSERT(motiNum == 2 && motiBody[0].IsOnConnectPos() && motiBody[1].IsOnLead());
-	motiNum = 0;
-	if(crunNum >= MAXCRUNNUM)	//只要结点数量够,导线一定够
+	ASSERT(motiCount == 2 && motiBody[0].IsOnConnectPos() && motiBody[1].IsOnLead());
+	motiCount = 0;
+	if(crunCount >= MAX_CRUN_COUNT)	//只要结点数量够,导线一定够
 	{
 		wndPointer->MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
 		return false;
@@ -212,15 +212,15 @@ bool Manager::ConnectBodyLead(POINT posb)
 	DeleteLead(motiBody[1].p1);	//删除原来导线
 	AddCrun(posb);	//添加结点
 
-	newCrun.SetOnCrun(crun[crunNum-1]);	//newCrun指向新添加结点
+	newCrun.SetOnCrun(crun[crunCount-1]);	//newCrun指向新添加结点
 
 	newCrun.SetAtState(dir1);
 	AddLead(x, newCrun);	//x和节点连线,x是起点,新节点是终点
-	lead[leadNum-1]->ReplacePos(newLeadPosx);	//坐标还原
+	lead[leadCount-1]->ReplacePos(newLeadPosx);	//坐标还原
 
 	newCrun.SetAtState(dir2);
 	AddLead(newCrun, y);	//y和节点连线,y是终点,新节点是起点
-	lead[leadNum-1]->ReplacePos(newLeadPosy);	//坐标还原
+	lead[leadCount-1]->ReplacePos(newLeadPosy);	//坐标还原
 
 	newCrun.SetAtState(dir3);
 	AddLead(a, newCrun);	//a和节点连线

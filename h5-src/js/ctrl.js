@@ -33,7 +33,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定义时需要添加新类型的处
 	//节点全局初始化次序
 	globalInitOrder: 1,
 	//重置全局初始化次序
-	ResetGlobalInitNum: function() {
+	ResetGlobalInitOrder: function() {
 		return (CTRL.globalInitOrder = 1);
 	},
 	
