@@ -1,18 +1,16 @@
 
-const long CTRL_BITMAP_TYPE_NUM = 7;					//控件位图种类的个数
-const long CTRL_BITMAP_NUM = CTRL_BITMAP_TYPE_NUM*4;	//控件位图的个数(包括旋转之后的)
+var CTRL_BITMAP_TYPE_NUM = 7;					//控件位图种类的个数
+var CTRL_BITMAP_NUM = CTRL_BITMAP_TYPE_NUM*4;	//控件位图的个数(包括旋转之后的)
 
-const long FILE_VERSION			= 13;					//文件版本,不同版本文件不予读取
-const long FILE_RESERVE_SIZE	= 256;					//文件保留域的大小
-const long MAXMOVEBODYDIS		= 50;					//使用方向键一次移动物体距离范围1~MAX_MOVEBODYDIS
-const long MAXLEAVEOUTDIS		= 15;					//相邻导线合并距离范围1~MAX_LEAVEOUTDIS
+var FILE_VERSION		= 13;					//文件版本,不同版本文件不予读取
+var FILE_RESERVE_SIZE	= 256;					//文件保留域的大小
+var MAXMOVEBODYDIS		= 50;					//使用方向键一次移动物体距离范围1~MAX_MOVEBODYDIS
+var MAXLEAVEOUTDIS		= 15;					//相邻导线合并距离范围1~MAX_LEAVEOUTDIS
 
 
 
-var Manager
-{
-private:
-
+//1初始化和清理函数------------------------------------------------------------
+var Manager = {
 	//画图变量---------------------------------------------------------------------
 	CDC ctrlDcMem[CTRL_BITMAP_NUM];
 	CBitmap ctrlBitmap[CTRL_BITMAP_NUM];	//CTRL_BITMAP_NUM个控件位图
@@ -95,166 +93,164 @@ private:
 	//撤销变量
 	MyVector circuitVector;		//电路信息容器
 	MyIterator vectorPos;		//当前在容器的位置
-};
 
 
-//1初始化和清理函数------------------------------------------------------------↓
-Manager::Manager(CWnd * outWnd)
-{
-	int i;
-	HINSTANCE hinst = AfxGetInstanceHandle();
+	CreateNew: function(outWnd) {
+		var i;
+		
+		//窗口显示-------------------------------------------------------
+		this.wndPointer = outWnd;		//当前窗口指针
+		dc = wndPointer->GetDC();	//当前窗口设备描述表
+
+		bitmapForRefresh.CreateBitmap(1, 1, 1, 32, NULL);	//使刷新不闪而使用的bitmap
+		dcForRefresh.CreateCompatibleDC(dc);				//使刷新不闪而使用的DC
+		dcForRefresh.SelectObject(&bitmapForRefresh);
 
 
-	//窗口显示-------------------------------------------------------
-	wndPointer = outWnd;		//当前窗口指针
-	dc = wndPointer->GetDC();	//当前窗口设备描述表
-
-	bitmapForRefresh.CreateBitmap(1, 1, 1, 32, NULL);	//使刷新不闪而使用的bitmap
-	dcForRefresh.CreateCompatibleDC(dc);				//使刷新不闪而使用的DC
-	dcForRefresh.SelectObject(&bitmapForRefresh);
+		//相对变量-------------------------------------------------------
+		viewOrig.x = viewOrig.y = 0;					//视角初始坐标
+		mouseWheelSense.cx = mouseWheelSense.cy = 32;	//mouseWheel的灵活度
+		moveBodySense = 3;								//按上下左右键物体一次移动的距离
+		maxLeaveOutDis = 7;								//导线合并最大距离
 
 
-	//相对变量-------------------------------------------------------
-	viewOrig.x = viewOrig.y = 0;					//视角初始坐标
-	mouseWheelSense.cx = mouseWheelSense.cy = 32;	//mouseWheel的灵活度
-	moveBodySense = 3;								//按上下左右键物体一次移动的距离
-	maxLeaveOutDis = 7;								//导线合并最大距离
+		//电路元件变量---------------------------------------------------
+		ZeroMemory(crun, sizeof(void *) * MAXCRUNNUM);
+		ZeroMemory(ctrl, sizeof(void *) * MAXCTRLNUM);
+		ZeroMemory(lead, sizeof(void *) * MAXLEADNUM);
+		crunNum = leadNum = ctrlNum = 0;	//物体的个数清零
 
 
-	//电路元件变量---------------------------------------------------
-	ZeroMemory(crun, sizeof(void *) * MAXCRUNNUM);
-	ZeroMemory(ctrl, sizeof(void *) * MAXCTRLNUM);
-	ZeroMemory(lead, sizeof(void *) * MAXLEADNUM);
-	crunNum = leadNum = ctrlNum = 0;	//物体的个数清零
+		//计算变量-------------------------------------------------------
+		circu = NULL;		//线路
+		circuNum = 0;		//线路个数,小于等于 crun*2
+		crun2 = NULL;		//将crun信息提取出来用于计算,个数同crun
+		maps = NULL;		//保存所有的线路
+		groupNum = 0;		//组数,同一组的在一个连通图中,分组建立方程
+		equation = NULL;	//方程处理的类
 
 
-	//计算变量-------------------------------------------------------
-	circu = NULL;		//线路
-	circuNum = 0;		//线路个数,小于等于 crun*2
-	crun2 = NULL;		//将crun信息提取出来用于计算,个数同crun
-	maps = NULL;		//保存所有的线路
-	groupNum = 0;		//组数,同一组的在一个连通图中,分组建立方程
-	equation = NULL;	//方程处理的类
+		//鼠标点击信息记录-----------------------------------------------
+		motiNum = 0;
+		addState = BODY_NO;
+		lButtonDownPos.x = -100;
+		lButtonDownState = false;
+		isUpRecvAfterDown = true;
+		FocusBodyClear(NULL);
 
 
-	//鼠标点击信息记录-----------------------------------------------
-	motiNum = 0;
-	addState = BODY_NO;
-	lButtonDownPos.x = -100;
-	lButtonDownState = false;
-	isUpRecvAfterDown = true;
-	FocusBodyClear(NULL);
+		//画图变量-------------------------------------------------------
+		textColor = BLACK;						//默认字体颜色
+		focusLeadStyle = SOLID_RESERVE_COLOR;	//默认焦点导线样式
+		focusCrunColor = GREEN;					//默认焦点结点颜色
+		focusCtrlColor = RED;					//默认焦点控件颜色
+		InitBitmap();							//初始化位图
+
+		//画笔
+		for(i=COLOR_TYPE_NUM-1; i>=0; --i) 
+			hp[i].CreatePen(PS_SOLID, 1, LEADCOLOR[i]);
+
+		//鼠标图标
+		/*HINSTANCE hinst = AfxGetInstanceHandle();
+		hcSizeNS		= LoadCursor(NULL,	IDC_SIZENS);
+		hcSizeWE		= LoadCursor(NULL,	IDC_SIZEWE);
+		hcShowConnect	= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_SHOWCONNECT));
+		hcHand			= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_HAND));
+		hcMoveHorz		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_HORZ_LEAD));
+		hcMoveVert		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_VERT_LEAD));
+		hcAddCrun		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_ADDCRUN));*/
 
 
-	//画图变量-------------------------------------------------------
-	textColor = BLACK;						//默认字体颜色
-	focusLeadStyle = SOLID_RESERVE_COLOR;	//默认焦点导线样式
-	focusCrunColor = GREEN;					//默认焦点结点颜色
-	focusCtrlColor = RED;					//默认焦点控件颜色
-	InitBitmap();							//初始化位图
+		//读取文件-------------------------------------------------------
+		vectorPos = NULL;
+		fileName[0] = '\0';
+		PutCircuitToVector();	//将当前空电路信息保存到容器
+	}
 
-	//画笔
-	for(i=COLOR_TYPE_NUM-1; i>=0; --i) 
-		hp[i].CreatePen(PS_SOLID, 1, LEADCOLOR[i]);
-
-	//鼠标图标
-	hcSizeNS		= LoadCursor(NULL,	IDC_SIZENS);
-	hcSizeWE		= LoadCursor(NULL,	IDC_SIZEWE);
-	hcShowConnect	= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_SHOWCONNECT));
-	hcHand			= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_HAND));
-	hcMoveHorz		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_HORZ_LEAD));
-	hcMoveVert		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_VERT_LEAD));
-	hcAddCrun		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_ADDCRUN));
-
-
-	//读取文件-------------------------------------------------------
-	vectorPos = NULL;
-	fileName[0] = '\0';
-	PutCircuitToVector();	//将当前空电路信息保存到容器
-}
-
-Manager::~Manager()
-{
-	DeleteVector(circuitVector.begin(), circuitVector.end());	//清除容器保存的电路信息
-
-	ClearClipboard();	//清空剪切板
-
-	//清除画图变量
-	DeleteObject(hcSizeNS);
-	DeleteObject(hcSizeWE);
-	DeleteObject(hcShowConnect);
-	DeleteObject(hcHand);
-	DeleteObject(hcMoveHorz);
-	DeleteObject(hcMoveVert);			//清除鼠标图标
-	for(int i=COLOR_TYPE_NUM-1; i>=0; --i) hp[i].DeleteObject();	//清除画笔
-	UninitBitmap();						//释放位图
-	wndPointer->ReleaseDC(dc);			//释放画图DC
-	bitmapForRefresh.DeleteObject();	//使刷新不闪而使用的bitmap
-	dcForRefresh.DeleteDC();			//使刷新不闪而使用的DC
-}
-
-void Manager::InitBitmap()
-//初始化位图句柄
-{
-	int i, j, k, l;
-	UINT * buf1, * buf2, * p;
-
-	//激活点位图------------------------------------
-	showConnectDcMem.CreateCompatibleDC(dc);
-	showConnectBitmap.LoadBitmap(IDB_SMALLCRUN);
-	showConnectDcMem.SelectObject(&showConnectBitmap);
-
-	//节点位图--------------------------------------
-	crunDcMem.CreateCompatibleDC(dc);
-	crunBitmap.LoadBitmap(IDB_CRUN);
-	crunDcMem.SelectObject(&crunBitmap);
-
-	//控件位图,处理得到旋转控件---------------------
-	buf1 = (UINT *)malloc(BODYSIZE.cx * BODYSIZE.cy * 4);
-	buf2 = (UINT *)malloc(BODYSIZE.cx * BODYSIZE.cy * 4);
-
-	for(k=CTRL_BITMAP_TYPE_NUM-1; k>=0; --k)
+	Manager::~Manager()
 	{
-		//原位图
-		ctrlDcMem[k].CreateCompatibleDC(dc);
-		ctrlBitmap[k].LoadBitmap(IDB_SOURCE + k);
-		ctrlDcMem[k].SelectObject(ctrlBitmap + k);
-		ctrlBitmap[k].GetBitmapBits(BODYSIZE.cx*BODYSIZE.cy*4, buf1);	//获得原位图像素
+		DeleteVector(circuitVector.begin(), circuitVector.end());	//清除容器保存的电路信息
 
-		//获得旋转位图
-		for(l=1; l<4; ++l)
+		ClearClipboard();	//清空剪切板
+
+		//清除画图变量
+		DeleteObject(hcSizeNS);
+		DeleteObject(hcSizeWE);
+		DeleteObject(hcShowConnect);
+		DeleteObject(hcHand);
+		DeleteObject(hcMoveHorz);
+		DeleteObject(hcMoveVert);			//清除鼠标图标
+		for(int i=COLOR_TYPE_NUM-1; i>=0; --i) hp[i].DeleteObject();	//清除画笔
+		UninitBitmap();						//释放位图
+		wndPointer->ReleaseDC(dc);			//释放画图DC
+		bitmapForRefresh.DeleteObject();	//使刷新不闪而使用的bitmap
+		dcForRefresh.DeleteDC();			//使刷新不闪而使用的DC
+	}
+
+	void Manager::InitBitmap()
+	//初始化位图句柄
+	{
+		int i, j, k, l;
+		UINT * buf1, * buf2, * p;
+
+		//激活点位图------------------------------------
+		showConnectDcMem.CreateCompatibleDC(dc);
+		showConnectBitmap.LoadBitmap(IDB_SMALLCRUN);
+		showConnectDcMem.SelectObject(&showConnectBitmap);
+
+		//节点位图--------------------------------------
+		crunDcMem.CreateCompatibleDC(dc);
+		crunBitmap.LoadBitmap(IDB_CRUN);
+		crunDcMem.SelectObject(&crunBitmap);
+
+		//控件位图,处理得到旋转控件---------------------
+		buf1 = (UINT *)malloc(BODYSIZE.cx * BODYSIZE.cy * 4);
+		buf2 = (UINT *)malloc(BODYSIZE.cx * BODYSIZE.cy * 4);
+
+		for(k=CTRL_BITMAP_TYPE_NUM-1; k>=0; --k)
 		{
-			p = buf1 + (BODYSIZE.cy - 1) * BODYSIZE.cx + BODYSIZE.cx - 1;
-			for(i = BODYSIZE.cy - 1; i >= 0; --i) for(j = BODYSIZE.cx - 1; j >= 0; --j)
-				* ( buf2 + j * BODYSIZE.cx + BODYSIZE.cx - 1 - i) = * p --;
+			//原位图
+			ctrlDcMem[k].CreateCompatibleDC(dc);
+			ctrlBitmap[k].LoadBitmap(IDB_SOURCE + k);
+			ctrlDcMem[k].SelectObject(ctrlBitmap + k);
+			ctrlBitmap[k].GetBitmapBits(BODYSIZE.cx*BODYSIZE.cy*4, buf1);	//获得原位图像素
 
-			i = k + CTRL_BITMAP_TYPE_NUM*l;
-			ctrlDcMem[i].CreateCompatibleDC(dc);
-			ctrlBitmap[i].CreateBitmap(BODYSIZE.cx, BODYSIZE.cy, 1, 32, buf2);
-			ctrlDcMem[i].SelectObject(ctrlBitmap + i);
+			//获得旋转位图
+			for(l=1; l<4; ++l)
+			{
+				p = buf1 + (BODYSIZE.cy - 1) * BODYSIZE.cx + BODYSIZE.cx - 1;
+				for(i = BODYSIZE.cy - 1; i >= 0; --i) for(j = BODYSIZE.cx - 1; j >= 0; --j)
+					* ( buf2 + j * BODYSIZE.cx + BODYSIZE.cx - 1 - i) = * p --;
 
-			p = buf1;
-			buf1 = buf2;
-			buf2 = p;
+				i = k + CTRL_BITMAP_TYPE_NUM*l;
+				ctrlDcMem[i].CreateCompatibleDC(dc);
+				ctrlBitmap[i].CreateBitmap(BODYSIZE.cx, BODYSIZE.cy, 1, 32, buf2);
+				ctrlDcMem[i].SelectObject(ctrlBitmap + i);
+
+				p = buf1;
+				buf1 = buf2;
+				buf2 = p;
+			}
+		}
+
+		free(buf1);
+		free(buf2);
+	}
+
+	void Manager::UninitBitmap()
+	//释放位图占用空间
+	{
+		showConnectBitmap.DeleteObject();
+		showConnectDcMem.DeleteDC();
+
+		crunBitmap.DeleteObject();
+		crunDcMem.DeleteDC();
+
+		for(int i=CTRL_BITMAP_NUM-1; i>=0; --i)
+		{
+			DeleteObject(ctrlBitmap[i]);
+			ctrlDcMem[i].DeleteDC();
 		}
 	}
 
-	free(buf1);
-	free(buf2);
-}
-
-void Manager::UninitBitmap()
-//释放位图占用空间
-{
-	showConnectBitmap.DeleteObject();
-	showConnectDcMem.DeleteDC();
-
-	crunBitmap.DeleteObject();
-	crunDcMem.DeleteDC();
-
-	for(int i=CTRL_BITMAP_NUM-1; i>=0; --i)
-	{
-		DeleteObject(ctrlBitmap[i]);
-		ctrlDcMem[i].DeleteDC();
-	}
-}
+};
