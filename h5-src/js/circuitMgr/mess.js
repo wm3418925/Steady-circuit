@@ -7,19 +7,17 @@ void Manager::SetAddState(BODY_TYPE type)
 	addState = type;
 }
 
-CDC * Manager::GetCtrlPaintHandle(const CTRL * c)
 //获得控件画图句柄
-{
-	CDC * paintMenDc = ctrlDcMem + c->GetStyle();	//默认的画图句柄
+Manager.GetCtrlPaintImage = function(c) {
+	var paintImage;
 
-	//具有特殊画图效果控件的画图DC
-	if(c->IsBulbOn())				//小灯泡达到额定功率
-			paintMenDc = ctrlDcMem + IDB_BULB_SHINE - IDB_SOURCE;
-	else if(c->SwitchOnOff(false))	//开关闭合
-			paintMenDc = ctrlDcMem + IDB_SWITCH_CLOSE - IDB_SOURCE;
+	if (c.IsBulbOn() || c.SwitchOnOff(false))	//小灯泡达到额定功率, 开关闭合
+		paintImage = ctrlDcMem[ctrlDcMem.length/2 + c.GetStyle()];
+	else
+		paintImage = ctrlDcMem[c.GetStyle()];	//默认的画图句柄
 
-	return paintMenDc + c->dir * CTRL_BITMAP_TYPE_COUNT;	//位图和旋转角度有关系
-}
+	return paintImage[c.dir];
+};
 
 void Manager::GetName(const Pointer &pointer, char * str)const
 //获得名称,str长度应该大于等于NAME_LEN*2
@@ -27,15 +25,15 @@ void Manager::GetName(const Pointer &pointer, char * str)const
 	ASSERT(pointer.IsOnAny());
 	if(pointer.IsOnLead())
 	{
-		sprintf(str, "导线[%d]", pointer.p1->GetInitOrder());
+		sprintf(str, "导线[%d]", pointer.p1.GetInitOrder());
 	}
 	else if(pointer.IsOnCrun())
 	{
-		sprintf(str, "结点[编号(%d), 当前名称(%s)]", pointer.p2->GetInitOrder(), pointer.p2->name);
+		sprintf(str, "结点[编号(%d), 当前名称(%s)]", pointer.p2.GetInitOrder(), pointer.p2.name);
 	}
 	else //if(pointer.IsOnCtrl())
 	{
-		sprintf(str, "控件[编号(%d), 当前名称(%s)]", pointer.p3->GetInitOrder(), pointer.p3->name);
+		sprintf(str, "控件[编号(%d), 当前名称(%s)]", pointer.p3.GetInitOrder(), pointer.p3.name);
 	}
 }
 
@@ -50,9 +48,9 @@ bool Manager::DeleteNote(const Pointer &body)
 	if(body.IsOnLead())
 		conNum = 0;
 	else if(body.IsOnCrun())
-		conNum = body.p2->GetConnectNum();
+		conNum = body.p2.GetConnectNum();
 	else if(body.IsOnCtrl())
-		conNum = body.p3->GetConnectNum();
+		conNum = body.p3.GetConnectNum();
 	else
 		return false;
 
@@ -64,13 +62,13 @@ bool Manager::DeleteNote(const Pointer &body)
 		sprintf(note, "要删除 %s 吗 ?", name);
 
 	PaintWithSpecialColor(body, false);	//用保留颜色(紫色)显示物体
-	return IDYES == wndPointer->MessageBox(note, "删除物体提示", MB_YESNO|MB_ICONWARNING);
+	return IDYES == wndPointer.MessageBox(note, "删除物体提示", MB_YESNO|MB_ICONWARNING);
 }
 
 void Manager::ClearCircuitState()
 //清除电路状态
 {
-	FocusBodyClear(NULL);	//焦点
+	FocusBodyClear(null);	//焦点
 	ClearPressBody();		//显示电势差
 	motiCount = 0;			//激活物体数量
 	addState = BODY_NO;		//添加物体类型

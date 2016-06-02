@@ -5,7 +5,7 @@ void Manager::SaveCircuitInfoToTextFile()
 {
 	int i;
 	FILE * fp = fopen("D:\\data.txt", "w");
-	if(fp == NULL) return;
+	if(fp == null) return;
 
 	fprintf(fp, "{\ncruns:[\n");
 	for(i=0; i<crunCount; i++)
@@ -66,7 +66,7 @@ void Manager::SaveCountInfoToTextFile()
 	FILE * fp = fopen("D:\\Circuit.txt", "w");
 	int i, j, group, ijPos, tempDir;
 
-	if(fp == NULL) return;
+	if(fp == null) return;
 
 	CollectCircuitInfo();
 
@@ -78,7 +78,7 @@ void Manager::SaveCountInfoToTextFile()
 		for(j=0;j<4;j++)
 		{
 			if(crun2[i].c[j])fprintf(fp, "\tcircuit[%d] = %d\n", j, crun2[i].c[j]->eleNum);
-			else fprintf(fp, "\tcircuit[%d] = NULL\n", j);
+			else fprintf(fp, "\tcircuit[%d] = null\n", j);
 		}
 	}
 
@@ -101,9 +101,9 @@ void Manager::SaveCountInfoToTextFile()
 
 	//////////////////////
 	CreateEquation();
-	CRUNMAP * maps = this->maps;
+	CRUNMAP * maps = this.maps;
 	fp = fopen("D:\\Map.txt", "w");
-	if(fp == NULL) return;
+	if(fp == null) return;
 
 	for(group=0; group<groupNum; ++group) for(i=maps[group].size-2; i>=0; --i) for(j=maps[group].size-1; j>i; --j)
 	{
@@ -117,12 +117,12 @@ void Manager::SaveCountInfoToTextFile()
 
 	delete [] crun2;
 	delete [] circu;
-	circu = NULL;
+	circu = null;
 	circuNum = 0;
 	fclose(fp);
 
 	fp = fopen("D:\\Equation.txt", "w");
-	if(fp == NULL) return;
+	if(fp == null) return;
 	for(group=0; group<groupNum; ++group)
 	{
 		fprintf(fp, "\ngroup[%d]------------\n", group);

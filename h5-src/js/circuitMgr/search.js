@@ -21,7 +21,7 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 		{
 			isAfterFocus = true;
 			if(isSearchLead)
-				j = focusBody.p1->num + 1;
+				j = focusBody.p1.num + 1;
 			else
 				j = leadCount;
 		}
@@ -59,7 +59,7 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 		{
 			isAfterFocus = true;
 			if(isSearchCrun)
-				j = focusBody.p2->num + 1;
+				j = focusBody.p2.num + 1;
 			else
 				j = crunCount;
 		}
@@ -104,7 +104,7 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 		{
 			isAfterFocus = true;
 			if(isSearchCtrl)
-				j = focusBody.p3->num + 1;
+				j = focusBody.p3.num + 1;
 			else
 				j = ctrlCount;
 		}
@@ -171,7 +171,7 @@ bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 		{
 			isAfterFocus = true;
 			if(isSearchCtrl)
-				j = focusBody.p3->num - 1;
+				j = focusBody.p3.num - 1;
 			else
 				j = -1;
 		}
@@ -219,7 +219,7 @@ bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 		{
 			isAfterFocus = true;
 			if(isSearchCrun)
-				j = focusBody.p2->num - 1;
+				j = focusBody.p2.num - 1;
 			else
 				j = -1;
 		}
@@ -264,7 +264,7 @@ bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 		{
 			isAfterFocus = true;
 			if(isSearchLead)
-				j = focusBody.p1->num - 1;
+				j = focusBody.p1.num - 1;
 			else
 				j = -1;
 		}

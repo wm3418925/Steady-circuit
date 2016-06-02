@@ -41,13 +41,13 @@ void Manager::AddLead(Pointer a, Pointer b)
 
 	//连接物体指向导线
 	if(a.IsOnCrun())
-		a.p2->lead[a.GetLeadNum()] = lead[leadCount-1];
+		a.p2.lead[a.GetLeadNum()] = lead[leadCount-1];
 	else 
-		a.p3->lead[a.GetLeadNum()] = lead[leadCount-1];
+		a.p3.lead[a.GetLeadNum()] = lead[leadCount-1];
 	if(b.IsOnCrun())
-		b.p2->lead[b.GetLeadNum()] = lead[leadCount-1];
+		b.p2.lead[b.GetLeadNum()] = lead[leadCount-1];
 	else 
-		b.p3->lead[b.GetLeadNum()] = lead[leadCount-1];
+		b.p3.lead[b.GetLeadNum()] = lead[leadCount-1];
 
 	//显示添加的导线
 	PaintLead(lead[leadCount-1]);
@@ -57,10 +57,10 @@ void Manager::DeleteLead(LEAD * l)
 //删除连接2个物体的连线
 //使用函数: Delete(Pointer), ConnectBodyLead
 {
-	ASSERT(l != NULL);
-	Pointer * a = l->conBody, * b = l->conBody + 1;
-	int dira = a->GetLeadNum(), dirb = b->GetLeadNum();
-	int num = l->num;
+	ASSERT(l != null);
+	Pointer * a = l.conBody, * b = l.conBody + 1;
+	int dira = a.GetLeadNum(), dirb = b.GetLeadNum();
+	int num = l.num;
 
 	//如果删除物体是焦点,清除焦点
 	Pointer pointer;
@@ -68,10 +68,10 @@ void Manager::DeleteLead(LEAD * l)
 	FocusBodyClear(&pointer);
 
 	//清空连接的指针
-	if(a->IsOnCrun()) a->p2->lead[dira] = NULL;
-	else if(a->IsOnCtrl()) a->p3->lead[dira] = NULL;
-	if(b->IsOnCrun()) b->p2->lead[dirb] = NULL;
-	else if(b->IsOnCtrl()) b->p3->lead[dirb] = NULL;
+	if(a.IsOnCrun()) a.p2.lead[dira] = null;
+	else if(a.IsOnCtrl()) a.p3.lead[dira] = null;
+	if(b.IsOnCrun()) b.p2.lead[dirb] = null;
+	else if(b.IsOnCtrl()) b.p3.lead[dirb] = null;
 
 	//删除导线
 	delete l;
@@ -80,7 +80,7 @@ void Manager::DeleteLead(LEAD * l)
 		lead[num] = lead[leadCount-1];
 		lead[num]->num = num;
 	}
-	lead[leadCount-1] = NULL;
+	lead[leadCount-1] = null;
 	--leadCount;
 }
 
@@ -94,26 +94,26 @@ void Manager::DeleteSingleBody(Pointer pointer)
 
 	if(pointer.IsOnCrun())
 	{
-		num = pointer.p2->num;
+		num = pointer.p2.num;
 		delete pointer.p2;
 		if(num != crunCount-1)
 		{
 			crun[num] = crun[crunCount-1];
 			crun[num]->num = num;
 		}
-		crun[crunCount-1] = NULL;
+		crun[crunCount-1] = null;
 		--crunCount;
 	}
 	else //if(pointer.IsOnCtrl())
 	{
-		num = pointer.p3->num;
+		num = pointer.p3.num;
 		delete pointer.p3;
 		if(num != ctrlCount-1)
 		{
 			ctrl[num] = ctrl[ctrlCount-1];
 			ctrl[num]->num = num;
 		}
-		ctrl[ctrlCount-1] = NULL;
+		ctrl[ctrlCount-1] = null;
 		--ctrlCount;
 	}
 }
@@ -130,14 +130,14 @@ void Manager::Delete(Pointer pointer)
 	}
 	else if(pointer.IsOnCrun())
 	{
-		for(int i=0; i<4; ++i) if(pointer.p2->lead[i] != NULL)
-			DeleteLead(pointer.p2->lead[i]);
+		for(int i=0; i<4; ++i) if(pointer.p2.lead[i] != null)
+			DeleteLead(pointer.p2.lead[i]);
 		DeleteSingleBody(pointer);
 	}
 	else //if(pointer.IsOnCtrl())
 	{
-		for(int i=0; i<2; ++i) if(pointer.p3->lead[i] != NULL)
-			DeleteLead(pointer.p3->lead[i]);
+		for(int i=0; i<2; ++i) if(pointer.p3.lead[i] != null)
+			DeleteLead(pointer.p3.lead[i]);
 		DeleteSingleBody(pointer);
 	}
 
@@ -159,7 +159,7 @@ bool Manager::ConnectBodyLead(POINT posb)
 	motiCount = 0;
 	if(crunCount >= MAX_CRUN_COUNT)	//只要结点数量够,导线一定够
 	{
-		wndPointer->MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
+		wndPointer.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
 		return false;
 	}
 
@@ -168,15 +168,15 @@ bool Manager::ConnectBodyLead(POINT posb)
 
 	//3,获得物体和坐标
 	a = motiBody[0];
-	x = motiBody[1].p1->conBody[0];
-	y = motiBody[1].p1->conBody[1];
-	if(a.IsOnCrun())posa = a.p2->coord;
-	else posa = a.p3->coord;	//获得先点击物体的坐标
+	x = motiBody[1].p1.conBody[0];
+	y = motiBody[1].p1.conBody[1];
+	if(a.IsOnCrun())posa = a.p2.coord;
+	else posa = a.p3.coord;	//获得先点击物体的坐标
 
 	//4,初始化连接新添加结点的方向
 	if(motiBody[1].IsOnHoriLead())	//-3,-5,-7....横线
 	{
-		if(motiBody[1].p1->GetBodyPos() & 2)
+		if(motiBody[1].p1.GetBodyPos() & 2)
 		{
 			dir1 = 4;
 			dir2 = 3;
@@ -192,7 +192,7 @@ bool Manager::ConnectBodyLead(POINT posb)
 	}
 	else	//-2,-4,-6....竖线
 	{
-		if(motiBody[1].p1->GetBodyPos() & 1)
+		if(motiBody[1].p1.GetBodyPos() & 1)
 		{
 			dir1 = 2;
 			dir2 = 1;
@@ -208,7 +208,7 @@ bool Manager::ConnectBodyLead(POINT posb)
 	}
 
 	//5,添加删除物体
-	motiBody[1].p1->Divide(motiBody[1].GetAtState(), posb, newLeadPosx, newLeadPosy);	//记忆原来导线坐标
+	motiBody[1].p1.Divide(motiBody[1].GetAtState(), posb, newLeadPosx, newLeadPosy);	//记忆原来导线坐标
 	DeleteLead(motiBody[1].p1);	//删除原来导线
 	AddCrun(posb);	//添加结点
 

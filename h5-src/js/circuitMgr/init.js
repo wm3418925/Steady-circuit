@@ -88,9 +88,9 @@ var Manager = {
 		
 		//窗口显示-------------------------------------------------------
 		this.wndPointer = outWnd;		//当前窗口指针
-		ctx = wndPointer->GetDC();	//当前窗口设备描述表
+		ctx = wndPointer.GetDC();	//当前窗口设备描述表
 
-		bitmapForRefresh.CreateBitmap(1, 1, 1, 32, NULL);	//使刷新不闪而使用的bitmap
+		bitmapForRefresh.CreateBitmap(1, 1, 1, 32, null);	//使刷新不闪而使用的bitmap
 		dcForRefresh.CreateCompatibleDC(ctx);				//使刷新不闪而使用的DC
 		dcForRefresh.SelectObject(&bitmapForRefresh);
 
@@ -115,7 +115,7 @@ var Manager = {
 		lButtonDownPos.x = -100;
 		lButtonDownState = false;
 		isUpRecvAfterDown = true;
-		FocusBodyClear(NULL);
+		FocusBodyClear(null);
 
 
 		//画图变量-------------------------------------------------------
@@ -125,14 +125,10 @@ var Manager = {
 		focusCtrlColor = RED;					//默认焦点控件颜色
 		InitBitmap();							//初始化位图
 
-		//画笔
-		for(i=COLOR_TYPE_NUM-1; i>=0; --i) 
-			hp[i].CreatePen(PS_SOLID, 1, LEADCOLOR[i]);
-
 		//鼠标图标
 		/*HINSTANCE hinst = AfxGetInstanceHandle();
-		hcSizeNS		= LoadCursor(NULL,	IDC_SIZENS);
-		hcSizeWE		= LoadCursor(NULL,	IDC_SIZEWE);
+		hcSizeNS		= LoadCursor(null,	IDC_SIZENS);
+		hcSizeWE		= LoadCursor(null,	IDC_SIZEWE);
 		hcShowConnect	= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_SHOWCONNECT));
 		hcHand			= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_HAND));
 		hcMoveHorz		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_HORZ_LEAD));
@@ -141,7 +137,7 @@ var Manager = {
 
 
 		//读取文件-------------------------------------------------------
-		vectorPos = NULL;
+		vectorPos = null;
 		fileName[0] = '\0';
 		PutCircuitToVector();	//将当前空电路信息保存到容器
 	},

@@ -5,7 +5,7 @@ void Manager::SetViewOrig(int xPos, int yPos)
 {
 	viewOrig.x = xPos * mouseWheelSense.cx;
 	viewOrig.y = yPos * mouseWheelSense.cy;
-	ctx->SetViewportOrg(-viewOrig.x, -viewOrig.y);
+	ctx.SetViewportOrg(-viewOrig.x, -viewOrig.y);
 }
 
 void Manager::SetMoveBodySense()
@@ -18,7 +18,7 @@ void Manager::SetMoveBodySense()
 	list.SetAMember(DATA_STYLE_UINT, "方向键移动物体的距离", &moveBodySense, 1, MAXMOVEBODYDIS);
 
 	sprintf(title, "灵敏度范围 : 1 ~ %d", MAXMOVEBODYDIS);
-	MyPropertyDlg dlg(&list, false, NULL, title, wndPointer);
+	MyPropertyDlg dlg(&list, false, null, title, wndPointer);
 	dlg.DoModal();
 }
 
@@ -32,7 +32,7 @@ void Manager::SetLeaveOutDis()
 	list.SetAMember(DATA_STYLE_UINT, "导线相邻两节合并临界距离", &maxLeaveOutDis, 1, MAXLEAVEOUTDIS);
 
 	sprintf(title, "临界距离范围 : 1 ~ %d", MAXLEAVEOUTDIS);
-	MyPropertyDlg dlg(&list, false, NULL, title, wndPointer);
+	MyPropertyDlg dlg(&list, false, null, title, wndPointer);
 	dlg.DoModal();
 }
 
@@ -44,12 +44,12 @@ void Manager::SetTextColor()
 	list.Init(1);
 	list.SetAEnumMember("标签颜色", &textColor, ENUM_COLOR);
 
-	MyPropertyDlg dlg(&list, false, NULL, "设置标签颜色", wndPointer);
+	MyPropertyDlg dlg(&list, false, null, "设置标签颜色", wndPointer);
 	dlg.DoModal();
 
 	if(preColor != textColor)
 	{
-		ctx->SetTextColor(LEADCOLOR[textColor]);
+		ctx.SetTextColor(LEADCOLOR[textColor]);
 		PaintAll();
 	}
 }
@@ -62,11 +62,11 @@ void Manager::SetFocusLeadStyle()
 	list.Init(1);
 	list.SetAEnumMember("选定导线样式", &focusLeadStyle, ENUM_LEADSTYLE);
 
-	MyPropertyDlg dlg(&list, false, NULL, "设置选定导线样式", wndPointer);
+	MyPropertyDlg dlg(&list, false, null, "设置选定导线样式", wndPointer);
 	dlg.DoModal();
 
 	if(save != focusLeadStyle && focusBody.IsOnLead())
-		FocusBodyPaint(NULL);
+		FocusBodyPaint(null);
 }
 
 void Manager::SetFocusCrunColor()
@@ -77,11 +77,11 @@ void Manager::SetFocusCrunColor()
 	list.Init(1);
 	list.SetAEnumMember("选定结点颜色", &focusCrunColor, ENUM_COLOR, RED, BLUE);
 
-	MyPropertyDlg dlg(&list, false, NULL, "设置选定结点颜色", wndPointer);
+	MyPropertyDlg dlg(&list, false, null, "设置选定结点颜色", wndPointer);
 	dlg.DoModal();
 
 	if(save != focusCrunColor && focusBody.IsOnCrun())
-		FocusBodyPaint(NULL);
+		FocusBodyPaint(null);
 }
 
 void Manager::SetFocusCtrlColor()
@@ -92,9 +92,9 @@ void Manager::SetFocusCtrlColor()
 	list.Init(1);
 	list.SetAEnumMember("选定电学元件颜色", &focusCtrlColor, ENUM_COLOR, RED, BLUE);
 
-	MyPropertyDlg dlg(&list, false, NULL, "设置选定电学元件颜色", wndPointer);
+	MyPropertyDlg dlg(&list, false, null, "设置选定电学元件颜色", wndPointer);
 	dlg.DoModal();
 
 	if(save != focusCtrlColor && focusBody.IsOnCtrl())
-		FocusBodyPaint(NULL);
+		FocusBodyPaint(null);
 }

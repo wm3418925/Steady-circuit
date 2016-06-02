@@ -24,9 +24,9 @@ void Manager::CopyToClipboard(const Pointer &body)
 	ClearClipboard();	//清空剪切板
 
 	if(body.IsOnCrun())
-		clipBody.SetOnCrun(body.p2->Clone(CLONE_FOR_CLIPBOARD), true);
+		clipBody.SetOnCrun(body.p2.Clone(CLONE_FOR_CLIPBOARD), true);
 	else //if(body.IsOnCtrl())
-		clipBody.SetOnCtrl(body.p3->Clone(CLONE_FOR_CLIPBOARD), true);
+		clipBody.SetOnCtrl(body.p3.Clone(CLONE_FOR_CLIPBOARD), true);
 }
 
 Pointer Manager::CopyBody(FOCUS_OR_POS &body)
@@ -55,19 +55,19 @@ bool Manager::PasteBody(POINT pos)
 		MessageBeep(0);
 		return false;
 	}
-	ctx->DPtoLP(&pos);
+	ctx.DPtoLP(&pos);
 
 	if(clipBody.IsOnCrun())
 	{
 		if(crunCount >= MAX_CRUN_COUNT)
 		{
-			wndPointer->MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
+			wndPointer.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
 			return false;
 		}
 
 		CloneCircuitBeforeChange();	//编辑前复制电路
 		//编辑部分
-		crun[crunCount] = clipBody.p2->Clone(CLONE_FOR_USE);
+		crun[crunCount] = clipBody.p2.Clone(CLONE_FOR_USE);
 		crun[crunCount]->coord = pos;
 		crun[crunCount]->num = crunCount;
 		++ crunCount;
@@ -79,13 +79,13 @@ bool Manager::PasteBody(POINT pos)
 	{
 		if(ctrlCount >= MAX_CTRL_COUNT)
 		{
-			wndPointer->MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
+			wndPointer.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
 			return false;
 		}
 
 		CloneCircuitBeforeChange();	//编辑前复制电路
 		//编辑部分
-		ctrl[ctrlCount] = clipBody.p3->Clone(CLONE_FOR_USE);
+		ctrl[ctrlCount] = clipBody.p3.Clone(CLONE_FOR_USE);
 		ctrl[ctrlCount]->coord = pos;
 		ctrl[ctrlCount]->num = ctrlCount;
 		++ ctrlCount;

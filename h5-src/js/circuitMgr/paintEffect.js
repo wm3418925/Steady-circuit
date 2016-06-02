@@ -7,21 +7,21 @@ bool Manager::ShowAddLead(POINT pos)
 	Pointer * body = motiBody;
 	POINT firstPos;
 
-	if(!body->IsOnConnectPos()) return false;
+	if(!body.IsOnConnectPos()) return false;
 
 	PaintAll();		//先刷新
 	motiCount = 1;	//还原变量
 
 	//dc移动到起点
-	Manager.ctx->DPtoLP(&pos);
-	Manager.ctx->MoveTo(pos);
+	Manager.ctx.DPtoLP(&pos);
+	Manager.ctx.MoveTo(pos);
 
 	//设置黑色画笔
-	Manager.ctx->SelectStockObject(BLACK_PEN);
+	Manager.ctx.SelectStockObject(BLACK_PEN);
 
 	//画直线
-	body->GetPosFromBody(firstPos);
-	Manager.ctx->LineTo(firstPos);
+	body.GetPosFromBody(firstPos);
+	Manager.ctx.LineTo(firstPos);
 
 	return true;
 }
@@ -32,10 +32,10 @@ bool Manager::ShowAddBody(POINT point)
 	if(addState == BODY_CRUN)
 	{
 		if(lastMoveOnPos.x > -100)
-			Manager.ctx->BitBlt(lastMoveOnPos.x-DD, lastMoveOnPos.y-DD, DD*2, DD*2, &crunDcMem, 0, 0, SRCINVERT);
-		Manager.ctx->DPtoLP(&point);
+			Manager.ctx.BitBlt(lastMoveOnPos.x-DD, lastMoveOnPos.y-DD, DD*2, DD*2, &crunDcMem, 0, 0, SRCINVERT);
+		Manager.ctx.DPtoLP(&point);
 		lastMoveOnPos = point;
-		Manager.ctx->BitBlt(lastMoveOnPos.x-DD, lastMoveOnPos.y-DD, DD*2, DD*2, &crunDcMem, 0, 0, SRCINVERT);
+		Manager.ctx.BitBlt(lastMoveOnPos.x-DD, lastMoveOnPos.y-DD, DD*2, DD*2, &crunDcMem, 0, 0, SRCINVERT);
 
 		::SetCursor(hcAddCrun);
 		return true;
@@ -44,12 +44,12 @@ bool Manager::ShowAddBody(POINT point)
 	{
 		CDC * tempDc = ctrlDcMem + addState;
 		if(lastMoveOnPos.x > -100)
-			Manager.ctx->BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, BODYSIZE.cx, BODYSIZE.cy, tempDc, 0, 0, SRCINVERT);
-		Manager.ctx->DPtoLP(&point);
+			Manager.ctx.BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, BODYSIZE.cx, BODYSIZE.cy, tempDc, 0, 0, SRCINVERT);
+		Manager.ctx.DPtoLP(&point);
 		lastMoveOnPos = point;
-		Manager.ctx->BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, BODYSIZE.cx, BODYSIZE.cy, tempDc, 0, 0, SRCINVERT);
+		Manager.ctx.BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, BODYSIZE.cx, BODYSIZE.cy, tempDc, 0, 0, SRCINVERT);
 
-		::SetCursor(NULL);
+		::SetCursor(null);
 		return true;
 	}
 	else
@@ -67,7 +67,7 @@ bool Manager::ShowMoveBody(POINT pos, bool isLButtonDown)
 	Pointer * body = motiBody + motiCount - 1;
 	POINT bodyPos = {0, 0};
 
-	if(!body->IsOnBody()) return false;
+	if(!body.IsOnBody()) return false;
 	if(!isLButtonDown)	//鼠标没有按下
 	{
 		PaintAll(); 
@@ -75,9 +75,9 @@ bool Manager::ShowMoveBody(POINT pos, bool isLButtonDown)
 	}
 
 	//获得物体坐标
-	Manager.ctx->DPtoLP(&pos);
-	if(body->IsOnCrun()) bodyPos = body->p2->coord;
-	else if(body->IsOnCtrl()) bodyPos = body->p3->coord;
+	Manager.ctx.DPtoLP(&pos);
+	if(body.IsOnCrun()) bodyPos = body.p2.coord;
+	else if(body.IsOnCtrl()) bodyPos = body.p3.coord;
 
 	//根据坐标差计算画图坐标
 	pos.x += bodyPos.x - lButtonDownPos.x;
@@ -130,25 +130,25 @@ BODY_TYPE Manager::PosBodyPaintRect(POINT pos)
 	MotivateAll(pos);
 	motiCount = 0;
 
-	if(!body->IsOnAny()) return BODY_NO;
+	if(!body.IsOnAny()) return BODY_NO;
 
-	if(body->IsOnConnectPos()) body->SetAtState(-1);
+	if(body.IsOnConnectPos()) body.SetAtState(-1);
 
-	if(body->IsOnBody()) Manager.ctx->SelectObject(hp + BLUE);
+	if(body.IsOnBody()) Manager.ctx.SelectObject(hp + BLUE);
 
-	if(body->IsOnCrun())
+	if(body.IsOnCrun())
 	{
-		Manager.ctx->Rectangle(body->p2->coord.x-DD-2, body->p2->coord.y-DD-2, 
-			body->p2->coord.x+DD+2, body->p2->coord.y+DD+2);
+		Manager.ctx.Rectangle(body.p2.coord.x-DD-2, body.p2.coord.y-DD-2, 
+			body.p2.coord.x+DD+2, body.p2.coord.y+DD+2);
 	}
-	else if(body->IsOnCtrl())
+	else if(body.IsOnCtrl())
 	{
-		Manager.ctx->Rectangle(body->p3->coord.x-2, body->p3->coord.y-2, 
-			body->p3->coord.x+BODYSIZE.cx+2, body->p3->coord.y+BODYSIZE.cy+2);
+		Manager.ctx.Rectangle(body.p3.coord.x-2, body.p3.coord.y-2, 
+			body.p3.coord.x+BODYSIZE.cx+2, body.p3.coord.y+BODYSIZE.cy+2);
 	}
 
 	PaintWithSpecialColor(*body, false);
-	return body->GetStyle();
+	return body.GetStyle();
 }
 
 
@@ -163,21 +163,21 @@ bool Manager::ShowBodyElec(FOCUS_OR_POS &body)
 	char title[NAME_LEN*3];		//窗口标题
 	double elec;				//电流大小
 	ELEC_STATE elecDir;			//电流方向
-	CDC * model = NULL;			//property显示物体的示例
+	CDC * model = null;			//property显示物体的示例
 	LISTDATA list;				//property显示的数据
 
 	//1,获得电流信息
 	if(pointer.IsOnLead())
 	{
-		elec = pointer.p1->elec;
-		elecDir  = pointer.p1->elecDir;
+		elec = pointer.p1.elec;
+		elecDir  = pointer.p1.elecDir;
 	}
 	else //if(pointer.IsOnCtrl())
 	{
-		elec = pointer.p3->elec;
-		elecDir  = pointer.p3->elecDir;
+		elec = pointer.p3.elec;
+		elecDir  = pointer.p3.elecDir;
 
-		model = GetCtrlPaintHandle(pointer.p3);	//示例
+		model = GetCtrlPaintImage(pointer.p3);	//示例
 	}
 
 	//2,生成LISTDATA
@@ -216,8 +216,8 @@ bool Manager::ShowBodyElec(FOCUS_OR_POS &body)
 
 		if(pointer.IsOnLead())
 		{
-			GetName(pointer.p1->conBody[LEFTELEC != elecDir], tempStr1);
-			GetName(pointer.p1->conBody[LEFTELEC == elecDir], tempStr2);
+			GetName(pointer.p1.conBody[LEFTELEC != elecDir], tempStr1);
+			GetName(pointer.p1.conBody[LEFTELEC == elecDir], tempStr2);
 
 			list.Init(3);
 			list.SetAMember(DATA_STYLE_double, DATA_NOTE[DATA_NOTE_CURRENT], &elec);
@@ -226,7 +226,7 @@ bool Manager::ShowBodyElec(FOCUS_OR_POS &body)
 		}
 		else //if(pointer.IsOnCtrl())
 		{
-			switch(pointer.p3->dir ^ ((RIGHTELEC == elecDir)<<1))
+			switch(pointer.p3.dir ^ ((RIGHTELEC == elecDir)<<1))
 			{
 			case 0:
 				strcpy(tempStr1, "从左到右");

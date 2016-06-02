@@ -17,18 +17,18 @@ bool Manager::SetStartBody(POINT pos)
 
 	if(motiBody[0].IsOnLead())
 	{
-		if(StaticClass::IsElecError(motiBody[0].p1->elecDir))
+		if(StaticClass::IsElecError(motiBody[0].p1.elecDir))
 		{
-			wndPointer->MessageBox("当前选择的电路不正常", "无法计算电势差", MB_ICONWARNING);
+			wndPointer.MessageBox("当前选择的电路不正常", "无法计算电势差", MB_ICONWARNING);
 			return false;
 		}
 	}
 	else if(motiBody[0].IsOnCrun() && !motiBody[0].IsOnConnectPos())
 	{
 		CRUN * c = motiBody[0].p2;
-		for(int i=0; i<4; ++i) if(c->lead[i] && StaticClass::IsElecError(c->lead[i]->elecDir))
+		for(int i=0; i<4; ++i) if(c.lead[i] && StaticClass::IsElecError(c.lead[i]->elecDir))
 		{
-			wndPointer->MessageBox("当前选择的电路不正常", "无法计算电势差", MB_ICONWARNING);
+			wndPointer.MessageBox("当前选择的电路不正常", "无法计算电势差", MB_ICONWARNING);
 			return false;
 		}
 	}
@@ -87,7 +87,7 @@ bool Manager::NextBodyByInputNum(UINT nChar)
 	{
 		if(dir < 0 || dir > 1) return false;
 		
-		Pointer temp = pressEnd.p1->conBody[dir];
+		Pointer temp = pressEnd.p1.conBody[dir];
 		temp.SetAtState(-1);
 
 		if(temp.IsOnCrun())
@@ -96,36 +96,36 @@ bool Manager::NextBodyByInputNum(UINT nChar)
 		}
 		else //if(temp.IsOnCtrl())
 		{
-			if(temp.p3->GetResist() < 0)	//断路控件
+			if(temp.p3.GetResist() < 0)	//断路控件
 			{
-				wndPointer->MessageBox("这是一个断路电学元件 !", "电流无法流过 !", MB_ICONINFORMATION);
+				wndPointer.MessageBox("这是一个断路电学元件 !", "电流无法流过 !", MB_ICONINFORMATION);
 				return false;
 			}
-			if(temp.p3->GetConnectNum() < 2)	//控件没有连接2段导线
+			if(temp.p3.GetConnectNum() < 2)	//控件没有连接2段导线
 			{
-				wndPointer->MessageBox("电学元件另一端没有连接导线 !", "电流无法流过 !", MB_ICONINFORMATION);
+				wndPointer.MessageBox("电学元件另一端没有连接导线 !", "电流无法流过 !", MB_ICONINFORMATION);
 				return false;
 			}
-			dir = temp.p3->lead[0] == pressEnd.p1;	//下一个导线索引(0或1)
-			if(temp.p3->lead[dir] == pressEnd.p1) return false;	//电路是一个控件2端都连接同一段导线
-			if(temp.p3->elecDir == dir)
-				startEndPressure -= temp.p3->GetResist() * temp.p3->elec;
+			dir = temp.p3.lead[0] == pressEnd.p1;	//下一个导线索引(0或1)
+			if(temp.p3.lead[dir] == pressEnd.p1) return false;	//电路是一个控件2端都连接同一段导线
+			if(temp.p3.elecDir == dir)
+				startEndPressure -= temp.p3.GetResist() * temp.p3.elec;
 			else
-				startEndPressure += temp.p3->GetResist() * temp.p3->elec;
-			startEndPressure += temp.p3->GetPress(dir);
-			pressEnd.SetOnLead(temp.p3->lead[dir]);
+				startEndPressure += temp.p3.GetResist() * temp.p3.elec;
+			startEndPressure += temp.p3.GetPress(dir);
+			pressEnd.SetOnLead(temp.p3.lead[dir]);
 		}
 	}
 	else	//结尾位置在结点上
 	{
 		if(dir < 0 || dir > 3) return false;
-		if(pressEnd.p2->lead[dir] != NULL)
+		if(pressEnd.p2.lead[dir] != null)
 		{
-			pressEnd.SetOnLead(pressEnd.p2->lead[dir]);
+			pressEnd.SetOnLead(pressEnd.p2.lead[dir]);
 		}
 		else 
 		{
-			wndPointer->MessageBox("结点这一端没有连接导线 !", "电流无法流过 !", MB_ICONINFORMATION);
+			wndPointer.MessageBox("结点这一端没有连接导线 !", "电流无法流过 !", MB_ICONINFORMATION);
 			return false;
 		}
 	}
@@ -156,7 +156,7 @@ bool Manager::ShowPressure()
 	list.SetAMember(DATA_STYLE_LPCTSTR, "起始位置", name1);
 	list.SetAMember(DATA_STYLE_LPCTSTR, "结束位置", name2);
 
-	MyPropertyDlg dlg(&list, true, NULL, note, wndPointer);
+	MyPropertyDlg dlg(&list, true, null, note, wndPointer);
 	dlg.DoModal();
 
 	return true;

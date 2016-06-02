@@ -3,63 +3,63 @@
 void Manager::UpdateEditMenuState()
 //更新编辑菜单状态(MF_ENABLED or MF_GRAYED)
 {
-	CMenu * cm = wndPointer->GetMenu();
+	CMenu * cm = wndPointer.GetMenu();
 	UINT menuState;
 
 	if(!focusBody.IsOnAny())
 	{
-		cm->EnableMenuItem(IDM_FOCUSBODY_COPY, MF_GRAYED);
-		cm->EnableMenuItem(IDM_FOCUSBODY_CUT, MF_GRAYED);
-		cm->EnableMenuItem(IDM_FOCUSBODY_DELETE, MF_GRAYED);
-		cm->EnableMenuItem(IDM_FOCUSBODY_PROPERTY, MF_GRAYED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_COPY, MF_GRAYED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_CUT, MF_GRAYED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_DELETE, MF_GRAYED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_PROPERTY, MF_GRAYED);
 
-		cm->EnableMenuItem(IDM_FOCUSBODY_CHANGECTRLSTYLE, MF_GRAYED);
-		cm->EnableMenuItem(IDM_FOCUSBODY_ROTATE1, MF_GRAYED);
-		cm->EnableMenuItem(IDM_FOCUSBODY_ROTATE2, MF_GRAYED);
-		cm->EnableMenuItem(IDM_FOCUSBODY_ROTATE3, MF_GRAYED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_CHANGECTRLSTYLE, MF_GRAYED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE1, MF_GRAYED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE2, MF_GRAYED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE3, MF_GRAYED);
 
-		cm->EnableMenuItem(IDM_FOCUSBODY_SHOWELEC, MF_GRAYED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_SHOWELEC, MF_GRAYED);
 	}
 	else if(focusBody.IsOnLead())
 	{
-		cm->EnableMenuItem(IDM_FOCUSBODY_COPY, MF_GRAYED);
-		cm->EnableMenuItem(IDM_FOCUSBODY_CUT, MF_GRAYED);
-		cm->EnableMenuItem(IDM_FOCUSBODY_DELETE, MF_ENABLED);
-		cm->EnableMenuItem(IDM_FOCUSBODY_PROPERTY, MF_ENABLED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_COPY, MF_GRAYED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_CUT, MF_GRAYED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_DELETE, MF_ENABLED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_PROPERTY, MF_ENABLED);
 
-		cm->EnableMenuItem(IDM_FOCUSBODY_CHANGECTRLSTYLE, MF_GRAYED);
-		cm->EnableMenuItem(IDM_FOCUSBODY_ROTATE1, MF_GRAYED);
-		cm->EnableMenuItem(IDM_FOCUSBODY_ROTATE2, MF_GRAYED);
-		cm->EnableMenuItem(IDM_FOCUSBODY_ROTATE3, MF_GRAYED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_CHANGECTRLSTYLE, MF_GRAYED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE1, MF_GRAYED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE2, MF_GRAYED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE3, MF_GRAYED);
 
-		cm->EnableMenuItem(IDM_FOCUSBODY_SHOWELEC, MF_ENABLED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_SHOWELEC, MF_ENABLED);
 	}
 	else
 	{
-		cm->EnableMenuItem(IDM_FOCUSBODY_COPY, MF_ENABLED);
-		cm->EnableMenuItem(IDM_FOCUSBODY_CUT, MF_ENABLED);
-		cm->EnableMenuItem(IDM_FOCUSBODY_DELETE, MF_ENABLED);
-		cm->EnableMenuItem(IDM_FOCUSBODY_PROPERTY, MF_ENABLED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_COPY, MF_ENABLED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_CUT, MF_ENABLED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_DELETE, MF_ENABLED);
+		cm.EnableMenuItem(IDM_FOCUSBODY_PROPERTY, MF_ENABLED);
 
 		if(focusBody.IsOnCtrl())
 			menuState = MF_ENABLED;
 		else
 			menuState = MF_GRAYED;
 
-		cm->EnableMenuItem(IDM_FOCUSBODY_CHANGECTRLSTYLE, menuState);
-		cm->EnableMenuItem(IDM_FOCUSBODY_ROTATE1, menuState);
-		cm->EnableMenuItem(IDM_FOCUSBODY_ROTATE2, menuState);
-		cm->EnableMenuItem(IDM_FOCUSBODY_ROTATE3, menuState);
-		cm->EnableMenuItem(IDM_FOCUSBODY_SHOWELEC, menuState);
+		cm.EnableMenuItem(IDM_FOCUSBODY_CHANGECTRLSTYLE, menuState);
+		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE1, menuState);
+		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE2, menuState);
+		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE3, menuState);
+		cm.EnableMenuItem(IDM_FOCUSBODY_SHOWELEC, menuState);
 	}
 }
 
 void Manager::FocusBodyClear(const Pointer * deleteBody)
 //判断删除物体是否是当前焦点,如果是则清除鼠标焦点物体
-//如果deleteBody==NULL,直接删除焦点
+//如果deleteBody==null,直接删除焦点
 //函数执行在:Manager,DeleteSingleBody,ClearCircuitState
 {
-	if(deleteBody == NULL || focusBody.IsBodySame(deleteBody))
+	if(deleteBody == null || focusBody.IsBodySame(deleteBody))
 	{
 		focusBody.Clear();
 		UpdateEditMenuState();
@@ -79,7 +79,7 @@ bool Manager::FocusBodyPaint(const Pointer * newFocus)
 //画获得鼠标焦点的物体,并覆盖原来的焦点
 //如果newFocus==NULL重绘原来焦点;否则覆盖原来的焦点,新的焦点用焦点色画
 {
-	if(newFocus != NULL)	//焦点改变
+	if(newFocus != null)	//焦点改变
 	{
 		if(focusBody.IsBodySame(newFocus))
 			return false;
@@ -107,7 +107,7 @@ bool Manager::FocusBodyPaint(const Pointer * newFocus)
 			PaintLead(focusBody.p1);
 			break;
 		case DOT_ORIGINAL_COLOR:
-			PaintLeadWithStyle(focusBody.p1, PS_DOT, focusBody.p1->color);
+			PaintLeadWithStyle(focusBody.p1, PS_DOT, focusBody.p1.color);
 			break;
 		case DOT_RESERVE_COLOR:
 			PaintLeadWithStyle(focusBody.p1, PS_DOT, RESERVE_COLOR);
@@ -137,17 +137,17 @@ void Manager::FocusBodyChangeUseTab()
 
 	if(focusBody.IsOnLead())	//当前焦点是导线
 	{
-		num = (focusBody.p1->num + 1) % leadCount;
+		num = (focusBody.p1.num + 1) % leadCount;
 		newFocus.SetOnLead(lead[num]);
 	}
 	else if(focusBody.IsOnCrun())	//当前焦点是结点
 	{
-		num = (focusBody.p2->num + 1) % crunCount;
+		num = (focusBody.p2.num + 1) % crunCount;
 		newFocus.SetOnCrun(crun[num], true);
 	}
 	else if(focusBody.IsOnCtrl())	//当前焦点是控件
 	{
-		num = (focusBody.p3->num + 1) % ctrlCount;
+		num = (focusBody.p3.num + 1) % ctrlCount;
 		newFocus.SetOnCtrl(ctrl[num], true);
 	}
 	else	//没有设定焦点
@@ -170,8 +170,8 @@ bool Manager::FocusBodyMove(int dir)
 	POINT fromPos, toPos;
 
 	//获得物体坐标
-	if(focusBody.IsOnCrun()) fromPos = focusBody.p2->coord;
-	else fromPos = focusBody.p3->coord;
+	if(focusBody.IsOnCrun()) fromPos = focusBody.p2.coord;
+	else fromPos = focusBody.p3.coord;
 	toPos = fromPos;
 
 	//设置移动后的坐标

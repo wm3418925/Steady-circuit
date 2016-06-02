@@ -9,36 +9,36 @@ bool Manager::MotivateAll(POINT &pos)
 
 	//1,初始化-------------------------------------------
 	ASSERT(motiCount >= 0 && motiCount < 2);
-	ctx->DPtoLP(&pos);
-	mouse->Clear();
+	ctx.DPtoLP(&pos);
+	mouse.Clear();
 
 	//2,搜索在什么物体上---------------------------------
 	for(i = crunCount-1; i >= 0; --i)	//搜索所有结点
 	{
-		mouse->SetAtState(crun[i]->At(pos));
-		if(mouse->IsOnAny())
+		mouse.SetAtState(crun[i]->At(pos));
+		if(mouse.IsOnAny())
 		{
-			mouse->SetOnCrun(crun[i]);
+			mouse.SetOnCrun(crun[i]);
 			++motiCount;
 			goto testPlace;
 		}
 	}
 	for(i = leadCount-1; i >= 0; --i)	//搜索所有导线
 	{
-		mouse->SetAtState(lead[i]->At(pos));
-		if(mouse->IsOnAny())
+		mouse.SetAtState(lead[i]->At(pos));
+		if(mouse.IsOnAny())
 		{
-			mouse->SetOnLead(lead[i], false);
+			mouse.SetOnLead(lead[i], false);
 			++motiCount;
 			goto testPlace;
 		}
 	}
 	for(i = ctrlCount-1; i >= 0; --i)	//搜索所有控件
 	{
-		mouse->SetAtState(ctrl[i]->At(pos));
-		if(mouse->IsOnAny())
+		mouse.SetAtState(ctrl[i]->At(pos));
+		if(mouse.IsOnAny())
 		{
-			mouse->SetOnCtrl(ctrl[i]);
+			mouse.SetOnCtrl(ctrl[i]);
 			++motiCount;
 			goto testPlace;
 		}
@@ -120,28 +120,28 @@ bool Manager::LButtonUp(POINT pos)
 {
 	isUpRecvAfterDown = true;						//鼠标按下后收到鼠标按起消息
 	if(!lButtonDownState || !motiCount) return false;	//没有点击返回
-	ctx->DPtoLP(&pos);
+	ctx.DPtoLP(&pos);
 	Pointer * body = motiBody + motiCount - 1;
 
 	//左键按下和按起的坐标相同,而且点击的不是连接点
 	if( lButtonDownPos.x == pos.x && lButtonDownPos.y == pos.y 
-		&& !body->IsOnConnectPos())
+		&& !body.IsOnConnectPos())
 	{
-		if(body->IsOnCtrl())
-			body->p3->SwitchOnOff();	//开关开合情况改变
-		FocusBodyPaint(NULL);			//重绘焦点
+		if(body.IsOnCtrl())
+			body.p3.SwitchOnOff();	//开关开合情况改变
+		FocusBodyPaint(null);			//重绘焦点
 
 		motiCount = 0;
 		return false;
 	}
 
-	if(body->IsOnLead())	//移动导线
+	if(body.IsOnLead())	//移动导线
 	{
-		body->p1->Move(body->GetAtState(), pos, maxLeaveOutDis);
+		body.p1.Move(body.GetAtState(), pos, maxLeaveOutDis);
 		motiCount = 0;
 		return true;
 	}
-	else if(body->IsOnBody())	//移动物体或复制物体
+	else if(body.IsOnBody())	//移动物体或复制物体
 	{
 		if(StaticClass::IsCtrlDown())	//左或右Ctrl键按下复制物体
 			PosBodyClone(body, lButtonDownPos, pos);
@@ -150,7 +150,7 @@ bool Manager::LButtonUp(POINT pos)
 		motiCount = 0;
 		return true;
 	}
-	else if(!body->IsOnConnectPos())
+	else if(!body.IsOnConnectPos())
 	{
 		motiCount = 0;
 		return false;

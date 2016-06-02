@@ -9,15 +9,15 @@ const char * Manager::GetFilePath()
 bool Manager::SaveFile(const char * newFile)
 //保存电路
 {
-	ASSERT(newFile != NULL && newFile[0] != '\0');
+	ASSERT(newFile != null && newFile[0] != '\0');
 	long i;
 	FILE * fp;
 
 	strcpy(fileName, newFile);	//替换原有文件路径
 	fp = fopen(fileName, "wb");
-	if(fp == NULL)	//文件不能打开
+	if(fp == null)	//文件不能打开
 	{
-		wndPointer->MessageBox("文件不能写 !", "保存文件错误", MB_ICONERROR);
+		wndPointer.MessageBox("文件不能写 !", "保存文件错误", MB_ICONERROR);
 		return false;
 	}
 
@@ -63,16 +63,16 @@ bool Manager::SaveFile(const char * newFile)
 bool Manager::ReadFile(const char * newFile)
 //读取电路
 {
-	ASSERT(newFile != NULL && newFile[0] != '\0');
+	ASSERT(newFile != null && newFile[0] != '\0');
 	FILE * fp;
 	int i;
-	POINT pos1 = {NULL};
+	POINT pos1 = {null};
 	Pointer body;
 
 	fp = fopen(newFile, "rb");
-	if(fp == NULL)
+	if(fp == null)
 	{
-		wndPointer->MessageBox("文件不能不存在或不能读取 !", "读取文件错误", MB_ICONERROR);
+		wndPointer.MessageBox("文件不能不存在或不能读取 !", "读取文件错误", MB_ICONERROR);
 		return false;
 	}
 
@@ -81,7 +81,7 @@ bool Manager::ReadFile(const char * newFile)
 	if(i != FILE_VERSION)	//文件版本不同,不予读取
 	{
 		fclose(fp);
-		wndPointer->MessageBox("文件版本不符 !", "读取文件错误", MB_ICONERROR);
+		wndPointer.MessageBox("文件版本不符 !", "读取文件错误", MB_ICONERROR);
 		return false;
 	}
 
@@ -135,10 +135,10 @@ bool Manager::ReadFile(const char * newFile)
 		FocusBodySet(body);								//设置焦点物体
 		fread(&viewOrig, sizeof(POINT), 1, fp);			//视角初始坐标
 
-		ctx->SetTextColor(LEADCOLOR[textColor]);								//初始化字体颜色
-		ctx->SetViewportOrg(-viewOrig.x, -viewOrig.y);						//初始化视角初始坐标
-		wndPointer->SetScrollPos(SB_HORZ, viewOrig.x/mouseWheelSense.cx);	//初始化水平滚动条
-		wndPointer->SetScrollPos(SB_VERT, viewOrig.y/mouseWheelSense.cy);	//初始化竖直滚动条
+		ctx.SetTextColor(LEADCOLOR[textColor]);								//初始化字体颜色
+		ctx.SetViewportOrg(-viewOrig.x, -viewOrig.y);						//初始化视角初始坐标
+		wndPointer.SetScrollPos(SB_HORZ, viewOrig.x/mouseWheelSense.cx);	//初始化水平滚动条
+		wndPointer.SetScrollPos(SB_VERT, viewOrig.y/mouseWheelSense.cy);	//初始化竖直滚动条
 
 	}	//try
 
@@ -146,7 +146,7 @@ bool Manager::ReadFile(const char * newFile)
 	{
 	READFILEERROR:
 		fclose(fp);
-		wndPointer->MessageBox("文件可能损坏了 !", "读取文件错误", MB_ICONERROR);
+		wndPointer.MessageBox("文件可能损坏了 !", "读取文件错误", MB_ICONERROR);
 		exit(0);
 	}
 
