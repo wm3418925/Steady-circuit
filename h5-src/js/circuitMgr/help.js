@@ -10,7 +10,7 @@ void Manager::Help(POINT pos)
 
 	if(!motiBody[0].IsOnAny())
 	{
-		wndPointer->MessageBox("鼠标没有移动到物体上 !", "提示信息", MB_ICONINFORMATION);
+		this.canvas->MessageBox("鼠标没有移动到物体上 !", "提示信息", MB_ICONINFORMATION);
 		return;
 	}
 
@@ -38,7 +38,7 @@ void Manager::Help(POINT pos)
 		strcat(note, "\n可以旋转它 或者 改为其他类型的电学元件");
 	}
 
-	PaintWithSpecialColor(motiBody[0], false);
-	wndPointer->MessageBox(note, "提示信息", MB_ICONINFORMATION);
+	PaintWithSpecialColorAndRect(motiBody[0], false);
+	this.canvas->MessageBox(note, "提示信息", MB_ICONINFORMATION);
 	PaintAll();
 }

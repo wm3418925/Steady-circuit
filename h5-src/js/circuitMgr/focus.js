@@ -3,7 +3,7 @@
 void Manager::UpdateEditMenuState()
 //更新编辑菜单状态(MF_ENABLED or MF_GRAYED)
 {
-	CMenu * cm = wndPointer.GetMenu();
+	CMenu * cm = this.canvas.GetMenu();
 	UINT menuState;
 
 	if(!focusBody.IsOnAny())
@@ -116,7 +116,7 @@ bool Manager::FocusBodyPaint(const Pointer * newFocus)
 	}
 	else if(focusBody.IsOnCrun())
 	{
-		PaintCrunWithColor(focusBody.p2, focusCrunColor);
+		PaintCrunWithStyle(focusBody.p2, PAINT_CRUN_STYLE_FOCUS);
 	}
 	else if(focusBody.IsOnCtrl())
 	{
@@ -194,7 +194,7 @@ bool Manager::FocusBodyMove(int dir)
 	}
 
 	//检查坐标是否越界
-	if(toPos.x < -BODYSIZE.cx/2 || toPos.y < -BODYSIZE.cy/2) return false;
+	if(toPos.x < -CTRL_SIZE.cx/2 || toPos.y < -CTRL_SIZE.cy/2) return false;
 
 	//移动对象
 	PosBodyMove(&focusBody, fromPos, toPos);

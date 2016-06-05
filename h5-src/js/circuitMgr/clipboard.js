@@ -61,7 +61,7 @@ bool Manager::PasteBody(POINT pos)
 	{
 		if(crunCount >= MAX_CRUN_COUNT)
 		{
-			wndPointer.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
+			this.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
 			return false;
 		}
 
@@ -79,7 +79,7 @@ bool Manager::PasteBody(POINT pos)
 	{
 		if(ctrlCount >= MAX_CTRL_COUNT)
 		{
-			wndPointer.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
+			this.canvas.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
 			return false;
 		}
 

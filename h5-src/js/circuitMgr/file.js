@@ -17,7 +17,7 @@ bool Manager::SaveFile(const char * newFile)
 	fp = fopen(fileName, "wb");
 	if(fp == null)	//文件不能打开
 	{
-		wndPointer.MessageBox("文件不能写 !", "保存文件错误", MB_ICONERROR);
+		this.canvas.MessageBox("文件不能写 !", "保存文件错误", MB_ICONERROR);
 		return false;
 	}
 
@@ -52,10 +52,6 @@ bool Manager::SaveFile(const char * newFile)
 	focusBody.SaveToFile(fp);						//焦点物体
 	fwrite(&viewOrig, sizeof(POINT), 1, fp);		//视角初始坐标
 
-	//7文件保留域,便于文件升级
-	char tmpForReserve[FILE_RESERVE_SIZE] = {0};
-	fwrite(tmpForReserve, FILE_RESERVE_SIZE, 1, fp);
-
 	fclose(fp);
 	return true;
 }
@@ -72,7 +68,7 @@ bool Manager::ReadFile(const char * newFile)
 	fp = fopen(newFile, "rb");
 	if(fp == null)
 	{
-		wndPointer.MessageBox("文件不能不存在或不能读取 !", "读取文件错误", MB_ICONERROR);
+		this.canvas.MessageBox("文件不能不存在或不能读取 !", "读取文件错误", MB_ICONERROR);
 		return false;
 	}
 
@@ -81,7 +77,7 @@ bool Manager::ReadFile(const char * newFile)
 	if(i != FILE_VERSION)	//文件版本不同,不予读取
 	{
 		fclose(fp);
-		wndPointer.MessageBox("文件版本不符 !", "读取文件错误", MB_ICONERROR);
+		this.canvas.MessageBox("文件版本不符 !", "读取文件错误", MB_ICONERROR);
 		return false;
 	}
 
@@ -137,8 +133,8 @@ bool Manager::ReadFile(const char * newFile)
 
 		ctx.SetTextColor(LEADCOLOR[textColor]);								//初始化字体颜色
 		ctx.SetViewportOrg(-viewOrig.x, -viewOrig.y);						//初始化视角初始坐标
-		wndPointer.SetScrollPos(SB_HORZ, viewOrig.x/mouseWheelSense.cx);	//初始化水平滚动条
-		wndPointer.SetScrollPos(SB_VERT, viewOrig.y/mouseWheelSense.cy);	//初始化竖直滚动条
+		this.canvas.SetScrollPos(SB_HORZ, viewOrig.x/mouseWheelSense.cx);	//初始化水平滚动条
+		this.canvas.SetScrollPos(SB_VERT, viewOrig.y/mouseWheelSense.cy);	//初始化竖直滚动条
 
 	}	//try
 
@@ -146,7 +142,7 @@ bool Manager::ReadFile(const char * newFile)
 	{
 	READFILEERROR:
 		fclose(fp);
-		wndPointer.MessageBox("文件可能损坏了 !", "读取文件错误", MB_ICONERROR);
+		this.canvas.MessageBox("文件可能损坏了 !", "读取文件错误", MB_ICONERROR);
 		exit(0);
 	}
 

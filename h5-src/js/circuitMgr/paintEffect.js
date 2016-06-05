@@ -32,22 +32,22 @@ bool Manager::ShowAddBody(POINT point)
 	if(addState == BODY_CRUN)
 	{
 		if(lastMoveOnPos.x > -100)
-			Manager.ctx.BitBlt(lastMoveOnPos.x-DD, lastMoveOnPos.y-DD, DD*2, DD*2, &crunDcMem, 0, 0, SRCINVERT);
+			Manager.ctx.BitBlt(lastMoveOnPos.x-DD, lastMoveOnPos.y-DD, DD*2, DD*2, &crunImageData, 0, 0, SRCINVERT);
 		Manager.ctx.DPtoLP(&point);
 		lastMoveOnPos = point;
-		Manager.ctx.BitBlt(lastMoveOnPos.x-DD, lastMoveOnPos.y-DD, DD*2, DD*2, &crunDcMem, 0, 0, SRCINVERT);
+		Manager.ctx.BitBlt(lastMoveOnPos.x-DD, lastMoveOnPos.y-DD, DD*2, DD*2, &crunImageData, 0, 0, SRCINVERT);
 
 		::SetCursor(hcAddCrun);
 		return true;
 	}
 	else if(Pointer::IsCtrl(addState))
 	{
-		CDC * tempDc = ctrlDcMem + addState;
+		CDC * tempDc = Manager.ctrlImageList[addState*4];
 		if(lastMoveOnPos.x > -100)
-			Manager.ctx.BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, BODYSIZE.cx, BODYSIZE.cy, tempDc, 0, 0, SRCINVERT);
+			Manager.ctx.BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, CTRL_SIZE.cx, CTRL_SIZE.cy, tempDc, 0, 0, SRCINVERT);
 		Manager.ctx.DPtoLP(&point);
 		lastMoveOnPos = point;
-		Manager.ctx.BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, BODYSIZE.cx, BODYSIZE.cy, tempDc, 0, 0, SRCINVERT);
+		Manager.ctx.BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, CTRL_SIZE.cx, CTRL_SIZE.cy, tempDc, 0, 0, SRCINVERT);
 
 		::SetCursor(null);
 		return true;
@@ -144,10 +144,10 @@ BODY_TYPE Manager::PosBodyPaintRect(POINT pos)
 	else if(body.IsOnCtrl())
 	{
 		Manager.ctx.Rectangle(body.p3.coord.x-2, body.p3.coord.y-2, 
-			body.p3.coord.x+BODYSIZE.cx+2, body.p3.coord.y+BODYSIZE.cy+2);
+			body.p3.coord.x+CTRL_SIZE.cx+2, body.p3.coord.y+CTRL_SIZE.cy+2);
 	}
 
-	PaintWithSpecialColor(*body, false);
+	PaintWithSpecialColorAndRect(*body, false);
 	return body.GetStyle();
 }
 
@@ -255,8 +255,8 @@ bool Manager::ShowBodyElec(FOCUS_OR_POS &body)
 	strcat(title, "的电流");
 
 	//4,显示对话框
-	PaintWithSpecialColor(pointer, false);	//用保留颜色(紫色)显示物体
-	MyPropertyDlg dlg(&list, true, model, title, wndPointer);
+	PaintWithSpecialColorAndRect(pointer, false);	//用保留颜色(紫色)显示物体
+	MyPropertyDlg dlg(&list, true, model, title, this.canvas);
 	dlg.DoModal();
 
 	return true;

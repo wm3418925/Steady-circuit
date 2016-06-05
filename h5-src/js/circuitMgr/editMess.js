@@ -11,7 +11,7 @@ bool Manager::AddBody(POINT pos)
 	{
 		if(crunCount >= MAX_CRUN_COUNT)
 		{
-			wndPointer.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
+			this.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
 			return false;
 		}
 
@@ -24,7 +24,7 @@ bool Manager::AddBody(POINT pos)
 	{
 		if(ctrlCount >= MAX_CTRL_COUNT)
 		{
-			wndPointer.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
+			this.canvas.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
 			return false;
 		}
 
@@ -58,7 +58,7 @@ void Manager::Property(FOCUS_OR_POS &body, bool isReadOnly)
 		GetName(pointer, tempStr);
 		strcat(tempStr, " 的标签");					//窗口标题
 		pointer.p2.GetDataList(&list);				//数据
-		model = &crunDcMem;							//示例
+		model = &crunImageData;							//示例
 	}
 	else if(pointer.IsOnCtrl())
 	{
@@ -72,8 +72,8 @@ void Manager::Property(FOCUS_OR_POS &body, bool isReadOnly)
 		return;
 	}
 
-	PaintWithSpecialColor(pointer, false);	//用保留颜色(紫色)显示物体
-	MyPropertyDlg dlg(&list, isReadOnly, model, tempStr, wndPointer);
+	PaintWithSpecialColorAndRect(pointer, false);	//用保留颜色(紫色)显示物体
+	MyPropertyDlg dlg(&list, isReadOnly, model, tempStr, this.canvas);
 	dlg.DoModal();
 }
 
@@ -99,8 +99,8 @@ void Manager::ChangeCtrlStyle(FOCUS_OR_POS &body)
 	strcat(tempStr, " 的类型");
 
 	//显示对话框
-	PaintWithSpecialColor(pointer, false);	//用保留颜色(紫色)显示物体
-	MyPropertyDlg dlg(&list, false, GetCtrlPaintImage(pointer.p3), tempStr, wndPointer);
+	PaintWithSpecialColorAndRect(pointer, false);	//用保留颜色(紫色)显示物体
+	MyPropertyDlg dlg(&list, false, GetCtrlPaintImage(pointer.p3), tempStr, this.canvas);
 	dlg.DoModal();
 
 	//改变类型
@@ -153,7 +153,7 @@ bool Manager::PosBodyClone(const Pointer * body, POINT firstPos, POINT lastPos)
 		//验证
 		if(crunCount >= MAX_CRUN_COUNT)
 		{
-			wndPointer.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
+			this.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
 			return false;
 		}
 
@@ -178,7 +178,7 @@ bool Manager::PosBodyClone(const Pointer * body, POINT firstPos, POINT lastPos)
 		//验证
 		if(ctrlCount >= MAX_CTRL_COUNT)
 		{
-			wndPointer.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
+			this.canvas.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
 			return false;
 		}
 

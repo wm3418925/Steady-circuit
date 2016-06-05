@@ -19,7 +19,7 @@ bool Manager::SetStartBody(POINT pos)
 	{
 		if(StaticClass::IsElecError(motiBody[0].p1.elecDir))
 		{
-			wndPointer.MessageBox("当前选择的电路不正常", "无法计算电势差", MB_ICONWARNING);
+			this.canvas.MessageBox("当前选择的电路不正常", "无法计算电势差", MB_ICONWARNING);
 			return false;
 		}
 	}
@@ -28,7 +28,7 @@ bool Manager::SetStartBody(POINT pos)
 		CRUN * c = motiBody[0].p2;
 		for(int i=0; i<4; ++i) if(c.lead[i] && StaticClass::IsElecError(c.lead[i]->elecDir))
 		{
-			wndPointer.MessageBox("当前选择的电路不正常", "无法计算电势差", MB_ICONWARNING);
+			this.canvas.MessageBox("当前选择的电路不正常", "无法计算电势差", MB_ICONWARNING);
 			return false;
 		}
 	}
@@ -98,12 +98,12 @@ bool Manager::NextBodyByInputNum(UINT nChar)
 		{
 			if(temp.p3.GetResist() < 0)	//断路控件
 			{
-				wndPointer.MessageBox("这是一个断路电学元件 !", "电流无法流过 !", MB_ICONINFORMATION);
+				this.canvas.MessageBox("这是一个断路电学元件 !", "电流无法流过 !", MB_ICONINFORMATION);
 				return false;
 			}
 			if(temp.p3.GetConnectNum() < 2)	//控件没有连接2段导线
 			{
-				wndPointer.MessageBox("电学元件另一端没有连接导线 !", "电流无法流过 !", MB_ICONINFORMATION);
+				this.canvas.MessageBox("电学元件另一端没有连接导线 !", "电流无法流过 !", MB_ICONINFORMATION);
 				return false;
 			}
 			dir = temp.p3.lead[0] == pressEnd.p1;	//下一个导线索引(0或1)
@@ -125,7 +125,7 @@ bool Manager::NextBodyByInputNum(UINT nChar)
 		}
 		else 
 		{
-			wndPointer.MessageBox("结点这一端没有连接导线 !", "电流无法流过 !", MB_ICONINFORMATION);
+			this.canvas.MessageBox("结点这一端没有连接导线 !", "电流无法流过 !", MB_ICONINFORMATION);
 			return false;
 		}
 	}
@@ -156,7 +156,7 @@ bool Manager::ShowPressure()
 	list.SetAMember(DATA_STYLE_LPCTSTR, "起始位置", name1);
 	list.SetAMember(DATA_STYLE_LPCTSTR, "结束位置", name2);
 
-	MyPropertyDlg dlg(&list, true, null, note, wndPointer);
+	MyPropertyDlg dlg(&list, true, null, note, this.canvas);
 	dlg.DoModal();
 
 	return true;

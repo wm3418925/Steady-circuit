@@ -159,7 +159,7 @@ bool Manager::ConnectBodyLead(POINT posb)
 	motiCount = 0;
 	if(crunCount >= MAX_CRUN_COUNT)	//只要结点数量够,导线一定够
 	{
-		wndPointer.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
+		this.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
 		return false;
 	}
 

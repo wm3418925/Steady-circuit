@@ -1,23 +1,22 @@
 
-var CTRL_BITMAP_TYPE_COUNT = 7;					//控件位图种类的个数
+var CTRL_BITMAP_TYPE_COUNT = CTRL_TYPE_COUNT*2;					//控件位图种类的个数
 var CTRL_BITMAP_COUNT = CTRL_BITMAP_TYPE_COUNT*4;	//控件位图的个数(包括旋转之后的)
 
 var FILE_VERSION		= 13;					//文件版本,不同版本文件不予读取
-var FILE_RESERVE_SIZE	= 256;					//文件保留域的大小
-var MAXMOVEBODYDIS		= 50;					//使用方向键一次移动物体距离范围1~MAX_MOVEBODYDIS
-var MAXLEAVEOUTDIS		= 15;					//相邻导线合并距离范围1~MAX_LEAVEOUTDIS
+var MAX_MOVE_BODY_DIS	= 50;					//使用方向键一次移动物体距离范围1~MAX_MOVEBODYDIS
+var MAX_LEAVE_OUT_DIS	= 15;					//相邻导线合并距离范围1~MAX_LEAVEOUTDIS
 
 
 
 //1初始化和清理函数------------------------------------------------------------
 var Manager = {
+	/*
 	//画图变量---------------------------------------------------------------------
-	CDC ctrlDcMem[CTRL_BITMAP_COUNT];
-	CBitmap ctrlBitmap[CTRL_BITMAP_COUNT];	//CTRL_BITMAP_NUM个控件位图
-	CDC showConnectDcMem;
-	CBitmap showConnectBitmap;		//激活点位图
-	CDC crunDcMem;
-	CBitmap crunBitmap;				//结点位图
+	CBitmap Manager.ctrlImageList[CTRL_BITMAP_COUNT];	//CTRL_BITMAP_NUM个控件位图
+	CDC showConnectImageData;
+	CBitmap showConnectImageData;		//激活点位图
+	CDC crunImageData;
+	CBitmap crunImageData;				//结点位图
 
 	CPen hp[COLOR_TYPE_NUM];		//COLOR_TYPE_NUM种颜色画笔
 
@@ -35,7 +34,7 @@ var Manager = {
 	enum COLOR focusCtrlColor;		//焦点控件颜色
 
 	//窗口显示---------------------------------------------------------------------
-	CWnd * wndPointer;			//当前窗口指针
+	CWnd * canvas;			//当前窗口指针
 	CDC  * ctx;					//当前窗口设备描述表
 	CDC dcForRefresh;			//使刷新不闪而使用的DC
 	CBitmap bitmapForRefresh;	//使刷新不闪而使用的bitmap
@@ -81,114 +80,133 @@ var Manager = {
 	Pointer pressStart;			//计算电势差的起始位置,只能指向导线或者节点
 	Pointer pressEnd;			//计算电势差的结束位置,只能指向导线或者节点
 	double startEndPressure;	//记录pressStart到pressEnd之间的电势差
-
-
-	CreateNew: function(outWnd) {
-		var i;
+*/
+	
+	// 初始化连接点位图
+	CreateShowConnectImageData: function() {
+		var len = 16*9;
+		var imgData = Manager.ctx.createImageData(6,6);
 		
-		//窗口显示-------------------------------------------------------
-		this.wndPointer = outWnd;		//当前窗口指针
-		ctx = wndPointer.GetDC();	//当前窗口设备描述表
-
-		bitmapForRefresh.CreateBitmap(1, 1, 1, 32, null);	//使刷新不闪而使用的bitmap
-		dcForRefresh.CreateCompatibleDC(ctx);				//使刷新不闪而使用的DC
-		dcForRefresh.SelectObject(&bitmapForRefresh);
-
-
-		//相对变量-------------------------------------------------------
-		viewOrig.x = viewOrig.y = 0;					//视角初始坐标
-		mouseWheelSense.cx = mouseWheelSense.cy = 32;	//mouseWheel的灵活度
-		moveBodySense = 3;								//按上下左右键物体一次移动的距离
-		maxLeaveOutDis = 7;								//导线合并最大距离
-
-
-		//电路元件变量---------------------------------------------------
-		ZeroMemory(crun, sizeof(void *) * MAX_CRUN_COUNT);
-		ZeroMemory(ctrl, sizeof(void *) * MAX_CTRL_COUNT);
-		ZeroMemory(lead, sizeof(void *) * MAX_LEAD_COUNT);
-		crunCount = leadCount = ctrlCount = 0;	//物体的个数清零
-
-
-		//鼠标点击信息记录-----------------------------------------------
-		motiCount = 0;
-		addState = BODY_NO;
-		lButtonDownPos.x = -100;
-		lButtonDownState = false;
-		isUpRecvAfterDown = true;
-		FocusBodyClear(null);
-
-
-		//画图变量-------------------------------------------------------
-		textColor = BLACK;						//默认字体颜色
-		focusLeadStyle = SOLID_RESERVE_COLOR;	//默认焦点导线样式
-		focusCrunColor = GREEN;					//默认焦点结点颜色
-		focusCtrlColor = RED;					//默认焦点控件颜色
-		InitBitmap();							//初始化位图
-
-		//鼠标图标
-		/*HINSTANCE hinst = AfxGetInstanceHandle();
-		hcSizeNS		= LoadCursor(null,	IDC_SIZENS);
-		hcSizeWE		= LoadCursor(null,	IDC_SIZEWE);
-		hcShowConnect	= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_SHOWCONNECT));
-		hcHand			= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_HAND));
-		hcMoveHorz		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_HORZ_LEAD));
-		hcMoveVert		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_VERT_LEAD));
-		hcAddCrun		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_ADDCRUN));*/
-
-
-		//读取文件-------------------------------------------------------
-		vectorPos = null;
-		fileName[0] = '\0';
-		PutCircuitToVector();	//将当前空电路信息保存到容器
+		for (var i=8; i<len; i+=4) {
+			imgData.data[i+0]=r;
+			imgData.data[i+1]=g;
+			imgData.data[i+2]=b;
+			imgData.data[i+3]=255;
+		}
+		imgData.data[3]=imgData.data[7]=imgData.data[19]=imgData.data[23]=imgData.data[27]=imgData.data[47]=0;
+		imgData.data[len-1]=imgData.data[len-5]=imgData.data[len-17]=imgData.data[len-21]=imgData.data[len-25]=imgData.data[len-45]=0;
 	},
-
+	
+	// 以指定颜色初始化一个节点
+	CreateCrunImageWithColor: function(r,g,b) {
+		var len = 16*DD*DD;
+		var imgData = Manager.ctx.createImageData(2*DD,2*DD);
+		
+		for (var i=8; i<len; i+=4) {
+			imgData.data[i+0]=r;
+			imgData.data[i+1]=g;
+			imgData.data[i+2]=b;
+			imgData.data[i+3]=255;
+		}
+		imgData.data[3]=imgData.data[7]=imgData.data[D*8-5]=imgData.data[D*8-1]=imgData.data[D*8+3]=imgData.data[D*16-1]=0;
+		imgData.data[len-1]=imgData.data[len-5]=imgData.data[len-D*8+7]=imgData.data[len-D*8+3]=imgData.data[len-D*8-1]=imgData.data[len-D*16+3]=0;
+	},
+	// 初始化一个反转颜色节点
+	/*CreateInverseCrunImage: function() {
+		var len = 16*DD*DD;
+		var imgData = Manager.ctx.createImageData(2*DD,2*DD);
+		
+		imgData.data[0]=imgData.data[1]=imgData.data[2]=imgData.data[3]=255;
+		imgData.data[4]=imgData.data[5]=imgData.data[6]=imgData.data[7]=255;
+		imgData.data[D*8-8]=imgData.data[D*8-7]=imgData.data[D*8-6]=imgData.data[D*8-5]=255;
+		imgData.data[D*8-4]=imgData.data[D*8-3]=imgData.data[D*8-2]=imgData.data[D*8-1]=255;
+		imgData.data[D*8]=imgData.data[D*8+1]=imgData.data[D*8+2]=imgData.data[D*8+3]=255;
+		imgData.data[D*16-4]=imgData.data[D*16-3]=imgData.data[D*16-2]=imgData.data[D*16-1]=255;
+		
+		imgData.data[len-4]=imgData.data[len-3]=imgData.data[len-2]=imgData.data[len-1]=255;
+		imgData.data[len-8]=imgData.data[len-7]=imgData.data[len-6]=imgData.data[len-5]=255;
+		imgData.data[len-D*8+4]=imgData.data[len-D*8+5]=imgData.data[len-D*8+6]=imgData.data[len-D*8+7]=255;
+		imgData.data[len-D*8]=imgData.data[len-D*8+1]=imgData.data[len-D*8+2]=imgData.data[len-D*8+3]=255;
+		imgData.data[len-D*8-4]=imgData.data[len-D*8-3]=imgData.data[len-D*8-2]=imgData.data[len-D*8-1]=255;
+		imgData.data[len-D*16]=imgData.data[len-D*16+1]=imgData.data[len-D*16+2]=imgData.data[len-D*16+3]=255;
+	},*/
+	// 初始化所有节点位图
+	CreateAllCrunImageData: function() {
+		var crunImageData = new Array(PAINT_CRUN_STYLE_COUNT);
+		crunImageData[PAINT_CRUN_STYLE_NORMAL] = Manager.CreateCrunImageWithColor(0,0,0);
+		crunImageData[PAINT_CRUN_STYLE_FOCUS] = Manager.CreateCrunImageWithColor(30,250,30);
+		crunImageData[PAINT_CRUN_STYLE_SPECIAL] = Manager.CreateCrunImageWithColor(190,30,100);
+		
+		Manager.crunImageData = crunImageData;
+	},
+	
 	//初始化位图句柄
 	InitBitmap: function() {
 		int i, j, k, l;
 		UINT * buf1, * buf2, * p;
 
 		//激活点位图------------------------------------
-		showConnectDcMem.CreateCompatibleDC(ctx);
-		showConnectBitmap.LoadBitmap(IDB_SMALLCRUN);
-		showConnectDcMem.SelectObject(&showConnectBitmap);
+		Manager.showConnectImageData = Manager.CreateShowConnectImageData();
 
 		//节点位图--------------------------------------
-		crunDcMem.CreateCompatibleDC(ctx);
-		crunBitmap.LoadBitmap(IDB_CRUN);
-		crunDcMem.SelectObject(&crunBitmap);
+		Manager.CreateAllCrunImageData();
 
 		//控件位图,处理得到旋转控件---------------------
-		buf1 = (UINT *)malloc(BODYSIZE.cx * BODYSIZE.cy * 4);
-		buf2 = (UINT *)malloc(BODYSIZE.cx * BODYSIZE.cy * 4);
+		Manager.ctrlImageList = new Array(CTRL_BITMAP_COUNT);
+	},
+	
+	Init: function(canvas) {
+		//窗口显示-------------------------------------------------------
+		Manager.canvas = canvas;
+		Manager.ctx = Manager.canvas.getContext("2d");
 
-		for(k=CTRL_BITMAP_TYPE_COUNT-1; k>=0; --k)
-		{
-			//原位图
-			ctrlDcMem[k].CreateCompatibleDC(ctx);
-			ctrlBitmap[k].LoadBitmap(IDB_SOURCE + k);
-			ctrlDcMem[k].SelectObject(ctrlBitmap + k);
-			ctrlBitmap[k].GetBitmapBits(BODYSIZE.cx*BODYSIZE.cy*4, buf1);	//获得原位图像素
+		Manager.bitmapForRefresh.CreateBitmap(1, 1, 1, 32, null);	//使刷新不闪而使用的bitmap
+		Manager.dcForRefresh.CreateCompatibleDC(ctx);				//使刷新不闪而使用的DC
+		Manager.dcForRefresh.SelectObject(&bitmapForRefresh);
 
-			//获得旋转位图
-			for(l=1; l<4; ++l)
-			{
-				p = buf1 + (BODYSIZE.cy - 1) * BODYSIZE.cx + BODYSIZE.cx - 1;
-				for(i = BODYSIZE.cy - 1; i >= 0; --i) for(j = BODYSIZE.cx - 1; j >= 0; --j)
-					* ( buf2 + j * BODYSIZE.cx + BODYSIZE.cx - 1 - i) = * p --;
 
-				i = k + CTRL_BITMAP_TYPE_COUNT*l;
-				ctrlDcMem[i].CreateCompatibleDC(ctx);
-				ctrlBitmap[i].CreateBitmap(BODYSIZE.cx, BODYSIZE.cy, 1, 32, buf2);
-				ctrlDcMem[i].SelectObject(ctrlBitmap + i);
+		//相对变量-------------------------------------------------------
+		Manager.viewOrig = {x:0, y:0};				//视角初始坐标
+		Manager.mouseWheelSense = {cx:32, cy:32};	//mouseWheel的灵活度
+		Manager.moveBodySense = 3;					//按上下左右键物体一次移动的距离
+		Manager.maxLeaveOutDis = 7;					//导线合并最大距离
 
-				p = buf1;
-				buf1 = buf2;
-				buf2 = p;
-			}
-		}
 
-		free(buf1);
-		free(buf2);
+		//电路元件变量---------------------------------------------------
+		Manager.crun = new Array();
+		Manager.ctrl = new Array();
+		Manager.lead = new Array();
+
+
+		//鼠标点击信息记录-----------------------------------------------
+		Manager.motiCount = 0;
+		Manager.addState = BODY_NO;
+		Manager.lButtonDownPos = {x:-100, y:-100};
+		Manager.lButtonDownState = false;
+		Manager.isUpRecvAfterDown = true;
+		Manager.FocusBodyClear(null);
+
+
+		//画图变量-------------------------------------------------------
+		Manager.textColor = BLACK;						//默认字体颜色
+		Manager.focusLeadStyle = SOLID_RESERVE_COLOR;	//默认焦点导线样式
+		Manager.focusCrunColor = GREEN;					//默认焦点结点颜色
+		Manager.focusCtrlColor = RED;					//默认焦点控件颜色
+		Manager.InitBitmap();							//初始化位图
+
+		//鼠标图标
+		/*HINSTANCE hinst = AfxGetInstanceHandle();
+		Manager.hcSizeNS		= LoadCursor(null,	IDC_SIZENS);
+		Manager.hcSizeWE		= LoadCursor(null,	IDC_SIZEWE);
+		Manager.hcShowConnect	= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_SHOWCONNECT));
+		Manager.hcHand			= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_HAND));
+		Manager.hcMoveHorz		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_HORZ_LEAD));
+		Manager.hcMoveVert		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_VERT_LEAD));
+		Manager.hcAddCrun		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_ADDCRUN));*/
+
+
+		//读取文件-------------------------------------------------------
+		Manager.fileName = "";
 	}
 
 };

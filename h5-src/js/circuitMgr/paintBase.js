@@ -5,7 +5,7 @@
 Manager.PaintCtrl = function(c, isPaintName) {
 	ASSERT(c != null);
 	if (isPaintName) PaintCtrlText(c);	//画控件名称
-	Manager.ctx.drawImage(GetCtrlPaintImage(c), c.x, c.y);
+	Manager.ctx.drawImage(Manager.GetCtrlPaintImage(c), c.x, c.y);
 };
 
 //画控件的名称
@@ -19,7 +19,7 @@ Manager.PaintCtrlText = function(c) {
 Manager.PaintCrun = function(c, isPaintName) {
 	ASSERT(c != null);
 	if (isPaintName) PaintCrunText(c);	//画结点名称
-	Manager.ctx.drawImage(crunDcMem, c.x-DD, c.y-DD);
+	Manager.PaintCrunWithStyle(c, PAINT_CRUN_STYLE_NORMAL);
 };
 
 //画结点名称
@@ -33,6 +33,7 @@ Manager.PaintCrunText = function(c) {
 Manager.PaintLead = function(l) {
 	ASSERT(l != null);
 	Manager.ctx.strokeStyle = l.color;
+	Manager.ctx.lineWidth = 1;
 	l.PaintLead(Manager.ctx);
 };
 
@@ -46,7 +47,6 @@ Manager.PaintAllLead = function() {
 
 //画所有的物体
 Manager.PaintAll = function() {
-	int i;
 	CDC * save = Manager.ctx;
 	RECT rect;
 	BITMAP bitmap;
@@ -61,8 +61,8 @@ Manager.PaintAll = function() {
 	//获得窗口尺寸
 	rect.left = 0;
 	rect.top = 0;
-	rect.right = width;
-	rect.bottom = height;
+	rect.right = Manager.canvas.width;
+	rect.bottom = Manager.canvas.height;
 
 	//初始化刷新位图大小
 	bitmapForRefresh.GetBitmap(&bitmap);
@@ -87,9 +87,9 @@ Manager.PaintAll = function() {
 	Manager.ctx.fillRect(&rect);
 
 	//画控件结点以及他们的名称
-	for(i=ctrlCount-1; i>=0; --i)
+	for(var i=ctrlCount-1; i>=0; --i)
 		PaintCtrl(ctrl[i], true);
-	for(i=crunCount-1; i>=0; --i)
+	for(var i=crunCount-1; i>=0; --i)
 		PaintCrun(crun[i], true);
 	//画导线
 	PaintAllLead();
@@ -98,8 +98,8 @@ Manager.PaintAll = function() {
 	FocusBodyPaint(null);
 
 	//重绘显示电势差的物体
-	PaintWithSpecialColor(pressStart, false);
-	PaintWithSpecialColor(pressEnd, true);
+	PaintWithSpecialColorAndRect(pressStart, false);
+	PaintWithSpecialColorAndRect(pressEnd, true);
 
 	//4,还原dc, 一次性画图--------------------------------------------------
 	Manager.ctx = save;
@@ -110,7 +110,7 @@ Manager.PaintAll = function() {
 Manager.PaintMouseMotivate = function(mouseMoti) {
 	var mm = mouseMoti;
 	POINT tempPos;
-	const int CR = 3; //连接点画图半径
+	var CR = 3; //连接点画图半径
 
 	if (mm.IsOnLead()) {
 		//选定了连接点,鼠标变成添加结点图形,提示使用ConnectBodyLead函数
@@ -131,17 +131,15 @@ Manager.PaintMouseMotivate = function(mouseMoti) {
 		//还原上一个连接点
 		if (lastMoveOnBody.IsOnConnectPos()) {
 			lastMoveOnBody.GetPosFromBody(tempPos);	//获得坐标
-			Manager.ctx.BitBlt(tempPos.x-CR, tempPos.y-CR, CR*2, CR*2,
-				&showConnectDcMem, 0, 0, SRCINVERT);
+			Manager.ctx.BitBlt(tempPos.x-CR, tempPos.y-CR, CR*2, CR*2, showConnectImageData, 0, 0, SRCINVERT);
 		}
 
-		lastMoveOnBody = *mm;	//记录当前鼠标激活物体
+		lastMoveOnBody = mm;	//记录当前鼠标激活物体
 
 		//画当前的连接点
 		if (mm.IsOnConnectPos()) {
 			mm.GetPosFromBody(tempPos);	//获得坐标
-			Manager.ctx.BitBlt(tempPos.x-CR, tempPos.y-CR, CR*2, CR*2,
-				&showConnectDcMem, 0, 0, SRCINVERT);
+			Manager.ctx.BitBlt(tempPos.x-CR, tempPos.y-CR, CR*2, CR*2, showConnectImageData, 0, 0, SRCINVERT);
 		}
 	}
 };
@@ -150,34 +148,19 @@ Manager.PaintMouseMotivate = function(mouseMoti) {
 Manager.PaintLeadWithStyle = function(lead, leadStyle, colorType) {
 	ASSERT(lead != null);
 	CPen tempPen;
-
+	
 	tempPen.CreatePen(leadStyle, 1, LEADCOLOR[colorType]);	//新建特殊画笔
 	Manager.ctx.SelectObject(tempPen.m_hObject);			//选择画笔
 	lead.PaintLead(Manager.ctx);							//画导线
-	tempPen.DeleteObject();									//释放画笔
-	Manager.ctx.SelectObject(hp);							//恢复画笔
 };
 
-//用指定颜色画指定结点
-Manager.PaintCrunWithColor = function(c, colorType) {
+//用指定的PAINT_CRUN_STYLE, 画指定结点
+Manager.PaintCrunWithStyle = function(c, style) {
 	ASSERT(c != null);
-	CBrush hb;
+	ASSERT(style >= 0 && style < PAINT_CRUN_STYLE_COUNT);
 
-	//1,画指定颜色背景 -------------------------------------------------------------
-	//设置指定颜色画刷
-	hb.CreateSolidBrush(LEADCOLOR[colorType]);
-	Manager.ctx.SelectObject(&hb);
-	//设置空画笔
-	Manager.ctx.SelectStockObject(NULL_PEN);
-	//画指定颜色圆形
-	Manager.ctx.Rectangle(c.x-DD, c.y-DD, c.x+DD+1, c.y+DD+1);
-
-	//2,释放画刷,还原画刷 ----------------------------------------------------------
-	hb.DeleteObject();
-	Manager.ctx.SelectStockObject(NULL_BRUSH);
-
-	//3,画黑色结点,使用 "或" 的逻辑画图,得到指定颜色结点 ---------------------------
-	Manager.ctx.BitBlt(c.x-DD, c.y-DD, DD*2, DD*2, &crunDcMem, 0, 0, SRCPAINT);
+	Manager.ctx.fillRect(c.x-DD, c.y-DD, 2*DD, 2*DD);
+	Manager.ctx.putImageData(Manager.crunImageData[style], c.x-DD, c.y-DD);
 };
 
 //用指定颜色画指定控件
@@ -192,22 +175,23 @@ Manager.PaintCtrlWithColor = function(c, colorType) {
 	//设置空画笔
 	Manager.ctx.SelectStockObject(NULL_PEN);
 	//画指定颜色矩形
-	Manager.ctx.Rectangle(c.x, c.y, c.x+BODYSIZE.cx+1, c.y+BODYSIZE.cy+1);
+	Manager.ctx.Rectangle(c.x, c.y, c.x+CTRL_SIZE.cx+1, c.y+CTRL_SIZE.cy+1);
 
 	//2,释放画刷,还原画刷 ----------------------------------------------------------
 	hb.DeleteObject();
 	Manager.ctx.SelectStockObject(NULL_BRUSH);
 
 	//3,画黑色控件,使用 "或" 的逻辑画图,得到指定颜色控件
-	Manager.ctx.BitBlt(c.x, c.y, BODYSIZE.cx, BODYSIZE.cy, GetCtrlPaintImage(c), 0, 0, SRCPAINT);
+	Manager.ctx.BitBlt(c.x, c.y, CTRL_SIZE.cx, CTRL_SIZE.cy, GetCtrlPaintImage(c), 0, 0, SRCPAINT);
 
 	//4,重新画被覆盖的周围导线 -----------------------------------------------------
-	for(int num=0; num<2; ++num) if (c.lead[num] != null)
-		PaintLead(c.lead[num]);
+	for (var i=0; i<2; ++i) 
+		if (c.lead[i] != null)
+			PaintLead(c.lead[i]);
 };
 
-//用保留颜色(紫色)显示
-Manager.PaintWithSpecialColor = function(const Pointer &body, isPaintNum) {
+//用保留颜色(紫色)显示物体, 并且在外部用矩形包围
+Manager.PaintWithSpecialColorAndRect = function(body, isPaintNum) {
 	const COLOR colorType = (enum COLOR)COLOR_TYPE_COUNT;	//选用保留颜色(紫色)
 
 	if (body.IsOnLead()) {
@@ -227,9 +211,10 @@ Manager.PaintWithSpecialColor = function(const Pointer &body, isPaintNum) {
 			PaintLeadWithStyle(body.p1, PS_DOT, colorType);	//画导线
 		}
 	} else if (body.IsOnCrun()) {
-		PaintCrunWithColor(body.p2, colorType);	//画结点
-		if (isPaintNum)							//在结点上下左右分别显示1,2,3,4
-		{
+		PaintCrunWithStyle(body.p2, PAINT_CRUN_STYLE_SPECIAL);	//画结点
+		PaintCommonFunc.PaintSurrendedRect(Manager.ctx, body.p.x-DD, body.p.y-DD, DD*2, DD*2, #F01010);
+		
+		if (isPaintNum) {	//在结点上下左右分别显示1,2,3,4
 			POINT pos = body.p2.coord;
 			pos.x -= 5; pos.y -= 8;
 			Manager.ctx.TextOut(pos.x, pos.y-15, "1", 1);
@@ -239,6 +224,7 @@ Manager.PaintWithSpecialColor = function(const Pointer &body, isPaintNum) {
 		}
 	} else if (body.IsOnCtrl()) {
 		PaintCtrlWithColor(body.p3, colorType);	//画控件
+		PaintCommonFunc.PaintSurrendedRect(Manager.ctx, body.p.x, body.p.y, CTRL_SIZE.cx, CTRL_SIZE.cy, #F01010);
 	}
 };
 
@@ -246,8 +232,8 @@ Manager.PaintWithSpecialColor = function(const Pointer &body, isPaintNum) {
 Manager.PaintInvertBodyAtPos = function(const Pointer &body, POINT pos) {
 	ASSERT(body.IsOnBody(false));
 	if (body.IsOnCrun()) {
-		Manager.ctx.BitBlt(pos.x-DD, pos.y-DD, DD*2, DD*2, &crunDcMem, 0, 0, SRCINVERT);
+		Manager.ctx.BitBlt(pos.x-DD, pos.y-DD, DD*2, DD*2, &crunImageData, 0, 0, SRCINVERT);
 	} else {//if (body.IsOnCtrl())
-		Manager.ctx.BitBlt(pos.x, pos.y, BODYSIZE.cx, BODYSIZE.cy, GetCtrlPaintImage(body.p3), 0, 0, SRCINVERT);
+		Manager.ctx.BitBlt(pos.x, pos.y, CTRL_SIZE.cx, CTRL_SIZE.cy, GetCtrlPaintImage(body.p3), 0, 0, SRCINVERT);
 	}
 };

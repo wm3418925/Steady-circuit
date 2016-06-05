@@ -9,14 +9,10 @@ void Manager::SetAddState(BODY_TYPE type)
 
 //获得控件画图句柄
 Manager.GetCtrlPaintImage = function(c) {
-	var paintImage;
-
 	if (c.IsBulbOn() || c.SwitchOnOff(false))	//小灯泡达到额定功率, 开关闭合
-		paintImage = ctrlDcMem[ctrlDcMem.length/2 + c.GetStyle()];
+		return Manager.ctrlImageList[(CTRL_TYPE_COUNT + c.GetStyle())*4 + c.dir];
 	else
-		paintImage = ctrlDcMem[c.GetStyle()];	//默认的画图句柄
-
-	return paintImage[c.dir];
+		return Manager.ctrlImageList[c.GetStyle()*4 + c.dir];	//默认的画图句柄
 };
 
 void Manager::GetName(const Pointer &pointer, char * str)const
@@ -61,8 +57,8 @@ bool Manager::DeleteNote(const Pointer &body)
 	else
 		sprintf(note, "要删除 %s 吗 ?", name);
 
-	PaintWithSpecialColor(body, false);	//用保留颜色(紫色)显示物体
-	return IDYES == wndPointer.MessageBox(note, "删除物体提示", MB_YESNO|MB_ICONWARNING);
+	PaintWithSpecialColorAndRect(body, false);	//用保留颜色(紫色)显示物体
+	return IDYES == this.canvas.MessageBox(note, "删除物体提示", MB_YESNO|MB_ICONWARNING);
 }
 
 void Manager::ClearCircuitState()

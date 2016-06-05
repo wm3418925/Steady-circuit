@@ -36,6 +36,13 @@ var CTRL_TYPE_NAMES = new Array(	//控件类型对应的名称
 );
 
 
+// 绘制的节点样式
+var PAINT_CRUN_STYLE_NORMAL = 0;	// 正常
+var PAINT_CRUN_STYLE_FOCUS = 1;		// 焦点, 绿色
+var PAINT_CRUN_STYLE_SPECIAL = 2;	// 紫色
+var PAINT_CRUN_STYLE_COUNT = 3;
+
+
 //LISTDATA的数据类型定义
 var DATA_TYPE_float		= 0;
 var DATA_TYPE_uint		= 1;
@@ -78,7 +85,7 @@ var MAX_CTRL_COUNT	= 128;	//控件最大数量
 var MAX_CRUN_COUNT	= 64;	//结点最大数量
 var MAX_LEAD_COUNT	= MAX_CRUN_COUNT*2 + MAX_CTRL_COUNT;	//导线最大数量
 
-var BODYSIZE = {29, 29};	//控件的大小
+var CTRL_SIZE = {cx:29, cy:29};	//控件的大小
 var DD = 4;	//当与某个物体距离<=DD时,认为移动到了物体上
 
 //复制物体目的枚举
