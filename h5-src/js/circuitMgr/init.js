@@ -112,8 +112,8 @@ var Manager = {
 			imgData.data[i+2]=b;
 			imgData.data[i+3]=255;
 		}
-		imgData.data[3]=imgData.data[7]=imgData.data[D*8-5]=imgData.data[D*8-1]=imgData.data[D*8+3]=imgData.data[D*16-1]=0;
-		imgData.data[len-1]=imgData.data[len-5]=imgData.data[len-D*8+7]=imgData.data[len-D*8+3]=imgData.data[len-D*8-1]=imgData.data[len-D*16+3]=0;
+		imgData.data[3]=imgData.data[7]=imgData.data[DD*8-5]=imgData.data[DD*8-1]=imgData.data[DD*8+3]=imgData.data[DD*16-1]=0;
+		imgData.data[len-1]=imgData.data[len-5]=imgData.data[len-DD*8+7]=imgData.data[len-DD*8+3]=imgData.data[len-DD*8-1]=imgData.data[len-DD*16+3]=0;
 	},
 	// 初始化所有节点位图
 	CreateAllCrunImageData: function() {
@@ -137,15 +137,15 @@ var Manager = {
 		Manager.ctrlImageList = new Array(CTRL_BITMAP_COUNT);
 		for (var i=0; i<CTRL_TYPE_COUNT; ++i) {
 			Manager.ctrlImageList[i*4] = document.getElementById("N-"+(i+1)+"-0");
-			Manager.ctrlImageList[i*4+1] = document.getElementById("N-"+(i+1)+"-1");
-			Manager.ctrlImageList[i*4+2] = document.getElementById("N-"+(i+1)+"-2");
-			Manager.ctrlImageList[i*4+3] = document.getElementById("N-"+(i+1)+"-3");
+			Manager.ctrlImageList[i*4+1] = document.getElementById("N-"+(i+2)+"-1");
+			Manager.ctrlImageList[i*4+2] = document.getElementById("N-"+(i+3)+"-2");
+			Manager.ctrlImageList[i*4+3] = document.getElementById("N-"+(i+4)+"-3");
 		}
 		for (var i=0; i<CTRL_TYPE_COUNT; ++i) {
 			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + i*4] = document.getElementById("S-"+(i+1)+"-0");
-			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + i*4+1] = document.getElementById("S-"+(i+1)+"-1");
-			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + i*4+2] = document.getElementById("S-"+(i+1)+"-2");
-			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + i*4+3] = document.getElementById("S-"+(i+1)+"-3");
+			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + i*4+1] = document.getElementById("S-"+(i+2)+"-1");
+			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + i*4+2] = document.getElementById("S-"+(i+3)+"-2");
+			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + i*4+3] = document.getElementById("S-"+(i+4)+"-3");
 		}
 		for (var i=0; i<CTRL_BITMAP_COUNT; ++i) {
 			if (Manager.ctrlImageList[i]) {
@@ -153,6 +153,8 @@ var Manager = {
 				Manager.ctrlImageList[i] = Manager.ctx.getImageData(0,0, CTRL_SIZE.cx,CTRL_SIZE.cy);
 			}
 		}
+		Manager.ctx.fillStyle = "#FFFFFF";
+		Manager.ctx.fillRect(0,0, CTRL_SIZE.cx,CTRL_SIZE.cy);
 	},
 	
 	Init: function(canvas) {
