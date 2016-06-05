@@ -72,8 +72,8 @@ var LEAD_STYLE_NAMES = new Array(
 	"虚线原来颜色"
 );
 
-var TITLE_NOTE[]     = "标签         (可以为空)";	//标签对应的提示
-var TITLESHOW_NOTE[] = "显示标签";					//显示标签对应的提示
+var TITLE_NOTE     = "标签         (可以为空)";	//标签对应的提示
+var TITLESHOW_NOTE = "显示标签";				//显示标签对应的提示
 
 
 //电流状态枚举
@@ -102,7 +102,7 @@ var CLONE_FOR_CLIPBOARD	= 2;	//复制为了剪切板使用
 
 //焦点物体或者坐标上的物体
 var FOCUS_OR_POS = {
-	CreateNew: {
+	CreateNew: function() {
 		return {isFocusBody:false, x:0, y:0};
 	}
 };

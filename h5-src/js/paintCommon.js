@@ -1,7 +1,7 @@
 
 var PaintCommonFunc = {
 	
-	function ZeroFixHex(num, digitCount) {
+	ZeroFixHex: function(num, digitCount) {
 	  var s = num.toString(16);
 	  while (s.length < digitCount)
 		s = "0" + s;
@@ -10,7 +10,7 @@ var PaintCommonFunc = {
 	HexToRGBStr: function(color) {
 		return "#" + ZeroFixHex(color, 6);
 	},
-	function RGBStrToHex(rgbStr) {
+	RGBStrToHex: function(rgbStr) {
 		if (rgbStr.charAt(0) == '#')
 			rgbStr = rgbStr.substr(1);
 	
@@ -23,7 +23,7 @@ var PaintCommonFunc = {
 		}
 		
 		return 0;
-	}
+	},
 	RGBToHex: function(r, g, b) {
 		return (r << 16) | (g << 8) | b;
 	},
@@ -52,7 +52,7 @@ var PaintCommonFunc = {
 	},
 	
 	// 以异或的逻辑 画物体
-	PaintImageDataXor(ctx, imageData, x,y) {
+	PaintImageDataXor: function(ctx, imageData, x,y) {
 		var orgImgData = ctx.getImageData(x,y, imageData.width,imageData.height);
 		for (var i=0; i<imageData.data.length; ) {
 			orgImgData.data[i] ^= imageData.data[i];
@@ -67,7 +67,7 @@ var PaintCommonFunc = {
 		ctx.putImageData(orgImgData, x,y);
 	},
 	// 以或的逻辑 画物体
-	PaintImageDataOr(ctx, imageData, x,y) {
+	PaintImageDataOr: function(ctx, imageData, x,y) {
 		var orgImgData = ctx.getImageData(x,y, imageData.width,imageData.height);
 		for (var i=0; i<imageData.data.length; ) {
 			orgImgData.data[i] |= imageData.data[i];

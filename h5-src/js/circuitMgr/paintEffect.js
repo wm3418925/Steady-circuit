@@ -1,7 +1,6 @@
 
-bool Manager::ShowAddLead(POINT pos)
 //连接导线过程显示
-{
+Manager.ShowAddLead = function(pos) {
 	if(1 != motiCount) return false;
 
 	Pointer * body = motiBody;
@@ -24,7 +23,7 @@ bool Manager::ShowAddLead(POINT pos)
 	Manager.ctx.LineTo(firstPos);
 
 	return true;
-}
+};
 
 bool Manager::ShowAddBody(POINT point)
 //添加物体过程显示

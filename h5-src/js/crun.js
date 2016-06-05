@@ -118,7 +118,7 @@ var CRUN = {
 
 	//寻找导线在哪个方向
 	GetDirect: function(l) {
-		for(int i=0; i<4; ++i) if (lead[i] == l) return i;
+		for (var i=0; i<4; ++i) if (lead[i] == l) return i;
 		return -1;	//没有找到
 	},
 

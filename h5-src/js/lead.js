@@ -101,7 +101,7 @@ var LEAD = {
 	},
 
 	//导线坐标一分为二
-	Divide: function(int atState, pos, leadCoord) {
+	Divide: function(atState, pos, leadCoord) {
 		ASSERT(atState <= -2);
 		atState = (-atState - 2) >> 1;
 
@@ -235,7 +235,7 @@ var LEAD = {
 	// static函数, 不需要this对象
 	//在2段平行导线之间或两边找到合适的另一个平行导线的位置
 	GetPosFit: function(pos1, pos2, dis, isEnd) {
-		int dis2 = -2;
+		var dis2 = -2;
 		if (isEnd) dis2 = 2;
 
 		if (pos2 - pos1 > dis || pos1 - pos2 > dis) {
@@ -443,7 +443,7 @@ var LEAD = {
 		//初始化变量 -------------------------------------------------------
 		var dir = conBody[1].GetConnectPosDir();
 		var dirOther = conBody[0].GetConnectPosDir();
-		int dis2 = 15;
+		var dis2 = 15;
 		if ((dir & 1) != 0) dis2 = -15;
 
 		var pre2 = null;
@@ -632,10 +632,10 @@ var LEAD = {
 		var isNext1TheLast;
 		var currentIndex = 1;
 		
-		int inter = 0;
+		var inter = 0;
 
 		//1,找到指针----------------------------------
-		int i = -2;
+		var i = -2;
 		while (true) {
 			if (pre1.x == now.x) {	//在竖线上
 				if (i == dir) break;
@@ -648,13 +648,13 @@ var LEAD = {
 			
 			pre2 = pre1;
 			pre1 = now;
-			now = this.coord.[currentIndex];
+			now = this.coord[currentIndex];
 			
 			i -= 2;
 		}
 		next1 = null;
 		if (currentIndex+1 < this.coord.length)
-			next1 = this.coord.[currentIndex+1];
+			next1 = this.coord[currentIndex+1];
 		isNext1TheLast = (currentIndex+1 == this.coord.length-1);
 
 		//2重新设置竖线坐标--------------------------
@@ -791,7 +791,7 @@ var LEAD = {
 				if (inter < 0) inter = -inter;
 
 				if (inter <= dis) {
-					if (pre2 != &coord) {	//pre2不是头
+					if (pre2 != coord) {	//pre2不是头
 						pre2.x = now.x;
 						this.coord.splice(currentIndex-1, 1);	// 删除pre1
 					} else {	//pre2是头
@@ -932,7 +932,7 @@ var LEAD = {
 		ASSERT(cxt != null);
 
 		cxt.moveTo(this.coord[0].x, this.coord[0].y);
-		for (var index=1; index < this.coord.length; ++index;) {
+		for (var index=1; index < this.coord.length; ++index) {
 			cxt.lineTo(this.coord[index].x, this.coord[index].y);
 		}
 	},

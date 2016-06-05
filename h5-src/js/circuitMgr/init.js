@@ -160,9 +160,9 @@ var Manager = {
 		Manager.canvas = canvas;
 		Manager.ctx = Manager.canvas.getContext("2d");
 
-		Manager.bitmapForRefresh.CreateBitmap(1, 1, 1, 32, null);	//使刷新不闪而使用的bitmap
-		Manager.dcForRefresh.CreateCompatibleDC(ctx);				//使刷新不闪而使用的DC
-		Manager.dcForRefresh.SelectObject(&bitmapForRefresh);
+		//Manager.bitmapForRefresh.CreateBitmap(1, 1, 1, 32, null);	//使刷新不闪而使用的bitmap
+		//Manager.dcForRefresh.CreateCompatibleDC(ctx);				//使刷新不闪而使用的DC
+		//Manager.dcForRefresh.SelectObject(bitmapForRefresh);
 
 
 		//相对变量-------------------------------------------------------
@@ -184,7 +184,7 @@ var Manager = {
 		Manager.lButtonDownPos = {x:-100, y:-100};
 		Manager.lButtonDownState = false;
 		Manager.isUpRecvAfterDown = true;
-		Manager.FocusBodyClear(null);
+		//Manager.FocusBodyClear(null);
 
 
 		//画图变量-------------------------------------------------------

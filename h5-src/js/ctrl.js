@@ -10,10 +10,10 @@ var DATA_NOTE_HAVERESIST	= 6;
 
 
 //标记控件是否提供电压(1提供,0不提供)
-var PRESSURE_TYPE[CTRL_TYPE_COUNT] = new Array(true, false, false, false, false);
+var PRESSURE_TYPE = new Array(true, false, false, false, false);
 
 //标记控件是否有电阻(1可以有电阻,-1断路,0无电阻)
-var RESISTANCE_TYPE[CTRL_TYPE_COUNT] = new Array(1, 1, 1, -1, 1);
+var RESISTANCE_TYPE = new Array(1, 1, 1, -1, 1);
 
 //每个电学属性对应的说明
 var DATA_NOTE = new Array(
@@ -38,7 +38,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定义时需要添加新类型的处
 	},
 	
 	
-	CreateNew: function(long memberIdx, x , y, ctrlStyle) {
+	CreateNew: function(memberIdx, x , y, ctrlStyle) {
 		ASSERT(ctrlStyle >= 0 && ctrlStyle < CTRL_TYPE_COUNT);
 		
 		var initOrder = CTRL.globalInitOrder++;
@@ -281,8 +281,8 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定义时需要添加新类型的处
 	//旋转控件
 	Rotate: function(rotateAngle90) {
 		this.dir = (this.dir + rotateAngle90) % 4;
-		if (lead[0]!=null) lead[0]->RefreshPos();
-		if (lead[1]!=null) lead[1]->RefreshPos();
+		if (lead[0]!=null) lead[0].RefreshPos();
+		if (lead[1]!=null) lead[1].RefreshPos();
 	},
 
 	//@小灯泡是否达到额定功率而发光
@@ -294,7 +294,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定义时需要添加新类型的处
 		if (elecDir != LEFTELEC && elecDir != RIGHTELEC)
 			return false;	//电流没有计算或者不符合条件
 
-		double tempData = GetResist() * elec * elec;
+		var tempData = GetResist() * elec * elec;
 
 		return (!IsFloatZero(sData) && tempData >= sData);
 	},
@@ -342,7 +342,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定义时需要添加新类型的处
 	AfterSetProperty: function() {
 		switch (style) {
 		case SWITCH:
-			if (this.closed);
+			if (this.closed)
 				this.resist = 0;
 			else
 				this.resist = -1;

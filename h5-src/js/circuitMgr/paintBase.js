@@ -63,14 +63,14 @@ Manager.PaintAll = function() {
 	//获得窗口尺寸
 	rect.left = 0;
 	rect.top = 0;
-	rect.right = Manager.canvas.width;
-	rect.bottom = Manager.canvas.height;
+	rect.width = Manager.canvas.width;
+	rect.height = Manager.canvas.height;
 
 	//初始化刷新位图大小
 	/*bitmapForRefresh.GetBitmap(&bitmap);
-	if (rect.bottom > bitmap.bmHeight || rect.right > bitmap.bmWidth) {
+	if (rect.height > bitmap.bmHeight || rect.width > bitmap.bmWidth) {
 		bitmapForRefresh.DeleteObject();
-		bitmapForRefresh.CreateBitmap(rect.right, rect.bottom, 1, 32, null);
+		bitmapForRefresh.CreateBitmap(rect.width, rect.height, 1, 32, null);
 		dcForRefresh.SelectObject(&bitmapForRefresh);
 	}*/
 
@@ -86,7 +86,7 @@ Manager.PaintAll = function() {
 	//用白色矩形覆盖整个客户区
 	Manager.ctx.fillStyle = "#FFFFFF";
 	Manager.ctx.strokeStyle = "#FFFFFF";
-	Manager.ctx.fillRect(&rect);
+	Manager.ctx.fillRect(rect.left,rect.top, rect.width,rect.height);
 
 	//画控件结点以及他们的名称
 	for(var i=ctrlCount-1; i>=0; --i)
@@ -105,7 +105,7 @@ Manager.PaintAll = function() {
 
 	//4,还原dc, 一次性画图--------------------------------------------------
 	//Manager.ctx = save;
-	//Manager.ctx.BitBlt(0, 0, rect.right, rect.bottom, &dcForRefresh, 0, 0, SRCCOPY);
+	//Manager.ctx.BitBlt(0, 0, rect.width, rect.height, &dcForRefresh, 0, 0, SRCCOPY);
 };
 
 //画激活的连接点部位,改变鼠标形状
@@ -203,7 +203,7 @@ Manager.PaintWithSpecialColorAndRect = function(body, isPaintNum) {
 		}
 	} else if (body.IsOnCrun()) {
 		PaintCrunWithStyle(body.p, PAINT_CRUN_STYLE_SPECIAL);	//画结点
-		PaintCommonFunc.PaintSurrendedRect(Manager.ctx, body.p.x-DD, body.p.y-DD, DD*2, DD*2, #F01010);
+		PaintCommonFunc.PaintSurrendedRect(Manager.ctx, body.p.x-DD, body.p.y-DD, DD*2, DD*2, 0xF01010);
 		
 		if (isPaintNum) {	//在结点上下左右分别显示1,2,3,4
 			var pos = {x:body.p.x-5, y:body.p.y-8};
@@ -214,7 +214,7 @@ Manager.PaintWithSpecialColorAndRect = function(body, isPaintNum) {
 		}
 	} else if (body.IsOnCtrl()) {
 		PaintCtrlWithColor(body.p, color);	//画控件
-		PaintCommonFunc.PaintSurrendedRect(Manager.ctx, body.p.x, body.p.y, CTRL_SIZE.cx, CTRL_SIZE.cy, #F01010);
+		PaintCommonFunc.PaintSurrendedRect(Manager.ctx, body.p.x, body.p.y, CTRL_SIZE.cx, CTRL_SIZE.cy, 0xF01010);
 	}
 };
 
