@@ -12,7 +12,7 @@ var MAX_LEAVE_OUT_DIS	= 15;					//相邻导线合并距离范围1~MAX_LEAVEOUTDIS
 var Manager = {
 	/*
 	//画图变量---------------------------------------------------------------------
-	CBitmap Manager.ctrlImageList[CTRL_BITMAP_COUNT];	//CTRL_BITMAP_NUM个控件位图
+	CBitmap ctrlImageList[CTRL_BITMAP_COUNT];	//CTRL_BITMAP_NUM个控件位图
 	CDC showConnectImageData;
 	CBitmap showConnectImageData;		//激活点位图
 	CDC crunImageData;
@@ -88,9 +88,9 @@ var Manager = {
 		var imgData = Manager.ctx.createImageData(6,6);
 		
 		for (var i=8; i<len; i+=4) {
-			imgData.data[i+0]=r;
-			imgData.data[i+1]=g;
-			imgData.data[i+2]=b;
+			imgData.data[i+0]=0;
+			imgData.data[i+1]=0;
+			imgData.data[i+2]=0;
 			imgData.data[i+3]=255;
 		}
 		imgData.data[3]=imgData.data[7]=imgData.data[19]=imgData.data[23]=imgData.data[27]=imgData.data[47]=0;
@@ -98,7 +98,11 @@ var Manager = {
 	},
 	
 	// 以指定颜色初始化一个节点
-	CreateCrunImageWithColor: function(r,g,b) {
+	CreateCrunImageWithColor: function(colorHex) {
+		var r = PaintCommonFunc.RedOfHexRGB(colorHex);
+		var g = PaintCommonFunc.GreenOfHexRGB(colorHex);
+		var b = PaintCommonFunc.BlueOfHexRGB(colorHex);
+		
 		var len = 16*DD*DD;
 		var imgData = Manager.ctx.createImageData(2*DD,2*DD);
 		
@@ -111,48 +115,44 @@ var Manager = {
 		imgData.data[3]=imgData.data[7]=imgData.data[D*8-5]=imgData.data[D*8-1]=imgData.data[D*8+3]=imgData.data[D*16-1]=0;
 		imgData.data[len-1]=imgData.data[len-5]=imgData.data[len-D*8+7]=imgData.data[len-D*8+3]=imgData.data[len-D*8-1]=imgData.data[len-D*16+3]=0;
 	},
-	// 初始化一个反转颜色节点
-	/*CreateInverseCrunImage: function() {
-		var len = 16*DD*DD;
-		var imgData = Manager.ctx.createImageData(2*DD,2*DD);
-		
-		imgData.data[0]=imgData.data[1]=imgData.data[2]=imgData.data[3]=255;
-		imgData.data[4]=imgData.data[5]=imgData.data[6]=imgData.data[7]=255;
-		imgData.data[D*8-8]=imgData.data[D*8-7]=imgData.data[D*8-6]=imgData.data[D*8-5]=255;
-		imgData.data[D*8-4]=imgData.data[D*8-3]=imgData.data[D*8-2]=imgData.data[D*8-1]=255;
-		imgData.data[D*8]=imgData.data[D*8+1]=imgData.data[D*8+2]=imgData.data[D*8+3]=255;
-		imgData.data[D*16-4]=imgData.data[D*16-3]=imgData.data[D*16-2]=imgData.data[D*16-1]=255;
-		
-		imgData.data[len-4]=imgData.data[len-3]=imgData.data[len-2]=imgData.data[len-1]=255;
-		imgData.data[len-8]=imgData.data[len-7]=imgData.data[len-6]=imgData.data[len-5]=255;
-		imgData.data[len-D*8+4]=imgData.data[len-D*8+5]=imgData.data[len-D*8+6]=imgData.data[len-D*8+7]=255;
-		imgData.data[len-D*8]=imgData.data[len-D*8+1]=imgData.data[len-D*8+2]=imgData.data[len-D*8+3]=255;
-		imgData.data[len-D*8-4]=imgData.data[len-D*8-3]=imgData.data[len-D*8-2]=imgData.data[len-D*8-1]=255;
-		imgData.data[len-D*16]=imgData.data[len-D*16+1]=imgData.data[len-D*16+2]=imgData.data[len-D*16+3]=255;
-	},*/
 	// 初始化所有节点位图
 	CreateAllCrunImageData: function() {
 		var crunImageData = new Array(PAINT_CRUN_STYLE_COUNT);
-		crunImageData[PAINT_CRUN_STYLE_NORMAL] = Manager.CreateCrunImageWithColor(0,0,0);
-		crunImageData[PAINT_CRUN_STYLE_FOCUS] = Manager.CreateCrunImageWithColor(30,250,30);
-		crunImageData[PAINT_CRUN_STYLE_SPECIAL] = Manager.CreateCrunImageWithColor(190,30,100);
+		crunImageData[PAINT_CRUN_STYLE_NORMAL] = Manager.CreateCrunImageWithColor(COLOR_NORMAL);
+		crunImageData[PAINT_CRUN_STYLE_FOCUS] = Manager.CreateCrunImageWithColor(COLOR_FOCUS);
+		crunImageData[PAINT_CRUN_STYLE_SPECIAL] = Manager.CreateCrunImageWithColor(COLOR_SPECIAL);
 		
 		Manager.crunImageData = crunImageData;
 	},
 	
 	//初始化位图句柄
 	InitBitmap: function() {
-		int i, j, k, l;
-		UINT * buf1, * buf2, * p;
-
-		//激活点位图------------------------------------
+		//激活点位图
 		Manager.showConnectImageData = Manager.CreateShowConnectImageData();
 
-		//节点位图--------------------------------------
+		//节点位图
 		Manager.CreateAllCrunImageData();
 
-		//控件位图,处理得到旋转控件---------------------
+		//控件位图,处理得到旋转控件
 		Manager.ctrlImageList = new Array(CTRL_BITMAP_COUNT);
+		for (var i=0; i<CTRL_TYPE_COUNT; ++i) {
+			Manager.ctrlImageList[i*4] = document.getElementById("N-"+(i+1)+"-0");
+			Manager.ctrlImageList[i*4+1] = document.getElementById("N-"+(i+1)+"-1");
+			Manager.ctrlImageList[i*4+2] = document.getElementById("N-"+(i+1)+"-2");
+			Manager.ctrlImageList[i*4+3] = document.getElementById("N-"+(i+1)+"-3");
+		}
+		for (var i=0; i<CTRL_TYPE_COUNT; ++i) {
+			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + i*4] = document.getElementById("S-"+(i+1)+"-0");
+			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + i*4+1] = document.getElementById("S-"+(i+1)+"-1");
+			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + i*4+2] = document.getElementById("S-"+(i+1)+"-2");
+			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + i*4+3] = document.getElementById("S-"+(i+1)+"-3");
+		}
+		for (var i=0; i<CTRL_BITMAP_COUNT; ++i) {
+			if (Manager.ctrlImageList[i]) {
+				Manager.ctx.drawImage(Manager.ctrlImageList[i], 0,0);
+				Manager.ctrlImageList[i] = Manager.ctx.getImageData(0,0, CTRL_SIZE.cx,CTRL_SIZE.cy);
+			}
+		}
 	},
 	
 	Init: function(canvas) {
@@ -188,10 +188,10 @@ var Manager = {
 
 
 		//画图变量-------------------------------------------------------
-		Manager.textColor = BLACK;						//默认字体颜色
-		Manager.focusLeadStyle = SOLID_RESERVE_COLOR;	//默认焦点导线样式
-		Manager.focusCrunColor = GREEN;					//默认焦点结点颜色
-		Manager.focusCtrlColor = RED;					//默认焦点控件颜色
+		Manager.textColor = COLOR_NORMAL;				//默认字体颜色
+		Manager.focusLeadStyle = SOLID_SPECIAL_COLOR;	//默认焦点导线样式
+		Manager.focusCrunColor = COLOR_FOCUS;			//默认焦点结点颜色
+		Manager.focusCtrlColor = COLOR_FOCUS;			//默认焦点控件颜色
 		Manager.InitBitmap();							//初始化位图
 
 		//鼠标图标

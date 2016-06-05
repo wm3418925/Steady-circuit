@@ -42,12 +42,12 @@ bool Manager::ShowAddBody(POINT point)
 	}
 	else if(Pointer::IsCtrl(addState))
 	{
-		CDC * tempDc = Manager.ctrlImageList[addState*4];
+		var tempImage = Manager.ctrlImageList[addState*4];
 		if(lastMoveOnPos.x > -100)
-			Manager.ctx.BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, CTRL_SIZE.cx, CTRL_SIZE.cy, tempDc, 0, 0, SRCINVERT);
+			Manager.ctx.BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, CTRL_SIZE.cx, CTRL_SIZE.cy, tempImage, 0, 0, SRCINVERT);
 		Manager.ctx.DPtoLP(&point);
 		lastMoveOnPos = point;
-		Manager.ctx.BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, CTRL_SIZE.cx, CTRL_SIZE.cy, tempDc, 0, 0, SRCINVERT);
+		Manager.ctx.BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, CTRL_SIZE.cx, CTRL_SIZE.cy, tempImage, 0, 0, SRCINVERT);
 
 		::SetCursor(null);
 		return true;
@@ -255,7 +255,7 @@ bool Manager::ShowBodyElec(FOCUS_OR_POS &body)
 	strcat(title, "的电流");
 
 	//4,显示对话框
-	PaintWithSpecialColorAndRect(pointer, false);	//用保留颜色(紫色)显示物体
+	PaintWithSpecialColorAndRect(pointer, false);
 	MyPropertyDlg dlg(&list, true, model, title, this.canvas);
 	dlg.DoModal();
 

@@ -20,6 +20,12 @@ var CAPA			= 3;
 var SWITCH			= 4;
 
 
+// 正常, 选中, 右击 颜色
+var COLOR_NORMAL = PaintCommonFunc.RGBToHex(0,0,0);
+var COLOR_FOCUS = PaintCommonFunc.RGBToHex(30,250,30);
+var COLOR_SPECIAL = PaintCommonFunc.RGBToHex(190,30,100);
+
+
 //供ENUM_STYLE使用
 var CTRL_TYPE_ENUM	= 0;	//控件类型
 var LEAD_STYLE_ENUM	= 1;	//导线样式
@@ -53,17 +59,17 @@ var DATA_TYPE_enum		= 4;
 
 
 //导线样式
-var SOLID_RESERVE_COLOR		= 0;	//实线保留色
+var SOLID_SPECIAL_COLOR		= 0;	//实线保留色
 var SOLID_ORIGINAL_COLOR	= 1;	//实线原来颜色
-var DOT_ORIGINAL_COLOR		= 2;	//虚线原来颜色
-var DOT_RESERVE_COLOR		= 3;	//虚线保留色
+var DOT_SPECIAL_COLOR		= 2;	//虚线保留色
+var DOT_ORIGINAL_COLOR		= 3;	//虚线原来颜色
 var LEAD_STYLE_COUNT = 4;	//导线样式个数
 //导线样式对应的名称
 var LEAD_STYLE_NAMES = new Array(
 	"实线紫色",
 	"实线原来颜色",
-	"虚线原来颜色",
 	"虚线紫色",
+	"虚线原来颜色"
 );
 
 var TITLE_NOTE[]     = "标签         (可以为空)";	//标签对应的提示

@@ -72,7 +72,7 @@ void Manager::Property(FOCUS_OR_POS &body, bool isReadOnly)
 		return;
 	}
 
-	PaintWithSpecialColorAndRect(pointer, false);	//用保留颜色(紫色)显示物体
+	PaintWithSpecialColorAndRect(pointer, false);
 	MyPropertyDlg dlg(&list, isReadOnly, model, tempStr, this.canvas);
 	dlg.DoModal();
 }
@@ -99,7 +99,7 @@ void Manager::ChangeCtrlStyle(FOCUS_OR_POS &body)
 	strcat(tempStr, " 的类型");
 
 	//显示对话框
-	PaintWithSpecialColorAndRect(pointer, false);	//用保留颜色(紫色)显示物体
+	PaintWithSpecialColorAndRect(pointer, false);
 	MyPropertyDlg dlg(&list, false, GetCtrlPaintImage(pointer.p3), tempStr, this.canvas);
 	dlg.DoModal();
 

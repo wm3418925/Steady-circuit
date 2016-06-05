@@ -98,19 +98,18 @@ bool Manager::FocusBodyPaint(const Pointer * newFocus)
 
 	if(focusBody.IsOnLead())
 	{
-		switch(focusLeadStyle)
-		{
-		case SOLID_RESERVE_COLOR:
-			PaintLeadWithStyle(focusBody.p1, PS_SOLID,  RESERVE_COLOR);
+		switch (focusLeadStyle) {
+		case SOLID_SPECIAL_COLOR:
+			PaintLeadWithStyle(focusBody.p1, 1, COLOR_SPECIAL);
 			break;
 		case SOLID_ORIGINAL_COLOR:
-			PaintLead(focusBody.p1);
+			PaintLeadWithStyle(focusBody.p1, 1, focusBody.p.color);
+			break;
+		case DOT_SPECIAL_COLOR:
+			PaintLeadWithStyle(focusBody.p1, 2, COLOR_SPECIAL);
 			break;
 		case DOT_ORIGINAL_COLOR:
-			PaintLeadWithStyle(focusBody.p1, PS_DOT, focusBody.p1.color);
-			break;
-		case DOT_RESERVE_COLOR:
-			PaintLeadWithStyle(focusBody.p1, PS_DOT, RESERVE_COLOR);
+			PaintLeadWithStyle(focusBody.p1, 2, focusBody.p.color);
 			break;
 		}
 	}

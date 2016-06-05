@@ -57,7 +57,7 @@ bool Manager::DeleteNote(const Pointer &body)
 	else
 		sprintf(note, "要删除 %s 吗 ?", name);
 
-	PaintWithSpecialColorAndRect(body, false);	//用保留颜色(紫色)显示物体
+	PaintWithSpecialColorAndRect(body, false);
 	return IDYES == this.canvas.MessageBox(note, "删除物体提示", MB_YESNO|MB_ICONWARNING);
 }
 
