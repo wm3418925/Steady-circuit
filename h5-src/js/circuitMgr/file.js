@@ -1,17 +1,16 @@
 
 //7文件函数--------------------------------------------------------------------↓
-const char * Manager::GetFilePath()
-//获取文件路径
-{
-	return fileName;
-}
 
-bool Manager::SaveFile(const char * newFile)
+//获取文件路径
+Manager.GetFilePath = function() {
+	return Manager.fileName;
+};
+
 //保存电路
-{
-	ASSERT(newFile != null && newFile[0] != '\0');
-	long i;
-	FILE * fp;
+Manager.SaveFile = function(newFile) {
+	ASSERT(newFile && newFile.length > 0);
+	var i;
+	var fp;
 
 	strcpy(fileName, newFile);	//替换原有文件路径
 	fp = fopen(fileName, "wb");
@@ -54,11 +53,10 @@ bool Manager::SaveFile(const char * newFile)
 
 	fclose(fp);
 	return true;
-}
+};
 
-bool Manager::ReadFile(const char * newFile)
 //读取电路
-{
+Manager.ReadFile = function(newFile) {
 	ASSERT(newFile != null && newFile[0] != '\0');
 	FILE * fp;
 	int i;
@@ -149,14 +147,13 @@ bool Manager::ReadFile(const char * newFile)
 	fclose(fp);				//关闭文件句柄
 	PutCircuitToVector();	//将当前电路信息保存到容器
 	return true;			//正常退出
-}
+};
 
-void Manager::CreateFile()
 //建立新文件(空的)
-{
+Manager.CreateFile = function() {
 	fileName[0] = '\0';											//路径清空
 	ClearCircuitState();										//清除电路状态信息
 	DeleteVector(circuitVector.begin(), circuitVector.end());	//清除容器保存的电路信息
 	leadCount = crunCount = ctrlCount = 0;							//物体数量设为0
 	PutCircuitToVector();										//将当前空电路信息保存到容器
-}
+};
