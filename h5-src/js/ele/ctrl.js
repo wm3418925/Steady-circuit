@@ -38,7 +38,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定义时需要添加新类型的处
 	},
 	
 	
-	CreateNew: function(memberIdx, x , y, ctrlStyle) {
+	CreateNew: function(memberIdx, x, y, ctrlStyle) {
 		ASSERT(ctrlStyle >= 0 && ctrlStyle < CTRL_TYPE_COUNT);
 		
 		var initOrder = CTRL.globalInitOrder++;
@@ -120,6 +120,15 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定义时需要添加新类型的处
 		CloneCtrlData(this, jsonObj);
 	},
 	
+	// 刷新开关电阻信息
+	RefreshSwitchResist: function() {
+		if (this.hasOwnProperty("closed")) {
+			if (this.closed)
+				this.resist = 0;
+			else
+				this.resist = -1;
+		}
+	},
 	// @根据类型, 初始化默认数据
 	InitDefaultData: function(ctrlStyle) {
 		switch (ctrlStyle) {
@@ -140,7 +149,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定义时需要添加新类型的处
 			break;
 		case SWITCH:
 			newObj.closed = false;
-			newObj.resist = -1;
+			RefreshSwitchResist();
 			break;
 		}
 	},
@@ -162,6 +171,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定义时需要添加新类型的处
 			break;
 		case SWITCH:
 			toCtrl.closed = fromCtrl.closed;
+			toCtrl.RefreshSwitchResist();
 			break;
 		}
         return toCtrl;
@@ -302,7 +312,10 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定义时需要添加新类型的处
 	//@开关闭合或者断开
 	SwitchClosed: function(isSwitch) {
 		if (SWITCH != style) return false;	//不是开关
-		if (isSwitch) this.closed = !this.closed;
+		if (isSwitch) {
+			this.closed = !this.closed;
+			RefreshSwitchResist();
+		}
 		return this.closed;
 	},
 
@@ -342,10 +355,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定义时需要添加新类型的处
 	AfterSetProperty: function() {
 		switch (style) {
 		case SWITCH:
-			if (this.closed)
-				this.resist = 0;
-			else
-				this.resist = -1;
+			RefreshSwitchResist();
 			break;
 		}
 	}

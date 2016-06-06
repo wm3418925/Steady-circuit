@@ -195,12 +195,19 @@ void Pointer::SaveToTextFile(FILE * fp)
 {
 	ASSERT(fp != NULL);
 
-	fprintf(fp, "{dir:%d,", atState);
+	fprintf(fp, "{atState:%d,style:%d,", atState, style);
 
-	if(IsOnLead())
-		fprintf(fp, "type:\"lead\",id:%d}", p1->GetInitOrder());
-	else if(IsOnCrun())
-		fprintf(fp, "type:\"crun\",id:%d}", p2->GetInitOrder());
-	else if(IsOnCtrl())
-		fprintf(fp, "type:\"ctrl\",id:%d}", p3->GetInitOrder());
+	if (IsOnLead())
+	{
+		fprintf(fp, "index:%d}", p1->num);
+	}
+	if (IsOnCrun())
+	{
+		fprintf(fp, "index:%d}", p2->num);
+	}
+	else if(IsOnCtrl()) 
+	{
+		fprintf(fp, "index:%d}", p3->num);
+	}
+	fprintf(fp, "index:0}");
 }

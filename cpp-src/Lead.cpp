@@ -1273,21 +1273,11 @@ void LEAD::SaveToTextFile(FILE * fp)const
 
 	//fprintf(fp, "µ¼Ïß Init Order = %d :\n", GetInitOrder());
 
-	fprintf(fp, "x:[");
+	fprintf(fp, "coord:[");
 	temp = &coord;
 	while(temp)
 	{
-		fprintf(fp, "%d", temp->pos.x);
-		temp = temp->next;
-		if (temp) fputc(',', fp);
-	}
-	fprintf(fp, "],\n");
-
-	fprintf(fp, "y:[");
-	temp = &coord;
-	while(temp)
-	{
-		fprintf(fp, "%d", temp->pos.y);
+		fprintf(fp, "{x:%d,y:%d}", temp->pos.x, temp->pos.y);
 		temp = temp->next;
 		if (temp) fputc(',', fp);
 	}

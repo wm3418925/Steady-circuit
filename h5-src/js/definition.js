@@ -6,6 +6,9 @@ var FILE_EXTENT_DOT = ".wan";					//文件后缀, 带.
 var DEFAULT_FILE_NAME = "data.wan";				//默认文件名
 var FILE_LIST = "电路文件(*.wan)|*.wan||";		//支持文件列表
 
+var FILE_VERSION = 13;					//文件版本,不同版本文件不予读取
+
+
 
 //指向物体的类型
 var BODY_ALL		= -5;
@@ -107,27 +110,11 @@ var FOCUS_OR_POS = {
 	}
 };
 
+
+var MAX_MOVE_BODY_DIS	= 50;					//使用方向键一次移动物体距离范围1~MAX_MOVE_BODY_DIS
+var MAX_LEAVE_OUT_DIS	= 15;					//相邻导线合并距离范围1~MAX_LEAVE_OUT_DIS
+
+
 // 搜索关键字
 var SEARCH_BY_NAME	= 0;	//根据名称搜索
 var SEARCH_BY_ID	= 1;	//根据序号搜索
-
-
-////////////////////////////////////////////////////////////////////////////
-//下面的在 "resource.h" 中要连号:
-/*
-	IDB_SOURCE
-	IDB_RESIST
-	IDB_BULB
-	IDB_CAPA
-	IDB_SWITCH
-	IDB_BULB_SHINE
-	IDB_SWITCH_CLOSE
-
-	IDM_ADD_NO
-	IDM_ADD_CRUNODE
-	IDM_ADD_SOURCE
-	IDM_ADD_RESIST
-	IDM_ADD_BULB
-	IDM_ADD_CAPA
-	IDM_ADD_SWITCH
-*/

@@ -3749,11 +3749,11 @@ void Manager::SaveCircuitInfoToTextFile()
 	fprintf(fp, "{\ncruns:[\n");
 	for(i=0; i<crunNum; i++)
 	{
-		fprintf(fp, "{id:%d,x:%d,y:%d,", crun[i]->GetInitOrder(), crun[i]->coord.x, crun[i]->coord.y);
-		fprintf(fp, "name:\"%s\",lead:[", crun[i]->name);
+		fprintf(fp, "{index:%d,x:%d,y:%d,", crun[i]->num, crun[i]->coord.x, crun[i]->coord.y);
+		fprintf(fp, "isPaintName:false,name:\"%s\",lead:[", crun[i]->name);
 		for(int j=0; j<4; j++)
 		{
-			if(crun[i]->lead[j]) fprintf(fp, "%d", crun[i]->lead[j]->GetInitOrder());
+			if(crun[i]->lead[j]) fprintf(fp, "%d", crun[i]->lead[j]->num);
 			else fprintf(fp, "-1");
 			if (j!=4-1) fprintf(fp, ",");
 		}
@@ -3766,7 +3766,7 @@ void Manager::SaveCircuitInfoToTextFile()
 	fprintf(fp, "leads:[\n");
 	for(i=0; i<leadNum; ++i)
 	{
-		fprintf(fp, "{id:%d,", (int)lead[i]->GetInitOrder());
+		fprintf(fp, "{index:%d,", (int)lead[i]->num);
 		lead[i]->SaveToTextFile(fp);
 		fprintf(fp, "color:%d,", (int)lead[i]->color);
 		fprintf(fp, "conBody[");	lead[i]->conBody[0].SaveToTextFile(fp);
@@ -3778,21 +3778,21 @@ void Manager::SaveCircuitInfoToTextFile()
 	fprintf(fp, "],\n");
 
 	fprintf(fp, "ctrls:[\n", ctrlNum);
-	const char * ctrlStyleStr[] = {"source","resistance","bulb","capa","switch"}; 
+	//const char * ctrlStyleStr[] = {"source","resistance","bulb","capa","switch"}; 
 	for(i=0; i<ctrlNum; ++i)
 	{
-		fprintf(fp, "{id:%d,x:%d,y:%d,", ctrl[i]->GetInitOrder(), ctrl[i]->coord.x, ctrl[i]->coord.y);
+		fprintf(fp, "{index:%d,x:%d,y:%d,", ctrl[i]->num, ctrl[i]->coord.x, ctrl[i]->coord.y);
 		fprintf(fp, "name:\"%s\",lead:[", ctrl[i]->name);
-		if(ctrl[i]->lead[0])fprintf(fp, "%d,", ctrl[i]->lead[0]->GetInitOrder());
+		if(ctrl[i]->lead[0])fprintf(fp, "%d,", ctrl[i]->lead[0]->num);
 		else fputs("-1,", fp);
-		if(ctrl[i]->lead[1])fprintf(fp, "%d],", ctrl[i]->lead[1]->GetInitOrder());
+		if(ctrl[i]->lead[1])fprintf(fp, "%d],", ctrl[i]->lead[1]->num);
 		else fputs("-1],", fp);
 
 		ctrl[i]->SaveToTextFile(fp);
 
-		fprintf(fp, "style:\"%s\"}", ctrlStyleStr[ctrl[i]->GetStyle()]);
+		fprintf(fp, "style:%d}", ctrl[i]->GetStyle());
 		
-		if (i != leadNum-1) fprintf(fp, ",");
+		if (i != ctrlNum-1) fprintf(fp, ",");
 	}
 	fprintf(fp, "]\n}\n");
 

@@ -408,7 +408,7 @@ void CTRL::SaveToTextFile(FILE * fp)const
 	switch(style)
 	{
 	case SOURCE:
-		fprintf(fp, "press:%f,", ((SOURCEDATA*)data)->pressure);
+		fprintf(fp, "pressure:%f,", ((SOURCEDATA*)data)->pressure);
 		fprintf(fp, "resist:%f,", ((SOURCEDATA*)data)->resist);
 		break;
 	case RESIST:
