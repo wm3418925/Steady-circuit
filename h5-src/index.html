@@ -59,6 +59,7 @@ Your browser does not support the canvas element.
 
 <script src="js/circuitMgr/init.js"></script>
 <script src="js/circuitMgr/mess.js"></script>
+<script src="js/circuitMgr/file.js"></script>
 <script src="js/circuitMgr/paintBase.js"></script>
 
 
@@ -66,6 +67,8 @@ Your browser does not support the canvas element.
 var canvas = document.getElementById("myCanvas");
 Manager.Init(canvas);
 Manager.ReadFile("testData.json");
+
+Manager.PaintAll();
 </script>
 
 

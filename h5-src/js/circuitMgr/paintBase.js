@@ -41,8 +41,8 @@ Manager.PaintLead = function(l) {
 
 //画所有导线
 Manager.PaintAllLead = function() {
-	for (var index=leadCount-1; index>=0; --index) {
-		Manager.PaintLead(lead[index]);
+	for (var index=Manager.lead.length-1; index>=0; --index) {
+		Manager.PaintLead(Manager.lead[index]);
 	}
 	Manager.ctx.strokeStyle = "#000000";
 };
@@ -54,10 +54,10 @@ Manager.PaintAll = function() {
 	//var bitmap;
 
 	//1,清除部分状态信息----------------------------------------------------
-	motiCount = 0;
-	addState = BODY_NO;
-	lastMoveOnPos.x = -100;
-	lastMoveOnBody.Clear();
+	Manager.motiCount = 0;
+	Manager.addState = BODY_NO;
+	//Manager.lastMoveOnPos = {x:-100, y:-100};
+	//Manager.lastMoveOnBody.Clear();
 
 	//2,画图初始化----------------------------------------------------------
 	//获得窗口尺寸
@@ -79,7 +79,7 @@ Manager.PaintAll = function() {
 	//Manager.ctx = &dcForRefresh;		//dc暂时替换为dcForRefresh,在内存画图
 
 	//设置字体和视角起点
-	ctx.font = "15px Georgia";
+	Manager.ctx.font = "15px Georgia";
 	//Manager.ctx.SetViewportOrg(-viewOrig.x, -viewOrig.y);	//初始化视角起始坐标
 
 	//3,内存画图------------------------------------------------------------
@@ -89,19 +89,19 @@ Manager.PaintAll = function() {
 	Manager.ctx.fillRect(rect.left,rect.top, rect.width,rect.height);
 
 	//画控件结点以及他们的名称
-	for(var i=ctrlCount-1; i>=0; --i)
-		PaintCtrl(ctrl[i], true);
-	for(var i=crunCount-1; i>=0; --i)
-		PaintCrun(crun[i], true);
+	for(var i=Manager.ctrl.length-1; i>=0; --i)
+		Manager.PaintCtrl(Manager.ctrl[i], true);
+	for(var i=Manager.crun.length-1; i>=0; --i)
+		Manager.PaintCrun(Manager.crun[i], true);
 	//画导线
-	PaintAllLead();
+	Manager.PaintAllLead();
 
 	//画焦点
-	//FocusBodyPaint(null);
+	//Manager.FocusBodyPaint(null);
 
 	//重绘显示电势差的物体
-	//PaintWithSpecialColorAndRect(pressStart, false);
-	//PaintWithSpecialColorAndRect(pressEnd, true);
+	//Manager.PaintWithSpecialColorAndRect(pressStart, false);
+	//Manager.PaintWithSpecialColorAndRect(pressEnd, true);
 
 	//4,还原dc, 一次性画图--------------------------------------------------
 	//Manager.ctx = save;
