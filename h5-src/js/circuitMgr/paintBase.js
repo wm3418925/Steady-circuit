@@ -36,7 +36,9 @@ Manager.PaintLead = function(l) {
 	ASSERT(l != null);
 	Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(l.color);
 	Manager.ctx.lineWidth = 1;
+	Manager.ctx.beginPath();
 	l.PaintLead(Manager.ctx);
+	Manager.ctx.stroke();
 };
 
 //画所有导线

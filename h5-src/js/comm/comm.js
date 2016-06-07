@@ -42,12 +42,25 @@ function subArray(array, startIndex, endIndex/*array.length*/) {
 }
 
 // 深度复制对象
-function deepCopy(source) { 
-	var result = {};
-	for (var key in source) {
-		result[key] = typeof source[key]==='object'? deepCopy(source[key]) : source[key];
+function deepCopy(source) {
+	if (!source)
+		return null;
+	
+	if (source instanceof Array) {
+		var result = new Array();
+		for (var i=0; i<source.length; ++i) {
+			result.push(deepCopy(source[i]));
+		}
+		return result;
+	} else {
+		var result = {};
+		for (var key in source) {
+			result[key] = typeof source[key]==='object'? deepCopy(source[key]) : source[key];
+		}
+		
+		result.__proto__ = source.__proto__;
+		return result;
 	}
-	return result;
 }
 
 
