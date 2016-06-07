@@ -3782,7 +3782,7 @@ void Manager::SaveCircuitInfoToTextFile()
 	for(i=0; i<ctrlNum; ++i)
 	{
 		fprintf(fp, "{index:%d,x:%d,y:%d,", ctrl[i]->num, ctrl[i]->coord.x, ctrl[i]->coord.y);
-		fprintf(fp, "name:\"%s\",lead:[", ctrl[i]->name);
+		fprintf(fp, "isPaintName:false,dir:%d,name:\"%s\",lead:[", ctrl[i]->dir, ctrl[i]->name);
 		if(ctrl[i]->lead[0])fprintf(fp, "%d,", ctrl[i]->lead[0]->num);
 		else fputs("-1,", fp);
 		if(ctrl[i]->lead[1])fprintf(fp, "%d],", ctrl[i]->lead[1]->num);

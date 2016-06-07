@@ -25,7 +25,7 @@ var ENUM_DATA_HANLDER = {
 		}
 		
 		var newObj = {"memeberName": memeberName, "noteList":noteList};
-		newObj.__proto__ = ENUM_DATA_HANLDER.prototype;
+		newObj.__proto__ = ENUM_DATA_HANLDER;
 		return newObj;
 	},
 
@@ -53,7 +53,7 @@ var LISTDATA = {	//数据列表信息类
 			memeberNameList: new Array(),	//数据
 			noteTextList: new Array()};		//每个数据项类型提示信息
 			
-		newObj.__proto__ = LISTDATA.prototype;
+		newObj.__proto__ = LISTDATA;
 		return newObj;
 	},
 	SetDataParent: function(dataParent) {

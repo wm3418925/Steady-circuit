@@ -18,10 +18,10 @@ var CRUN = {
 			isPaintName : false,		//默认不显示结点标签
 			name : "Crun" + initOrder,	//默认名称
 			x:x, y:y,					//坐标
-			lead:[null,null,null,null]	//连接导线的位置,0↑,1↓,2←,3→*/
+			lead:[null,null,null,null]	//连接导线的位置,0↑,1↓,2←,3→
 		};
         
-		newObj.__proto__ = CRUN.prototype;
+		newObj.__proto__ = CRUN;
 		return newObj;
 	},
 

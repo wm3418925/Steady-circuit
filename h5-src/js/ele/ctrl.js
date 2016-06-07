@@ -60,7 +60,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 		
 		this.InitDefaultData(ctrlStyle);
         
-		newObj.__proto__ = CTRL.prototype;
+		newObj.__proto__ = CTRL;
 		return newObj;
 	},
 	// 拷贝控件信息到新的控件
@@ -69,7 +69,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 		newCtrl.name = this.name;
 		newCtrl.isPaintName = this.isPaintName;
 		newCtrl.dir = this.dir;
-		CloneCtrlData(newCtrl, this);
+		CTRL.CloneCtrlData(newCtrl, this);
 
 		if (CLONE_FOR_USE != clonePurpose) {
 			newCtrl.initOrder = this.initOrder;
@@ -96,7 +96,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 			dir : this.dir,
 			style : this.style,
 		};
-		return CloneCtrlData(storeJsonObj, this);
+		return CTRL.CloneCtrlData(storeJsonObj, this);
 	},
 	//从json读取信息
 	ReadFromStoreJsonObj: function(jsonObj, leadList) {
@@ -119,7 +119,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 		this.dir = jsonObj.dir;
 		this.style = jsonObj.style;
 
-		CloneCtrlData(this, jsonObj);
+		CTRL.CloneCtrlData(this, jsonObj);
 	},
 	
 	// 刷新开关电阻信息
@@ -299,14 +299,14 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 
 	//@小灯泡是否达到额定功率而发光
 	IsBulbOn: function() {
-		var sData = GetSpecialData();
+		var sData = this.GetSpecialData();
 
 		if (BULB != style)
 			return false;	//不是小灯泡
 		if (elecDir != LEFTELEC && elecDir != RIGHTELEC)
 			return false;	//电流没有计算或者不符合条件
 
-		var tempData = GetResist() * elec * elec;
+		var tempData = this.GetResist() * elec * elec;
 
 		return (!IsFloatZero(sData) && tempData >= sData);
 	},

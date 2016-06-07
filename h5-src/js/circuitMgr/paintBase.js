@@ -4,7 +4,7 @@
 //画控件
 Manager.PaintCtrl = function(c, isPaintName) {
 	ASSERT(c != null);
-	if (isPaintName) PaintCtrlText(c);	//画控件名称
+	if (isPaintName) Manager.PaintCtrlText(c);	//画控件名称
 	Manager.ctx.putImageData(Manager.GetCtrlPaintImage(c), c.x, c.y);
 };
 
@@ -19,7 +19,7 @@ Manager.PaintCtrlText = function(c) {
 //画结点
 Manager.PaintCrun = function(c, isPaintName) {
 	ASSERT(c != null);
-	if (isPaintName) PaintCrunText(c);	//画结点名称
+	if (isPaintName) Manager.PaintCrunText(c);	//画结点名称
 	Manager.PaintCrunWithStyle(c, PAINT_CRUN_STYLE_NORMAL);
 };
 

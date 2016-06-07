@@ -26,7 +26,7 @@ var CRUN2 = {
 		c[0] = c[1] = c[2] = c[3] = null;   
 
         var newObj = {"c":c, "group":-1};   //group -1代表不属于群组
-		newObj.__proto__ = CRUN2.prototype;
+		newObj.__proto__ = CRUN2;
         return newObj;
 	}
 };
@@ -44,7 +44,7 @@ var CIRCU = {	//线路,不包括结点,由结点连接,电流方向为from->to
 	        indexInGroup:0			//在群组内的序号
          };
 
-		 newObj.__proto__ = CIRCU.prototype;
+		 newObj.__proto__ = CIRCU;
          return newObj;
 	},
 
@@ -72,7 +72,7 @@ var ROADSTEP = { //2个结点之间路径上的一个结点
 			pre:null,
 	        next:null
         };
-		newObj.__proto__ = ROADSTEP.prototype;
+		newObj.__proto__ = ROADSTEP;
         return newObj;
     }
 };
@@ -83,7 +83,7 @@ var ROAD = {
 	        first:null,
 	        last:null
         };
-		newObj.__proto__ = ROAD.prototype;
+		newObj.__proto__ = ROAD;
         return newObj;
     },
 
@@ -209,7 +209,7 @@ var CRUNMAP = {
 		    "firstCircuit":	new Array(bufSize),
 		    "dir":			new Array(bufSize)
         };
-		newObj.__proto__ = CRUNMAP.prototype;
+		newObj.__proto__ = CRUNMAP;
         return newObj;
     }
 };
@@ -258,7 +258,7 @@ var Equation = {
 			x : x,
 			a : a
 		};
-		newObj.__proto__ = CRUNMAP.prototype;
+		newObj.__proto__ = CRUNMAP;
 		return newObj;
     },
 

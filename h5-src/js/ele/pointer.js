@@ -20,7 +20,7 @@ var Pointer = {
 
 	CreateNew: function() {
 		var newObj = {p: null, atState: 0, style: BODY_NO};
-		newObj.__proto__ = Pointer.prototype;
+		newObj.__proto__ = Pointer;
 		return newObj;
 	},
 	//保存信息到json
@@ -33,7 +33,7 @@ var Pointer = {
 	},
 	//从json读取信息
 	ReadFromStoreJsonObj: function(jsonObj, leadList, crunList, ctrlList) {
-		Clear();
+		this.Clear();
 		
 		this.atState = jsonObj.atState;
 		this.style = jsonObj.style;
@@ -111,7 +111,7 @@ var Pointer = {
 	},
 	//判断是否在控件上
 	IsOnCtrl: function() {
-		return IsCtrl(style);
+		return Pointer.IsCtrl(style);
 	},
 	//判断是否在连接点上
 	IsOnConnectPos: function() {

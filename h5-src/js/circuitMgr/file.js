@@ -109,9 +109,11 @@ function readFileCallbackFunc(data) {
 		Manager.focusLeadStyle = data.focusLeadStyle;	//焦点导线样式
 		Manager.focusCrunColor = data.focusCrunColor;	//焦点结点颜色
 		Manager.focusCtrlColor = data.focusCtrlColor;	//焦点控件颜色
+		//读取焦点物体
 		var focusBody = Pointer.CreateNew();
-		focusBody.ReadFromStoreJsonObj(data.focusBody, lead, crun, ctrl);	//读取焦点物体
-		Manager.FocusBodySet(focusBody);				//设置焦点物体
+		if (data.focusBody) 
+			focusBody.ReadFromStoreJsonObj(data.focusBody, Manager.lead, Manager.crun, Manager.ctrl);
+		//Manager.FocusBodySet(focusBody);				//设置焦点物体
 		Manager.viewOrig = data.viewOrig;				//视角初始坐标
 
 		//ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);	//初始化字体颜色

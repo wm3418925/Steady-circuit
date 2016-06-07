@@ -29,7 +29,7 @@ var LEAD = {
 			RefreshPos();		//更新坐标链表
 		}
 		
-		newObj.__proto__ = LEAD.prototype;
+		newObj.__proto__ = LEAD;
 		return newObj;
 	},
 

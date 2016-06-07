@@ -9,10 +9,10 @@ Manager.SetAddState = function(type) {
 
 //获得控件画图句柄
 Manager.GetCtrlPaintImage = function(c) {
-	if (c.IsBulbOn() || c.SwitchOnOff(false))	//小灯泡达到额定功率, 开关闭合
+	if (c.IsBulbOn() || c.SwitchClosed(false))	//小灯泡达到额定功率, 开关闭合
 		return Manager.ctrlImageList[(CTRL_TYPE_COUNT + c.GetStyle())*4 + c.dir];
 	else
-		return Manager.ctrlImageList[c.GetStyle()*4 + c.dir];	//默认的画图句柄
+		return Manager.ctrlImageList[c.style*4 + c.dir];	//默认的画图句柄
 };
 
 //获得名称,str长度应该大于等于NAME_LEN*2
