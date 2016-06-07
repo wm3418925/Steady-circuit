@@ -1,44 +1,44 @@
 
 //10处理剪切板函数-----------------------------------------------------------------↓
-void Manager::ClearClipboard()
+void Manager.ClearClipboard()
 //清空剪切板
 {
-	if(clipBody.IsOnCrun())
+	if (clipBody.IsOnCrun())
 		delete clipBody.p2;
-	else if(clipBody.IsOnCtrl())
+	else if (clipBody.IsOnCtrl())
 		delete clipBody.p3;
 	clipBody.Clear();
 }
 
-bool Manager::GetClipboardState()
+bool Manager.GetClipboardState()
 //获取剪切板是否可用
 {
 	return clipBody.IsOnBody();
 }
 
-void Manager::CopyToClipboard(const Pointer &body)
+void Manager.CopyToClipboard(const Pointer &body)
 //拷贝body指向的物体到剪切板
 {
 	ASSERT(body.IsOnBody());
 	motiCount = 0;
 	ClearClipboard();	//清空剪切板
 
-	if(body.IsOnCrun())
+	if (body.IsOnCrun())
 		clipBody.SetOnCrun(body.p2.Clone(CLONE_FOR_CLIPBOARD), true);
-	else //if(body.IsOnCtrl())
+	else //if (body.IsOnCtrl())
 		clipBody.SetOnCtrl(body.p3.Clone(CLONE_FOR_CLIPBOARD), true);
 }
 
-Pointer Manager::CopyBody(FOCUS_OR_POS &body)
+Pointer Manager.CopyBody(FOCUS_OR_POS &body)
 //复制物体到剪切板
 {
-	Pointer pointer = GetBodyPointer(body);
+	Pointer pointer = Manager.GetBodyPointer(body);
 	if(!pointer.IsOnBody()) return pointer;
 	CopyToClipboard(pointer);
 	return pointer;
 }
 
-void Manager::CutBody(FOCUS_OR_POS &body)
+void Manager.CutBody(FOCUS_OR_POS &body)
 //剪切物体到剪切板
 {
 	Pointer pointer = CopyBody(body);	//复制物体
@@ -47,7 +47,7 @@ void Manager::CutBody(FOCUS_OR_POS &body)
 	PaintAll();							//重绘电路
 }
 
-bool Manager::PasteBody(POINT pos)
+bool Manager.PasteBody(POINT pos)
 //粘贴物体
 {
 	if(!clipBody.IsOnBody())
@@ -57,9 +57,9 @@ bool Manager::PasteBody(POINT pos)
 	}
 	ctx.DPtoLP(&pos);
 
-	if(clipBody.IsOnCrun())
+	if (clipBody.IsOnCrun())
 	{
-		if(crunCount >= MAX_CRUN_COUNT)
+		if (crunCount >= MAX_CRUN_COUNT)
 		{
 			this.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
 			return false;
@@ -75,9 +75,9 @@ bool Manager::PasteBody(POINT pos)
 		PutCircuitToVector();	//将新的电路信息保存到容器
 		PaintCrun(crun[crunCount-1]);
 	}
-	else if(clipBody.IsOnCtrl())
+	else if (clipBody.IsOnCtrl())
 	{
-		if(ctrlCount >= MAX_CTRL_COUNT)
+		if (ctrlCount >= MAX_CTRL_COUNT)
 		{
 			this.canvas.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
 			return false;

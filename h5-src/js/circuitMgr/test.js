@@ -1,11 +1,11 @@
 
 //9测试函数------------------------------------------------------------------------↓
-void Manager::SaveCircuitInfoToTextFile()
+void Manager.SaveCircuitInfoToTextFile()
 //保存电路信息到文本文件,测试函数
 {
 	int i;
 	FILE * fp = fopen("D:\\data.txt", "w");
-	if(fp == null) return;
+	if (fp == null) return;
 
 	fprintf(fp, "{\ncruns:[\n");
 	for(i=0; i<crunCount; i++)
@@ -14,7 +14,7 @@ void Manager::SaveCircuitInfoToTextFile()
 		fprintf(fp, "name:\"%s\",lead:[", crun[i]->name);
 		for(int j=0; j<4; j++)
 		{
-			if(crun[i]->lead[j]) fprintf(fp, "%d", crun[i]->lead[j]->GetInitOrder());
+			if (crun[i]->lead[j]) fprintf(fp, "%d", crun[i]->lead[j]->GetInitOrder());
 			else fprintf(fp, "-1");
 			if (j!=4-1) fprintf(fp, ",");
 		}
@@ -44,9 +44,9 @@ void Manager::SaveCircuitInfoToTextFile()
 	{
 		fprintf(fp, "{id:%d,x:%d,y:%d,", ctrl[i]->GetInitOrder(), ctrl[i]->coord.x, ctrl[i]->coord.y);
 		fprintf(fp, "name:\"%s\",lead:[", ctrl[i]->name);
-		if(ctrl[i]->lead[0])fprintf(fp, "%d,", ctrl[i]->lead[0]->GetInitOrder());
+		if (ctrl[i]->lead[0])fprintf(fp, "%d,", ctrl[i]->lead[0]->GetInitOrder());
 		else fputs("-1,", fp);
-		if(ctrl[i]->lead[1])fprintf(fp, "%d],", ctrl[i]->lead[1]->GetInitOrder());
+		if (ctrl[i]->lead[1])fprintf(fp, "%d],", ctrl[i]->lead[1]->GetInitOrder());
 		else fputs("-1],", fp);
 
 		ctrl[i]->SaveToTextFile(fp);
@@ -60,13 +60,13 @@ void Manager::SaveCircuitInfoToTextFile()
 	fclose(fp);
 }
 
-void Manager::SaveCountInfoToTextFile()
+void Manager.SaveCountInfoToTextFile()
 //保存计算过程到文本文件,测试函数
 {
 	FILE * fp = fopen("D:\\Circuit.txt", "w");
 	int i, j, group, ijPos, tempDir;
 
-	if(fp == null) return;
+	if (fp == null) return;
 
 	CollectCircuitInfo();
 
@@ -77,7 +77,7 @@ void Manager::SaveCountInfoToTextFile()
 		//fprintf(fp, "\tgroup = %f\n", crun2[i].potential);
 		for(j=0;j<4;j++)
 		{
-			if(crun2[i].c[j])fprintf(fp, "\tcircuit[%d] = %d\n", j, crun2[i].c[j]->eleNum);
+			if (crun2[i].c[j])fprintf(fp, "\tcircuit[%d] = %d\n", j, crun2[i].c[j]->eleNum);
 			else fprintf(fp, "\tcircuit[%d] = null\n", j);
 		}
 	}
@@ -103,7 +103,7 @@ void Manager::SaveCountInfoToTextFile()
 	CreateEquation();
 	CRUNMAP * maps = this.maps;
 	fp = fopen("D:\\Map.txt", "w");
-	if(fp == null) return;
+	if (fp == null) return;
 
 	for(group=0; group<groupNum; ++group) for(i=maps[group].size-2; i>=0; --i) for(j=maps[group].size-1; j>i; --j)
 	{
@@ -122,7 +122,7 @@ void Manager::SaveCountInfoToTextFile()
 	fclose(fp);
 
 	fp = fopen("D:\\Equation.txt", "w");
-	if(fp == null) return;
+	if (fp == null) return;
 	for(group=0; group<groupNum; ++group)
 	{
 		fprintf(fp, "\ngroup[%d]------------\n", group);

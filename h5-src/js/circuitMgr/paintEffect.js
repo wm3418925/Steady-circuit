@@ -1,178 +1,162 @@
 
 //连接导线过程显示
 Manager.ShowAddLead = function(pos) {
-	if(1 != motiCount) return false;
+	if (1 != Manager.motiCount) return false;
 
-	Pointer * body = motiBody;
-	POINT firstPos;
+	var body = Manager.motiBody;
 
-	if(!body.IsOnConnectPos()) return false;
+	if (!body || !body.IsOnConnectPos()) return false;
 
-	PaintAll();		//先刷新
-	motiCount = 1;	//还原变量
-
-	//dc移动到起点
-	Manager.ctx.DPtoLP(&pos);
-	Manager.ctx.MoveTo(pos);
+	Manager.PaintAll();		//先刷新
+	Manager.motiCount = 1;	//还原变量
 
 	//设置黑色画笔
 	Manager.ctx.SelectStockObject(BLACK_PEN);
-
-	//画直线
-	body.GetPosFromBody(firstPos);
-	Manager.ctx.LineTo(firstPos);
+	
+	Manager.ctx.beginPath();
+	Manager.ctx.DPtoLP(&pos);
+	Manager.ctx.moveTo(pos);
+	var firstPos = body.GetPosFromBody();
+	Manager.ctx.lineTo(firstPos);
+	Manager.ctx.stroke();
 
 	return true;
 };
 
-bool Manager::ShowAddBody(POINT point)
 //添加物体过程显示
-{
-	if(addState == BODY_CRUN)
-	{
-		if(lastMoveOnPos.x > -100)
-			Manager.ctx.BitBlt(lastMoveOnPos.x-DD, lastMoveOnPos.y-DD, DD*2, DD*2, &crunImageData, 0, 0, SRCINVERT);
+Manager.ShowAddBody = function(point) {
+	if (Manager.addState == BODY_CRUN) {
+		if (Manager.lastMoveOnPos.x > -100)
+			PaintCommonFunc.PaintImageDataXor(Manager.ctx, crunImageData[PAINT_CRUN_STYLE_NORMAL], Manager.lastMoveOnPos.x-DD, Manager.lastMoveOnPos.y-DD);
+		
 		Manager.ctx.DPtoLP(&point);
-		lastMoveOnPos = point;
-		Manager.ctx.BitBlt(lastMoveOnPos.x-DD, lastMoveOnPos.y-DD, DD*2, DD*2, &crunImageData, 0, 0, SRCINVERT);
+		Manager.lastMoveOnPos = point;
+		
+		PaintCommonFunc.PaintImageDataXor(Manager.ctx, crunImageData[PAINT_CRUN_STYLE_NORMAL], Manager.lastMoveOnPos.x-DD, Manager.lastMoveOnPos.y-DD);
 
 		::SetCursor(hcAddCrun);
 		return true;
-	}
-	else if(Pointer::IsCtrl(addState))
-	{
-		var tempImage = Manager.ctrlImageList[addState*4];
-		if(lastMoveOnPos.x > -100)
-			Manager.ctx.BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, CTRL_SIZE.cx, CTRL_SIZE.cy, tempImage, 0, 0, SRCINVERT);
+	} else if (Pointer.IsCtrl(Manager.addState)) {
+		var tempImage = Manager.ctrlImageList[Manager.addState*4];
+		
+		if (Manager.lastMoveOnPos.x > -100)
+			PaintCommonFunc.PaintImageDataXor(Manager.ctx, tempImage, Manager.lastMoveOnPos.x, Manager.lastMoveOnPos.y);
+		
 		Manager.ctx.DPtoLP(&point);
-		lastMoveOnPos = point;
-		Manager.ctx.BitBlt(lastMoveOnPos.x, lastMoveOnPos.y, CTRL_SIZE.cx, CTRL_SIZE.cy, tempImage, 0, 0, SRCINVERT);
+		Manager.lastMoveOnPos = point;
+		
+		PaintCommonFunc.PaintImageDataXor(Manager.ctx, tempImage, Manager.lastMoveOnPos.x, Manager.lastMoveOnPos.y);
 
 		::SetCursor(null);
 		return true;
-	}
-	else
-	{
+	} else {
 		return false;
 	}
-}
+};
 
-bool Manager::ShowMoveBody(POINT pos, bool isLButtonDown)
-//移动物体过程显示,lastMoveOnPos.x初始值设为-100,在LButtonDown和PaintAll中设置
-{
+//移动物体过程显示,Manager.lastMoveOnPos.x初始值设为-100,在LButtonDown和PaintAll中设置
+Manager.ShowMoveBody = function(pos, isLButtonDown) {
 	ASSERT(motiCount >= 0 && motiCount <= 2);
-	if(motiCount == 0) return false;
+	if (motiCount == 0) return false;
 
-	Pointer * body = motiBody + motiCount - 1;
-	POINT bodyPos = {0, 0};
+	var body = motiBody[motiCount - 1];
+	var bodyPos = {x:0, y:0};
 
-	if(!body.IsOnBody()) return false;
-	if(!isLButtonDown)	//鼠标没有按下
-	{
+	if (!body.IsOnBody()) return false;
+	if (!isLButtonDown) {	//鼠标没有按下
 		PaintAll(); 
 		return false;
 	}
 
 	//获得物体坐标
 	Manager.ctx.DPtoLP(&pos);
-	if(body.IsOnCrun()) bodyPos = body.p2.coord;
-	else if(body.IsOnCtrl()) bodyPos = body.p3.coord;
+	if (body.IsOnCrun()) bodyPos = body.p2.coord;
+	else if (body.IsOnCtrl()) bodyPos = body.p3.coord;
 
 	//根据坐标差计算画图坐标
 	pos.x += bodyPos.x - lButtonDownPos.x;
 	pos.y += bodyPos.y - lButtonDownPos.y;
 
 	//清除上次坐标画的物体
-	if(lastMoveOnPos.x > -100)
-		PaintInvertBodyAtPos(*body, lastMoveOnPos);
+	if (Manager.lastMoveOnPos.x > -100)
+		PaintInvertBodyAtPos(*body, Manager.lastMoveOnPos);
 
 	//在新的坐标物体
-	lastMoveOnPos = pos;	//获得新的坐标
-	PaintInvertBodyAtPos(*body, lastMoveOnPos);
+	Manager.lastMoveOnPos = pos;	//获得新的坐标
+	PaintInvertBodyAtPos(*body, Manager.lastMoveOnPos);
 
 	//左或右ctrl键被按下相当于复制
-	if(StaticClass::IsCtrlDown()) SetCursor(hcAddCrun);
+	if (StaticClass.IsCtrlDown()) SetCursor(hcAddCrun);
 
 	return true;
-}
+};
 
-bool Manager::ShowMoveLead(bool isLButtonDown)
 //移动导线过程显示
-{
+Manager.ShowMoveLead = function(isLButtonDown) {
 	ASSERT(motiCount>=0 && motiCount<=2);
 
-	if(motiCount == 0 || !motiBody[motiCount-1].IsOnLead())
-	{
+	if (motiCount == 0 || !motiBody[motiCount-1].IsOnLead()) {
 		return false;
 	}
-	if(!isLButtonDown)	//鼠标没有按下
-	{
+	if (!isLButtonDown) {	//鼠标没有按下
 		PaintAll();
 		return true;
 	}
 
-	if(motiBody[motiCount-1].IsOnHoriLead())
+	if (motiBody[motiCount-1].IsOnHoriLead())
 		SetCursor(hcMoveHorz);	//在横线,鼠标变成"上下指针"
 	else 
 		SetCursor(hcMoveVert);	//在竖线,鼠标变成"左右指针"
 
 	return true;
-}
+};
 
 
-BODY_TYPE Manager::PosBodyPaintRect(POINT pos)
 //突出右击物体
-{
-	Pointer * body = motiBody; //&motiBody[0]
+Manager.PosBodyPaintRect = function(pos) {
+	var body = motiBody[0]
 
 	motiCount = 0;
 	MotivateAll(pos);
 	motiCount = 0;
 
-	if(!body.IsOnAny()) return BODY_NO;
+	if (!body.IsOnAny()) return BODY_NO;
 
-	if(body.IsOnConnectPos()) body.SetAtState(-1);
+	if (body.IsOnConnectPos()) body.SetAtState(-1);
 
-	if(body.IsOnBody()) Manager.ctx.SelectObject(hp + BLUE);
+	if (body.IsOnBody()) Manager.ctx.SelectObject(hp + BLUE);
 
-	if(body.IsOnCrun())
-	{
+	if (body.IsOnCrun()) {
 		Manager.ctx.Rectangle(body.p2.coord.x-DD-2, body.p2.coord.y-DD-2, 
 			body.p2.coord.x+DD+2, body.p2.coord.y+DD+2);
-	}
-	else if(body.IsOnCtrl())
-	{
+	} else if (body.IsOnCtrl()) {
 		Manager.ctx.Rectangle(body.p3.coord.x-2, body.p3.coord.y-2, 
 			body.p3.coord.x+CTRL_SIZE.cx+2, body.p3.coord.y+CTRL_SIZE.cy+2);
 	}
 
 	PaintWithSpecialColorAndRect(*body, false);
 	return body.GetStyle();
-}
+};
 
 
-bool Manager::ShowBodyElec(FOCUS_OR_POS &body)
 //计算电流后,显示流过物体的电流
-{
-	Pointer pointer = GetBodyPointer(body);
-	if(!pointer.IsOnLead() && !pointer.IsOnCtrl()) return false;	//只显示导线和控件
+Manager.ShowBodyElec = function(body) {
+	var pointer = Manager.GetBodyPointer(body);
+	if (!pointer.IsOnLead() && !pointer.IsOnCtrl()) return false;	//只显示导线和控件
 
-	char tempStr1[NAME_LEN*2];	//字符串
-	char tempStr2[NAME_LEN*2];	//字符串
-	char title[NAME_LEN*3];		//窗口标题
-	double elec;				//电流大小
-	ELEC_STATE elecDir;			//电流方向
-	CDC * model = null;			//property显示物体的示例
-	LISTDATA list;				//property显示的数据
+	var tempStr1;	//字符串
+	var tempStr2;	//字符串
+	var title;		//窗口标题
+	var elec;		//电流大小
+	var elecDir;	//电流方向
+	var model = null;	//property显示物体的示例
+	var list = LISTDATA.CreateNew();	//property显示的数据
 
 	//1,获得电流信息
-	if(pointer.IsOnLead())
-	{
+	if (pointer.IsOnLead()) {
 		elec = pointer.p1.elec;
 		elecDir  = pointer.p1.elecDir;
-	}
-	else //if(pointer.IsOnCtrl())
-	{
+	} else { //if (pointer.IsOnCtrl())
 		elec = pointer.p3.elec;
 		elecDir  = pointer.p3.elecDir;
 
@@ -180,8 +164,7 @@ bool Manager::ShowBodyElec(FOCUS_OR_POS &body)
 	}
 
 	//2,生成LISTDATA
-	switch(elecDir)
-	{
+	switch (elecDir) {
 	case UNKNOWNELEC:
 		list.Init(1);
 		list.SetAMember(DATA_STYLE_LPCTSTR, "电流情况 :", "电流没有计算过!");
@@ -206,15 +189,13 @@ bool Manager::ShowBodyElec(FOCUS_OR_POS &body)
 	case RIGHTELEC:
 		ASSERT(elec >= 0);	//不会出现负电流
 
-		if(StaticClass::IsZero(elec))
-		{
+		if (StaticClass.IsZero(elec)) {
 			list.Init(1);
 			list.SetAMember(DATA_STYLE_LPCTSTR, "电流情况 :", "电流为0");
 			break;
 		}
 
-		if(pointer.IsOnLead())
-		{
+		if (pointer.IsOnLead()) {
 			GetName(pointer.p1.conBody[LEFTELEC != elecDir], tempStr1);
 			GetName(pointer.p1.conBody[LEFTELEC == elecDir], tempStr2);
 
@@ -222,11 +203,8 @@ bool Manager::ShowBodyElec(FOCUS_OR_POS &body)
 			list.SetAMember(DATA_STYLE_double, DATA_NOTE[DATA_NOTE_CURRENT], &elec);
 			list.SetAMember(DATA_STYLE_LPCTSTR, "电流起点 :", tempStr1);
 			list.SetAMember(DATA_STYLE_LPCTSTR, "电流终点 :", tempStr2);
-		}
-		else //if(pointer.IsOnCtrl())
-		{
-			switch(pointer.p3.dir ^ ((RIGHTELEC == elecDir)<<1))
-			{
+		} else { //if (pointer.IsOnCtrl())
+			switch (pointer.p3.dir ^ ((RIGHTELEC == elecDir)<<1)) {
 			case 0:
 				strcpy(tempStr1, "从左到右");
 				break;
@@ -259,4 +237,4 @@ bool Manager::ShowBodyElec(FOCUS_OR_POS &body)
 	dlg.DoModal();
 
 	return true;
-}
+};

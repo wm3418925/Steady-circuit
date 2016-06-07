@@ -125,12 +125,10 @@ function readFileCallbackFunc(data) {
 	return true;			//正常退出
 }
 function readFileComplete(xhr, textStatus) {
-	//alert(textStatus);
 }
 //读取电路
 Manager.ReadFile = function(newFileName) {
 	ASSERT(newFileName && newFileName.length > 0);
-	//$.get("/testData.json", {}, readFileCallbackFunc, "json");
 	$.ajax({ url: "/testData.json", async:false, success: readFileCallbackFunc, complete:readFileComplete});
 	return true;
 };

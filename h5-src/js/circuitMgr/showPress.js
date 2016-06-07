@@ -1,6 +1,6 @@
 
 //13显示电势差函数-----------------------------------------------------------------↓
-void Manager::ClearPressBody()
+void Manager.ClearPressBody()
 //清空显示电势差的成员变量
 {
 	pressStart.Clear();
@@ -8,25 +8,25 @@ void Manager::ClearPressBody()
 	startEndPressure = 0;
 }
 
-bool Manager::SetStartBody(POINT pos)
+bool Manager.SetStartBody(POINT pos)
 //设置计算电势差的起始位置
 {
 	motiCount = 0;
 	if(!MotivateAll(pos)) return false;	//没有点击物体
 	motiCount = 0;
 
-	if(motiBody[0].IsOnLead())
+	if (motiBody[0].IsOnLead())
 	{
-		if(StaticClass::IsElecError(motiBody[0].p1.elecDir))
+		if (StaticClass.IsElecError(motiBody[0].p1.elecDir))
 		{
 			this.canvas.MessageBox("当前选择的电路不正常", "无法计算电势差", MB_ICONWARNING);
 			return false;
 		}
 	}
-	else if(motiBody[0].IsOnCrun() && !motiBody[0].IsOnConnectPos())
+	else if (motiBody[0].IsOnCrun() && !motiBody[0].IsOnConnectPos())
 	{
 		CRUN * c = motiBody[0].p2;
-		for(int i=0; i<4; ++i) if(c.lead[i] && StaticClass::IsElecError(c.lead[i]->elecDir))
+		for(int i=0; i<4; ++i) if (c.lead[i] && StaticClass.IsElecError(c.lead[i]->elecDir))
 		{
 			this.canvas.MessageBox("当前选择的电路不正常", "无法计算电势差", MB_ICONWARNING);
 			return false;
@@ -44,7 +44,7 @@ bool Manager::SetStartBody(POINT pos)
 	return true;
 }
 
-bool Manager::NextBodyByInputNum(UINT nChar)
+bool Manager.NextBodyByInputNum(UINT nChar)
 //用户输入数字1,2,3,4来移动电势差结尾位置
 {
 	if(!pressStart.IsOnAny() || !pressEnd.IsOnAny())
@@ -77,38 +77,38 @@ bool Manager::NextBodyByInputNum(UINT nChar)
 		break;
 
 	default:
-		if(nChar >= '1' && nChar <= '4')
+		if (nChar >= '1' && nChar <= '4')
 			dir = nChar - '1';
 		else
 			return false;
 	}
 
-	if(pressEnd.IsOnLead())	//结尾位置在导线上
+	if (pressEnd.IsOnLead())	//结尾位置在导线上
 	{
-		if(dir < 0 || dir > 1) return false;
+		if (dir < 0 || dir > 1) return false;
 		
 		Pointer temp = pressEnd.p1.conBody[dir];
 		temp.SetAtState(-1);
 
-		if(temp.IsOnCrun())
+		if (temp.IsOnCrun())
 		{
 			pressEnd = temp;
 		}
-		else //if(temp.IsOnCtrl())
+		else //if (temp.IsOnCtrl())
 		{
-			if(temp.p3.GetResist() < 0)	//断路控件
+			if (temp.p3.GetResist() < 0)	//断路控件
 			{
 				this.canvas.MessageBox("这是一个断路电学元件 !", "电流无法流过 !", MB_ICONINFORMATION);
 				return false;
 			}
-			if(temp.p3.GetConnectNum() < 2)	//控件没有连接2段导线
+			if (temp.p3.GetConnectNum() < 2)	//控件没有连接2段导线
 			{
 				this.canvas.MessageBox("电学元件另一端没有连接导线 !", "电流无法流过 !", MB_ICONINFORMATION);
 				return false;
 			}
 			dir = temp.p3.lead[0] == pressEnd.p1;	//下一个导线索引(0或1)
-			if(temp.p3.lead[dir] == pressEnd.p1) return false;	//电路是一个控件2端都连接同一段导线
-			if(temp.p3.elecDir == dir)
+			if (temp.p3.lead[dir] == pressEnd.p1) return false;	//电路是一个控件2端都连接同一段导线
+			if (temp.p3.elecDir == dir)
 				startEndPressure -= temp.p3.GetResist() * temp.p3.elec;
 			else
 				startEndPressure += temp.p3.GetResist() * temp.p3.elec;
@@ -118,8 +118,8 @@ bool Manager::NextBodyByInputNum(UINT nChar)
 	}
 	else	//结尾位置在结点上
 	{
-		if(dir < 0 || dir > 3) return false;
-		if(pressEnd.p2.lead[dir] != null)
+		if (dir < 0 || dir > 3) return false;
+		if (pressEnd.p2.lead[dir] != null)
 		{
 			pressEnd.SetOnLead(pressEnd.p2.lead[dir]);
 		}
@@ -134,7 +134,7 @@ bool Manager::NextBodyByInputNum(UINT nChar)
 	return true;
 }
 
-bool Manager::ShowPressure()
+bool Manager.ShowPressure()
 //显示从起始位置到结尾位置的电势差(U0-U1)
 {
 	if(!pressStart.IsOnAny() || !pressEnd.IsOnAny())
@@ -151,7 +151,7 @@ bool Manager::ShowPressure()
 	LISTDATA list;
 	list.Init(3);
 
-	if(StaticClass::IsZero(startEndPressure)) startEndPressure = 0;
+	if (StaticClass.IsZero(startEndPressure)) startEndPressure = 0;
 	list.SetAMember(DATA_STYLE_double, note, (void *)(&startEndPressure));
 	list.SetAMember(DATA_STYLE_LPCTSTR, "起始位置", name1);
 	list.SetAMember(DATA_STYLE_LPCTSTR, "结束位置", name2);

@@ -1,6 +1,6 @@
 
 //11鼠标焦点物体函数---------------------------------------------------------------↓
-void Manager::UpdateEditMenuState()
+void Manager.UpdateEditMenuState()
 //更新编辑菜单状态(MF_ENABLED or MF_GRAYED)
 {
 	CMenu * cm = this.canvas.GetMenu();
@@ -20,7 +20,7 @@ void Manager::UpdateEditMenuState()
 
 		cm.EnableMenuItem(IDM_FOCUSBODY_SHOWELEC, MF_GRAYED);
 	}
-	else if(focusBody.IsOnLead())
+	else if (focusBody.IsOnLead())
 	{
 		cm.EnableMenuItem(IDM_FOCUSBODY_COPY, MF_GRAYED);
 		cm.EnableMenuItem(IDM_FOCUSBODY_CUT, MF_GRAYED);
@@ -41,7 +41,7 @@ void Manager::UpdateEditMenuState()
 		cm.EnableMenuItem(IDM_FOCUSBODY_DELETE, MF_ENABLED);
 		cm.EnableMenuItem(IDM_FOCUSBODY_PROPERTY, MF_ENABLED);
 
-		if(focusBody.IsOnCtrl())
+		if (focusBody.IsOnCtrl())
 			menuState = MF_ENABLED;
 		else
 			menuState = MF_GRAYED;
@@ -54,19 +54,19 @@ void Manager::UpdateEditMenuState()
 	}
 }
 
-void Manager::FocusBodyClear(const Pointer * deleteBody)
+void Manager.FocusBodyClear(const Pointer * deleteBody)
 //判断删除物体是否是当前焦点,如果是则清除鼠标焦点物体
 //如果deleteBody==null,直接删除焦点
 //函数执行在:Manager,DeleteSingleBody,ClearCircuitState
 {
-	if(deleteBody == null || focusBody.IsBodySame(deleteBody))
+	if (deleteBody == null || focusBody.IsBodySame(deleteBody))
 	{
 		focusBody.Clear();
 		UpdateEditMenuState();
 	}
 }
 
-void Manager::FocusBodySet(const Pointer &newFocus)
+void Manager.FocusBodySet(const Pointer &newFocus)
 //设置焦点物体
 //函数执行在:FocusBodyPaint,ReadCircuitFromVector,ReadFile
 {
@@ -75,28 +75,28 @@ void Manager::FocusBodySet(const Pointer &newFocus)
 	UpdateEditMenuState();
 }
 
-bool Manager::FocusBodyPaint(const Pointer * newFocus)
+bool Manager.FocusBodyPaint(const Pointer * newFocus)
 //画获得鼠标焦点的物体,并覆盖原来的焦点
 //如果newFocus==NULL重绘原来焦点;否则覆盖原来的焦点,新的焦点用焦点色画
 {
-	if(newFocus != null)	//焦点改变
+	if (newFocus != null)	//焦点改变
 	{
-		if(focusBody.IsBodySame(newFocus))
+		if (focusBody.IsBodySame(newFocus))
 			return false;
 
 		//原来的焦点用黑色画
-		if(focusBody.IsOnLead())
+		if (focusBody.IsOnLead())
 			PaintLead(focusBody.p1);
-		if(focusBody.IsOnCrun())
+		if (focusBody.IsOnCrun())
 			PaintCrun(focusBody.p2, false);
-		else if(focusBody.IsOnCtrl())
+		else if (focusBody.IsOnCtrl())
 			PaintCtrl(focusBody.p3, false);
 
 		//焦点物体更新
 		FocusBodySet(*newFocus);
 	}
 
-	if(focusBody.IsOnLead())
+	if (focusBody.IsOnLead())
 	{
 		switch (focusLeadStyle) {
 		case SOLID_SPECIAL_COLOR:
@@ -113,11 +113,11 @@ bool Manager::FocusBodyPaint(const Pointer * newFocus)
 			break;
 		}
 	}
-	else if(focusBody.IsOnCrun())
+	else if (focusBody.IsOnCrun())
 	{
 		PaintCrunWithStyle(focusBody.p2, PAINT_CRUN_STYLE_FOCUS);
 	}
-	else if(focusBody.IsOnCtrl())
+	else if (focusBody.IsOnCtrl())
 	{
 		PaintCtrlWithColor(focusBody.p3, focusCtrlColor);
 	}
@@ -125,33 +125,33 @@ bool Manager::FocusBodyPaint(const Pointer * newFocus)
 	return true;
 }
 
-void Manager::FocusBodyChangeUseTab()
+void Manager.FocusBodyChangeUseTab()
 //用户按Tab键切换焦点处理
 {
 	const int bodyNum = crunCount + ctrlCount;
 	Pointer newFocus;
 	int num;
 
-	if(bodyNum == 0) return;	//没有物体
+	if (bodyNum == 0) return;	//没有物体
 
-	if(focusBody.IsOnLead())	//当前焦点是导线
+	if (focusBody.IsOnLead())	//当前焦点是导线
 	{
 		num = (focusBody.p1.num + 1) % leadCount;
 		newFocus.SetOnLead(lead[num]);
 	}
-	else if(focusBody.IsOnCrun())	//当前焦点是结点
+	else if (focusBody.IsOnCrun())	//当前焦点是结点
 	{
 		num = (focusBody.p2.num + 1) % crunCount;
 		newFocus.SetOnCrun(crun[num], true);
 	}
-	else if(focusBody.IsOnCtrl())	//当前焦点是控件
+	else if (focusBody.IsOnCtrl())	//当前焦点是控件
 	{
 		num = (focusBody.p3.num + 1) % ctrlCount;
 		newFocus.SetOnCtrl(ctrl[num], true);
 	}
 	else	//没有设定焦点
 	{
-		if(crunCount > 0)
+		if (crunCount > 0)
 			newFocus.SetOnCrun(crun[0], true);
 		else
 			newFocus.SetOnCtrl(ctrl[0], true);
@@ -160,7 +160,7 @@ void Manager::FocusBodyChangeUseTab()
 	FocusBodyPaint(&newFocus);
 }
 
-bool Manager::FocusBodyMove(int dir)
+bool Manager.FocusBodyMove(int dir)
 //用户按上下左右键移动焦点物体
 {
 	motiCount = 0;
@@ -169,7 +169,7 @@ bool Manager::FocusBodyMove(int dir)
 	POINT fromPos, toPos;
 
 	//获得物体坐标
-	if(focusBody.IsOnCrun()) fromPos = focusBody.p2.coord;
+	if (focusBody.IsOnCrun()) fromPos = focusBody.p2.coord;
 	else fromPos = focusBody.p3.coord;
 	toPos = fromPos;
 
@@ -193,7 +193,7 @@ bool Manager::FocusBodyMove(int dir)
 	}
 
 	//检查坐标是否越界
-	if(toPos.x < -CTRL_SIZE.cx/2 || toPos.y < -CTRL_SIZE.cy/2) return false;
+	if (toPos.x < -CTRL_SIZE.cx/2 || toPos.y < -CTRL_SIZE.cy/2) return false;
 
 	//移动对象
 	PosBodyMove(&focusBody, fromPos, toPos);

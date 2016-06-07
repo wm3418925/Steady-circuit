@@ -20,9 +20,9 @@ Manager.GetBodyDefaultName = function(pointer) {
 	ASSERT(pointer.IsOnAny());
 	if (pointer.IsOnLead()) {
 		return "导线[" + pointer.p.GetInitOrder() + "]";
-	} else if(pointer.IsOnCrun()) {
+	} else if (pointer.IsOnCrun()) {
 		return "结点[编号("+pointer.p.GetInitOrder()+"), 当前名称("+pointer.p.name+")]";
-	} else { //if(pointer.IsOnCtrl())
+	} else { //if (pointer.IsOnCtrl())
 		return "控件[编号("+pointer.p.GetInitOrder()+"), 当前名称("+pointer.p.name+")]";
 	}
 };
@@ -34,11 +34,11 @@ Manager.DeleteNote = function(body) {
 	var note;	//提示字符串
 
 	//获得连接导线数
-	if(body.IsOnLead())
+	if (body.IsOnLead())
 		conCount = 0;
-	else if(body.IsOnCrun())
+	else if (body.IsOnCrun())
 		conCount = body.p.GetConnectNum();
-	else if(body.IsOnCtrl())
+	else if (body.IsOnCtrl())
 		conCount = body.p.GetConnectNum();
 	else
 		return false;

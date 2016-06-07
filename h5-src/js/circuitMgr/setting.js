@@ -1,7 +1,7 @@
 
 //12设置函数-----------------------------------------------------------------------
 
-void Manager::SetMoveBodySense()
+void Manager.SetMoveBodySense()
 //设置按方向键一次移动物体的距离
 {
 	LISTDATA list;
@@ -15,7 +15,7 @@ void Manager::SetMoveBodySense()
 	dlg.DoModal();
 }
 
-void Manager::SetLeaveOutDis()
+void Manager.SetLeaveOutDis()
 //设置最大导线合并距离
 {
 	LISTDATA list;
@@ -29,7 +29,7 @@ void Manager::SetLeaveOutDis()
 	dlg.DoModal();
 }
 
-void Manager::SetTextColor()
+void Manager.SetTextColor()
 //设置字体颜色
 {
 	const enum COLOR preColor = textColor;
@@ -40,14 +40,14 @@ void Manager::SetTextColor()
 	MyPropertyDlg dlg(&list, false, null, "设置标签颜色", this.canvas);
 	dlg.DoModal();
 
-	if(preColor != textColor)
+	if (preColor != textColor)
 	{
 		ctx.SetTextColor(LEADCOLOR[textColor]);
 		PaintAll();
 	}
 }
 
-void Manager::SetFocusLeadStyle()
+void Manager.SetFocusLeadStyle()
 //设置焦点导线样式
 {
 	const enum LEADSTYLE save = focusLeadStyle;
@@ -58,11 +58,11 @@ void Manager::SetFocusLeadStyle()
 	MyPropertyDlg dlg(&list, false, null, "设置选定导线样式", this.canvas);
 	dlg.DoModal();
 
-	if(save != focusLeadStyle && focusBody.IsOnLead())
+	if (save != focusLeadStyle && focusBody.IsOnLead())
 		FocusBodyPaint(null);
 }
 
-void Manager::SetFocusCrunColor()
+void Manager.SetFocusCrunColor()
 //设置焦点结点颜色
 {
 	const enum COLOR save = focusCrunColor;
@@ -73,11 +73,11 @@ void Manager::SetFocusCrunColor()
 	MyPropertyDlg dlg(&list, false, null, "设置选定结点颜色", this.canvas);
 	dlg.DoModal();
 
-	if(save != focusCrunColor && focusBody.IsOnCrun())
+	if (save != focusCrunColor && focusBody.IsOnCrun())
 		FocusBodyPaint(null);
 }
 
-void Manager::SetFocusCtrlColor()
+void Manager.SetFocusCtrlColor()
 //设置焦点控件颜色
 {
 	const enum COLOR save = focusCtrlColor;
@@ -88,6 +88,6 @@ void Manager::SetFocusCtrlColor()
 	MyPropertyDlg dlg(&list, false, null, "设置选定电学元件颜色", this.canvas);
 	dlg.DoModal();
 
-	if(save != focusCtrlColor && focusBody.IsOnCtrl())
+	if (save != focusCtrlColor && focusBody.IsOnCtrl())
 		FocusBodyPaint(null);
 }

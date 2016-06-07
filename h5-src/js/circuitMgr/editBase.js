@@ -1,6 +1,6 @@
 
 //5编辑函数------------------------------------------------------------------------↓
-void Manager::AddCtrl(POINT pos, BODY_TYPE style)
+void Manager.AddCtrl(POINT pos, BODY_TYPE style)
 //添加控件
 {
 	ASSERT(ctrlCount < MAX_CTRL_COUNT);
@@ -14,7 +14,7 @@ void Manager::AddCtrl(POINT pos, BODY_TYPE style)
 	FocusBodyPaint(&newFocus);
 }
 
-void Manager::AddCrun(POINT pos)
+void Manager.AddCrun(POINT pos)
 //添加结点
 {
 	ASSERT(crunCount < MAX_CRUN_COUNT);
@@ -28,7 +28,7 @@ void Manager::AddCrun(POINT pos)
 	FocusBodyPaint(&newFocus);
 }
 
-void Manager::AddLead(Pointer a, Pointer b)
+void Manager.AddLead(Pointer a, Pointer b)
 //用导线连接2个物体
 {
 	ASSERT(leadCount < MAX_LEAD_COUNT);						//导线够用
@@ -40,11 +40,11 @@ void Manager::AddLead(Pointer a, Pointer b)
 	++leadCount;
 
 	//连接物体指向导线
-	if(a.IsOnCrun())
+	if (a.IsOnCrun())
 		a.p2.lead[a.GetLeadNum()] = lead[leadCount-1];
 	else 
 		a.p3.lead[a.GetLeadNum()] = lead[leadCount-1];
-	if(b.IsOnCrun())
+	if (b.IsOnCrun())
 		b.p2.lead[b.GetLeadNum()] = lead[leadCount-1];
 	else 
 		b.p3.lead[b.GetLeadNum()] = lead[leadCount-1];
@@ -53,7 +53,7 @@ void Manager::AddLead(Pointer a, Pointer b)
 	PaintLead(lead[leadCount-1]);
 }
 
-void Manager::DeleteLead(LEAD * l)
+void Manager.DeleteLead(LEAD * l)
 //删除连接2个物体的连线
 //使用函数: Delete(Pointer), ConnectBodyLead
 {
@@ -68,14 +68,14 @@ void Manager::DeleteLead(LEAD * l)
 	FocusBodyClear(&pointer);
 
 	//清空连接的指针
-	if(a.IsOnCrun()) a.p2.lead[dira] = null;
-	else if(a.IsOnCtrl()) a.p3.lead[dira] = null;
-	if(b.IsOnCrun()) b.p2.lead[dirb] = null;
-	else if(b.IsOnCtrl()) b.p3.lead[dirb] = null;
+	if (a.IsOnCrun()) a.p2.lead[dira] = null;
+	else if (a.IsOnCtrl()) a.p3.lead[dira] = null;
+	if (b.IsOnCrun()) b.p2.lead[dirb] = null;
+	else if (b.IsOnCtrl()) b.p3.lead[dirb] = null;
 
 	//删除导线
 	delete l;
-	if(num != leadCount-1)
+	if (num != leadCount-1)
 	{
 		lead[num] = lead[leadCount-1];
 		lead[num]->num = num;
@@ -84,7 +84,7 @@ void Manager::DeleteLead(LEAD * l)
 	--leadCount;
 }
 
-void Manager::DeleteSingleBody(Pointer pointer)
+void Manager.DeleteSingleBody(Pointer pointer)
 //仅仅是删除一个结点或者控件,不影响周围物体
 {
 	ASSERT(pointer.IsOnBody());
@@ -92,11 +92,11 @@ void Manager::DeleteSingleBody(Pointer pointer)
 
 	FocusBodyClear(&pointer);	//如果删除物体是焦点,清除焦点
 
-	if(pointer.IsOnCrun())
+	if (pointer.IsOnCrun())
 	{
 		num = pointer.p2.num;
 		delete pointer.p2;
-		if(num != crunCount-1)
+		if (num != crunCount-1)
 		{
 			crun[num] = crun[crunCount-1];
 			crun[num]->num = num;
@@ -104,11 +104,11 @@ void Manager::DeleteSingleBody(Pointer pointer)
 		crun[crunCount-1] = null;
 		--crunCount;
 	}
-	else //if(pointer.IsOnCtrl())
+	else //if (pointer.IsOnCtrl())
 	{
 		num = pointer.p3.num;
 		delete pointer.p3;
-		if(num != ctrlCount-1)
+		if (num != ctrlCount-1)
 		{
 			ctrl[num] = ctrl[ctrlCount-1];
 			ctrl[num]->num = num;
@@ -118,25 +118,25 @@ void Manager::DeleteSingleBody(Pointer pointer)
 	}
 }
 
-void Manager::Delete(Pointer pointer)
+void Manager.Delete(Pointer pointer)
 //删除
 {
 	ASSERT(pointer.IsOnAny() && !pointer.IsOnConnectPos());
 	CloneCircuitBeforeChange();	//编辑前复制电路
 
-	if(pointer.IsOnLead())
+	if (pointer.IsOnLead())
 	{
 		DeleteLead(pointer.p1);
 	}
-	else if(pointer.IsOnCrun())
+	else if (pointer.IsOnCrun())
 	{
-		for(int i=0; i<4; ++i) if(pointer.p2.lead[i] != null)
+		for(int i=0; i<4; ++i) if (pointer.p2.lead[i] != null)
 			DeleteLead(pointer.p2.lead[i]);
 		DeleteSingleBody(pointer);
 	}
-	else //if(pointer.IsOnCtrl())
+	else //if (pointer.IsOnCtrl())
 	{
-		for(int i=0; i<2; ++i) if(pointer.p3.lead[i] != null)
+		for(int i=0; i<2; ++i) if (pointer.p3.lead[i] != null)
 			DeleteLead(pointer.p3.lead[i]);
 		DeleteSingleBody(pointer);
 	}
@@ -144,7 +144,7 @@ void Manager::Delete(Pointer pointer)
 	PutCircuitToVector();	//将新的电路信息保存到容器
 }
 
-bool Manager::ConnectBodyLead(POINT posb)
+bool Manager.ConnectBodyLead(POINT posb)
 //连接一个连接点和导线
 {
 	Pointer a;				//先点击物体和连接点
@@ -157,7 +157,7 @@ bool Manager::ConnectBodyLead(POINT posb)
 	//1,检查函数运行条件
 	ASSERT(motiCount == 2 && motiBody[0].IsOnConnectPos() && motiBody[1].IsOnLead());
 	motiCount = 0;
-	if(crunCount >= MAX_CRUN_COUNT)	//只要结点数量够,导线一定够
+	if (crunCount >= MAX_CRUN_COUNT)	//只要结点数量够,导线一定够
 	{
 		this.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
 		return false;
@@ -170,13 +170,13 @@ bool Manager::ConnectBodyLead(POINT posb)
 	a = motiBody[0];
 	x = motiBody[1].p1.conBody[0];
 	y = motiBody[1].p1.conBody[1];
-	if(a.IsOnCrun())posa = a.p2.coord;
+	if (a.IsOnCrun())posa = a.p2.coord;
 	else posa = a.p3.coord;	//获得先点击物体的坐标
 
 	//4,初始化连接新添加结点的方向
-	if(motiBody[1].IsOnHoriLead())	//-3,-5,-7....横线
+	if (motiBody[1].IsOnHoriLead())	//-3,-5,-7....横线
 	{
-		if(motiBody[1].p1.GetBodyPos() & 2)
+		if (motiBody[1].p1.GetBodyPos() & 2)
 		{
 			dir1 = 4;
 			dir2 = 3;
@@ -187,12 +187,12 @@ bool Manager::ConnectBodyLead(POINT posb)
 			dir2 = 4;
 		}
 
-		if(posa.y > posb.y)dir3 = 2;	//先点击物体在后点击位置的下面
+		if (posa.y > posb.y)dir3 = 2;	//先点击物体在后点击位置的下面
 		else dir3 = 1;	//先点击物体在后点击位置的上面
 	}
 	else	//-2,-4,-6....竖线
 	{
-		if(motiBody[1].p1.GetBodyPos() & 1)
+		if (motiBody[1].p1.GetBodyPos() & 1)
 		{
 			dir1 = 2;
 			dir2 = 1;
@@ -203,7 +203,7 @@ bool Manager::ConnectBodyLead(POINT posb)
 			dir2 = 2;
 		}
 
-		if(posa.x > posb.x)dir3 = 4;	//先点击物体在后点击位置的右面
+		if (posa.x > posb.x)dir3 = 4;	//先点击物体在后点击位置的右面
 		else dir3 = 3;	//先点击物体在后点击位置的左面
 	}
 
@@ -231,13 +231,13 @@ bool Manager::ConnectBodyLead(POINT posb)
 	return true;
 }
 
-bool Manager::Delete(FOCUS_OR_POS &body)
+bool Manager.Delete(FOCUS_OR_POS &body)
 //删除物体
 {
-	Pointer pointer = GetBodyPointer(body);
+	Pointer pointer = Manager.GetBodyPointer(body);
 	if(!pointer.IsOnAny()) return false;
 
-	if(DeleteNote(pointer))
+	if (DeleteNote(pointer))
 	{
 		Delete(pointer);
 		return true;

@@ -1,7 +1,7 @@
 
 // 搜索函数
 
-bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, bool isMatchCase, char * keyWord)
+bool Manager.SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, bool isMatchCase, char * keyWord)
 //搜索下一个物体
 {
 	bool isAfterFocus = false;
@@ -10,7 +10,7 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 	int round, j;
 	bool isSearchLead = (range == BODY_ALL || range == BODY_LEAD) && searchBy == SEARCH_BY_ID;
 	bool isSearchCrun = (range == BODY_ALL || range == BODY_CRUN);
-	bool isSearchCtrl = (range == BODY_ALL || range == BODY_ALLCTRL || Pointer::IsCtrl(range));
+	bool isSearchCtrl = (range == BODY_ALL || range == BODY_ALLCTRL || Pointer.IsCtrl(range));
 	KMP kmp(keyWord, isWholeWord, isMatchCase || searchBy == SEARCH_BY_ID);	//搜索序号时可以区分大小写, 加快速度
 	Pointer newFocus;
 
@@ -20,16 +20,16 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 		if(!isAfterFocus && focusBody.IsOnLead())
 		{
 			isAfterFocus = true;
-			if(isSearchLead)
+			if (isSearchLead)
 				j = focusBody.p1.num + 1;
 			else
 				j = leadCount;
 		}
-		else if(isAfterFocus && isSearchLead)
+		else if (isAfterFocus && isSearchLead)
 		{
 			j = 0;
 		}
-		else if(isAfterFocus && !isSearchLead && focusBody.IsOnLead())
+		else if (isAfterFocus && !isSearchLead && focusBody.IsOnLead())
 		{
 			return false;
 		}
@@ -42,11 +42,11 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 		{
 			itoa(lead[j]->GetInitOrder(), str, 10);
 			isMatch = kmp.IsMatch(str);
-			if(focusBody.IsLeadSame(lead[j]))
+			if (focusBody.IsLeadSame(lead[j]))
 			{
 				return isMatch;
 			}
-			else if(isMatch)
+			else if (isMatch)
 			{
 				newFocus.SetOnLead(lead[j], true);
 				FocusBodyPaint(&newFocus);
@@ -58,16 +58,16 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 		if(!isAfterFocus && focusBody.IsOnCrun())
 		{
 			isAfterFocus = true;
-			if(isSearchCrun)
+			if (isSearchCrun)
 				j = focusBody.p2.num + 1;
 			else
 				j = crunCount;
 		}
-		else if(isAfterFocus && isSearchCrun)
+		else if (isAfterFocus && isSearchCrun)
 		{
 			j = 0;
 		}
-		else if(isAfterFocus && !isSearchCrun && focusBody.IsOnCrun())
+		else if (isAfterFocus && !isSearchCrun && focusBody.IsOnCrun())
 		{
 			return false;
 		}
@@ -78,7 +78,7 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 
 		for(; j<crunCount; ++j)
 		{
-			if(searchBy == SEARCH_BY_NAME)
+			if (searchBy == SEARCH_BY_NAME)
 			{
 				isMatch = kmp.IsMatch(crun[j]->name);
 			}
@@ -87,11 +87,11 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 				itoa(crun[j]->GetInitOrder(), str, 10);
 				isMatch = kmp.IsMatch(str);
 			}
-			if(focusBody.IsCrunSame(crun[j]))
+			if (focusBody.IsCrunSame(crun[j]))
 			{
 				return isMatch;
 			}
-			else if(isMatch)
+			else if (isMatch)
 			{
 				newFocus.SetOnCrun(crun[j], true);
 				FocusBodyPaint(&newFocus);
@@ -103,16 +103,16 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 		if(!isAfterFocus && focusBody.IsOnCtrl())
 		{
 			isAfterFocus = true;
-			if(isSearchCtrl)
+			if (isSearchCtrl)
 				j = focusBody.p3.num + 1;
 			else
 				j = ctrlCount;
 		}
-		else if(isAfterFocus && isSearchCtrl)
+		else if (isAfterFocus && isSearchCtrl)
 		{
 			j = 0;
 		}
-		else if(isAfterFocus && !isSearchCtrl && focusBody.IsOnCtrl())
+		else if (isAfterFocus && !isSearchCtrl && focusBody.IsOnCtrl())
 		{
 			return false;
 		}
@@ -123,9 +123,9 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 
 		for(; j<ctrlCount; ++j)
 		{
-			if(range == BODY_ALL || range == BODY_ALLCTRL || ctrl[j]->GetStyle() == range)
+			if (range == BODY_ALL || range == BODY_ALLCTRL || ctrl[j]->GetStyle() == range)
 			{
-				if(searchBy == SEARCH_BY_NAME)
+				if (searchBy == SEARCH_BY_NAME)
 				{
 					isMatch = kmp.IsMatch(ctrl[j]->name);
 				}
@@ -134,11 +134,11 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 					itoa(ctrl[j]->GetInitOrder(), str, 10);
 					isMatch = kmp.IsMatch(str);
 				}
-				if(focusBody.IsCtrlSame(ctrl[j]))
+				if (focusBody.IsCtrlSame(ctrl[j]))
 				{
 					return isMatch;
 				}
-				else if(isMatch)
+				else if (isMatch)
 				{
 					newFocus.SetOnCtrl(ctrl[j], true);
 					FocusBodyPaint(&newFocus);
@@ -151,7 +151,7 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 	return false;
 }
 
-bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, bool isMatchCase, char * keyWord)
+bool Manager.SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, bool isMatchCase, char * keyWord)
 //搜索上一个物体
 {
 	bool isAfterFocus = false;
@@ -160,7 +160,7 @@ bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 	int round, j;
 	bool isSearchLead = (range == BODY_ALL || range == BODY_LEAD) && searchBy == SEARCH_BY_ID;
 	bool isSearchCrun = (range == BODY_ALL || range == BODY_CRUN);
-	bool isSearchCtrl = (range == BODY_ALL || range == BODY_ALLCTRL || Pointer::IsCtrl(range));
+	bool isSearchCtrl = (range == BODY_ALL || range == BODY_ALLCTRL || Pointer.IsCtrl(range));
 	KMP kmp(keyWord, isWholeWord, isMatchCase || searchBy == SEARCH_BY_ID);	//搜索序号时可以区分大小写, 加快速度
 	Pointer newFocus;
 
@@ -170,16 +170,16 @@ bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 		if(!isAfterFocus && focusBody.IsOnCtrl())
 		{
 			isAfterFocus = true;
-			if(isSearchCtrl)
+			if (isSearchCtrl)
 				j = focusBody.p3.num - 1;
 			else
 				j = -1;
 		}
-		else if(isAfterFocus && isSearchCtrl)
+		else if (isAfterFocus && isSearchCtrl)
 		{
 			j = ctrlCount-1;
 		}
-		else if(isAfterFocus && !isSearchCtrl && focusBody.IsOnCtrl())
+		else if (isAfterFocus && !isSearchCtrl && focusBody.IsOnCtrl())
 		{
 			return false;
 		}
@@ -190,9 +190,9 @@ bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 
 		for(; j>=0; --j)
 		{
-			if(range == BODY_ALL || range == BODY_ALLCTRL || ctrl[j]->GetStyle() == range)
+			if (range == BODY_ALL || range == BODY_ALLCTRL || ctrl[j]->GetStyle() == range)
 			{
-				if(searchBy == SEARCH_BY_NAME)
+				if (searchBy == SEARCH_BY_NAME)
 				{
 					isMatch = kmp.IsMatch(ctrl[j]->name);
 				}
@@ -201,11 +201,11 @@ bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 					itoa(ctrl[j]->GetInitOrder(), str, 10);
 					isMatch = kmp.IsMatch(str);
 				}
-				if(focusBody.IsCtrlSame(ctrl[j]))
+				if (focusBody.IsCtrlSame(ctrl[j]))
 				{
 					return isMatch;
 				}
-				else if(isMatch)
+				else if (isMatch)
 				{
 					newFocus.SetOnCtrl(ctrl[j], true);
 					FocusBodyPaint(&newFocus);
@@ -218,16 +218,16 @@ bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 		if(!isAfterFocus && focusBody.IsOnCrun())
 		{
 			isAfterFocus = true;
-			if(isSearchCrun)
+			if (isSearchCrun)
 				j = focusBody.p2.num - 1;
 			else
 				j = -1;
 		}
-		else if(isAfterFocus && isSearchCrun)
+		else if (isAfterFocus && isSearchCrun)
 		{
 			j = crunCount - 1;
 		}
-		else if(isAfterFocus && !isSearchCrun && focusBody.IsOnCrun())
+		else if (isAfterFocus && !isSearchCrun && focusBody.IsOnCrun())
 		{
 			return false;
 		}
@@ -238,7 +238,7 @@ bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 
 		for(; j>=0; --j)
 		{
-			if(searchBy == SEARCH_BY_NAME)
+			if (searchBy == SEARCH_BY_NAME)
 			{
 				isMatch = kmp.IsMatch(crun[j]->name);
 			}
@@ -247,11 +247,11 @@ bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 				itoa(crun[j]->GetInitOrder(), str, 10);
 				isMatch = kmp.IsMatch(str);
 			}
-			if(focusBody.IsCrunSame(crun[j]))
+			if (focusBody.IsCrunSame(crun[j]))
 			{
 				return isMatch;
 			}
-			else if(isMatch)
+			else if (isMatch)
 			{
 				newFocus.SetOnCrun(crun[j], true);
 				FocusBodyPaint(&newFocus);
@@ -263,16 +263,16 @@ bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 		if(!isAfterFocus && focusBody.IsOnLead())
 		{
 			isAfterFocus = true;
-			if(isSearchLead)
+			if (isSearchLead)
 				j = focusBody.p1.num - 1;
 			else
 				j = -1;
 		}
-		else if(isAfterFocus && isSearchLead)
+		else if (isAfterFocus && isSearchLead)
 		{
 			j = leadCount - 1;
 		}
-		else if(isAfterFocus && !isSearchLead && focusBody.IsOnLead())
+		else if (isAfterFocus && !isSearchLead && focusBody.IsOnLead())
 		{
 			return false;
 		}
@@ -285,11 +285,11 @@ bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 		{
 			itoa(lead[j]->GetInitOrder(), str, 10);
 			isMatch = kmp.IsMatch(str);
-			if(focusBody.IsLeadSame(lead[j]))
+			if (focusBody.IsLeadSame(lead[j]))
 			{
 				return isMatch;
 			}
-			else if(isMatch)
+			else if (isMatch)
 			{
 				newFocus.SetOnLead(lead[j], true);
 				FocusBodyPaint(&newFocus);
