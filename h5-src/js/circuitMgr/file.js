@@ -1,80 +1,80 @@
 
-//7ÎÄ¼şº¯Êı--------------------------------------------------------------------¡ı
+//7æ–‡ä»¶å‡½æ•°--------------------------------------------------------------------â†“
 
-//»ñÈ¡ÎÄ¼şÂ·¾¶
+//è·å–æ–‡ä»¶è·¯å¾„
 Manager.GetFilePath = function() {
 	return Manager.fileName;
 };
 
-//±£´æµçÂ·
+//ä¿å­˜ç”µè·¯
 Manager.SaveFile = function(newFileName) {
 	ASSERT(newFileName && newFileName.length > 0);
-	Manager.fileName = newFileName;	//Ìæ»»Ô­ÓĞÎÄ¼şÂ·¾¶
+	Manager.fileName = newFileName;	//æ›¿æ¢åŸæœ‰æ–‡ä»¶è·¯å¾„
 	
 	
 	var data = {};
 
-	//1ÎÄ¼ş°æ±¾
+	//1æ–‡ä»¶ç‰ˆæœ¬
 	data.fileVersion = FILE_VERSION;
 
-	//2½áµã
+	//2ç»“ç‚¹
 	data.cruns = new Array();
 	for (var i = Manager.crun.length-1; i >= 0; --i)
 		data.cruns.push(Manager.crun[i].GenerateStoreJsonObj());
-	//3¿Ø¼ş
+	//3æ§ä»¶
 	data.ctrls = new Array();
 	for (var i = Manager.ctrl.length-1; i >= 0; --i)
 		data.ctrls.push(Manager.ctrl[i].GenerateStoreJsonObj());
-	//4µ¼Ïß
+	//4å¯¼çº¿
 	data.leads = new Array();
 	for (var i = Manager.lead.length-1; i >= 0; --i)
 		data.leads.push(Manager.lead[i].GenerateStoreJsonObj());
 
-	//5ÆäËû±äÁ¿
-	data.moveBodySense = Manager.moveBodySense;		//°´·½Ïò¼üÒ»´ÎÎïÌåÒÆ¶¯µÄ¾àÀë
-	data.maxLeaveOutDis = Manager.maxLeaveOutDis;	//µ¼ÏßºÏ²¢×î´ó¾àÀë
-	data.textColor = Manager.textColor;				//×ÖÌåÑÕÉ«
-	data.focusLeadStyle = Manager.focusLeadStyle;	//½¹µãµ¼ÏßÑùÊ½
-	data.focusCrunColor = Manager.focusCrunColor;	//½¹µã½áµãÑÕÉ«
-	data.focusCtrlColor = Manager.focusCtrlColor;	//½¹µã¿Ø¼şÑÕÉ«
-	data.focusBody = Manager.focusBody.GenerateStoreJsonObj();	//½¹µãÎïÌå
-	data.viewOrig = Manager.viewOrig;				//ÊÓ½Ç³õÊ¼×ø±ê
+	//5å…¶ä»–å˜é‡
+	data.moveBodySense = Manager.moveBodySense;		//æŒ‰æ–¹å‘é”®ä¸€æ¬¡ç‰©ä½“ç§»åŠ¨çš„è·ç¦»
+	data.maxLeaveOutDis = Manager.maxLeaveOutDis;	//å¯¼çº¿åˆå¹¶æœ€å¤§è·ç¦»
+	data.textColor = Manager.textColor;				//å­—ä½“é¢œè‰²
+	data.focusLeadStyle = Manager.focusLeadStyle;	//ç„¦ç‚¹å¯¼çº¿æ ·å¼
+	data.focusCrunColor = Manager.focusCrunColor;	//ç„¦ç‚¹ç»“ç‚¹é¢œè‰²
+	data.focusCtrlColor = Manager.focusCtrlColor;	//ç„¦ç‚¹æ§ä»¶é¢œè‰²
+	data.focusBody = Manager.focusBody.GenerateStoreJsonObj();	//ç„¦ç‚¹ç‰©ä½“
+	data.viewOrig = Manager.viewOrig;				//è§†è§’åˆå§‹åæ ‡
 	
-	// ·¢ËÍÇëÇó
+	// å‘é€è¯·æ±‚
 	var callbackFunc = function(response) {};
-	$.post("/saveCircuit", {"data":data}, callbackFunc)
+	$.post("/saveCircuit", {"data":data}, callbackFunc);
 	return true;
 };
 
-//¶ÁÈ¡µçÂ·»Øµ÷º¯Êı
+//è¯»å–ç”µè·¯å›è°ƒå‡½æ•°
 function readFileCallbackFunc(data) {
 	var pos1 = {x:0, y:0};
 
 	if (!data || data.length <= 0) {
-		alert("ÎÄ¼ş²»ÄÜ²»´æÔÚ»ò²»ÄÜ¶ÁÈ¡ !");
+		alert("æ–‡ä»¶ä¸èƒ½ä¸å­˜åœ¨æˆ–ä¸èƒ½è¯»å– !");
 		return false;
 	}
 
-	//1ÎÄ¼ş°æ±¾
-	if (data.fileVersion != FILE_VERSION) {	//ÎÄ¼ş°æ±¾²»Í¬,²»Óè¶ÁÈ¡
-		alert("ÎÄ¼ş°æ±¾²»·û ! ¶ÁÈ¡ÎÄ¼ş´íÎó");
+	//1æ–‡ä»¶ç‰ˆæœ¬
+	if (data.fileVersion != FILE_VERSION) {	//æ–‡ä»¶ç‰ˆæœ¬ä¸åŒ,ä¸äºˆè¯»å–
+		alert("æ–‡ä»¶ç‰ˆæœ¬ä¸ç¬¦ ! è¯»å–æ–‡ä»¶é”™è¯¯");
 		return false;
 	}
 
-	//Manager.fileName = newFileName;	//Ìæ»»Ô­ÓĞÂ·¾¶
+	//Manager.fileName = newFileName;	//æ›¿æ¢åŸæœ‰è·¯å¾„
 
-	// ¿ÉÄÜÒòÎªÎÄ¼şÎÊÌâ¶ø·¢Éú´íÎó
-	try {
-		//2¶ÁÈ¡ÎïÌåÊıÁ¿
+	// å¯èƒ½å› ä¸ºæ–‡ä»¶é—®é¢˜è€Œå‘ç”Ÿé”™è¯¯
+	//try {
+		//2è¯»å–ç‰©ä½“æ•°é‡
 		var crunCount = data.cruns.length;
 		var ctrlCount = data.ctrls.length;
 		var leadCount = data.leads.length;
 
-		//¼ì²é¶ÁÈ¡µÄÎïÌåÊıÁ¿ÊÇ·ñÔÚÔÊĞíµÄ·¶Î§Ö®ÄÚ
+		//æ£€æŸ¥è¯»å–çš„ç‰©ä½“æ•°é‡æ˜¯å¦åœ¨å…è®¸çš„èŒƒå›´ä¹‹å†…
 		if (crunCount>MAX_CRUN_COUNT || leadCount>MAX_LEAD_COUNT || ctrlCount>MAX_CTRL_COUNT)
-			throw new Error(10, "µçÂ·Ôª¼şÌ«¶à");
+			throw new Error(10, "ç”µè·¯å…ƒä»¶å¤ªå¤š");
 		
-		//3ĞÂ½¨Ô­¼ş
+		//3æ–°å»ºåŸä»¶
 		CRUN.ResetGlobalInitOrder();
 		Manager.crun = new Array(crunCount);
 		for (var i = crunCount-1; i >= 0; --i)
@@ -90,51 +90,56 @@ function readFileCallbackFunc(data) {
 		for (var i = leadCount-1; i >= 0; --i)
 			Manager.lead[i] = LEAD.CreateNew(i, 0, null,null, false);
 		
-		//4¶ÁÈ¡½áµã
+		//4è¯»å–ç»“ç‚¹
 		for (var i = crunCount-1; i >= 0; --i)
 			Manager.crun[i].ReadFromStoreJsonObj(data.cruns[i], Manager.lead);
 
-		//5¶ÁÈ¡¿Ø¼ş
+		//5è¯»å–æ§ä»¶
 		for (var i = ctrlCount-1; i >= 0; --i)
 			Manager.ctrl[i].ReadFromStoreJsonObj(data.ctrls[i], Manager.lead);
 
-		//6¶ÁÈ¡µ¼Ïß
+		//6è¯»å–å¯¼çº¿
 		for (var i = leadCount-1; i >= 0; --i)
 			Manager.lead[i].ReadFromStoreJsonObj(data.leads[i], Manager.lead, Manager.crun, Manager.ctrl);
 
-		//7¶ÁÈ¡ÆäËû±äÁ¿
-		Manager.moveBodySense = data.moveBodySense;		//°´·½Ïò¼üÒ»´ÎÎïÌåÒÆ¶¯µÄ¾àÀë
-		Manager.maxLeaveOutDis = data.maxLeaveOutDis;	//µ¼ÏßºÏ²¢×î´ó¾àÀë
-		Manager.textColor = data.textColor;				//×ÖÌåÑÕÉ«
-		Manager.focusLeadStyle = data.focusLeadStyle;	//½¹µãµ¼ÏßÑùÊ½
-		Manager.focusCrunColor = data.focusCrunColor;	//½¹µã½áµãÑÕÉ«
-		Manager.focusCtrlColor = data.focusCtrlColor;	//½¹µã¿Ø¼şÑÕÉ«
+		//7è¯»å–å…¶ä»–å˜é‡
+		Manager.moveBodySense = data.moveBodySense;		//æŒ‰æ–¹å‘é”®ä¸€æ¬¡ç‰©ä½“ç§»åŠ¨çš„è·ç¦»
+		Manager.maxLeaveOutDis = data.maxLeaveOutDis;	//å¯¼çº¿åˆå¹¶æœ€å¤§è·ç¦»
+		Manager.textColor = data.textColor;				//å­—ä½“é¢œè‰²
+		Manager.focusLeadStyle = data.focusLeadStyle;	//ç„¦ç‚¹å¯¼çº¿æ ·å¼
+		Manager.focusCrunColor = data.focusCrunColor;	//ç„¦ç‚¹ç»“ç‚¹é¢œè‰²
+		Manager.focusCtrlColor = data.focusCtrlColor;	//ç„¦ç‚¹æ§ä»¶é¢œè‰²
 		var focusBody = Pointer.CreateNew();
-		focusBody.ReadFromStoreJsonObj(data.focusBody, lead, crun, ctrl);	//¶ÁÈ¡½¹µãÎïÌå
-		Manager.FocusBodySet(focusBody);				//ÉèÖÃ½¹µãÎïÌå
-		Manager.viewOrig = data.viewOrig;				//ÊÓ½Ç³õÊ¼×ø±ê
+		focusBody.ReadFromStoreJsonObj(data.focusBody, lead, crun, ctrl);	//è¯»å–ç„¦ç‚¹ç‰©ä½“
+		Manager.FocusBodySet(focusBody);				//è®¾ç½®ç„¦ç‚¹ç‰©ä½“
+		Manager.viewOrig = data.viewOrig;				//è§†è§’åˆå§‹åæ ‡
 
-		//ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);	//³õÊ¼»¯×ÖÌåÑÕÉ«
-		//ctx.SetViewportOrg(-Manager.viewOrig.x, -Manager.viewOrig.y);		//³õÊ¼»¯ÊÓ½Ç³õÊ¼×ø±ê
-		//Manager.canvas.SetScrollPos(SB_HORZ, viewOrig.x/mouseWheelSense.cx);	//³õÊ¼»¯Ë®Æ½¹ö¶¯Ìõ
-		//Manager.canvas.SetScrollPos(SB_VERT, viewOrig.y/mouseWheelSense.cy);	//³õÊ¼»¯ÊúÖ±¹ö¶¯Ìõ
-	} catch(e) {
-		alert("ÎÄ¼ş¿ÉÄÜËğ»µÁË ! ¶ÁÈ¡ÎÄ¼ş´íÎó");
-		exit(0);
-	}
+		//ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);	//åˆå§‹åŒ–å­—ä½“é¢œè‰²
+		//ctx.SetViewportOrg(-Manager.viewOrig.x, -Manager.viewOrig.y);		//åˆå§‹åŒ–è§†è§’åˆå§‹åæ ‡
+		//Manager.canvas.SetScrollPos(SB_HORZ, viewOrig.x/mouseWheelSense.cx);	//åˆå§‹åŒ–æ°´å¹³æ»šåŠ¨æ¡
+		//Manager.canvas.SetScrollPos(SB_VERT, viewOrig.y/mouseWheelSense.cy);	//åˆå§‹åŒ–ç«–ç›´æ»šåŠ¨æ¡
+	/*} catch(e) {
+		alert("æ–‡ä»¶å¯èƒ½æŸåäº† ! è¯»å–æ–‡ä»¶é”™è¯¯");
+		return false;
+	}*/
 
-	return true;			//Õı³£ÍË³ö
+	Manager.PaintAll();
+	return true;			//æ­£å¸¸é€€å‡º
 }
-//¶ÁÈ¡µçÂ·
+function readFileComplete(xhr, textStatus) {
+	//alert(textStatus);
+}
+//è¯»å–ç”µè·¯
 Manager.ReadFile = function(newFileName) {
 	ASSERT(newFileName && newFileName.length > 0);
-	$.post("/testData.json", {}, readFileCallbackFunc)
+	//$.get("/testData.json", {}, readFileCallbackFunc, "json");
+	$.ajax({ url: "/testData.json", async:false, success: readFileCallbackFunc, complete:readFileComplete});
 	return true;
 };
 
-//½¨Á¢ĞÂÎÄ¼ş(¿ÕµÄ)
+//å»ºç«‹æ–°æ–‡ä»¶(ç©ºçš„)
 Manager.CreateFile = function() {
-	Manager.fileName = '';													//Â·¾¶Çå¿Õ
-	Manager.ClearCircuitState();											//Çå³ıµçÂ·×´Ì¬ĞÅÏ¢
-	Manager.crun.length = Manager.ctrl.length = Manager.lead.length = 0;	//ÎïÌåÊıÁ¿ÉèÎª0
+	Manager.fileName = '';													//è·¯å¾„æ¸…ç©º
+	Manager.ClearCircuitState();											//æ¸…é™¤ç”µè·¯çŠ¶æ€ä¿¡æ¯
+	Manager.crun.length = Manager.ctrl.length = Manager.lead.length = 0;	//ç‰©ä½“æ•°é‡è®¾ä¸º0
 };

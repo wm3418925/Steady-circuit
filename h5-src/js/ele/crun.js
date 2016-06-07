@@ -1,9 +1,9 @@
-//½áµãÀà
+//ç»“ç‚¹ç±»
 var CRUN = {
 
-	//È«¾Ö³õÊ¼»¯´ÎĞò
+	//å…¨å±€åˆå§‹åŒ–æ¬¡åº
 	globalInitOrder: 1,
-	//ÖØÖÃÈ«¾Ö³õÊ¼»¯´ÎĞò
+	//é‡ç½®å…¨å±€åˆå§‹åŒ–æ¬¡åº
 	ResetGlobalInitOrder: function() {
 		return (CRUN.globalInitOrder = 1);
 	},
@@ -12,18 +12,20 @@ var CRUN = {
 	CreateNew: function(memberIdx, x, y) {
 		var initOrder = CRUN.globalInitOrder++;
 		var newObj = {
-			initOrder : initOrder,		//³õÊ¼»¯ĞòºÅ
-			index : memberIdx,			//ÔÚÊı×éÖĞĞòºÅ
+			initOrder : initOrder,		//åˆå§‹åŒ–åºå·
+			index : memberIdx,			//åœ¨æ•°ç»„ä¸­åºå·
 			
-			isPaintName : false,		//Ä¬ÈÏ²»ÏÔÊ¾½áµã±êÇ©
-			name : "Crun" + initOrder,	//Ä¬ÈÏÃû³Æ
-			x:x, y:y,					//×ø±ê
-			lead:[null,null,null,null]	//Á¬½Óµ¼ÏßµÄÎ»ÖÃ,0¡ü,1¡ı,2¡û,3¡ú*/
+			isPaintName : false,		//é»˜è®¤ä¸æ˜¾ç¤ºç»“ç‚¹æ ‡ç­¾
+			name : "Crun" + initOrder,	//é»˜è®¤åç§°
+			x:x, y:y,					//åæ ‡
+			lead:[null,null,null,null]	//è¿æ¥å¯¼çº¿çš„ä½ç½®,0â†‘,1â†“,2â†,3â†’*/
 		};
-        return newObj;
+        
+		newObj.__proto__ = CRUN.prototype;
+		return newObj;
 	},
 
-	//±£´æĞÅÏ¢µ½json
+	//ä¿å­˜ä¿¡æ¯åˆ°json
 	GenerateStoreJsonObj: function() {
 		var leadIndexArray = new Array();
 		for (var i=0; i<4; ++i) {
@@ -40,7 +42,7 @@ var CRUN = {
 			lead : leadIndexArray
 		};
 	},
-	//´Ójson¶ÁÈ¡ĞÅÏ¢
+	//ä»jsonè¯»å–ä¿¡æ¯
 	ReadFromStoreJsonObj: function(jsonObj, leadList) {
 		ASSERT(jsonObj != null);
 		ASSERT(leadList != null);
@@ -59,44 +61,44 @@ var CRUN = {
 		this.lead = leadArray;
 	},
 
-	//»ñµÃÊó±êÔÚ½áµãµÄÎ»ÖÃ
+	//è·å¾—é¼ æ ‡åœ¨ç»“ç‚¹çš„ä½ç½®
 	At: function (xPox, yPos) {
 		var dis, disBetweenCenter;
 
 		disBetweenCenter = (xPox-this.x)*(xPox-this.x)+(yPox-this.y)*(yPox-this.y);
-		if (disBetweenCenter > 4 * DD * DD) return 0;	//¾àÀëµãÔ¶
+		if (disBetweenCenter > 4 * DD * DD) return 0;	//è·ç¦»ç‚¹è¿œ
 
 		dis = (xPox-this.x)*(xPox-this.x)+(yPox-this.y+DD)*(yPox-this.y+DD);
-		if (dis <= DD) {	//ÔÚÉÏÁ¬½Óµã
+		if (dis <= DD) {	//åœ¨ä¸Šè¿æ¥ç‚¹
 			if (lead[0] != null) return -1;
 			else return 1;
 		}
 
 		dis = (xPox-this.x)*(xPox-this.x)+(yPox-this.y-DD)*(yPox-this.y-DD);
-		if (dis <= DD) {	//ÔÚÏÂÁ¬½Óµã
+		if (dis <= DD) {	//åœ¨ä¸‹è¿æ¥ç‚¹
 			if (lead[1] != null) return -1;
 			else return 2;
 		}
 
 		dis = (xPox-this.x+DD)*(xPox-this.x+DD)+(yPox-this.y)*(yPox-this.y);
-		if (dis <= DD) {	//ÔÚ×óÁ¬½Óµã
+		if (dis <= DD) {	//åœ¨å·¦è¿æ¥ç‚¹
 			if (lead[2] != null) return -1;
 			else return 3;
 		}
 
 		dis = (xPox-this.x-DD)*(xPox-this.x-DD)+(yPox-this.y)*(yPox-this.y);
-		if (dis <= DD)	//ÔÚÓÒÁ¬½Óµã
+		if (dis <= DD)	//åœ¨å³è¿æ¥ç‚¹
 		{
 			if (lead[3] != null) return -1;
 			else return 4;
 		}
 
-		if (disBetweenCenter <= DD * DD) return -1;	//ÔÚµãÉÏ
+		if (disBetweenCenter <= DD * DD) return -1;	//åœ¨ç‚¹ä¸Š
 
 		return 0;
 	},
 
-	//¿½±´¿Ø¼ş½áµãĞÅÏ¢µ½ĞÂµÄ½áµã
+	//æ‹·è´æ§ä»¶ç»“ç‚¹ä¿¡æ¯åˆ°æ–°çš„ç»“ç‚¹
 	Clone: function(clonePurpose) {
 		var newCrun = CRUN.CreateNew(this.index, this.x, this.y);
 		newCrun.isPaintName = this.isPaintName;
@@ -109,20 +111,20 @@ var CRUN = {
 		return newCrun;
 	},
 
-	//ºÍCProperty½»»¥
+	//å’ŒCPropertyäº¤äº’
 	GetDataList: function (list) {
 		list.SetDataParent(this);
 		list.SetAMember(DATA_TYPE_string, TITLE_NOTE, "name");
 		list.SetAMember(DATA_TYPE_bool, TITLESHOW_NOTE, "isPaintName");
 	},
 
-	//Ñ°ÕÒµ¼ÏßÔÚÄÄ¸ö·½Ïò
+	//å¯»æ‰¾å¯¼çº¿åœ¨å“ªä¸ªæ–¹å‘
 	GetDirect: function(l) {
 		for (var i=0; i<4; ++i) if (lead[i] == l) return i;
-		return -1;	//Ã»ÓĞÕÒµ½
+		return -1;	//æ²¡æœ‰æ‰¾åˆ°
 	},
 
-	//»ñµÃÁ¬½ÓÁË¼¸¸öµ¼Ïß
+	//è·å¾—è¿æ¥äº†å‡ ä¸ªå¯¼çº¿
 	GetConnectNum: function() {
 		return  (lead[0] != null) + 
 				(lead[1] != null) + 

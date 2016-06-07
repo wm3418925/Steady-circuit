@@ -9,30 +9,30 @@ var DATA_NOTE_HAVERESIST	= 6;
 
 
 
-//±ê¼Ç¿Ø¼şÊÇ·ñÌá¹©µçÑ¹(1Ìá¹©,0²»Ìá¹©)
+//æ ‡è®°æ§ä»¶æ˜¯å¦æä¾›ç”µå‹(1æä¾›,0ä¸æä¾›)
 var PRESSURE_TYPE = new Array(true, false, false, false, false);
 
-//±ê¼Ç¿Ø¼şÊÇ·ñÓĞµç×è(1¿ÉÒÔÓĞµç×è,-1¶ÏÂ·,0ÎŞµç×è)
+//æ ‡è®°æ§ä»¶æ˜¯å¦æœ‰ç”µé˜»(1å¯ä»¥æœ‰ç”µé˜»,-1æ–­è·¯,0æ— ç”µé˜»)
 var RESISTANCE_TYPE = new Array(1, 1, 1, -1, 1);
 
-//Ã¿¸öµçÑ§ÊôĞÔ¶ÔÓ¦µÄËµÃ÷
+//æ¯ä¸ªç”µå­¦å±æ€§å¯¹åº”çš„è¯´æ˜
 var DATA_NOTE = new Array(
-	"µç×è            (Å·Ä·-¦¸)"	,
-	"µçÑ¹             (·üÌØ-U)"	,
-	"µçÁ÷      (°²Åà/Ãë-A/S)"	,
-	"¶î¶¨¹¦ÂÊ     (ÍßÌØ-W)"		,
-	"µçÈİ          (Î¢·¢-¦ÌF)"	,
-	"¿ª¹Ø±ÕºÏ"					,
-	"´ËµçÔ´ÓĞµç×è"
+	"ç”µé˜»            (æ¬§å§†-Î©)"	,
+	"ç”µå‹             (ä¼ç‰¹-U)"	,
+	"ç”µæµ      (å®‰åŸ¹/ç§’-A/S)"	,
+	"é¢å®šåŠŸç‡     (ç“¦ç‰¹-W)"		,
+	"ç”µå®¹          (å¾®å‘-Î¼F)"	,
+	"å¼€å…³é—­åˆ"					,
+	"æ­¤ç”µæºæœ‰ç”µé˜»"
 );
 
 
-//¿Ø¼şÀà
-var CTRL = {//!º¯ÊıºóÃæ¼ÓÁË@µÄº¯Êı¹²ÓĞ8¸ö,ÔÚÓĞĞÂ¿Ø¼şÀàĞÍ¶¨ÒåÊ±ĞèÒªÌí¼ÓĞÂÀàĞÍµÄ´¦Àí´úÂë
+//æ§ä»¶ç±»
+var CTRL = {//!å‡½æ•°åé¢åŠ äº†@çš„å‡½æ•°å…±æœ‰8ä¸ª,åœ¨æœ‰æ–°æ§ä»¶ç±»å‹å®šä¹‰æ—¶éœ€è¦æ·»åŠ æ–°ç±»å‹çš„å¤„ç†ä»£ç 
 
-	//½ÚµãÈ«¾Ö³õÊ¼»¯´ÎĞò
+	//èŠ‚ç‚¹å…¨å±€åˆå§‹åŒ–æ¬¡åº
 	globalInitOrder: 1,
-	//ÖØÖÃÈ«¾Ö³õÊ¼»¯´ÎĞò
+	//é‡ç½®å…¨å±€åˆå§‹åŒ–æ¬¡åº
 	ResetGlobalInitOrder: function() {
 		return (CTRL.globalInitOrder = 1);
 	},
@@ -43,25 +43,27 @@ var CTRL = {//!º¯ÊıºóÃæ¼ÓÁË@µÄº¯Êı¹²ÓĞ8¸ö,ÔÚÓĞĞÂ¿Ø¼şÀàĞÍ¶¨ÒåÊ±ĞèÒªÌí¼ÓĞÂÀàĞÍµÄ´¦
 		
 		var initOrder = CTRL.globalInitOrder++;
 		var newObj = {
-			initOrder : initOrder,		//³õÊ¼»¯ĞòºÅ
-			index : memberIdx,			//ÔÚ¿Ø¼şÊı×éÖĞĞòºÅ
+			initOrder : initOrder,		//åˆå§‹åŒ–åºå·
+			index : memberIdx,			//åœ¨æ§ä»¶æ•°ç»„ä¸­åºå·
 			
-			isPaintName : true,			//Ä¬ÈÏÏÔÊ¾½áµã±êÇ©
-			name : "Ctrl" + initOrder,	//Ä¬ÈÏÃû³Æ
-			x : x, y : y,				//×ø±ê
-			lead : [null,null],			//½áµãÁ¬½Óµ¼ÏßµÄÎ»ÖÃ,0¡ü,1¡ı,2¡û,3¡ú*/
+			isPaintName : true,			//é»˜è®¤æ˜¾ç¤ºç»“ç‚¹æ ‡ç­¾
+			name : "Ctrl" + initOrder,	//é»˜è®¤åç§°
+			x : x, y : y,				//åæ ‡
+			lead : [null,null],			//ç»“ç‚¹è¿æ¥å¯¼çº¿çš„ä½ç½®,0â†‘,1â†“,2â†,3â†’*/
 			
-			dir : 0,					//¿Ø¼şÄ¬ÈÏ·½Ïò
+			dir : 0,					//æ§ä»¶é»˜è®¤æ–¹å‘
 			style : ctrlStyle,
 			
-			elec : 0,					//Á÷¹ı¿Ø¼şµÄµçÁ÷µÄ ´óĞ¡(ÔÚ·½Ïò¶¨ÒåÏÂµÄ´óĞ¡)
-			elecDir : UNKNOWNELEC		//µçÁ÷·½Ïò
+			elec : 0,					//æµè¿‡æ§ä»¶çš„ç”µæµçš„ å¤§å°(åœ¨æ–¹å‘å®šä¹‰ä¸‹çš„å¤§å°)
+			elecDir : UNKNOWNELEC		//ç”µæµæ–¹å‘
 		};
 		
 		this.InitDefaultData(ctrlStyle);
-        return newObj;
+        
+		newObj.__proto__ = CTRL.prototype;
+		return newObj;
 	},
-	// ¿½±´¿Ø¼şĞÅÏ¢µ½ĞÂµÄ¿Ø¼ş
+	// æ‹·è´æ§ä»¶ä¿¡æ¯åˆ°æ–°çš„æ§ä»¶
 	Clone: function(clonePurpose) {
 		var newCtrl = CTRL.CreateNew(this.index, this.x, this.y, this.style);
 		newCtrl.name = this.name;
@@ -75,7 +77,7 @@ var CTRL = {//!º¯ÊıºóÃæ¼ÓÁË@µÄº¯Êı¹²ÓĞ8¸ö,ÔÚÓĞĞÂ¿Ø¼şÀàĞÍ¶¨ÒåÊ±ĞèÒªÌí¼ÓĞÂÀàĞÍµÄ´¦
 		}
 		return newCtrl;
 	},
-	//±£´æĞÅÏ¢µ½json
+	//ä¿å­˜ä¿¡æ¯åˆ°json
 	GenerateStoreJsonObj: function() {
 		var leadIndexArray = new Array();
 		for (var i=0; i<2; ++i) {
@@ -96,7 +98,7 @@ var CTRL = {//!º¯ÊıºóÃæ¼ÓÁË@µÄº¯Êı¹²ÓĞ8¸ö,ÔÚÓĞĞÂ¿Ø¼şÀàĞÍ¶¨ÒåÊ±ĞèÒªÌí¼ÓĞÂÀàĞÍµÄ´¦
 		};
 		return CloneCtrlData(storeJsonObj, this);
 	},
-	//´Ójson¶ÁÈ¡ĞÅÏ¢
+	//ä»jsonè¯»å–ä¿¡æ¯
 	ReadFromStoreJsonObj: function(jsonObj, leadList) {
 		ASSERT(jsonObj != null);
 		ASSERT(leadList != null);
@@ -120,7 +122,7 @@ var CTRL = {//!º¯ÊıºóÃæ¼ÓÁË@µÄº¯Êı¹²ÓĞ8¸ö,ÔÚÓĞĞÂ¿Ø¼şÀàĞÍ¶¨ÒåÊ±ĞèÒªÌí¼ÓĞÂÀàĞÍµÄ´¦
 		CloneCtrlData(this, jsonObj);
 	},
 	
-	// Ë¢ĞÂ¿ª¹Øµç×èĞÅÏ¢
+	// åˆ·æ–°å¼€å…³ç”µé˜»ä¿¡æ¯
 	RefreshSwitchResist: function() {
 		if (this.hasOwnProperty("closed")) {
 			if (this.closed)
@@ -129,31 +131,31 @@ var CTRL = {//!º¯ÊıºóÃæ¼ÓÁË@µÄº¯Êı¹²ÓĞ8¸ö,ÔÚÓĞĞÂ¿Ø¼şÀàĞÍ¶¨ÒåÊ±ĞèÒªÌí¼ÓĞÂÀàĞÍµÄ´¦
 				this.resist = -1;
 		}
 	},
-	// @¸ù¾İÀàĞÍ, ³õÊ¼»¯Ä¬ÈÏÊı¾İ
+	// @æ ¹æ®ç±»å‹, åˆå§‹åŒ–é»˜è®¤æ•°æ®
 	InitDefaultData: function(ctrlStyle) {
 		switch (ctrlStyle) {
 		case SOURCE:
-			newObj.pressure = 10;
-			newObj.resist = 0;
+			this.pressure = 10;
+			this.resist = 0;
 			break;
 		case RESIST:
-			newObj.resist = 10;
+			this.resist = 10;
 			break;
 		case BULB:
-			newObj.rating = 10;
-			newObj.resist = 5;
+			this.rating = 10;
+			this.resist = 5;
 			break;
 		case CAPA:
-			newObj.capa = 10;
-			newObj.resist = -1;
+			this.capa = 10;
+			this.resist = -1;
 			break;
 		case SWITCH:
-			newObj.closed = false;
-			RefreshSwitchResist();
+			this.closed = false;
+			this.RefreshSwitchResist();
 			break;
 		}
 	},
-	// @¸´ÖÆ¿Ø¼şÊı¾İ
+	// @å¤åˆ¶æ§ä»¶æ•°æ®
 	CloneCtrlData: function(toCtrl, fromCtrl) {
 		toCtrl.resist = fromCtrl.resist;
 		
@@ -176,7 +178,7 @@ var CTRL = {//!º¯ÊıºóÃæ¼ÓÁË@µÄº¯Êı¹²ÓĞ8¸ö,ÔÚÓĞĞÂ¿Ø¼şÀàĞÍ¶¨ÒåÊ±ĞèÒªÌí¼ÓĞÂÀàĞÍµÄ´¦
 		}
         return toCtrl;
 	},
-	// @»ñµÃ¿Ø¼şµÄÌØÕ÷Êı¾İ
+	// @è·å¾—æ§ä»¶çš„ç‰¹å¾æ•°æ®
 	GetSpecialData: function() {
 		switch (style) {
 		case SOURCE:
@@ -193,7 +195,7 @@ var CTRL = {//!º¯ÊıºóÃæ¼ÓÁË@µÄº¯Êı¹²ÓĞ8¸ö,ÔÚÓĞĞÂ¿Ø¼şÀàĞÍ¶¨ÒåÊ±ĞèÒªÌí¼ÓĞÂÀàĞÍµÄ´¦
 
 		return 0;
 	},
-	// »ñµÃ¿Ø¼şµÄµçÑ¹
+	// è·å¾—æ§ä»¶çš„ç”µå‹
 	GetPressure: function(direction) {
 		if (this.hasOwnProperty("pressure")) {
 			if (direction != 0)
@@ -205,29 +207,29 @@ var CTRL = {//!º¯ÊıºóÃæ¼ÓÁË@µÄº¯Êı¹²ÓĞ8¸ö,ÔÚÓĞĞÂ¿Ø¼şÀàĞÍ¶¨ÒåÊ±ĞèÒªÌí¼ÓĞÂÀàĞÍµÄ´¦
 		return 0;
 	},
 
-	//¸Ä±ä¿Ø¼şÀàĞÍ
+	//æ”¹å˜æ§ä»¶ç±»å‹
 	ChangeStyle: function(newStyle) {
 		ASSERT(this.style != newStyle);
 		this.style = newStyle;
 		InitDefaultData(newStyle);
 	},
 
-	//»ñµÃ¿Ø¼şÁ¬½ÓµÄµ¼ÏßÊı
+	//è·å¾—æ§ä»¶è¿æ¥çš„å¯¼çº¿æ•°
 	GetConnectNum: function() {
 		return (lead[0] != NULL) + (lead[1] != NULL); 
 	},
 
-	//Ñ°ÕÒµ¼ÏßÔÚÄÄ¸ö·½Ïò : 0¡ü,1¡ı,2¡û,3¡ú
+	//å¯»æ‰¾å¯¼çº¿åœ¨å“ªä¸ªæ–¹å‘ : 0â†‘,1â†“,2â†,3â†’
 	GetDirect: function(l) {
 		var i;
 		for (i=0; i<2; ++i) {
 			if (lead[i] == l) break;
 		}
-		if (i >= 2) return -1;	//Ã»ÓĞÕÒµ½
+		if (i >= 2) return -1;	//æ²¡æœ‰æ‰¾åˆ°
 
 		ASSERT(this.dir>=0 && this.dir<4);
 
-		switch (this.dir)	//¸ù¾İ¿Ø¼ş·½ÏòÅĞ¶Ï
+		switch (this.dir)	//æ ¹æ®æ§ä»¶æ–¹å‘åˆ¤æ–­
 		{
 		case 0: return 2 + i;	//0:2;1:3
 		case 1: return i;		//0:0;1:1
@@ -237,37 +239,37 @@ var CTRL = {//!º¯ÊıºóÃæ¼ÓÁË@µÄº¯Êı¹²ÓĞ8¸ö,ÔÚÓĞĞÂ¿Ø¼şÀàĞÍ¶¨ÒåÊ±ĞèÒªÌí¼ÓĞÂÀàĞÍµÄ´¦
 		}
 	},
 
-	//»ñµÃÊó±êÔÚ¿Ø¼şµÄÎ»ÖÃ
+	//è·å¾—é¼ æ ‡åœ¨æ§ä»¶çš„ä½ç½®
 	At: function(xPos, yPos) {
 		var ret = 0;
 
 		var xInter = xPos - this.x - (BODYSIZE.cx>>1);
 		var yInter = yPos - this.y - (BODYSIZE.cy>>1);
 
-		if (0 == (dir&1)) {	//ºáÏò
+		if (0 == (dir&1)) {	//æ¨ªå‘
 			if (xInter < 0) {
 				xInter += (BODYSIZE.cx>>1);
-				if (xInter*xInter + yInter*yInter <= DD*DD) {	//Ñ¡ÖĞ×óÁ¬½Óµã
+				if (xInter*xInter + yInter*yInter <= DD*DD) {	//é€‰ä¸­å·¦è¿æ¥ç‚¹
 					if (0 == (dir&2)) ret = 1;
 					else ret = 2;
 				}
 			} else {
 				xInter -= (BODYSIZE.cx>>1);
-				if (xInter*xInter + yInter*yInter <= DD*DD) {	//Ñ¡ÖĞÓÒÁ¬½Óµã
+				if (xInter*xInter + yInter*yInter <= DD*DD) {	//é€‰ä¸­å³è¿æ¥ç‚¹
 					if (0 == (dir&2)) ret = 2;
 					else ret = 1;
 				}
 			}
-		} else { //×İÏò
+		} else { //çºµå‘
 			if (yInter < 0) {
 				yInter += (BODYSIZE.cy>>1);
-				if (xInter*xInter + yInter*yInter <= DD*DD) {	//Ñ¡ÖĞÉÏÁ¬½Óµã
+				if (xInter*xInter + yInter*yInter <= DD*DD) {	//é€‰ä¸­ä¸Šè¿æ¥ç‚¹
 					if (0 == (dir&2)) ret = 1;
 					else ret = 2;
 				}
 			} else {
 				yInter -= (BODYSIZE.cy>>1);
-				if (xInter*xInter + yInter*yInter <= DD*DD) {	//Ñ¡ÖĞÏÂÁ¬½Óµã
+				if (xInter*xInter + yInter*yInter <= DD*DD) {	//é€‰ä¸­ä¸‹è¿æ¥ç‚¹
 					if (0 == (dir&2)) ret = 2;
 					else ret = 1;
 				}
@@ -283,35 +285,35 @@ var CTRL = {//!º¯ÊıºóÃæ¼ÓÁË@µÄº¯Êı¹²ÓĞ8¸ö,ÔÚÓĞĞÂ¿Ø¼şÀàĞÍ¶¨ÒåÊ±ĞèÒªÌí¼ÓĞÂÀàĞÍµÄ´¦
 
 		if (xPos>=this.x && xPos<this.x+BODYSIZE.cx 
 			&& yPos>=this.y && yPos<this.y+BODYSIZE.cy)
-			return -1;	//ÔÚ¿Ø¼şÉÏ
+			return -1;	//åœ¨æ§ä»¶ä¸Š
 
 		return 0;
 	},
 
-	//Ğı×ª¿Ø¼ş
+	//æ—‹è½¬æ§ä»¶
 	Rotate: function(rotateAngle90) {
 		this.dir = (this.dir + rotateAngle90) % 4;
 		if (lead[0]!=null) lead[0].RefreshPos();
 		if (lead[1]!=null) lead[1].RefreshPos();
 	},
 
-	//@Ğ¡µÆÅİÊÇ·ñ´ïµ½¶î¶¨¹¦ÂÊ¶ø·¢¹â
+	//@å°ç¯æ³¡æ˜¯å¦è¾¾åˆ°é¢å®šåŠŸç‡è€Œå‘å…‰
 	IsBulbOn: function() {
 		var sData = GetSpecialData();
 
 		if (BULB != style)
-			return false;	//²»ÊÇĞ¡µÆÅİ
+			return false;	//ä¸æ˜¯å°ç¯æ³¡
 		if (elecDir != LEFTELEC && elecDir != RIGHTELEC)
-			return false;	//µçÁ÷Ã»ÓĞ¼ÆËã»òÕß²»·ûºÏÌõ¼ş
+			return false;	//ç”µæµæ²¡æœ‰è®¡ç®—æˆ–è€…ä¸ç¬¦åˆæ¡ä»¶
 
 		var tempData = GetResist() * elec * elec;
 
 		return (!IsFloatZero(sData) && tempData >= sData);
 	},
 
-	//@¿ª¹Ø±ÕºÏ»òÕß¶Ï¿ª
+	//@å¼€å…³é—­åˆæˆ–è€…æ–­å¼€
 	SwitchClosed: function(isSwitch) {
-		if (SWITCH != style) return false;	//²»ÊÇ¿ª¹Ø
+		if (SWITCH != style) return false;	//ä¸æ˜¯å¼€å…³
 		if (isSwitch) {
 			this.closed = !this.closed;
 			RefreshSwitchResist();
@@ -319,7 +321,7 @@ var CTRL = {//!º¯ÊıºóÃæ¼ÓÁË@µÄº¯Êı¹²ÓĞ8¸ö,ÔÚÓĞĞÂ¿Ø¼şÀàĞÍ¶¨ÒåÊ±ĞèÒªÌí¼ÓĞÂÀàĞÍµÄ´¦
 		return this.closed;
 	},
 
-	//@ÓëCProperty½»»»ĞÅÏ¢
+	//@ä¸CPropertyäº¤æ¢ä¿¡æ¯
 	GetDataList: function(list) {
 		list.SetDataParent(this);
 
@@ -347,11 +349,11 @@ var CTRL = {//!º¯ÊıºóÃæ¼ÓÁË@µÄº¯Êı¹²ÓĞ8¸ö,ÔÚÓĞĞÂ¿Ø¼şÀàĞÍ¶¨ÒåÊ±ĞèÒªÌí¼ÓĞÂÀàĞÍµÄ´¦
 
 		case SWITCH:
 			list.SetAMember(DATA_TYPE_bool, DATA_NOTE[DATA_NOTE_SWITCHONOFF], "closed");
-			// µ±ĞŞ¸ÄÍê±ÏĞèÒªÁ¢¼´¸üĞÂresist
+			// å½“ä¿®æ”¹å®Œæ¯•éœ€è¦ç«‹å³æ›´æ–°resist
 			break;
 		}
 	},
-	//@CPropertyÉèÖÃÊı¾İÖ®ºó
+	//@CPropertyè®¾ç½®æ•°æ®ä¹‹å
 	AfterSetProperty: function() {
 		switch (style) {
 		case SWITCH:

@@ -209,5 +209,6 @@ void Pointer::SaveToTextFile(FILE * fp)
 	{
 		fprintf(fp, "index:%d}", p3->num);
 	}
-	fprintf(fp, "index:0}");
+	else
+		fprintf(fp, "index:0}");
 }

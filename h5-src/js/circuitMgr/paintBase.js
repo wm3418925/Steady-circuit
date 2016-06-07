@@ -1,14 +1,14 @@
 
-//3»­Í¼º¯Êý------------------------------------------------------------------------
+//3ç”»å›¾å‡½æ•°------------------------------------------------------------------------
 
-//»­¿Ø¼þ
+//ç”»æŽ§ä»¶
 Manager.PaintCtrl = function(c, isPaintName) {
 	ASSERT(c != null);
-	if (isPaintName) PaintCtrlText(c);	//»­¿Ø¼þÃû³Æ
+	if (isPaintName) PaintCtrlText(c);	//ç”»æŽ§ä»¶åç§°
 	Manager.ctx.putImageData(Manager.GetCtrlPaintImage(c), c.x, c.y);
 };
 
-//»­¿Ø¼þµÄÃû³Æ
+//ç”»æŽ§ä»¶çš„åç§°
 Manager.PaintCtrlText = function(c) {
 	ASSERT(c != null);
 	if (!c.isPaintName) return;
@@ -16,14 +16,14 @@ Manager.PaintCtrlText = function(c) {
 	Manager.ctx.strokeText(c.name, c.x, c.y-15);
 };
 
-//»­½áµã
+//ç”»ç»“ç‚¹
 Manager.PaintCrun = function(c, isPaintName) {
 	ASSERT(c != null);
-	if (isPaintName) PaintCrunText(c);	//»­½áµãÃû³Æ
+	if (isPaintName) PaintCrunText(c);	//ç”»ç»“ç‚¹åç§°
 	Manager.PaintCrunWithStyle(c, PAINT_CRUN_STYLE_NORMAL);
 };
 
-//»­½áµãÃû³Æ
+//ç”»ç»“ç‚¹åç§°
 Manager.PaintCrunText = function(c) {
 	ASSERT(c != null);
 	if (!c.isPaintName) return;
@@ -31,7 +31,7 @@ Manager.PaintCrunText = function(c) {
 	Manager.ctx.strokeText(c.name, c.x, c.y-20);
 };
 
-//»­µ¼Ïß
+//ç”»å¯¼çº¿
 Manager.PaintLead = function(l) {
 	ASSERT(l != null);
 	Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(l.color);
@@ -39,7 +39,7 @@ Manager.PaintLead = function(l) {
 	l.PaintLead(Manager.ctx);
 };
 
-//»­ËùÓÐµ¼Ïß
+//ç”»æ‰€æœ‰å¯¼çº¿
 Manager.PaintAllLead = function() {
 	for (var index=Manager.lead.length-1; index>=0; --index) {
 		Manager.PaintLead(Manager.lead[index]);
@@ -47,26 +47,26 @@ Manager.PaintAllLead = function() {
 	Manager.ctx.strokeStyle = "#000000";
 };
 
-//»­ËùÓÐµÄÎïÌå
+//ç”»æ‰€æœ‰çš„ç‰©ä½“
 Manager.PaintAll = function() {
 	var rect = {};
 	//var save = Manager.ctx;
 	//var bitmap;
 
-	//1,Çå³ý²¿·Ö×´Ì¬ÐÅÏ¢----------------------------------------------------
+	//1,æ¸…é™¤éƒ¨åˆ†çŠ¶æ€ä¿¡æ¯----------------------------------------------------
 	Manager.motiCount = 0;
 	Manager.addState = BODY_NO;
 	//Manager.lastMoveOnPos = {x:-100, y:-100};
 	//Manager.lastMoveOnBody.Clear();
 
-	//2,»­Í¼³õÊ¼»¯----------------------------------------------------------
-	//»ñµÃ´°¿Ú³ß´ç
+	//2,ç”»å›¾åˆå§‹åŒ–----------------------------------------------------------
+	//èŽ·å¾—çª—å£å°ºå¯¸
 	rect.left = 0;
 	rect.top = 0;
 	rect.width = Manager.canvas.width;
 	rect.height = Manager.canvas.height;
 
-	//³õÊ¼»¯Ë¢ÐÂÎ»Í¼´óÐ¡
+	//åˆå§‹åŒ–åˆ·æ–°ä½å›¾å¤§å°
 	/*bitmapForRefresh.GetBitmap(&bitmap);
 	if (rect.height > bitmap.bmHeight || rect.width > bitmap.bmWidth) {
 		bitmapForRefresh.DeleteObject();
@@ -74,78 +74,78 @@ Manager.PaintAll = function() {
 		dcForRefresh.SelectObject(&bitmapForRefresh);
 	}*/
 
-	//ÓÉdcForRefresh»­Í¼
-	//Manager.ctx.DPtoLP(&rect);			//µ±Ç°rectÓÉÉè±¸×ø±ê±ä»»ÎªÂß¼­×ø±ê
-	//Manager.ctx = &dcForRefresh;		//dcÔÝÊ±Ìæ»»ÎªdcForRefresh,ÔÚÄÚ´æ»­Í¼
+	//ç”±dcForRefreshç”»å›¾
+	//Manager.ctx.DPtoLP(&rect);			//å½“å‰rectç”±è®¾å¤‡åæ ‡å˜æ¢ä¸ºé€»è¾‘åæ ‡
+	//Manager.ctx = &dcForRefresh;		//dcæš‚æ—¶æ›¿æ¢ä¸ºdcForRefresh,åœ¨å†…å­˜ç”»å›¾
 
-	//ÉèÖÃ×ÖÌåºÍÊÓ½ÇÆðµã
+	//è®¾ç½®å­—ä½“å’Œè§†è§’èµ·ç‚¹
 	Manager.ctx.font = "15px Georgia";
-	//Manager.ctx.SetViewportOrg(-viewOrig.x, -viewOrig.y);	//³õÊ¼»¯ÊÓ½ÇÆðÊ¼×ø±ê
+	//Manager.ctx.SetViewportOrg(-viewOrig.x, -viewOrig.y);	//åˆå§‹åŒ–è§†è§’èµ·å§‹åæ ‡
 
-	//3,ÄÚ´æ»­Í¼------------------------------------------------------------
-	//ÓÃ°×É«¾ØÐÎ¸²¸ÇÕû¸ö¿Í»§Çø
+	//3,å†…å­˜ç”»å›¾------------------------------------------------------------
+	//ç”¨ç™½è‰²çŸ©å½¢è¦†ç›–æ•´ä¸ªå®¢æˆ·åŒº
 	Manager.ctx.fillStyle = "#FFFFFF";
 	Manager.ctx.strokeStyle = "#FFFFFF";
 	Manager.ctx.fillRect(rect.left,rect.top, rect.width,rect.height);
 
-	//»­¿Ø¼þ½áµãÒÔ¼°ËûÃÇµÄÃû³Æ
+	//ç”»æŽ§ä»¶ç»“ç‚¹ä»¥åŠä»–ä»¬çš„åç§°
 	for(var i=Manager.ctrl.length-1; i>=0; --i)
 		Manager.PaintCtrl(Manager.ctrl[i], true);
 	for(var i=Manager.crun.length-1; i>=0; --i)
 		Manager.PaintCrun(Manager.crun[i], true);
-	//»­µ¼Ïß
+	//ç”»å¯¼çº¿
 	Manager.PaintAllLead();
 
-	//»­½¹µã
+	//ç”»ç„¦ç‚¹
 	//Manager.FocusBodyPaint(null);
 
-	//ÖØ»æÏÔÊ¾µçÊÆ²îµÄÎïÌå
+	//é‡ç»˜æ˜¾ç¤ºç”µåŠ¿å·®çš„ç‰©ä½“
 	//Manager.PaintWithSpecialColorAndRect(pressStart, false);
 	//Manager.PaintWithSpecialColorAndRect(pressEnd, true);
 
-	//4,»¹Ô­dc, Ò»´ÎÐÔ»­Í¼--------------------------------------------------
+	//4,è¿˜åŽŸdc, ä¸€æ¬¡æ€§ç”»å›¾--------------------------------------------------
 	//Manager.ctx = save;
 	//Manager.ctx.BitBlt(0, 0, rect.width, rect.height, &dcForRefresh, 0, 0, SRCCOPY);
 };
 
-//»­¼¤»îµÄÁ¬½Óµã²¿Î»,¸Ä±äÊó±êÐÎ×´
+//ç”»æ¿€æ´»çš„è¿žæŽ¥ç‚¹éƒ¨ä½,æ”¹å˜é¼ æ ‡å½¢çŠ¶
 Manager.PaintMouseMotivate = function(mouseMoti) {
 	var mm = mouseMoti;
-	var CR = 3; //Á¬½Óµã»­Í¼°ë¾¶
+	var CR = 3; //è¿žæŽ¥ç‚¹ç”»å›¾åŠå¾„
 
 	if (mm.IsOnLead()) {
-		//Ñ¡¶¨ÁËÁ¬½Óµã,Êó±ê±ä³ÉÌí¼Ó½áµãÍ¼ÐÎ,ÌáÊ¾Ê¹ÓÃConnectBodyLeadº¯Êý
+		//é€‰å®šäº†è¿žæŽ¥ç‚¹,é¼ æ ‡å˜æˆæ·»åŠ ç»“ç‚¹å›¾å½¢,æç¤ºä½¿ç”¨ConnectBodyLeadå‡½æ•°
 		if (motiCount && motiBody[motiCount-1].IsOnConnectPos()) {
 			SetCursor(hcShowConnect);
-		//Ã»ÓÐÑ¡¶¨Á¬½Óµã,Êó±ê±ä³É"Ö¸Õë",ÌáÊ¾¸Ä±äµ¼Ïß×ø±ê
+		//æ²¡æœ‰é€‰å®šè¿žæŽ¥ç‚¹,é¼ æ ‡å˜æˆ"æŒ‡é’ˆ",æç¤ºæ”¹å˜å¯¼çº¿åæ ‡
 		} else {
 			if (mm.IsOnHoriLead())
-				SetCursor(hcSizeNS);	//ÔÚºáÏß,Êó±ê±ä³É"ÉÏÏÂÖ¸Õë"
+				SetCursor(hcSizeNS);	//åœ¨æ¨ªçº¿,é¼ æ ‡å˜æˆ"ä¸Šä¸‹æŒ‡é’ˆ"
 			else 
-				SetCursor(hcSizeWE);	//ÔÚÊúÏß,Êó±ê±ä³É"×óÓÒÖ¸Õë"
+				SetCursor(hcSizeWE);	//åœ¨ç«–çº¿,é¼ æ ‡å˜æˆ"å·¦å³æŒ‡é’ˆ"
 		}
-	} else if (mm.IsOnBody()) {	//ÔÚÎïÌåÉÏ,Êó±ê±ä³ÉÊÖµÄÐÎ×´,ÌáÊ¾ÒÆ¶¯ÎïÌå
+	} else if (mm.IsOnBody()) {	//åœ¨ç‰©ä½“ä¸Š,é¼ æ ‡å˜æˆæ‰‹çš„å½¢çŠ¶,æç¤ºç§»åŠ¨ç‰©ä½“
 		SetCursor(hcHand);
 	}
 
-	if (!lastMoveOnBody.IsAllSame(mm)) {	//lastMoveOnBodyÓëmouseÖ¸ÏòµÄPointer½á¹¹Ìå²»Ò»Ñù
-		//»¹Ô­ÉÏÒ»¸öÁ¬½Óµã
+	if (!lastMoveOnBody.IsAllSame(mm)) {	//lastMoveOnBodyä¸ŽmouseæŒ‡å‘çš„Pointerç»“æž„ä½“ä¸ä¸€æ ·
+		//è¿˜åŽŸä¸Šä¸€ä¸ªè¿žæŽ¥ç‚¹
 		if (lastMoveOnBody.IsOnConnectPos()) {
-			var tempPos = lastMoveOnBody.GetPosFromBody();	//»ñµÃ×ø±ê
+			var tempPos = lastMoveOnBody.GetPosFromBody();	//èŽ·å¾—åæ ‡
 			Manager.ctx.BitBlt(tempPos.x-CR, tempPos.y-CR, CR*2, CR*2, showConnectImageData, 0, 0, SRCINVERT);
 		}
 
-		lastMoveOnBody = mm;	//¼ÇÂ¼µ±Ç°Êó±ê¼¤»îÎïÌå
+		lastMoveOnBody = mm;	//è®°å½•å½“å‰é¼ æ ‡æ¿€æ´»ç‰©ä½“
 
-		//»­µ±Ç°µÄÁ¬½Óµã
+		//ç”»å½“å‰çš„è¿žæŽ¥ç‚¹
 		if (mm.IsOnConnectPos()) {
-			var tempPos = mm.GetPosFromBody();	//»ñµÃ×ø±ê
+			var tempPos = mm.GetPosFromBody();	//èŽ·å¾—åæ ‡
 			Manager.ctx.BitBlt(tempPos.x-CR, tempPos.y-CR, CR*2, CR*2, showConnectImageData, 0, 0, SRCINVERT);
 		}
 	}
 };
 
-//ÓÃÖ¸¶¨ÑÕÉ«»­ÐéÏßµ¼Ïß
+//ç”¨æŒ‡å®šé¢œè‰²ç”»è™šçº¿å¯¼çº¿
 Manager.PaintLeadWithStyle = function(lead, leadWidth, color) {
 	ASSERT(lead != null);
 	
@@ -154,7 +154,7 @@ Manager.PaintLeadWithStyle = function(lead, leadWidth, color) {
 	lead.PaintLead(Manager.ctx);
 };
 
-//ÓÃÖ¸¶¨µÄPAINT_CRUN_STYLE, »­Ö¸¶¨½áµã
+//ç”¨æŒ‡å®šçš„PAINT_CRUN_STYLE, ç”»æŒ‡å®šç»“ç‚¹
 Manager.PaintCrunWithStyle = function(c, style) {
 	ASSERT(c != null);
 	ASSERT(style >= 0 && style < PAINT_CRUN_STYLE_COUNT);
@@ -163,49 +163,49 @@ Manager.PaintCrunWithStyle = function(c, style) {
 	Manager.ctx.putImageData(Manager.crunImageData[style], c.x-DD, c.y-DD);
 };
 
-//ÓÃÖ¸¶¨ÑÕÉ«»­Ö¸¶¨¿Ø¼þ
+//ç”¨æŒ‡å®šé¢œè‰²ç”»æŒ‡å®šæŽ§ä»¶
 Manager.PaintCtrlWithColor = function(c, color) {
 	ASSERT(c != null);
 
-	//»­Ö¸¶¨ÑÕÉ«±³¾°
-	//ÉèÖÃÖ¸¶¨ÑÕÉ«»­Ë¢
+	//ç”»æŒ‡å®šé¢œè‰²èƒŒæ™¯
+	//è®¾ç½®æŒ‡å®šé¢œè‰²ç”»åˆ·
 	Manager.ctx.fillStyle = PaintCommonFunc.HexToRGBStr(color);
-	//ÉèÖÃ¿Õ»­±Ê
+	//è®¾ç½®ç©ºç”»ç¬”
 	Manager.ctx.lineWidth = 0;
-	//»­Ö¸¶¨ÑÕÉ«¾ØÐÎ
+	//ç”»æŒ‡å®šé¢œè‰²çŸ©å½¢
 	Manager.ctx.fillRect(c.x, c.y, CTRL_SIZE.cx, CTRL_SIZE.cy);
 
-	//»­ºÚÉ«¿Ø¼þ,Ê¹ÓÃ "»ò" µÄÂß¼­»­Í¼,µÃµ½Ö¸¶¨ÑÕÉ«¿Ø¼þ
+	//ç”»é»‘è‰²æŽ§ä»¶,ä½¿ç”¨ "æˆ–" çš„é€»è¾‘ç”»å›¾,å¾—åˆ°æŒ‡å®šé¢œè‰²æŽ§ä»¶
 	PaintCommonFunc.PaintImageDataOr(Manager.ctx, Manager.GetCtrlPaintImage(c), c.x,c.y);
 
-	//ÖØÐÂ»­±»¸²¸ÇµÄÖÜÎ§µ¼Ïß
+	//é‡æ–°ç”»è¢«è¦†ç›–çš„å‘¨å›´å¯¼çº¿
 	for (var i=0; i<2; ++i) 
 		if (c.lead[i] != null)
 			Manager.PaintLead(c.lead[i]);
 };
 
-//ÓÃ±£ÁôÑÕÉ«(×ÏÉ«)ÏÔÊ¾ÎïÌå, ²¢ÇÒÔÚÍâ²¿ÓÃ¾ØÐÎ°üÎ§
+//ç”¨ä¿ç•™é¢œè‰²(ç´«è‰²)æ˜¾ç¤ºç‰©ä½“, å¹¶ä¸”åœ¨å¤–éƒ¨ç”¨çŸ©å½¢åŒ…å›´
 Manager.PaintWithSpecialColorAndRect = function(body, isPaintNum) {
-	var color = COLOR_SPECIAL;	//Ñ¡ÓÃ±£ÁôÑÕÉ«(×ÏÉ«)
+	var color = COLOR_SPECIAL;	//é€‰ç”¨ä¿ç•™é¢œè‰²(ç´«è‰²)
 
 	if (body.IsOnLead()) {
 		if (isPaintNum) {
-			//»­µ¼Ïß
+			//ç”»å¯¼çº¿
 			PaintLeadWithStyle(body.p, 1, color);
 
-			//ÔÚµ¼ÏßÆðÊ¼ºÍ½áÎ²´¦·Ö±ðÏÔÊ¾Êý×Ö'1'ºÍ'2'
+			//åœ¨å¯¼çº¿èµ·å§‹å’Œç»“å°¾å¤„åˆ†åˆ«æ˜¾ç¤ºæ•°å­—'1'å’Œ'2'
 			var startPos = {}, endPos = {};
 			body.p.GetStartEndPos(startPos, endPos);
 			Manager.ctx.strokeText("1", startPos.x, startPos.y);
 			Manager.ctx.strokeText("2", endPos.x, endPos.y);
 		} else {
-			PaintLeadWithStyle(body.p, 2, color);	//»­µ¼Ïß
+			PaintLeadWithStyle(body.p, 2, color);	//ç”»å¯¼çº¿
 		}
 	} else if (body.IsOnCrun()) {
-		PaintCrunWithStyle(body.p, PAINT_CRUN_STYLE_SPECIAL);	//»­½áµã
+		PaintCrunWithStyle(body.p, PAINT_CRUN_STYLE_SPECIAL);	//ç”»ç»“ç‚¹
 		PaintCommonFunc.PaintSurrendedRect(Manager.ctx, body.p.x-DD, body.p.y-DD, DD*2, DD*2, 0xF01010);
 		
-		if (isPaintNum) {	//ÔÚ½áµãÉÏÏÂ×óÓÒ·Ö±ðÏÔÊ¾1,2,3,4
+		if (isPaintNum) {	//åœ¨ç»“ç‚¹ä¸Šä¸‹å·¦å³åˆ†åˆ«æ˜¾ç¤º1,2,3,4
 			var pos = {x:body.p.x-5, y:body.p.y-8};
 			Manager.ctx.strokeText("1", pos.x, pos.y-15);
 			Manager.ctx.strokeText("2", pos.x, pos.y+15);
@@ -213,12 +213,12 @@ Manager.PaintWithSpecialColorAndRect = function(body, isPaintNum) {
 			Manager.ctx.strokeText("4", pos.x+15, pos.y);
 		}
 	} else if (body.IsOnCtrl()) {
-		PaintCtrlWithColor(body.p, color);	//»­¿Ø¼þ
+		PaintCtrlWithColor(body.p, color);	//ç”»æŽ§ä»¶
 		PaintCommonFunc.PaintSurrendedRect(Manager.ctx, body.p.x, body.p.y, CTRL_SIZE.cx, CTRL_SIZE.cy, 0xF01010);
 	}
 };
 
-//ÔÚÖ¸¶¨Î»ÖÃÏÔÊ¾ÎïÌåµÄ·´Ïà
+//åœ¨æŒ‡å®šä½ç½®æ˜¾ç¤ºç‰©ä½“çš„åç›¸
 Manager.PaintInvertBodyAtPos = function(body, pos) {
 	ASSERT(body.IsOnBody(false));
 	if (body.IsOnCrun()) {

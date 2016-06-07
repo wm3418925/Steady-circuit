@@ -3769,7 +3769,7 @@ void Manager::SaveCircuitInfoToTextFile()
 		fprintf(fp, "{index:%d,", (int)lead[i]->num);
 		lead[i]->SaveToTextFile(fp);
 		fprintf(fp, "color:%d,", (int)lead[i]->color);
-		fprintf(fp, "conBody[");	lead[i]->conBody[0].SaveToTextFile(fp);
+		fprintf(fp, "conBody:[");	lead[i]->conBody[0].SaveToTextFile(fp);
 		fprintf(fp, ",");	lead[i]->conBody[1].SaveToTextFile(fp);
 		fprintf(fp, "]}\n");
 

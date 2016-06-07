@@ -1,52 +1,54 @@
 
-//µçÁ÷×´Ì¬Ã¶¾Ù
-var UNKNOWNELEC	= -2,	//µçÁ÷Î´¼ÆËã
-ERRORELEC		= -1,	//¼ÆËã´íÎó
-NORMALELEC		= 0,	//µçÁ÷Õı³£
-LEFTELEC		= 0,	//µçÁ÷´Ó×óµ½ÓÒ
-RIGHTELEC		= 1,	//µçÁ÷´ÓÓÒµ½×ó
-OPENELEC		= 6,	//¶ÏÂ·
-SHORTELEC		= 7,	//¶ÌÂ·
-UNCOUNTABLEELEC	= 8;	//º¬ÓĞÎŞ·¨¼ÆËãµÄ·ÖÖ§
+//ç”µæµçŠ¶æ€æšä¸¾
+var UNKNOWNELEC	= -2,	//ç”µæµæœªè®¡ç®—
+ERRORELEC		= -1,	//è®¡ç®—é”™è¯¯
+NORMALELEC		= 0,	//ç”µæµæ­£å¸¸
+LEFTELEC		= 0,	//ç”µæµä»å·¦åˆ°å³
+RIGHTELEC		= 1,	//ç”µæµä»å³åˆ°å·¦
+OPENELEC		= 6,	//æ–­è·¯
+SHORTELEC		= 7,	//çŸ­è·¯
+UNCOUNTABLEELEC	= 8;	//å«æœ‰æ— æ³•è®¡ç®—çš„åˆ†æ”¯
 
 
-// ½á¹¹×÷ÓÃ
-//CIRCU;		//ÏßÂ·,²»°üÀ¨½áµã,ÓÉ½áµãÁ¬½Ó
-//CRUN2;		//ÓÃÓÚ¼ÆËãµÄ½áµãÀà
-//CRUNMAP;	    //°üº¬Ã¿2¸ö½áµãÖ®¼äµÄÂ·¾¶
-//ROAD;		    //2¸ö½áµãÖ®¼äÁ¬½ÓµÄÂ·¾¶
+// ç»“æ„ä½œç”¨
+//CIRCU;		//çº¿è·¯,ä¸åŒ…æ‹¬ç»“ç‚¹,ç”±ç»“ç‚¹è¿æ¥
+//CRUN2;		//ç”¨äºè®¡ç®—çš„ç»“ç‚¹ç±»
+//CRUNMAP;	    //åŒ…å«æ¯2ä¸ªç»“ç‚¹ä¹‹é—´çš„è·¯å¾„
+//ROAD;		    //2ä¸ªç»“ç‚¹ä¹‹é—´è¿æ¥çš„è·¯å¾„
 //ROADSTEP;
 
 
 var CRUN2 = {
-	//CIRCU * c[4];     //Ö¸ÏòµÄÏßÂ·
-	//int group;        //ÊôÓÚµÄÈº,ÓÉÁ¬½ÓµÄµ¼Ïß,½Úµã,¿Ø¼ş×é³É
+	//CIRCU * c[4];     //æŒ‡å‘çš„çº¿è·¯
+	//int group;        //å±äºçš„ç¾¤,ç”±è¿æ¥çš„å¯¼çº¿,èŠ‚ç‚¹,æ§ä»¶ç»„æˆ
 	CreateNew: function() {
         var c = new Array(4);
 		c[0] = c[1] = c[2] = c[3] = null;   
 
-        var newObj = {"c":c, "group":-1};   //group -1´ú±í²»ÊôÓÚÈº×é
+        var newObj = {"c":c, "group":-1};   //group -1ä»£è¡¨ä¸å±äºç¾¤ç»„
+		newObj.__proto__ = CRUN2.prototype;
         return newObj;
 	}
 };
 
-var CIRCU = {	//ÏßÂ·,²»°üÀ¨½áµã,ÓÉ½áµãÁ¬½Ó,µçÁ÷·½ÏòÎªfrom->to
+var CIRCU = {	//çº¿è·¯,ä¸åŒ…æ‹¬ç»“ç‚¹,ç”±ç»“ç‚¹è¿æ¥,ç”µæµæ–¹å‘ä¸ºfrom->to
 	CreateNew: function() {
         var newObj = {
-            eleIndex:0,				//ÏßÂ·µçÁ÷±àºÅ,Ä¬ÈÏ±àºÅÊÇµØÖ·±àºÅ
-	        pressure:0,		        //ÆğµãÓëÖÕµãµÄµçÊÆ²î(U0 - U1)
-	        resistance:0,		    //µç×è(Ò»°ã>=0, <0´ú±íÎŞÇî´ó,¶ÏÂ·)
-	        elecDir:NORMALELEC,		//µçÁ÷×´Ì¬±ê¼Ç
-	        elec:0,     			//ÏßÂ·µçÁ÷´óĞ¡
-	        from:null, to:null,		//ÆğµãºÍÖÕµã½áµã
-	        dirFrom:0, dirTo:0,	    //ÆğµãºÍÖÕµã½áµãµÄ·½Ïò
-	        indexInGroup:0			//ÔÚÈº×éÄÚµÄĞòºÅ
+            eleIndex:0,				//çº¿è·¯ç”µæµç¼–å·,é»˜è®¤ç¼–å·æ˜¯åœ°å€ç¼–å·
+	        pressure:0,		        //èµ·ç‚¹ä¸ç»ˆç‚¹çš„ç”µåŠ¿å·®(U0 - U1)
+	        resistance:0,		    //ç”µé˜»(ä¸€èˆ¬>=0, <0ä»£è¡¨æ— ç©·å¤§,æ–­è·¯)
+	        elecDir:NORMALELEC,		//ç”µæµçŠ¶æ€æ ‡è®°
+	        elec:0,     			//çº¿è·¯ç”µæµå¤§å°
+	        from:null, to:null,		//èµ·ç‚¹å’Œç»ˆç‚¹ç»“ç‚¹
+	        dirFrom:0, dirTo:0,	    //èµ·ç‚¹å’Œç»ˆç‚¹ç»“ç‚¹çš„æ–¹å‘
+	        indexInGroup:0			//åœ¨ç¾¤ç»„å†…çš„åºå·
          };
 
+		 newObj.__proto__ = CIRCU.prototype;
          return newObj;
 	},
 
-	ConvertWhenElecLessZero: function(circu) {	//µ±µçÁ÷¸ºÊıÊ±¸ÄÎªÕıÊı,²¢µ÷×ªµçÁ÷·½Ïò
+	ConvertWhenElecLessZero: function(circu) {	//å½“ç”µæµè´Ÿæ•°æ—¶æ”¹ä¸ºæ­£æ•°,å¹¶è°ƒè½¬ç”µæµæ–¹å‘
 		if(circu.elec >= 0) return;
 		if(circu.elecDir != NORMALELEC) return;
 
@@ -63,13 +65,14 @@ var CIRCU = {	//ÏßÂ·,²»°üÀ¨½áµã,ÓÉ½áµãÁ¬½Ó,µçÁ÷·½ÏòÎªfrom->to
 	}
 };
 
-var ROADSTEP = { //2¸ö½áµãÖ®¼äÂ·¾¶ÉÏµÄÒ»¸ö½áµã
+var ROADSTEP = { //2ä¸ªç»“ç‚¹ä¹‹é—´è·¯å¾„ä¸Šçš„ä¸€ä¸ªç»“ç‚¹
     CreateNew: function() {
         var newObj = {
 	        crunIndex:0,
 			pre:null,
 	        next:null
         };
+		newObj.__proto__ = ROADSTEP.prototype;
         return newObj;
     }
 };
@@ -80,6 +83,7 @@ var ROAD = {
 	        first:null,
 	        last:null
         };
+		newObj.__proto__ = ROAD.prototype;
         return newObj;
     },
 
@@ -134,7 +138,7 @@ var ROAD = {
 	    }
     },
 
-    //ÅĞ¶ÏÊÇ·ñÓĞ½áµãpoint
+    //åˆ¤æ–­æ˜¯å¦æœ‰ç»“ç‚¹point
     HaveRoadPoint: function(road, point) {
 	    var now = road.first;
 	    while (now) {
@@ -145,7 +149,7 @@ var ROAD = {
 	    return false;
     },
 
-    //ÅĞ¶ÏÊÇ·ñÓĞfrom->toÂ·¾¶
+    //åˆ¤æ–­æ˜¯å¦æœ‰from->toè·¯å¾„
     HaveRoadStep: function(road, from, to) {
 	    if (!road.first)
             return false;
@@ -161,7 +165,7 @@ var ROAD = {
 	    return false;
     },
 
-    //ÔÚ×îºó¼ÓÈë½áµã
+    //åœ¨æœ€ååŠ å…¥ç»“ç‚¹
     InsertPointAtTail: function(road, crunIndex) {
 	    var now;
 
@@ -179,20 +183,20 @@ var ROAD = {
     }
 };
 
-//°üº¬Ã¿Á½¸ö½áµãÖ®¼äÊÇ·ñÖ±½ÓÁ¬½Ó
+//åŒ…å«æ¯ä¸¤ä¸ªç»“ç‚¹ä¹‹é—´æ˜¯å¦ç›´æ¥è¿æ¥
 var CRUNMAP = {
-	/*int size;			//°üº¬µÄ½áµãÊı
-	int circuitCount;	//°üº¬µÄÏßÂ·Êı
-	int * crunOrderMap;	//ÀëÉ¢µÄ½áµã±àºÅ¶ÔÓ¦µ½ 0 ~ size-1
+	/*int size;			//åŒ…å«çš„ç»“ç‚¹æ•°
+	int circuitCount;	//åŒ…å«çš„çº¿è·¯æ•°
+	int * crunOrderMap;	//ç¦»æ•£çš„ç»“ç‚¹ç¼–å·å¯¹åº”åˆ° 0 ~ size-1
 
-	//-1 ÓĞ¼ä½ÓÁ¬½Ó ;
-	//0  ÎŞÁ¬½Ó(Ä¿Ç°Ã»ÓĞÕÒµ½Â·¾¶) ;
-	//1  Ö»ÓĞÓĞÒ»ÌõÖ±½ÓÁ¬½Ó,Ä¿Ç°Ã»ÓĞÕÒµ½Â·¾¶ ;
-	//2  ÓĞ¶àÌõÂ·¾¶,»òÕßÖ»ÓĞÒ»ÌõÓĞÖ±½ÓÁ¬½Ó,µ«ÊÇÕÒµ½ÁËÂ·¾¶ ;
+	//-1 æœ‰é—´æ¥è¿æ¥ ;
+	//0  æ— è¿æ¥(ç›®å‰æ²¡æœ‰æ‰¾åˆ°è·¯å¾„) ;
+	//1  åªæœ‰æœ‰ä¸€æ¡ç›´æ¥è¿æ¥,ç›®å‰æ²¡æœ‰æ‰¾åˆ°è·¯å¾„ ;
+	//2  æœ‰å¤šæ¡è·¯å¾„,æˆ–è€…åªæœ‰ä¸€æ¡æœ‰ç›´æ¥è¿æ¥,ä½†æ˜¯æ‰¾åˆ°äº†è·¯å¾„ ;
 	char *	direct;
 
-	CIRCU ** firstCircuit;	//Á¬½Ó2¸ö½áµãµÄµÚÒ»¸öÏßÂ·
-	int * dir;				//Á¬½Ó2¸ö½áµãµÄµÚÒ»¸öÏßÂ·Ïà¶ÔÓÚĞòºÅĞ¡µÄ½áµãµÄµ¼Ïß±àºÅ(0,1,2,3)
+	CIRCU ** firstCircuit;	//è¿æ¥2ä¸ªç»“ç‚¹çš„ç¬¬ä¸€ä¸ªçº¿è·¯
+	int * dir;				//è¿æ¥2ä¸ªç»“ç‚¹çš„ç¬¬ä¸€ä¸ªçº¿è·¯ç›¸å¯¹äºåºå·å°çš„ç»“ç‚¹çš„å¯¼çº¿ç¼–å·(0,1,2,3)
     */
 
     CreateNew: function(size) {
@@ -205,6 +209,7 @@ var CRUNMAP = {
 		    "firstCircuit":	new Array(bufSize),
 		    "dir":			new Array(bufSize)
         };
+		newObj.__proto__ = CRUNMAP.prototype;
         return newObj;
     }
 };
@@ -214,21 +219,20 @@ var CRUNMAP = {
 
 var Equation = {
 /*private:
-	double ** a, * x;	//a´æ´¢Êı¾İÖ÷Êı×ém*n,xÊÇ·½³ÌµÄ½â
-	int m, n;			//n-1==µçÁ÷µÄ¸öÊı
-	int gotoRow;		//¼ÇÂ¼ÒÑ¾­ÊäÈëµ½ÄÄĞĞ
-	int * c;			//c[i]´æ´¢µÚiĞĞµÚÒ»¸ö²»ÊÇ0µÄÊı
+	double ** a, * x;	//aå­˜å‚¨æ•°æ®ä¸»æ•°ç»„m*n,xæ˜¯æ–¹ç¨‹çš„è§£
+	int m, n;			//n-1==ç”µæµçš„ä¸ªæ•°
+	int gotoRow;		//è®°å½•å·²ç»è¾“å…¥åˆ°å“ªè¡Œ
+	int * c;			//c[i]å­˜å‚¨ç¬¬iè¡Œç¬¬ä¸€ä¸ªä¸æ˜¯0çš„æ•°
 */
 
 	CreateNew: function(/*int */crunCount, /*int */eleCount) {
-	    gotoRow = 0;
-	    m = -1;
-	    n = 0;
-	    c = NULL;
-	    x = NULL;
-	    a = NULL;
+	    var m = -1;
+	    var n = 0;
+	    var c = null;
+	    var x = null;
+	    var a = null;
 
-	    if(eleCount <= 0 || crunCount <= 0) return;	//ÎŞĞè³õÊ¼»¯
+	    if (eleCount <= 0 || crunCount <= 0) return;	//æ— éœ€åˆå§‹åŒ–
 
 	    m = eleCount + crunCount - 1;
 	    n = eleCount + 1;
@@ -245,6 +249,17 @@ var Equation = {
 		    a[i] = new Array(n);
 		    zeroArray(a[i]);
 	    }
+		
+		var newObj = {
+			gotoRow:0,
+			m : m,
+			n : n,
+			c : c,
+			x : x,
+			a : a
+		};
+		newObj.__proto__ = CRUNMAP.prototype;
+		return newObj;
     },
 
     /*Equation::~Equation()
@@ -259,13 +274,13 @@ var Equation = {
     }*/
 
     /*const double **/GetAnswer: function()
-    //»ñµÃ·½³Ì½âµÄÊı×é
+    //è·å¾—æ–¹ç¨‹è§£çš„æ•°ç»„
     {
 	    return x;
     },
 
     InputARow: function(/*const double * */buf)
-    //ÊäÈë´ÓgotoRows¿ªÊ¼µÄ1ĞĞÊı¾İµ½Ö÷Êı×éÖĞ
+    //è¾“å…¥ä»gotoRowså¼€å§‹çš„1è¡Œæ•°æ®åˆ°ä¸»æ•°ç»„ä¸­
     {
 	    ASSERT(gotoRow < m);
 
@@ -274,19 +289,19 @@ var Equation = {
     },
 
     OutputToFile: function(/*FILE * */fp)
-    //½«·½³Ì±£´æµ½ÎÄ¼ş,²âÊÔº¯Êı
+    //å°†æ–¹ç¨‹ä¿å­˜åˆ°æ–‡ä»¶,æµ‹è¯•å‡½æ•°
     {
 	    /*int*/var i, j;
 
-	    console.log("ÒÑÊäÈëµ½ µÚ %d ĞĞ .\n\n", gotoRow);
+	    console.log("å·²è¾“å…¥åˆ° ç¬¬ %d è¡Œ .\n\n", gotoRow);
 
-	    console.log("xÊı×é(½â):\n");
+	    console.log("xæ•°ç»„(è§£):\n");
 	    for(i=0; i<n-1; ++i) console.log("%6.2f ", x[i]);
 
-	    console.log("\n\ncÊı×é(Ä³Ò»ĞĞµÚÒ»¸ö²»ÊÇ0µÄÊıµÄÎ»ÖÃ):\n");
+	    console.log("\n\ncæ•°ç»„(æŸä¸€è¡Œç¬¬ä¸€ä¸ªä¸æ˜¯0çš„æ•°çš„ä½ç½®):\n");
 	    for(i=0; i<m; ++i) console.log("%3d ", c[i]);
 
-	    console.log("\n\naÊı×é(Ö÷Êı×é,´æ´¢nÔªÒ»´Î·½³Ì):\n");
+	    console.log("\n\naæ•°ç»„(ä¸»æ•°ç»„,å­˜å‚¨nå…ƒä¸€æ¬¡æ–¹ç¨‹):\n");
 	    for(i=0; i<m; ++i)
 	    {
 		    for(j=0; j<n; ++j) console.log("%6.2f ", a[i][j]);
@@ -297,15 +312,15 @@ var Equation = {
 
     /*ELEC_STATE*/Count: function()
     {
-	    /*const int*/var m = gotoRow;	//¼ÇÂ¼ÒÑ¾­ÊäÈëµ½µÄĞĞ,¶ø²»ÊÇthis->m
+	    /*const int*/var m = gotoRow;	//è®°å½•å·²ç»è¾“å…¥åˆ°çš„è¡Œ,è€Œä¸æ˜¯this->m
         /*int*/var i, j, l, k, w;
         /*double*/var temp;
-	    if(m <= 0 || n <= 1) return NORMALELEC;	//ÎŞĞë¼ÆËã
-	    w = n<m-1 ? n : m-1;					//wµÄÖµÎªm-1,nµÄ½ÏĞ¡Öµ
+	    if(m <= 0 || n <= 1) return NORMALELEC;	//æ— é¡»è®¡ç®—
+	    w = n<m-1 ? n : m-1;					//wçš„å€¼ä¸ºm-1,nçš„è¾ƒå°å€¼
 
 	    for(i=n-2; i>=0; --i) x[i] = 0;
 
-	    //»¯½×Ìİ-----------------------------------------------------------------------------
+	    //åŒ–é˜¶æ¢¯-----------------------------------------------------------------------------
 	    for(l=0,k=0; l<w; ++l,++k)
 	    {
 		    while(k < n)
@@ -325,11 +340,11 @@ var Equation = {
 
 		    if(k == n)
 		    {
-			    if(l == 0) return NORMALELEC;	//l==0,µçÁ÷¶¼Îª0
+			    if(l == 0) return NORMALELEC;	//l==0,ç”µæµéƒ½ä¸º0
 			    break;
 		    }
 
-		    if(k == n-1) return SHORTELEC;	//µçÂ·¶ÌÂ·
+		    if(k == n-1) return SHORTELEC;	//ç”µè·¯çŸ­è·¯
 
 		    if(i != l)
 		    {
@@ -352,8 +367,8 @@ var Equation = {
 		    }
 	    }
 
-	    //ÅĞ¶Ï²¢·µ»ØµçÁ÷---------------------------------------------------------------------
-	    w = n - 1;	//m´ú±íº¬ÓĞ·Ç0ÖµĞĞµÄ¸öÊı
+	    //åˆ¤æ–­å¹¶è¿”å›ç”µæµ---------------------------------------------------------------------
+	    w = n - 1;	//mä»£è¡¨å«æœ‰é0å€¼è¡Œçš„ä¸ªæ•°
 	    for(i=0; i<w; ++i)
 	    {
 		    for(j=i; j<n; ++j) if(!IsFloatZero(a[i][j])) break;
@@ -362,9 +377,9 @@ var Equation = {
 		    if(j > i)
 		    {
 			    if(j == n-1)
-				    return SHORTELEC;		//µçÂ·¶ÌÂ·
+				    return SHORTELEC;		//ç”µè·¯çŸ­è·¯
 			    else
-				    return UNCOUNTABLEELEC;	//ÎŞ·¨¼ÆËã
+				    return UNCOUNTABLEELEC;	//æ— æ³•è®¡ç®—
 		    }
 	    }
 
@@ -385,10 +400,10 @@ var Equation = {
 		    }
 	    }
 
-	    for(i=n-2; i>=0; --i) x[i] = a[i][n-1];							//·ÅÈë½á¹ûµ½Êı×é
-	    for(i=n-2; i>=0; --i) if(IsFloatZero(x[i])) x[i] = 0;	//½üËÆ0µÄÊıÉèÎª0
+	    for(i=n-2; i>=0; --i) x[i] = a[i][n-1];					//æ”¾å…¥ç»“æœåˆ°æ•°ç»„
+	    for(i=n-2; i>=0; --i) if(IsFloatZero(x[i])) x[i] = 0;	//è¿‘ä¼¼0çš„æ•°è®¾ä¸º0
 
-	    return NORMALELEC;	//Õı³£·µ»Ø
+	    return NORMALELEC;	//æ­£å¸¸è¿”å›
     }
 
 };

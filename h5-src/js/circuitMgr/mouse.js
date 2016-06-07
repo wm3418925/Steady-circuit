@@ -1,19 +1,19 @@
 
-//6Êó±êÏûÏ¢´¦Àíº¯Êı----------------------------------------------------------------¡ı
+//6é¼ æ ‡æ¶ˆæ¯å¤„ç†å‡½æ•°----------------------------------------------------------------â†“
 
 bool Manager::MotivateAll(POINT &pos)
-//´«ÈëÊó±ê×ø±ê,´«³öÊÇ·ñÔÚÎïÌåÉÏ,»òÎïÌåµÄÁ¬½ÓµãÉÏ
+//ä¼ å…¥é¼ æ ‡åæ ‡,ä¼ å‡ºæ˜¯å¦åœ¨ç‰©ä½“ä¸Š,æˆ–ç‰©ä½“çš„è¿æ¥ç‚¹ä¸Š
 {
 	Pointer * mouse = motiBody + motiCount;
 	int i;
 
-	//1,³õÊ¼»¯-------------------------------------------
+	//1,åˆå§‹åŒ–-------------------------------------------
 	ASSERT(motiCount >= 0 && motiCount < 2);
 	ctx.DPtoLP(&pos);
 	mouse.Clear();
 
-	//2,ËÑË÷ÔÚÊ²Ã´ÎïÌåÉÏ---------------------------------
-	for(i = crunCount-1; i >= 0; --i)	//ËÑË÷ËùÓĞ½áµã
+	//2,æœç´¢åœ¨ä»€ä¹ˆç‰©ä½“ä¸Š---------------------------------
+	for(i = crunCount-1; i >= 0; --i)	//æœç´¢æ‰€æœ‰ç»“ç‚¹
 	{
 		mouse.SetAtState(crun[i]->At(pos));
 		if(mouse.IsOnAny())
@@ -23,7 +23,7 @@ bool Manager::MotivateAll(POINT &pos)
 			goto testPlace;
 		}
 	}
-	for(i = leadCount-1; i >= 0; --i)	//ËÑË÷ËùÓĞµ¼Ïß
+	for(i = leadCount-1; i >= 0; --i)	//æœç´¢æ‰€æœ‰å¯¼çº¿
 	{
 		mouse.SetAtState(lead[i]->At(pos));
 		if(mouse.IsOnAny())
@@ -33,7 +33,7 @@ bool Manager::MotivateAll(POINT &pos)
 			goto testPlace;
 		}
 	}
-	for(i = ctrlCount-1; i >= 0; --i)	//ËÑË÷ËùÓĞ¿Ø¼ş
+	for(i = ctrlCount-1; i >= 0; --i)	//æœç´¢æ‰€æœ‰æ§ä»¶
 	{
 		mouse.SetAtState(ctrl[i]->At(pos));
 		if(mouse.IsOnAny())
@@ -44,12 +44,12 @@ bool Manager::MotivateAll(POINT &pos)
 		}
 	}
 
-	return false;	//ÔËĞĞµ½ÕâÀïÒ»¶¨Ã»ÓĞ¼¤»îÎïÌå
+	return false;	//è¿è¡Œåˆ°è¿™é‡Œä¸€å®šæ²¡æœ‰æ¿€æ´»ç‰©ä½“
 
 testPlace:
 
-	//3,È¥³ı²»ĞèÒªÏÔÊ¾Á¬½ÓµÄ²¿·Ö-------------------------
-	if( 2 == motiCount		//Í¬Ò»ÎïÌåµÄÁ½¸öÁ¬½Óµã²»ÄÜÏÔÊ¾Á¬½Ó
+	//3,å»é™¤ä¸éœ€è¦æ˜¾ç¤ºè¿æ¥çš„éƒ¨åˆ†-------------------------
+	if( 2 == motiCount		//åŒä¸€ç‰©ä½“çš„ä¸¤ä¸ªè¿æ¥ç‚¹ä¸èƒ½æ˜¾ç¤ºè¿æ¥
 		&& motiBody[0].IsOnConnectPos() 
 		&& motiBody[1].IsOnConnectPos()
 		&& motiBody[0].IsBodySame(motiBody+1))	
@@ -57,7 +57,7 @@ testPlace:
 		--motiCount;
 		return false;
 	}
-	else if(2 == motiCount	//ÎŞÒâÒå²Ù×÷
+	else if(2 == motiCount	//æ— æ„ä¹‰æ“ä½œ
 		&& motiBody[0].IsOnConnectPos()
 		&& !motiBody[1].IsOnConnectPos() 
 		&& !motiBody[1].IsOnLead())
@@ -70,33 +70,33 @@ testPlace:
 }
 
 bool Manager::LButtonDown(POINT pos)
-//´¦ÀíWM_LBUTTONDOWNÏûÏ¢
+//å¤„ç†WM_LBUTTONDOWNæ¶ˆæ¯
 {
-	if(!isUpRecvAfterDown) motiCount = 0;		//ÔÚÉÏ´ÎÊó±ê×ó¼ü°´ÏÂºóÃ»ÓĞ½ÓÊÜµ½Êó±ê°´ÆğÏûÏ¢
-	lButtonDownState = MotivateAll(pos);	//¼ÇÂ¼Õâ´ÎÊó±êÊÇ·ñµã»÷ÁËÎïÌå
-	lButtonDownPos = pos;					//¼ÇÂ¼Êó±ê×ó¼ü°´ÏÂµÄ×ø±ê
-	isUpRecvAfterDown = false;				//ÊÕµ½Êó±ê°´ÆğÏûÏ¢»áÉèÖÃÎªtrue
-	lastMoveOnPos.x = -100;					//»¹Ô­×ó»÷ÎïÌåºó,Êó±êÒÆ¶¯µ½µÄ×ø±ê
+	if(!isUpRecvAfterDown) motiCount = 0;		//åœ¨ä¸Šæ¬¡é¼ æ ‡å·¦é”®æŒ‰ä¸‹åæ²¡æœ‰æ¥å—åˆ°é¼ æ ‡æŒ‰èµ·æ¶ˆæ¯
+	lButtonDownState = MotivateAll(pos);	//è®°å½•è¿™æ¬¡é¼ æ ‡æ˜¯å¦ç‚¹å‡»äº†ç‰©ä½“
+	lButtonDownPos = pos;					//è®°å½•é¼ æ ‡å·¦é”®æŒ‰ä¸‹çš„åæ ‡
+	isUpRecvAfterDown = false;				//æ”¶åˆ°é¼ æ ‡æŒ‰èµ·æ¶ˆæ¯ä¼šè®¾ç½®ä¸ºtrue
+	lastMoveOnPos.x = -100;					//è¿˜åŸå·¦å‡»ç‰©ä½“å,é¼ æ ‡ç§»åŠ¨åˆ°çš„åæ ‡
 
-	if(!lButtonDownState) //Î´µã»÷ÓĞĞ§²¿Î»,µã»÷ÎïÌåÇå³ı,°ïÖúÁ¬½Óµ¼Ïß
+	if(!lButtonDownState) //æœªç‚¹å‡»æœ‰æ•ˆéƒ¨ä½,ç‚¹å‡»ç‰©ä½“æ¸…é™¤,å¸®åŠ©è¿æ¥å¯¼çº¿
 	{
 		if(motiCount > 0 && motiBody[motiCount-1].IsOnConnectPos())
-			PaintAll();	//¸²¸ÇShowAddLead»­µÄµ¼Ïß
+			PaintAll();	//è¦†ç›–ShowAddLeadç”»çš„å¯¼çº¿
 
 		motiCount = 0; return false;
 	}
-	else if(!motiBody[motiCount-1].IsOnConnectPos())	//µã»÷²»ÔÚÁ¬½Óµã
+	else if(!motiBody[motiCount-1].IsOnConnectPos())	//ç‚¹å‡»ä¸åœ¨è¿æ¥ç‚¹
 	{
-		FocusBodyPaint(motiBody+motiCount-1);	//ÖØ»æ½¹µãÎïÌå
+		FocusBodyPaint(motiBody+motiCount-1);	//é‡ç»˜ç„¦ç‚¹ç‰©ä½“
 	}
 
-	if(2 == motiCount && motiBody[0].IsOnConnectPos())	//ÅĞ¶ÏµÚÒ»¸öÑ¡¶¨µãÊÇ·ñÊÇÁ¬½Óµã
+	if(2 == motiCount && motiBody[0].IsOnConnectPos())	//åˆ¤æ–­ç¬¬ä¸€ä¸ªé€‰å®šç‚¹æ˜¯å¦æ˜¯è¿æ¥ç‚¹
 	{
 		if(motiBody[1].IsOnConnectPos())
 		{
-			CloneCircuitBeforeChange();			//±à¼­Ç°¸´ÖÆµçÂ·
-			AddLead(motiBody[0], motiBody[1]);	//±à¼­º¯Êı
-			PutCircuitToVector();				//½«ĞÂµÄµçÂ·ĞÅÏ¢±£´æµ½ÈİÆ÷
+			CloneCircuitBeforeChange();			//ç¼–è¾‘å‰å¤åˆ¶ç”µè·¯
+			AddLead(motiBody[0], motiBody[1]);	//ç¼–è¾‘å‡½æ•°
+			PutCircuitToVector();				//å°†æ–°çš„ç”µè·¯ä¿¡æ¯ä¿å­˜åˆ°å®¹å™¨
 		}
 		else if(motiBody[1].IsOnLead())
 		{
@@ -106,44 +106,44 @@ bool Manager::LButtonDown(POINT pos)
 		motiCount = 0; return true;
 	}
 
-	//AddLead´¦ÀíÁËdira=1~4,dirb=1~4µÄÏûÏ¢;ConnectBodyLead(pos)´¦ÀíÁËdira=1~4,dirb=-2~-3,...µÄÏûÏ¢.
-	//dira=1~4,dirb=-1µÄÏûÏ¢²»×ö´¦Àí,½ö½öË¢ĞÂ
-	//dira=-1,-2,-3,...µÄÏûÏ¢ÆÁ±Îµô(ÒòÎªºóÃæÓÖµã»÷ÁËÎïÌå)
-	//Ò²¾ÍÊÇLButtonUpÖ»ÄÜ´¦Àí1==motiCount,dira=-1,-2,-3,...µÄÏûÏ¢;
+	//AddLeadå¤„ç†äº†dira=1~4,dirb=1~4çš„æ¶ˆæ¯;ConnectBodyLead(pos)å¤„ç†äº†dira=1~4,dirb=-2~-3,...çš„æ¶ˆæ¯.
+	//dira=1~4,dirb=-1çš„æ¶ˆæ¯ä¸åšå¤„ç†,ä»…ä»…åˆ·æ–°
+	//dira=-1,-2,-3,...çš„æ¶ˆæ¯å±è”½æ‰(å› ä¸ºåé¢åˆç‚¹å‡»äº†ç‰©ä½“)
+	//ä¹Ÿå°±æ˜¯LButtonUpåªèƒ½å¤„ç†1==motiCount,dira=-1,-2,-3,...çš„æ¶ˆæ¯;
 
 	if(2 == motiCount) motiCount = 0;
 	return false;
 }
 
 bool Manager::LButtonUp(POINT pos)
-//´¦ÀíÊó±ê×ó¼ü°´ÆğµÄÏûÏ¢
+//å¤„ç†é¼ æ ‡å·¦é”®æŒ‰èµ·çš„æ¶ˆæ¯
 {
-	isUpRecvAfterDown = true;						//Êó±ê°´ÏÂºóÊÕµ½Êó±ê°´ÆğÏûÏ¢
-	if(!lButtonDownState || !motiCount) return false;	//Ã»ÓĞµã»÷·µ»Ø
+	isUpRecvAfterDown = true;						//é¼ æ ‡æŒ‰ä¸‹åæ”¶åˆ°é¼ æ ‡æŒ‰èµ·æ¶ˆæ¯
+	if(!lButtonDownState || !motiCount) return false;	//æ²¡æœ‰ç‚¹å‡»è¿”å›
 	ctx.DPtoLP(&pos);
 	Pointer * body = motiBody + motiCount - 1;
 
-	//×ó¼ü°´ÏÂºÍ°´ÆğµÄ×ø±êÏàÍ¬,¶øÇÒµã»÷µÄ²»ÊÇÁ¬½Óµã
+	//å·¦é”®æŒ‰ä¸‹å’ŒæŒ‰èµ·çš„åæ ‡ç›¸åŒ,è€Œä¸”ç‚¹å‡»çš„ä¸æ˜¯è¿æ¥ç‚¹
 	if( lButtonDownPos.x == pos.x && lButtonDownPos.y == pos.y 
 		&& !body.IsOnConnectPos())
 	{
 		if(body.IsOnCtrl())
-			body.p3.SwitchOnOff();	//¿ª¹Ø¿ªºÏÇé¿ö¸Ä±ä
-		FocusBodyPaint(null);			//ÖØ»æ½¹µã
+			body.p3.SwitchOnOff();	//å¼€å…³å¼€åˆæƒ…å†µæ”¹å˜
+		FocusBodyPaint(null);			//é‡ç»˜ç„¦ç‚¹
 
 		motiCount = 0;
 		return false;
 	}
 
-	if(body.IsOnLead())	//ÒÆ¶¯µ¼Ïß
+	if(body.IsOnLead())	//ç§»åŠ¨å¯¼çº¿
 	{
 		body.p1.Move(body.GetAtState(), pos, maxLeaveOutDis);
 		motiCount = 0;
 		return true;
 	}
-	else if(body.IsOnBody())	//ÒÆ¶¯ÎïÌå»ò¸´ÖÆÎïÌå
+	else if(body.IsOnBody())	//ç§»åŠ¨ç‰©ä½“æˆ–å¤åˆ¶ç‰©ä½“
 	{
-		if(StaticClass::IsCtrlDown())	//×ó»òÓÒCtrl¼ü°´ÏÂ¸´ÖÆÎïÌå
+		if(StaticClass::IsCtrlDown())	//å·¦æˆ–å³Ctrlé”®æŒ‰ä¸‹å¤åˆ¶ç‰©ä½“
 			PosBodyClone(body, lButtonDownPos, pos);
 		else
 			PosBodyMove(body, lButtonDownPos, pos);
@@ -160,20 +160,20 @@ bool Manager::LButtonUp(POINT pos)
 }
 
 void Manager::MouseMove(POINT pos, bool isLButtonDown)
-//Êó±êÒÆ¶¯ÏûÏ¢´¦Àí
+//é¼ æ ‡ç§»åŠ¨æ¶ˆæ¯å¤„ç†
 {
-	if(ShowAddBody(pos)) return;					//Ìí¼ÓÎïÌå¹ı³ÌÏÔÊ¾
-	if(ShowMoveBody(pos, isLButtonDown)) return;	//ÒÆ¶¯ÎïÌå¹ı³ÌÏÔÊ¾
-	if(ShowMoveLead(isLButtonDown)) return;			//ÒÆ¶¯µ¼Ïß¹ı³ÌÏÔÊ¾
-	ShowAddLead(pos);								//Á¬½Óµ¼Ïß¹ı³ÌÏÔÊ¾
+	if(ShowAddBody(pos)) return;					//æ·»åŠ ç‰©ä½“è¿‡ç¨‹æ˜¾ç¤º
+	if(ShowMoveBody(pos, isLButtonDown)) return;	//ç§»åŠ¨ç‰©ä½“è¿‡ç¨‹æ˜¾ç¤º
+	if(ShowMoveLead(isLButtonDown)) return;			//ç§»åŠ¨å¯¼çº¿è¿‡ç¨‹æ˜¾ç¤º
+	ShowAddLead(pos);								//è¿æ¥å¯¼çº¿è¿‡ç¨‹æ˜¾ç¤º
 
-	//Êó±ê¼¤»îÎïÌåÏÔÊ¾
-	if(MotivateAll(pos))	//Êó±ê¼¤»îÁËÎïÌå
+	//é¼ æ ‡æ¿€æ´»ç‰©ä½“æ˜¾ç¤º
+	if(MotivateAll(pos))	//é¼ æ ‡æ¿€æ´»äº†ç‰©ä½“
 	{
 		--motiCount;
 		PaintMouseMotivate(motiBody[motiCount]);
 	}
-	else					//Êó±êÃ»ÓĞ¼¤»îÎïÌå
+	else					//é¼ æ ‡æ²¡æœ‰æ¿€æ´»ç‰©ä½“
 	{
 		motiBody[1].Clear();
 		PaintMouseMotivate(motiBody[1]);

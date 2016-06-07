@@ -1,10 +1,10 @@
 
-//µ¼ÏßÀà
+//å¯¼çº¿ç±»
 var LEAD = {
 	
-	//È«¾Ö³õÊ¼»¯´ÎĞò
+	//å…¨å±€åˆå§‹åŒ–æ¬¡åº
 	globalInitOrder: 1,
-	//ÖØÖÃÈ«¾Ö³õÊ¼»¯´ÎĞò
+	//é‡ç½®å…¨å±€åˆå§‹åŒ–æ¬¡åº
 	ResetGlobalInitOrder: function() {
 		return (LEAD.globalInitOrder = 1);
 	},
@@ -14,28 +14,29 @@ var LEAD = {
 		var initOrder = CRUN.globalInitOrder++;
 		
 		var newObj = {
-			initOrder : initOrder,		//³õÊ¼»¯ĞòºÅ
-			index : memberIdx,			//ÔÚÊı×éÖĞĞòºÅ
+			initOrder : initOrder,		//åˆå§‹åŒ–åºå·
+			index : memberIdx,			//åœ¨æ•°ç»„ä¸­åºå·
 			
 			color : color,
-			elecDir : UNKNOWNELEC,	//µçÁ÷·½Ïò
+			elecDir : UNKNOWNELEC,	//ç”µæµæ–¹å‘
 			coord : new Array(),
 			conBody : new Array(null, null)
 		};
 		
 		if (isInit) {
-			newObj.conBody[0] = p1;	//Á¬½ÓÎïÌå
-			newObj.conBody[1] = p2;	//Á¬½ÓÎïÌå
-			RefreshPos();		//¸üĞÂ×ø±êÁ´±í
+			newObj.conBody[0] = p1;	//è¿æ¥ç‰©ä½“
+			newObj.conBody[1] = p2;	//è¿æ¥ç‰©ä½“
+			RefreshPos();		//æ›´æ–°åæ ‡é“¾è¡¨
 		}
 		
+		newObj.__proto__ = LEAD.prototype;
 		return newObj;
 	},
 
 	Clone: function(clonePurpose) {
 		var newLead = LEAD.CreateNew(index, color, conBody[0], conBody[1], false);
 
-		//¸´ÖÆ×ø±ê
+		//å¤åˆ¶åæ ‡
 		newLead.coord = deepCopy(this.coord);
 
 		if (CLONE_FOR_USE != clonePurpose) {
@@ -45,7 +46,7 @@ var LEAD = {
 		return newLead;
 	},
 	
-	//±£´æĞÅÏ¢µ½json
+	//ä¿å­˜ä¿¡æ¯åˆ°json
 	GenerateStoreJsonObj: function() {
 		return {
 			color : color,
@@ -53,7 +54,7 @@ var LEAD = {
 			conBody  : new Array(conBody[0].GenerateStoreJsonObj(), conBody[1].GenerateStoreJsonObj())
 		};
 	},
-	//´Ójson¶ÁÈ¡ĞÅÏ¢
+	//ä»jsonè¯»å–ä¿¡æ¯
 	ReadFromStoreJsonObj: function(jsonObj, leadList, crunList, ctrlList) {
 		ASSERT(jsonObj!=null && leadList!=null && crunList!=null && ctrlList!=null);
 
@@ -63,13 +64,13 @@ var LEAD = {
 		this.conBody[1] = Pointer.ReadFromStoreJsonObj(jsonObj, leadList, crunList, ctrlList);
 	},
 
-	//»ñµÃµ¼ÏßÁ½¸öÁ¬½ÓÎïÌåµÄÏà¶ÔÎ»ÖÃ
-	//×Ö½Ú×îºóÒ»Î»:
-	//			0 ÆğµãÎïÌå ÔÚ ÖÕµãÎïÌå ÉÏÃæ
-	//			1 ÆğµãÎïÌå ÔÚ ÖÕµãÎïÌå ÏÂÃæ
-	//×Ö½Úµ¹ÊıµÚ¶şÎ»:
-	//			0 ÆğµãÎïÌå ÔÚ ÖÕµãÎïÌå ×óÃæ
-	//			1 ÆğµãÎïÌå ÔÚ ÖÕµãÎïÌå ÓÒÃæ
+	//è·å¾—å¯¼çº¿ä¸¤ä¸ªè¿æ¥ç‰©ä½“çš„ç›¸å¯¹ä½ç½®
+	//å­—èŠ‚æœ€åä¸€ä½:
+	//			0 èµ·ç‚¹ç‰©ä½“ åœ¨ ç»ˆç‚¹ç‰©ä½“ ä¸Šé¢
+	//			1 èµ·ç‚¹ç‰©ä½“ åœ¨ ç»ˆç‚¹ç‰©ä½“ ä¸‹é¢
+	//å­—èŠ‚å€’æ•°ç¬¬äºŒä½:
+	//			0 èµ·ç‚¹ç‰©ä½“ åœ¨ ç»ˆç‚¹ç‰©ä½“ å·¦é¢
+	//			1 èµ·ç‚¹ç‰©ä½“ åœ¨ ç»ˆç‚¹ç‰©ä½“ å³é¢
 	GetBodyPos: function() {
 		var a = conBody[0].p;
 		var b = conBody[1].p;
@@ -77,30 +78,30 @@ var LEAD = {
 		return ((a.x > b.x) << 1) + (a.y > b.y);
 	},
 
-	//ÓëCProperty½»»»ĞÅÏ¢
+	//ä¸CPropertyäº¤æ¢ä¿¡æ¯
 	GetDataList: function(list, name) {
 		list.Init(this, 1);
 		list.SetAEnumMember(name, "color");
 	},
 
-	//´Ö²ÚµÄ³õÊ¼»¯µ¼Ïß×ø±ê
+	//ç²—ç³™çš„åˆå§‹åŒ–å¯¼çº¿åæ ‡
 	EasyInitPos: function(from, to) {
-		//ÊÍ·Å×ø±êÕ¼ÓÃ¿Õ¼ä
+		//é‡Šæ”¾åæ ‡å ç”¨ç©ºé—´
 		this.coord.length = 0;
 
-		//ÆğÊ¼×ø±ê
+		//èµ·å§‹åæ ‡
 		coord.push({x:from.x, y:from.y});
 
-		//ÖĞ¼äµã×ø±ê
+		//ä¸­é—´ç‚¹åæ ‡
 		if (from.x != to.x && from.y != to.y) {
 			coord.push({x:from.x, y:to.y});
 		}
 
-		//ÖÕµã×ø±ê
+		//ç»ˆç‚¹åæ ‡
 		coord.push({x:to.x, y:to.y});
 	},
 
-	//µ¼Ïß×ø±êÒ»·ÖÎª¶ş
+	//å¯¼çº¿åæ ‡ä¸€åˆ†ä¸ºäºŒ
 	Divide: function(atState, pos, leadCoord) {
 		ASSERT(atState <= -2);
 		atState = (-atState - 2) >> 1;
@@ -108,42 +109,42 @@ var LEAD = {
 		if (this.coord.length < atState+2)
 			return false;
 		
-		// »ñµÃÁ¬½Óµã×ø±ê
+		// è·å¾—è¿æ¥ç‚¹åæ ‡
 		var nowPos = this.coord[atState];
 		var nownext1Pos = this.coord[atState+1];
 		var dividePos = {x:pos.x, y:pos.y};
-		if (nowPos.x == nownext1Pos.x)	//ÔÚÊúÏßÉÏ
+		if (nowPos.x == nownext1Pos.x)	//åœ¨ç«–çº¿ä¸Š
 			dividePos.x = nowPos.x;
-		else	//ÔÚºáÏßÉÏ
+		else	//åœ¨æ¨ªçº¿ä¸Š
 			dividePos.y = nowPos.y;
 		
-		// Ç°°ë¶Î
+		// å‰åŠæ®µ
 		leadCoord.first = new Array();
 		for (var i=0; i<=atState; ++i) {
 			leadCoord.first.push({x:this.coord[i].x, y:this.coord[i].y});
 		}
 		leadCoord.first.push({x:dividePos.x, y:dividePos.y});
 		
-		// ºó°ë¶Î
+		// ååŠæ®µ
 		leadCoord.second = new Array();
 		leadCoord.second.push({x:dividePos.x, y:dividePos.y});
 		for (var i=atState+1; i<this.coord.length; ++i) {
 			leadCoord.second.push({x:this.coord[i].x, y:this.coord[i].y});
 		}
 
-		//Ïú»Ùµ¼Ïß×ø±ê
+		//é”€æ¯å¯¼çº¿åæ ‡
 		this.coord.length = 0;
 
 		return true;
 	},
 
-	//Ìæ»»Ô­À´µÄ×ø±ê
+	//æ›¿æ¢åŸæ¥çš„åæ ‡
 	ReplacePos: function(newPosArray) {
 		this.coord.length = 0;
 		this.coord = newPosArray;
 	},
 
-	//»ñµÃÊó±êÔÚµ¼ÏßµÄÎ»ÖÃ : -3,-5,-7,...ºáÏß²¿·Ö; -2,-4,-6,...ÊúÏß²¿·Ö; 0²»ÔÚ.
+	//è·å¾—é¼ æ ‡åœ¨å¯¼çº¿çš„ä½ç½® : -3,-5,-7,...æ¨ªçº¿éƒ¨åˆ†; -2,-4,-6,...ç«–çº¿éƒ¨åˆ†; 0ä¸åœ¨.
 	At: function(xPos, yPos) {
 		var min, max;
 		var i = -2;
@@ -152,7 +153,7 @@ var LEAD = {
 		var pre = this.coord[nowIndex-1];
 		var now = this.coord[nowIndex];
 		while (nowIndex < this.coord.length) {
-			if (pre.x == now.x) {	//ÔÚÊúÏßÉÏ
+			if (pre.x == now.x) {	//åœ¨ç«–çº¿ä¸Š
 				if (now.y > pre.y) {
 					min = pre.y; 
 					max = now.y;
@@ -165,7 +166,7 @@ var LEAD = {
 					&& xPos > now.x - DD 
 					&& xPos < now.x + DD)
 					return i;
-			} else {	//ÔÚºáÏßÉÏ
+			} else {	//åœ¨æ¨ªçº¿ä¸Š
 				if (now.x > pre.x) {
 					min = pre.x; 
 					max = now.x;
@@ -190,9 +191,9 @@ var LEAD = {
 		return 0;
 	},
 
-	//É¾³ıÓĞÏàÍ¬×ø±êµÄµ¼Ïß½áµã
+	//åˆ é™¤æœ‰ç›¸åŒåæ ‡çš„å¯¼çº¿ç»“ç‚¹
 	CleanLead: function() {
-		if (this.coord.length <= 2) return;	//Ö»ÓĞ2¸ö½ÚµãµÄµ¼Ïß²»¿¼ÂÇ
+		if (this.coord.length <= 2) return;	//åªæœ‰2ä¸ªèŠ‚ç‚¹çš„å¯¼çº¿ä¸è€ƒè™‘
 		
 		var p1 = this.coord[0];
 		var p2 = this.coord[1];
@@ -232,8 +233,8 @@ var LEAD = {
 		}
 	},
 
-	// staticº¯Êı, ²»ĞèÒªthis¶ÔÏó
-	//ÔÚ2¶ÎÆ½ĞĞµ¼ÏßÖ®¼ä»òÁ½±ßÕÒµ½ºÏÊÊµÄÁíÒ»¸öÆ½ĞĞµ¼ÏßµÄÎ»ÖÃ
+	// staticå‡½æ•°, ä¸éœ€è¦thiså¯¹è±¡
+	//åœ¨2æ®µå¹³è¡Œå¯¼çº¿ä¹‹é—´æˆ–ä¸¤è¾¹æ‰¾åˆ°åˆé€‚çš„å¦ä¸€ä¸ªå¹³è¡Œå¯¼çº¿çš„ä½ç½®
 	GetPosFit: function(pos1, pos2, dis, isEnd) {
 		var dis2 = -2;
 		if (isEnd) dis2 = 2;
@@ -253,11 +254,11 @@ var LEAD = {
 		}
 	},
 
-	//Ê¹µ¼Ïß²»ÕÚµ²Á¬½ÓµÄµÚ1¸öÎïÌå
+	//ä½¿å¯¼çº¿ä¸é®æŒ¡è¿æ¥çš„ç¬¬1ä¸ªç‰©ä½“
 	FitStart: function(dis) {
 		ASSERT(this.coord.length >= 2);
 		
-		//³õÊ¼»¯±äÁ¿ -------------------------------------------------------
+		//åˆå§‹åŒ–å˜é‡ -------------------------------------------------------
 		var dir = conBody[0].GetConnectPosDir();
 		var dirSum = dir + conBody[1].GetConnectPosDir();
 		
@@ -272,31 +273,31 @@ var LEAD = {
 		
 		var theLast;
 
-		//ÅĞ¶ÏÖ´ĞĞÌõ¼ş -----------------------------------------------------
+		//åˆ¤æ–­æ‰§è¡Œæ¡ä»¶ -----------------------------------------------------
 		switch (dir) {
-		case 1:	//ÉÏÁ¬½Óµã
+		case 1:	//ä¸Šè¿æ¥ç‚¹
 			if (this.coord[0].x != next1.x || this.coord[0].y >= next1.y)
 				return;
 			break;
-		case 2:	//ÏÂÁ¬½Óµã
+		case 2:	//ä¸‹è¿æ¥ç‚¹
 			if (this.coord[0].x != next1.x || this.coord[0].y <= next1.y)
 				return;
 			break;
-		case 3:	//×óÁ¬½Óµã
+		case 3:	//å·¦è¿æ¥ç‚¹
 			if (this.coord[0].y != next1.y || this.coord[0].x >= next1.x)
 				return;
 			break;
-		case 4:	//ÓÒÁ¬½Óµã
+		case 4:	//å³è¿æ¥ç‚¹
 			if (this.coord[0].y != next1.y || this.coord[0].x <= next1.x)
 				return;
 			break;
 		}
 
-		//µ¼ÏßÖ»ÓĞ2¸ö½Úµã ---------------------------------------------------
+		//å¯¼çº¿åªæœ‰2ä¸ªèŠ‚ç‚¹ ---------------------------------------------------
 		if (this.coord.length == 2) {
 			switch (dir) {
-			case 1:	//ÉÏÁ¬½Óµã
-			case 2:	//ÏÂÁ¬½Óµã
+			case 1:	//ä¸Šè¿æ¥ç‚¹
+			case 2:	//ä¸‹è¿æ¥ç‚¹
 				this.coord.length = 1;
 				
 				theLast = this.coord[0];
@@ -310,8 +311,8 @@ var LEAD = {
 				this.coord.push(next1);
 				return;
 
-			case 3:	//×óÁ¬½Óµã
-			case 4:	//ÓÒÁ¬½Óµã
+			case 3:	//å·¦è¿æ¥ç‚¹
+			case 4:	//å³è¿æ¥ç‚¹
 				this.coord.length = 1;
 				
 				theLast = this.coord[0];
@@ -327,12 +328,12 @@ var LEAD = {
 			}
 		}
 		
-		//µ¼ÏßÖ»ÓĞ3¸ö½Úµã ---------------------------------------------------
+		//å¯¼çº¿åªæœ‰3ä¸ªèŠ‚ç‚¹ ---------------------------------------------------
 		else if (this.coord.length == 3) {
 			if (oppositeFlag) {
 				switch (dir) {
-				case 1:	//ÉÏÁ¬½Óµã
-				case 2:	//ÏÂÁ¬½Óµã
+				case 1:	//ä¸Šè¿æ¥ç‚¹
+				case 2:	//ä¸‹è¿æ¥ç‚¹
 					this.coord.length = 1;
 					
 					theLast = this.coord[0];
@@ -346,8 +347,8 @@ var LEAD = {
 					this.coord.push(next2);
 					return;
 
-				case 3:	//×óÁ¬½Óµã
-				case 4:	//ÓÒÁ¬½Óµã
+				case 3:	//å·¦è¿æ¥ç‚¹
+				case 4:	//å³è¿æ¥ç‚¹
 					this.coord.length = 1;
 					
 					theLast = this.coord[0];
@@ -363,8 +364,8 @@ var LEAD = {
 				}
 			} else {
 				switch (dir) {
-				case 1:	//ÉÏÁ¬½Óµã
-				case 2:	//ÏÂÁ¬½Óµã
+				case 1:	//ä¸Šè¿æ¥ç‚¹
+				case 2:	//ä¸‹è¿æ¥ç‚¹
 					this.coord.length = 1;
 					
 					theLast = this.coord[0];
@@ -374,8 +375,8 @@ var LEAD = {
 					this.coord.push(next2);
 					return;
 
-				case 3:	//×óÁ¬½Óµã
-				case 4:	//ÓÒÁ¬½Óµã
+				case 3:	//å·¦è¿æ¥ç‚¹
+				case 4:	//å³è¿æ¥ç‚¹
 					this.coord.length = 1;
 					
 					theLast = this.coord[0];
@@ -388,12 +389,12 @@ var LEAD = {
 			}
 		}
 		
-		//µ¼ÏßÖ»ÓĞ4¸ö½ÚµãÇÒÁ¬½ÓµãÏà¶Ô ---------------------------------------
+		//å¯¼çº¿åªæœ‰4ä¸ªèŠ‚ç‚¹ä¸”è¿æ¥ç‚¹ç›¸å¯¹ ---------------------------------------
 		else if (oppositeFlag && this.coord.length == 4) {
 			var next3 = coord[3];
 			switch (dir) {
-			case 1:	//ÉÏÁ¬½Óµã
-			case 2:	//ÏÂÁ¬½Óµã
+			case 1:	//ä¸Šè¿æ¥ç‚¹
+			case 2:	//ä¸‹è¿æ¥ç‚¹
 				this.coord.length = 1;
 				
 				theLast = this.coord[0];
@@ -405,8 +406,8 @@ var LEAD = {
 				this.coord.push(next3);
 				return;
 
-			case 3:	//×óÁ¬½Óµã
-			case 4:	//ÓÒÁ¬½Óµã
+			case 3:	//å·¦è¿æ¥ç‚¹
+			case 4:	//å³è¿æ¥ç‚¹
 				this.coord.length = 1;
 				
 				theLast = this.coord[0];
@@ -420,27 +421,27 @@ var LEAD = {
 			}
 		}
 		
-		// (µ¼ÏßÖÁÉÙÓĞ5¸ö½Úµã) or (µ¼ÏßÖÁÉÙÓĞ4¸ö½Úµã and Á¬½Óµã²»Ïà¶Ô) ------
+		// (å¯¼çº¿è‡³å°‘æœ‰5ä¸ªèŠ‚ç‚¹) or (å¯¼çº¿è‡³å°‘æœ‰4ä¸ªèŠ‚ç‚¹ and è¿æ¥ç‚¹ä¸ç›¸å¯¹) ------
 		else {
 			switch (dir) {
-			case 1:	//ÉÏÁ¬½Óµã
-			case 2:	//ÏÂÁ¬½Óµã
+			case 1:	//ä¸Šè¿æ¥ç‚¹
+			case 2:	//ä¸‹è¿æ¥ç‚¹
 				next2.y = next1.y = this.coord[0].y + dis2;
 				return;
 
-			case 3:	//×óÁ¬½Óµã
-			case 4:	//ÓÒÁ¬½Óµã
+			case 3:	//å·¦è¿æ¥ç‚¹
+			case 4:	//å³è¿æ¥ç‚¹
 				next2.x = next1.x = this.coord[0].x + dis2;
 				return;
 			}
 		}
 	},
 
-	//Ê¹µ¼Ïß²»ÕÚµ²Á¬½ÓµÄµÚ2¸öÎïÌå
+	//ä½¿å¯¼çº¿ä¸é®æŒ¡è¿æ¥çš„ç¬¬2ä¸ªç‰©ä½“
 	FitEnd: function(dis) {
 		ASSERT(this.coord.length >= 2);
 		
-		//³õÊ¼»¯±äÁ¿ -------------------------------------------------------
+		//åˆå§‹åŒ–å˜é‡ -------------------------------------------------------
 		var dir = conBody[1].GetConnectPosDir();
 		var dirOther = conBody[0].GetConnectPosDir();
 		var dis2 = 15;
@@ -459,31 +460,31 @@ var LEAD = {
 		
 		var theLast;
 
-		//ÅĞ¶ÏÖ´ĞĞÌõ¼ş -----------------------------------------------------
+		//åˆ¤æ–­æ‰§è¡Œæ¡ä»¶ -----------------------------------------------------
 		switch (dir) {
-		case 1:	//ÉÏÁ¬½Óµã
+		case 1:	//ä¸Šè¿æ¥ç‚¹
 			if (now.x != pre1.x || now.y >= pre1.y)
 				return;
 			break;
-		case 2:	//ÏÂÁ¬½Óµã
+		case 2:	//ä¸‹è¿æ¥ç‚¹
 			if (now.x != pre1.x || now.y <= pre1.y)
 				return;
 			break;
-		case 3:	//×óÁ¬½Óµã
+		case 3:	//å·¦è¿æ¥ç‚¹
 			if (now.y != pre1.y || now.x >= pre1.x)
 				return;
 			break;
-		case 4:	//ÓÒÁ¬½Óµã
+		case 4:	//å³è¿æ¥ç‚¹
 			if (now.y != pre1.y || now.x <= pre1.x)
 				return;
 			break;
 		}
 
-		//µ¼ÏßÖ»ÓĞ2¸ö½Úµã ---------------------------------------------------
+		//å¯¼çº¿åªæœ‰2ä¸ªèŠ‚ç‚¹ ---------------------------------------------------
 		if (this.coord.length == 2) {
 			switch (dir) {
-			case 1:	//ÉÏÁ¬½Óµã
-			case 2:	//ÏÂÁ¬½Óµã
+			case 1:	//ä¸Šè¿æ¥ç‚¹
+			case 2:	//ä¸‹è¿æ¥ç‚¹
 				this.coord.length = 1;
 				
 				theLast = this.coord[0];
@@ -501,8 +502,8 @@ var LEAD = {
 				this.coord.push(next1);
 				return;
 
-			case 3:	//×óÁ¬½Óµã
-			case 4:	//ÓÒÁ¬½Óµã
+			case 3:	//å·¦è¿æ¥ç‚¹
+			case 4:	//å³è¿æ¥ç‚¹
 				this.coord.length = 1;
 				
 				theLast = this.coord[0];
@@ -522,11 +523,11 @@ var LEAD = {
 			}
 		}
 
-		//µ¼ÏßÖ»ÓĞ3¸ö½Úµã ---------------------------------------------------
+		//å¯¼çº¿åªæœ‰3ä¸ªèŠ‚ç‚¹ ---------------------------------------------------
 		else if (this.coord.length == 3) {
 			switch (dir) {
-			case 1:	//ÉÏÁ¬½Óµã
-			case 2:	//ÏÂÁ¬½Óµã
+			case 1:	//ä¸Šè¿æ¥ç‚¹
+			case 2:	//ä¸‹è¿æ¥ç‚¹
 				//next1.x
 				if (dirOther == 4)
 					next1.x = next2.x + dis;
@@ -540,8 +541,8 @@ var LEAD = {
 				this.coord.push(next2);
 				return;
 
-			case 3:	//×óÁ¬½Óµã
-			case 4:	//ÓÒÁ¬½Óµã
+			case 3:	//å·¦è¿æ¥ç‚¹
+			case 4:	//å³è¿æ¥ç‚¹
 				//next1.y
 				if (dirOther == 2)
 					next1.y = next2.y + dis;
@@ -557,11 +558,11 @@ var LEAD = {
 			}
 		}
 		
-		//µ¼ÏßÖ»ÓĞ4¸ö½Úµã ----------------------------------------------
+		//å¯¼çº¿åªæœ‰4ä¸ªèŠ‚ç‚¹ ----------------------------------------------
 		else if (this.coord.length == 4) {
 			switch (dir) {
-			case 1:	//ÉÏÁ¬½Óµã
-			case 2:	//ÏÂÁ¬½Óµã
+			case 1:	//ä¸Šè¿æ¥ç‚¹
+			case 2:	//ä¸‹è¿æ¥ç‚¹
 				if (dirOther == 3 || dirOther == 4) {
 					pre1.y = pre2.y = now.y + dis2;
 				} else { //dir != dirOther
@@ -574,8 +575,8 @@ var LEAD = {
 				}
 				return;
 
-			case 3:	//×óÁ¬½Óµã
-			case 4:	//ÓÒÁ¬½Óµã
+			case 3:	//å·¦è¿æ¥ç‚¹
+			case 4:	//å³è¿æ¥ç‚¹
 				if (dirOther == 1 || dirOther == 2) {
 					pre1.x = pre2.x = now.x + dis2;
 				} else { //dir != dirOther
@@ -590,23 +591,23 @@ var LEAD = {
 			}
 		}
 
-		//µ¼ÏßÖÁÉÙÓĞ5¸ö½Úµã --------------------------------------------
+		//å¯¼çº¿è‡³å°‘æœ‰5ä¸ªèŠ‚ç‚¹ --------------------------------------------
 		else {
 			switch (dir) {
-			case 1:	//ÉÏÁ¬½Óµã
-			case 2:	//ÏÂÁ¬½Óµã
+			case 1:	//ä¸Šè¿æ¥ç‚¹
+			case 2:	//ä¸‹è¿æ¥ç‚¹
 				pre1.y = pre2.y = now.y + dis2;
 				return;
 
-			case 3:	//×óÁ¬½Óµã
-			case 4:	//ÓÒÁ¬½Óµã
+			case 3:	//å·¦è¿æ¥ç‚¹
+			case 4:	//å³è¿æ¥ç‚¹
 				pre1.x = pre2.x = now.x + dis2;
 				return;
 			}
 		}
 	},
 
-	//µ±ĞÂµÄµ¼ÏßÎ»ÖÃ¸²¸ÇÁ¬½ÓµÄÎïÌåÊ±,ÃÀ»¯µ¼Ïß
+	//å½“æ–°çš„å¯¼çº¿ä½ç½®è¦†ç›–è¿æ¥çš„ç‰©ä½“æ—¶,ç¾åŒ–å¯¼çº¿
 	MakeFit: function() {
 		ASSERT(coord.next != null);
 
@@ -623,7 +624,7 @@ var LEAD = {
 		}
 	},
 
-	//ÒÆ¶¯µ¼Ïß
+	//ç§»åŠ¨å¯¼çº¿
 	Move: function(dir, pos, dis) {
 		var pre2 = null;
 		var pre1 = this.coord[0];
@@ -634,17 +635,17 @@ var LEAD = {
 		
 		var inter = 0;
 
-		//1,ÕÒµ½Ö¸Õë----------------------------------
+		//1,æ‰¾åˆ°æŒ‡é’ˆ----------------------------------
 		var i = -2;
 		while (true) {
-			if (pre1.x == now.x) {	//ÔÚÊúÏßÉÏ
+			if (pre1.x == now.x) {	//åœ¨ç«–çº¿ä¸Š
 				if (i == dir) break;
-			} else {	//ÔÚºáÏßÉÏ
+			} else {	//åœ¨æ¨ªçº¿ä¸Š
 				if (i-1 == dir) break;
 			}
 			
 			++currentIndex;
-			if (currentIndex >= this.coord.length) return false;	//Ã»ÓĞÕÒµ½
+			if (currentIndex >= this.coord.length) return false;	//æ²¡æœ‰æ‰¾åˆ°
 			
 			pre2 = pre1;
 			pre1 = now;
@@ -657,231 +658,231 @@ var LEAD = {
 			next1 = this.coord[currentIndex+1];
 		isNext1TheLast = (currentIndex+1 == this.coord.length-1);
 
-		//2ÖØĞÂÉèÖÃÊúÏß×ø±ê--------------------------
-		if (pre1.x == now.x) {	//ÔÚÊúÏßÉÏ
-			if (pos.x == pre1.x) return false;	//ÎŞĞè¸Ä±ä
+		//2é‡æ–°è®¾ç½®ç«–çº¿åæ ‡--------------------------
+		if (pre1.x == now.x) {	//åœ¨ç«–çº¿ä¸Š
+			if (pos.x == pre1.x) return false;	//æ— éœ€æ”¹å˜
 
-			//2.1´¦ÀípreÊÇÍ·.........................
-			if (pre2 == null) {	//pre1ÊÇÍ·
-				if (next1 != null) {	//now²»ÊÇ½áÎ²
+			//2.1å¤„ç†preæ˜¯å¤´.........................
+			if (pre2 == null) {	//pre1æ˜¯å¤´
+				if (next1 != null) {	//nowä¸æ˜¯ç»“å°¾
 					inter = pos.x - next1.x;
 					if (inter < 0) inter = -inter;
 				}
 
-				if (next1 != null && inter <= dis) {	//now²»ÊÇ½áÎ²
-					if (!isNext1TheLast) {	//next1²»ÊÇ½áÎ²
+				if (next1 != null && inter <= dis) {	//nowä¸æ˜¯ç»“å°¾
+					if (!isNext1TheLast) {	//next1ä¸æ˜¯ç»“å°¾
 						next1.y = pre1.y;
 						
-						this.coord.splice(currentIndex, 1);	// É¾³ınow
-					} else {	//next1ÊÇ½áÎ²
+						this.coord.splice(currentIndex, 1);	// åˆ é™¤now
+					} else {	//next1æ˜¯ç»“å°¾
 						now.x = next1.x;
 						now.y = pre1.y;
 					}
-				} else if (next1 != null) {	//now²»ÊÇ½áÎ²
+				} else if (next1 != null) {	//nowä¸æ˜¯ç»“å°¾
 					var tmp = {x: pos.x, y: pre1.y};
 					now.x = pos.x;
-					this.coord.splice(currentIndex, 0, tmp);	// ÔÚpre1ºóÃæ²åÈëtmp
-				} else {	//nowÊÇ½áÎ²
+					this.coord.splice(currentIndex, 0, tmp);	// åœ¨pre1åé¢æ’å…¥tmp
+				} else {	//nowæ˜¯ç»“å°¾
 					var tmp1  = {x: pos.x, y: pre1.y};
 					var tmp2 = {x: pos.x, y: now.y};
 					
-					this.coord.splice(currentIndex, 0, tmp1, tmp2);	//ÔÚpre1ºóÃæ²åÈëÔªËØ
+					this.coord.splice(currentIndex, 0, tmp1, tmp2);	//åœ¨pre1åé¢æ’å…¥å…ƒç´ 
 				}
 
 				CleanLead(); return true;
-			}//ÒÔÏÂpre²»ÊÇÍ·
+			}//ä»¥ä¸‹preä¸æ˜¯å¤´
 
-			//2.2´¦ÀínowÊÇ½áÎ².........................
-			if (next1 == null) {	//nowÊÇ½áÎ²
+			//2.2å¤„ç†nowæ˜¯ç»“å°¾.........................
+			if (next1 == null) {	//nowæ˜¯ç»“å°¾
 				inter = pos.x - pre2.x;
 				if (inter < 0) inter = -inter;
 
 				if (inter <= dis) {
-					if (pre2 != coord[0]) {	//pre2²»ÊÇÍ·
+					if (pre2 != coord[0]) {	//pre2ä¸æ˜¯å¤´
 						pre2.y = now.y;
-						this.coord.splice(currentIndex-1, 1);	// É¾³ıpre1
-					} else {	//pre2ÊÇÍ·
+						this.coord.splice(currentIndex-1, 1);	// åˆ é™¤pre1
+					} else {	//pre2æ˜¯å¤´
 						pre1.x = pre2.x;
 						pre1.y = now.y;
 					}
 				} else {
 					pre1.x = pos.x;
 					var tmp  = {x: pos.x, y: now.y};
-					this.coord.splice(currentIndex-1, 0, tmp);	//ÔÚpre1ºóÃæ²åÈëÔªËØ
+					this.coord.splice(currentIndex-1, 0, tmp);	//åœ¨pre1åé¢æ’å…¥å…ƒç´ 
 				}
 
 				CleanLead(); return true;
-			}//ÒÔÏÂnow²»ÊÇ½áÎ²
+			}//ä»¥ä¸‹nowä¸æ˜¯ç»“å°¾
 
-			//2.3´¦ÀíÓëÇ°ÃæºÏ²¢..........................
+			//2.3å¤„ç†ä¸å‰é¢åˆå¹¶..........................
 			inter = pos.x - pre2.x;
 			if (inter < 0) inter = -inter;
 
-			if (inter <= dis) {	//µ¼ÏßºÏ²¢
-				if (pre2 != coord[0]) {	//pre2²»ÊÇÍ·
+			if (inter <= dis) {	//å¯¼çº¿åˆå¹¶
+				if (pre2 != coord[0]) {	//pre2ä¸æ˜¯å¤´
 					pre2.y = next1.y;
-					this.coord.splice(currentIndex-1, 2);	// É¾³ıpre1,now
-				} else {	//pre2ÊÇÍ·
+					this.coord.splice(currentIndex-1, 2);	// åˆ é™¤pre1,now
+				} else {	//pre2æ˜¯å¤´
 					now.x = pre2.x;
 
 					if (now.x == next1.x && now.y == next1.y) {
-						this.coord.splice(currentIndex-1, 2);	// É¾³ıpre1,now
+						this.coord.splice(currentIndex-1, 2);	// åˆ é™¤pre1,now
 					} else  {
-						this.coord.splice(currentIndex-1, 1);	// É¾³ıpre1
+						this.coord.splice(currentIndex-1, 1);	// åˆ é™¤pre1
 					}
 				}
 				
 				CleanLead(); return true;
 			}
 
-			//2.4´¦ÀíÓëºóÃæºÏ²¢..........................
+			//2.4å¤„ç†ä¸åé¢åˆå¹¶..........................
 			inter = pos.x - next1.x;
 			if (inter < 0) inter = -inter;
 
-			if (inter <= dis) {	//µ¼ÏßºÏ²¢
-				if (!isNext1TheLast) {	//next1²»ÊÇ½áÎ²
+			if (inter <= dis) {	//å¯¼çº¿åˆå¹¶
+				if (!isNext1TheLast) {	//next1ä¸æ˜¯ç»“å°¾
 					next1.y = pre2.y;
-					this.coord.splice(currentIndex-1, 2);	// É¾³ıpre1,now
-				} else {	//next1ÊÇ½áÎ²
+					this.coord.splice(currentIndex-1, 2);	// åˆ é™¤pre1,now
+				} else {	//next1æ˜¯ç»“å°¾
 					pre1.x = next1.x;
-					this.coord.splice(currentIndex, 1);	// É¾³ınow
+					this.coord.splice(currentIndex, 1);	// åˆ é™¤now
 				}
 				CleanLead(); return true;
 			}
 
-			//2.5´¦ÀíÆäËûÇé¿ö..........................
+			//2.5å¤„ç†å…¶ä»–æƒ…å†µ..........................
 			now.x = pos.x;
 			pre1.x = pos.x;
 			CleanLead(); return true;
 
-		}//ÖØĞÂÉèÖÃÊúÏß×ø±ê
+		}//é‡æ–°è®¾ç½®ç«–çº¿åæ ‡
 
-		//3ÖØĞÂÉèÖÃºáÏß×ø±ê--------------------------
-		if (pre1.y == now.y) {	//ÔÚºáÏßÉÏ
-			if (pos.y == pre1.y) return false;	//ÎŞĞè¸Ä±ä
+		//3é‡æ–°è®¾ç½®æ¨ªçº¿åæ ‡--------------------------
+		if (pre1.y == now.y) {	//åœ¨æ¨ªçº¿ä¸Š
+			if (pos.y == pre1.y) return false;	//æ— éœ€æ”¹å˜
 
-			//3.1´¦ÀípreÊÇÍ·.........................
-			if (pre2 == null) {	//preÊÇÍ·
-				if (next1 != null) {	//now²»ÊÇ½áÎ²
+			//3.1å¤„ç†preæ˜¯å¤´.........................
+			if (pre2 == null) {	//preæ˜¯å¤´
+				if (next1 != null) {	//nowä¸æ˜¯ç»“å°¾
 					inter = pos.y - next1.y;
 					if (inter < 0) inter = -inter;
 				}
 
-				if (next1 != null && inter <= dis) {	//now²»ÊÇ½áÎ²
-					if (!isNext1TheLast) {	//next1²»ÊÇ½áÎ²
+				if (next1 != null && inter <= dis) {	//nowä¸æ˜¯ç»“å°¾
+					if (!isNext1TheLast) {	//next1ä¸æ˜¯ç»“å°¾
 						next1.x = pre1.x;
-						this.coord.splice(currentIndex, 1);	// É¾³ınow
-					} else {	//next1ÊÇ½áÎ²
+						this.coord.splice(currentIndex, 1);	// åˆ é™¤now
+					} else {	//next1æ˜¯ç»“å°¾
 						now.y = next1.y;
 						now.x = pre1.x;
 					}
-				} else if (next1 != null) {	//now²»ÊÇ½áÎ²
+				} else if (next1 != null) {	//nowä¸æ˜¯ç»“å°¾
 					now.y = pos.y;
-					this.coord.splice(currentIndex-1, 0, {x:pre1.x, y:pos.y});	//ÔÚpre1ºóÃæ²åÈëÔªËØ
-				} else {	//nowÊÇ½áÎ²
-					this.coord.splice(currentIndex-1, 0, {x:pre1.x, y:pos.y}, {x:now.x, y:pos.y});	//ÔÚpre1ºóÃæ²åÈëÔªËØ
+					this.coord.splice(currentIndex-1, 0, {x:pre1.x, y:pos.y});	//åœ¨pre1åé¢æ’å…¥å…ƒç´ 
+				} else {	//nowæ˜¯ç»“å°¾
+					this.coord.splice(currentIndex-1, 0, {x:pre1.x, y:pos.y}, {x:now.x, y:pos.y});	//åœ¨pre1åé¢æ’å…¥å…ƒç´ 
 				}
 
 				CleanLead(); return true;
-			}//ÒÔÏÂpre²»ÊÇÍ·
+			}//ä»¥ä¸‹preä¸æ˜¯å¤´
 
-			//3.2´¦ÀínowÊÇ½áÎ².........................
-			if (next1 == null) {	//nowÊÇ½áÎ²
+			//3.2å¤„ç†nowæ˜¯ç»“å°¾.........................
+			if (next1 == null) {	//nowæ˜¯ç»“å°¾
 				inter = pos.y - pre2.y;
 				if (inter < 0) inter = -inter;
 
 				if (inter <= dis) {
-					if (pre2 != coord) {	//pre2²»ÊÇÍ·
+					if (pre2 != coord) {	//pre2ä¸æ˜¯å¤´
 						pre2.x = now.x;
-						this.coord.splice(currentIndex-1, 1);	// É¾³ıpre1
-					} else {	//pre2ÊÇÍ·
+						this.coord.splice(currentIndex-1, 1);	// åˆ é™¤pre1
+					} else {	//pre2æ˜¯å¤´
 						pre1.y = pre2.y;
 						pre1.x = now.x;
 					}
 				} else {
 					pre1.y = pos.y;
-					this.coord.splice(currentIndex-1, 0, {x:now.x, y:pos.y});	//ÔÚpre1ºóÃæ²åÈëÔªËØ
+					this.coord.splice(currentIndex-1, 0, {x:now.x, y:pos.y});	//åœ¨pre1åé¢æ’å…¥å…ƒç´ 
 				}
 
 				CleanLead(); return true;
-			}//ÒÔÏÂnow²»ÊÇ½áÎ²
+			}//ä»¥ä¸‹nowä¸æ˜¯ç»“å°¾
 
-			//3.3´¦ÀíÓëÇ°ÃæºÏ²¢..........................
+			//3.3å¤„ç†ä¸å‰é¢åˆå¹¶..........................
 			inter = pos.y - pre2.y;
 			if (inter < 0) inter = -inter;
 
-			if (inter <= dis) {	//µ¼ÏßºÏ²¢
-				if (pre2 != coord[0]) {	//pre2²»ÊÇÍ·
+			if (inter <= dis) {	//å¯¼çº¿åˆå¹¶
+				if (pre2 != coord[0]) {	//pre2ä¸æ˜¯å¤´
 					pre2.x = next1.x;
-					this.coord.splice(currentIndex-1, 2);	// É¾³ıpre1,now
-				} else {	//pre2ÊÇÍ·
+					this.coord.splice(currentIndex-1, 2);	// åˆ é™¤pre1,now
+				} else {	//pre2æ˜¯å¤´
 					now.y = pre2.y;
 					
 					if (now.x == next1.x && now.y == next1.y) {
-						this.coord.splice(currentIndex-1, 2);	// É¾³ıpre1,now
+						this.coord.splice(currentIndex-1, 2);	// åˆ é™¤pre1,now
 					} else {
-						this.coord.splice(currentIndex-1, 1);	// É¾³ıpre1
+						this.coord.splice(currentIndex-1, 1);	// åˆ é™¤pre1
 					}
 				}
 
 				CleanLead(); return true;
 			}
 
-			//3.4´¦ÀíÓëºóÃæºÏ²¢..........................
+			//3.4å¤„ç†ä¸åé¢åˆå¹¶..........................
 			inter = pos.y - next1.y;
 			if (inter < 0) inter = -inter;
 
-			if (inter <= dis) {	//µ¼ÏßºÏ²¢
-				if (!isNext1TheLast) {	//next1²»ÊÇ½áÎ²
+			if (inter <= dis) {	//å¯¼çº¿åˆå¹¶
+				if (!isNext1TheLast) {	//next1ä¸æ˜¯ç»“å°¾
 					next1.x = pre2.x;
-					this.coord.splice(currentIndex-1, 2);	// É¾³ıpre1,now
-				} else {	//next1ÊÇ½áÎ²
+					this.coord.splice(currentIndex-1, 2);	// åˆ é™¤pre1,now
+				} else {	//next1æ˜¯ç»“å°¾
 					pre1.y = next1.y;
-					this.coord.splice(currentIndex, 1);	// É¾³ınow
+					this.coord.splice(currentIndex, 1);	// åˆ é™¤now
 				}
 				CleanLead(); return true;
 			}
 
-			//3.5´¦ÀíÆäËûÇé¿ö..........................
+			//3.5å¤„ç†å…¶ä»–æƒ…å†µ..........................
 			now.y = pos.y;
 			pre1.y = pos.y;
 			CleanLead(); return true;
 
-		}	//ÖØĞÂÉèÖÃºáÏß×ø±ê
+		}	//é‡æ–°è®¾ç½®æ¨ªçº¿åæ ‡
 
 
-		CleanLead();	//É¾³ıÓĞÏàÍ¬×ø±êµÄµ¼Ïß½áµã
+		CleanLead();	//åˆ é™¤æœ‰ç›¸åŒåæ ‡çš„å¯¼çº¿ç»“ç‚¹
 		return true;
 	},
 
-	//Á¬½ÓÎïÌå×ø±ê¸Ä±ä,¸üĞÂµ¼ÏßÎ»ÖÃ
+	//è¿æ¥ç‰©ä½“åæ ‡æ”¹å˜,æ›´æ–°å¯¼çº¿ä½ç½®
 	RefreshPos: function() {
-		//ÖØĞÂ»ñµÃÁ½¸ö¶Ëµã×ø±ê
+		//é‡æ–°è·å¾—ä¸¤ä¸ªç«¯ç‚¹åæ ‡
 		var from = conBody[0].GetPosFromBody();
 		var to = conBody[1].GetPosFromBody();
 
-		//³õÊ¼»¯
+		//åˆå§‹åŒ–
 		if (this.coord.length <= 2) {
 			EasyInitPos(from, to);
-			MakeFit();	//ÃÀ»¯µ¼Ïß
+			MakeFit();	//ç¾åŒ–å¯¼çº¿
 			return;
 		}
 
 
-		//Æğµã×ø±ê¸Ä±ä
+		//èµ·ç‚¹åæ ‡æ”¹å˜
 		var coord0 = this.coord[0];
 		var coord1 = this.coord[1];
 		var coord2 = this.coord[2];
 		
 		if (from.x != coord0.x || from.y != coord0.y) {
-			if (coord1.x != coord0.x || coord1.y != coord0.y) {	//µÚ0,1µÄ×ø±ê²»Í¬
+			if (coord1.x != coord0.x || coord1.y != coord0.y) {	//ç¬¬0,1çš„åæ ‡ä¸åŒ
 				if (coord1.x == coord0.x)
 					coord1.x = from.x;
 				else
 					coord1.y = from.y;
 				coord0.x = from.x;
 				coord0.y = from.y;
-			} else if (coord1.x != coord2.x || coord1.y != coord2.y) {	//µÚ1,2µÄ×ø±ê²»Í¬
+			} else if (coord1.x != coord2.x || coord1.y != coord2.y) {	//ç¬¬1,2çš„åæ ‡ä¸åŒ
 				if (coord1.x == coord2.x)
 					coord1.y = from.y;
 				else
@@ -889,27 +890,27 @@ var LEAD = {
 				coord0.x = from.x;
 				coord0.y = from.y;
 			} else {
-				EasyInitPos(from, to);	//³õÊ¼»¯
-				MakeFit();	//ÃÀ»¯µ¼Ïß
+				EasyInitPos(from, to);	//åˆå§‹åŒ–
+				MakeFit();	//ç¾åŒ–å¯¼çº¿
 				return;
 			}
 		}
 		
 
-		//ÖÕµã×ø±ê¸Ä±ä
+		//ç»ˆç‚¹åæ ‡æ”¹å˜
 		var last2 = this.coord[this.coord.length-3];
 		var last1 = this.coord[this.coord.length-2];
 		var last0 = this.coord[this.coord.length-1];
 		
 		if (to.x != last0.x || to.y != last0.y) {
-			if (last1.x != last0.x || last1.y != last0.y) {	//ºó2¸ö×ø±ê²»Í¬
+			if (last1.x != last0.x || last1.y != last0.y) {	//å2ä¸ªåæ ‡ä¸åŒ
 				if (last1.x == last0.x)
 					last1.x = to.x;
 				else
 					last1.y = to.y;
 				last0.x = to.x;
 				last0.y = to.y;
-			} else if (last1.x != last2.x || last1.y != last2.y) {	//µ¹Êı2,3¸ö×ø±ê²»Í¬
+			} else if (last1.x != last2.x || last1.y != last2.y) {	//å€’æ•°2,3ä¸ªåæ ‡ä¸åŒ
 				if (last1.x == last2.x)
 					last1.y = to.y;
 				else
@@ -917,17 +918,17 @@ var LEAD = {
 				last0.x = to.x;
 				last0.y = to.y;
 			} else {
-				EasyInitPos(from, to);	//³õÊ¼»¯
-				MakeFit();	//ÃÀ»¯µ¼Ïß
+				EasyInitPos(from, to);	//åˆå§‹åŒ–
+				MakeFit();	//ç¾åŒ–å¯¼çº¿
 				return;
 			}
 		}
 
-		CleanLead();	//È¥³ıÏàÍ¬×ø±êµÄµ¼Ïß½Úµã
-		MakeFit();		//ÃÀ»¯µ¼Ïß
+		CleanLead();	//å»é™¤ç›¸åŒåæ ‡çš„å¯¼çº¿èŠ‚ç‚¹
+		MakeFit();		//ç¾åŒ–å¯¼çº¿
 	},
 
-	//»­µ¼Ïß
+	//ç”»å¯¼çº¿
 	PaintLead: function(cxt) {
 		ASSERT(cxt != null);
 
@@ -937,7 +938,7 @@ var LEAD = {
 		}
 	},
 
-	//»ñµÃµ¼Ïß¿ªÊ¼Î»ÖÃºÍ½áÎ²×ø±ê
+	//è·å¾—å¯¼çº¿å¼€å§‹ä½ç½®å’Œç»“å°¾åæ ‡
 	GetStartEndPos: function(startPos, endPos) {
 		startPos.x = this.coord[0].x;
 		startPos.y = this.coord[0].y;

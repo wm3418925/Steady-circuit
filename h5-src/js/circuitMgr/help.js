@@ -1,6 +1,6 @@
 
 void Manager::Help(POINT pos)
-//ÔÚÓÃ»§ÇøposÎ»ÖÃ°´F1,Ñ°Çó°ïÖú
+//åœ¨ç”¨æˆ·åŒºposä½ç½®æŒ‰F1,å¯»æ±‚å¸®åŠ©
 {
 	char note[128];
 
@@ -10,35 +10,35 @@ void Manager::Help(POINT pos)
 
 	if(!motiBody[0].IsOnAny())
 	{
-		this.canvas->MessageBox("Êó±êÃ»ÓĞÒÆ¶¯µ½ÎïÌåÉÏ !", "ÌáÊ¾ĞÅÏ¢", MB_ICONINFORMATION);
+		this.canvas->MessageBox("é¼ æ ‡æ²¡æœ‰ç§»åŠ¨åˆ°ç‰©ä½“ä¸Š !", "æç¤ºä¿¡æ¯", MB_ICONINFORMATION);
 		return;
 	}
 
 	if(motiBody[0].IsOnConnectPos())
 	{
-		strcpy(note, "ÕâÊÇÎïÌåÁ¬½Óµã²¿·Ö,¿ÉÒÔÁ¬½ÓÆäËûÎïÌå");
+		strcpy(note, "è¿™æ˜¯ç‰©ä½“è¿æ¥ç‚¹éƒ¨åˆ†,å¯ä»¥è¿æ¥å…¶ä»–ç‰©ä½“");
 	}
 	else if(motiBody[0].IsBodySame(&focusBody))
 	{
-		strcpy(note, "ÕâÊÇÑ¡¶¨ÎïÌå,ÏÔÊ¾²»Í¬ÓÚÆäËûÎïÌå");
-		strcat(note, "\n¶ÔËü²Ù×÷¿ÉÒÔÊ¹ÓÃ¿ì½İ¼ü");
+		strcpy(note, "è¿™æ˜¯é€‰å®šç‰©ä½“,æ˜¾ç¤ºä¸åŒäºå…¶ä»–ç‰©ä½“");
+		strcat(note, "\nå¯¹å®ƒæ“ä½œå¯ä»¥ä½¿ç”¨å¿«æ·é”®");
 	}
 	else if(motiBody[0].IsOnLead())
 	{
-		strcpy(note, "µ¼Ïß,¿ÉÒÔÁ¬½Ó2¸öÎïÌå");
+		strcpy(note, "å¯¼çº¿,å¯ä»¥è¿æ¥2ä¸ªç‰©ä½“");
 	}
 	else if(motiBody[0].IsOnCrun())
 	{
-		strcpy(note, "½áµã,¿ÉÒÔÁ¬½Ó4¶Îµ¼Ïß");
+		strcpy(note, "ç»“ç‚¹,å¯ä»¥è¿æ¥4æ®µå¯¼çº¿");
 	}
 	else //if(motiBody[0].IsOnCtrl())
 	{
-		strcpy(note, "µçÑ§Ôª¼ş¡ª");
+		strcpy(note, "ç”µå­¦å…ƒä»¶â€”");
 		strcat(note, CTRL_STYLE_NAME[motiBody[0].p3->GetStyle()]);
-		strcat(note, "\n¿ÉÒÔĞı×ªËü »òÕß ¸ÄÎªÆäËûÀàĞÍµÄµçÑ§Ôª¼ş");
+		strcat(note, "\nå¯ä»¥æ—‹è½¬å®ƒ æˆ–è€… æ”¹ä¸ºå…¶ä»–ç±»å‹çš„ç”µå­¦å…ƒä»¶");
 	}
 
 	PaintWithSpecialColorAndRect(motiBody[0], false);
-	this.canvas->MessageBox(note, "ÌáÊ¾ĞÅÏ¢", MB_ICONINFORMATION);
+	this.canvas->MessageBox(note, "æç¤ºä¿¡æ¯", MB_ICONINFORMATION);
 	PaintAll();
 }

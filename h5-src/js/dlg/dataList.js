@@ -1,30 +1,32 @@
 
-//´íÎóÀàĞÍ:
-var ERROR_NO				= 0;	//ÎŞ´í
-var ERROR_STRNULL			= 1;	//×Ö·û´®Îª¿Õ
-var ERROR_FLOATMIX			= 2;	//¸¡µãÊıº¬ÓĞ·Ç·¨×Ö·û
-var ERROR_UINTMIX			= 3;	//ÕıÕûÊıº¬ÓĞ·Ç·¨×Ö·û
-var ERROR_UINTOVER			= 4;	//ÕıÕûÊı²»ÔÚ·¶Î§
-var ERROR_ENUMOVER			= 5;	//Ã¶¾Ù²»ÊÇÑ¡ÏîµÄÄ³Ò»¸ö
-var ERROR_STRMIX			= 6;	//Ãû³Æ±êÇ©º¬ÓĞ·Ç·¨×Ö·û [](){}
-var ERROR_ENUMNOTALLOWED	= 7;	//Ã¶¾ÙÔÚÒ»Ğ©Çé¿öÏÂ²»ÔÊĞíÒ»Ğ©Öµ(Èç:½¹µãÎïÌåÑÕÉ«²»ÄÜÎªºÚÉ«)
+//é”™è¯¯ç±»å‹:
+var ERROR_NO				= 0;	//æ— é”™
+var ERROR_STRNULL			= 1;	//å­—ç¬¦ä¸²ä¸ºç©º
+var ERROR_FLOATMIX			= 2;	//æµ®ç‚¹æ•°å«æœ‰éæ³•å­—ç¬¦
+var ERROR_UINTMIX			= 3;	//æ­£æ•´æ•°å«æœ‰éæ³•å­—ç¬¦
+var ERROR_UINTOVER			= 4;	//æ­£æ•´æ•°ä¸åœ¨èŒƒå›´
+var ERROR_ENUMOVER			= 5;	//æšä¸¾ä¸æ˜¯é€‰é¡¹çš„æŸä¸€ä¸ª
+var ERROR_STRMIX			= 6;	//åç§°æ ‡ç­¾å«æœ‰éæ³•å­—ç¬¦ [](){}
+var ERROR_ENUMNOTALLOWED	= 7;	//æšä¸¾åœ¨ä¸€äº›æƒ…å†µä¸‹ä¸å…è®¸ä¸€äº›å€¼(å¦‚:ç„¦ç‚¹ç‰©ä½“é¢œè‰²ä¸èƒ½ä¸ºé»‘è‰²)
 
 
-// ´¦ÀíÀàĞÍÊôĞÔ
+// å¤„ç†ç±»å‹å±æ€§
 var ENUM_DATA_HANLDER = {
 	
 	CreateNew: function(enumType, memeberName) {
 		var noteList;
 		switch (enumType) {
-		case CTRL_TYPE_ENUM:	//¿Ø¼şÀàĞÍ
+		case CTRL_TYPE_ENUM:	//æ§ä»¶ç±»å‹
 			noteList = CTRL_TYPE_NAMES;
 			break;
-		case LEAD_STYLE_ENUM:	//µ¼ÏßÑùÊ½
+		case LEAD_STYLE_ENUM:	//å¯¼çº¿æ ·å¼
 			noteList = LEAD_STYLE_NAMES;
 			break;
 		}
 		
-		return {"memeberName": memeberName, "noteList":noteList};
+		var newObj = {"memeberName": memeberName, "noteList":noteList};
+		newObj.__proto__ = ENUM_DATA_HANLDER.prototype;
+		return newObj;
 	},
 
 	GetMemeberName: function() {
@@ -40,16 +42,19 @@ var ENUM_DATA_HANLDER = {
 	}
 };
 
-var LISTDATA = {	//Êı¾İÁĞ±íĞÅÏ¢Àà
+var LISTDATA = {	//æ•°æ®åˆ—è¡¨ä¿¡æ¯ç±»
 
 	CreateNew: function() {
-		return {
+		var newObj = {
 			dataParent : null,
-			dataTypeList: new Array(),		//Ã¿¸öÊı¾İÏîÀàĞÍ
-			dataMinList: new Array(),		//Èç¹ûÊÇshort,int,longµÈÕûĞÍÊı¾İ,ÓĞ×îĞ¡Öµ
-			dataMaxList: new Array(),		//Èç¹ûÊÇshort,int,longµÈÕûĞÍÊı¾İ,ÓĞ×î´óÖµ
-			memeberNameList: new Array(),	//Êı¾İ
-			noteTextList: new Array()};		//Ã¿¸öÊı¾İÏîÀàĞÍÌáÊ¾ĞÅÏ¢
+			dataTypeList: new Array(),		//æ¯ä¸ªæ•°æ®é¡¹ç±»å‹
+			dataMinList: new Array(),		//å¦‚æœæ˜¯short,int,longç­‰æ•´å‹æ•°æ®,æœ‰æœ€å°å€¼
+			dataMaxList: new Array(),		//å¦‚æœæ˜¯short,int,longç­‰æ•´å‹æ•°æ®,æœ‰æœ€å¤§å€¼
+			memeberNameList: new Array(),	//æ•°æ®
+			noteTextList: new Array()};		//æ¯ä¸ªæ•°æ®é¡¹ç±»å‹æç¤ºä¿¡æ¯
+			
+		newObj.__proto__ = LISTDATA.prototype;
+		return newObj;
 	},
 	SetDataParent: function(dataParent) {
 		this.dataParent = dataParent;
@@ -67,7 +72,7 @@ var LISTDATA = {	//Êı¾İÁĞ±íĞÅÏ¢Àà
 		return memeberNameList.length;
 	},
 
-	//ÉèÖÃÁĞ±íµÄÒ»Ïî, dataType != DATA_TYPE_enum, µ±min>max±íÊ¾Ã»ÓĞ´óĞ¡ÏŞÖÆ
+	//è®¾ç½®åˆ—è¡¨çš„ä¸€é¡¹, dataType != DATA_TYPE_enum, å½“min>maxè¡¨ç¤ºæ²¡æœ‰å¤§å°é™åˆ¶
 	void SetAMember(dataType, note, data, min/*1*/, max/*0*/) {
 		ASSERT(dataType != DATA_TYPE_enum);
 		if (min == undefined || max == undefined) {
@@ -82,7 +87,7 @@ var LISTDATA = {	//Êı¾İÁĞ±íĞÅÏ¢Àà
 		memeberNameList.push(data);
 	},
 
-	//ÉèÖÃstyle == DATA_TYPE_enum µÄÒ»Ïî, memeberNameList Ö¸ÏòÒ»¸ö ENUM_DATA_HANLDER
+	//è®¾ç½®style == DATA_TYPE_enum çš„ä¸€é¡¹, memeberNameList æŒ‡å‘ä¸€ä¸ª ENUM_DATA_HANLDER
 	void SetAEnumMember(note, data, enumType, min/*1*/, max/*0*/) {
 		if (min == undefined || max == undefined) {
 			min = 1;
@@ -96,7 +101,7 @@ var LISTDATA = {	//Êı¾İÁĞ±íĞÅÏ¢Àà
 		memeberNameList.push(ENUM_DATA_HANLDER.CreateNew(enumType, data));
 	},
 
-	//¼ì²éÒ»ĞĞ: row--ĞĞ, chData--×Ö·û´®Êı¾İ, enumData--Ã¶¾ÙÊı¾İ
+	//æ£€æŸ¥ä¸€è¡Œ: row--è¡Œ, chData--å­—ç¬¦ä¸²æ•°æ®, enumData--æšä¸¾æ•°æ®
 	ERROR_TYPE CheckAMember(row, pageElement) {
 		var chData;
 		var enumData;
@@ -116,7 +121,7 @@ var LISTDATA = {	//Êı¾İÁĞ±íĞÅÏ¢Àà
 				return ERROR_STRNULL;
 			} else if (!IsUnsignedInteger(chData)) {
 				return ERROR_UINTMIX;
-			} else if (dataMinList[row] <= dataMaxList[row]) {	//ÓĞ´óĞ¡ÏŞÖÆ
+			} else if (dataMinList[row] <= dataMaxList[row]) {	//æœ‰å¤§å°é™åˆ¶
 				enumData = parseInt(chData);
 				if (enumData < dataMinList[row] || enumData > dataMaxList[row])
 					return ERROR_UINTOVER;
@@ -127,7 +132,7 @@ var LISTDATA = {	//Êı¾İÁĞ±íĞÅÏ¢Àà
 			enumData = pageElement.selectedIndex;
 			if (enumData < 0 || enumData >= memeberNameList[row].GetOptionCount()) {
 				return ERROR_ENUMOVER;
-			} else if (dataMinList[row] <= dataMaxList[row]) {	//ÓĞ´óĞ¡ÏŞÖÆ
+			} else if (dataMinList[row] <= dataMaxList[row]) {	//æœ‰å¤§å°é™åˆ¶
 				if (enumData < dataMinList[row] || enumData > dataMaxList[row])
 					return ERROR_ENUMNOTALLOWED;
 			}
@@ -141,7 +146,7 @@ var LISTDATA = {	//Êı¾İÁĞ±íĞÅÏ¢Àà
 		return ERROR_NO;
 	},
 
-	//½«¿Ø¼şÓÃ»§ĞŞ¸ÄµÄĞÅÏ¢±£´æµ½Ö¸ÕëÖ¸ÏòµÄÎïÌå
+	//å°†æ§ä»¶ç”¨æˆ·ä¿®æ”¹çš„ä¿¡æ¯ä¿å­˜åˆ°æŒ‡é’ˆæŒ‡å‘çš„ç‰©ä½“
 	void SaveAMember(row, pageElement) {
 		var tmpData;
 

@@ -1,7 +1,7 @@
 
-//10´¦Àí¼ôÇĞ°åº¯Êı-----------------------------------------------------------------¡ı
+//10å¤„ç†å‰ªåˆ‡æ¿å‡½æ•°-----------------------------------------------------------------â†“
 void Manager::ClearClipboard()
-//Çå¿Õ¼ôÇĞ°å
+//æ¸…ç©ºå‰ªåˆ‡æ¿
 {
 	if(clipBody.IsOnCrun())
 		delete clipBody.p2;
@@ -11,17 +11,17 @@ void Manager::ClearClipboard()
 }
 
 bool Manager::GetClipboardState()
-//»ñÈ¡¼ôÇĞ°åÊÇ·ñ¿ÉÓÃ
+//è·å–å‰ªåˆ‡æ¿æ˜¯å¦å¯ç”¨
 {
 	return clipBody.IsOnBody();
 }
 
 void Manager::CopyToClipboard(const Pointer &body)
-//¿½±´bodyÖ¸ÏòµÄÎïÌåµ½¼ôÇĞ°å
+//æ‹·è´bodyæŒ‡å‘çš„ç‰©ä½“åˆ°å‰ªåˆ‡æ¿
 {
 	ASSERT(body.IsOnBody());
 	motiCount = 0;
-	ClearClipboard();	//Çå¿Õ¼ôÇĞ°å
+	ClearClipboard();	//æ¸…ç©ºå‰ªåˆ‡æ¿
 
 	if(body.IsOnCrun())
 		clipBody.SetOnCrun(body.p2.Clone(CLONE_FOR_CLIPBOARD), true);
@@ -30,7 +30,7 @@ void Manager::CopyToClipboard(const Pointer &body)
 }
 
 Pointer Manager::CopyBody(FOCUS_OR_POS &body)
-//¸´ÖÆÎïÌåµ½¼ôÇĞ°å
+//å¤åˆ¶ç‰©ä½“åˆ°å‰ªåˆ‡æ¿
 {
 	Pointer pointer = GetBodyPointer(body);
 	if(!pointer.IsOnBody()) return pointer;
@@ -39,16 +39,16 @@ Pointer Manager::CopyBody(FOCUS_OR_POS &body)
 }
 
 void Manager::CutBody(FOCUS_OR_POS &body)
-//¼ôÇĞÎïÌåµ½¼ôÇĞ°å
+//å‰ªåˆ‡ç‰©ä½“åˆ°å‰ªåˆ‡æ¿
 {
-	Pointer pointer = CopyBody(body);	//¸´ÖÆÎïÌå
+	Pointer pointer = CopyBody(body);	//å¤åˆ¶ç‰©ä½“
 	if(!pointer.IsOnBody()) return;
-	Delete(pointer);					//É¾³ıÎïÌå
-	PaintAll();							//ÖØ»æµçÂ·
+	Delete(pointer);					//åˆ é™¤ç‰©ä½“
+	PaintAll();							//é‡ç»˜ç”µè·¯
 }
 
 bool Manager::PasteBody(POINT pos)
-//Õ³ÌùÎïÌå
+//ç²˜è´´ç‰©ä½“
 {
 	if(!clipBody.IsOnBody())
 	{
@@ -61,36 +61,36 @@ bool Manager::PasteBody(POINT pos)
 	{
 		if(crunCount >= MAX_CRUN_COUNT)
 		{
-			this.canvas.MessageBox("½áµã³¬¹ı×î´óÊıÁ¿!", "½áµã²»ÄÜÌí¼Ó", MB_ICONWARNING);
+			this.canvas.MessageBox("ç»“ç‚¹è¶…è¿‡æœ€å¤§æ•°é‡!", "ç»“ç‚¹ä¸èƒ½æ·»åŠ ", MB_ICONWARNING);
 			return false;
 		}
 
-		CloneCircuitBeforeChange();	//±à¼­Ç°¸´ÖÆµçÂ·
-		//±à¼­²¿·Ö
+		CloneCircuitBeforeChange();	//ç¼–è¾‘å‰å¤åˆ¶ç”µè·¯
+		//ç¼–è¾‘éƒ¨åˆ†
 		crun[crunCount] = clipBody.p2.Clone(CLONE_FOR_USE);
 		crun[crunCount]->coord = pos;
 		crun[crunCount]->num = crunCount;
 		++ crunCount;
 
-		PutCircuitToVector();	//½«ĞÂµÄµçÂ·ĞÅÏ¢±£´æµ½ÈİÆ÷
+		PutCircuitToVector();	//å°†æ–°çš„ç”µè·¯ä¿¡æ¯ä¿å­˜åˆ°å®¹å™¨
 		PaintCrun(crun[crunCount-1]);
 	}
 	else if(clipBody.IsOnCtrl())
 	{
 		if(ctrlCount >= MAX_CTRL_COUNT)
 		{
-			this.canvas.MessageBox("µçÑ§Ôª¼ş³¬¹ı×î´óÊıÁ¿!", "µçÑ§Ôª¼ş²»ÄÜÌí¼Ó", MB_ICONWARNING);
+			this.canvas.MessageBox("ç”µå­¦å…ƒä»¶è¶…è¿‡æœ€å¤§æ•°é‡!", "ç”µå­¦å…ƒä»¶ä¸èƒ½æ·»åŠ ", MB_ICONWARNING);
 			return false;
 		}
 
-		CloneCircuitBeforeChange();	//±à¼­Ç°¸´ÖÆµçÂ·
-		//±à¼­²¿·Ö
+		CloneCircuitBeforeChange();	//ç¼–è¾‘å‰å¤åˆ¶ç”µè·¯
+		//ç¼–è¾‘éƒ¨åˆ†
 		ctrl[ctrlCount] = clipBody.p3.Clone(CLONE_FOR_USE);
 		ctrl[ctrlCount]->coord = pos;
 		ctrl[ctrlCount]->num = ctrlCount;
 		++ ctrlCount;
 
-		PutCircuitToVector();	//½«ĞÂµÄµçÂ·ĞÅÏ¢±£´æµ½ÈİÆ÷
+		PutCircuitToVector();	//å°†æ–°çš„ç”µè·¯ä¿¡æ¯ä¿å­˜åˆ°å®¹å™¨
 		PaintCtrl(ctrl[ctrlCount-1]);
 	}
 

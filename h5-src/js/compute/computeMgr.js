@@ -1,7 +1,7 @@
 var ComputeMgr = {};
 
 
-ComputeMgr.CONVERT = function(a,b,size)	{return size*a-(a+1)*a/2+b-a-1;}	//ÓÃÓÚCRUNMAP³ÉÔ±µÄ·ÃÎÊ
+ComputeMgr.CONVERT = function(a,b,size)	{return size*a-(a+1)*a/2+b-a-1;}	//ç”¨äºCRUNMAPæˆå‘˜çš„è®¿é—®
 
 
 
@@ -11,7 +11,7 @@ ComputeMgr.CombineGroup = function(
 							/*int*/to,
 							/*int **/group,
 							/*int*/groupSize)
-//½«2¸öÁ¬½Ó×é µÄ×éºÅ ºÏ²¢
+//å°†2ä¸ªè¿æ¥ç»„ çš„ç»„å· åˆå¹¶
 {
 	ASSERT(group && groupSize>0 && from>=0 && to>=0);
 	for (var i=groupSize-1; i>=0; --i) if (group[i]==from)
@@ -19,7 +19,7 @@ ComputeMgr.CombineGroup = function(
 };
 
 /*char*/ComputeMgr.GetCrun2ConnectNum = function(/*int*/a, /*int*/b)
-//»ñµÃ2¸öWmMgr.crun2½áµãÖ±½ÓÁ¬½ÓµÄÏßÂ·¸öÊı
+//è·å¾—2ä¸ªWmMgr.crun2ç»“ç‚¹ç›´æ¥è¿æ¥çš„çº¿è·¯ä¸ªæ•°
 {
 	/*int*/var i;
 	/*char*/var connect = 0;
@@ -34,8 +34,8 @@ ComputeMgr.CombineGroup = function(
 };
 
 /*{c:CIRCU *,dir:int}*/ComputeMgr.GetCrun2FirstCircu = function(/*int*/ a, /*int*/ b)
-//ÓÉ½áµã±àºÅ»ñµÃµÚÒ»¸öÁ¬½ÓËûÃÇµÄÏßÂ·
-//º¯Êı·µ»ØµÄ {ÏßÂ·Ö¸Õë, ÏßÂ·ÔÚWmMgr.crun2[a].c[i]µÄi}
+//ç”±ç»“ç‚¹ç¼–å·è·å¾—ç¬¬ä¸€ä¸ªè¿æ¥ä»–ä»¬çš„çº¿è·¯
+//å‡½æ•°è¿”å›çš„ {çº¿è·¯æŒ‡é’ˆ, çº¿è·¯åœ¨WmMgr.crun2[a].c[i]çš„i}
 {
 	/*CIRCU **/var temp;
 
@@ -57,7 +57,7 @@ ComputeMgr.PutIntoBuf = function(/*int */fromGroup,
 							/*int */toGroup,
 							/*CRUNMAP * */map,
 							/*double * */buf) {
-//½«from,to½áµãµÚÒ»¸öÁ¬½ÓÏßÂ·µÄµçÁ÷µç×è·ÅÈë»º³å
+//å°†from,toç»“ç‚¹ç¬¬ä¸€ä¸ªè¿æ¥çº¿è·¯çš„ç”µæµç”µé˜»æ”¾å…¥ç¼“å†²
 	/*int*/var i;
 	/*CIRCU **/var c;
 	ASSERT(map != null && buf != null);
@@ -79,7 +79,7 @@ ComputeMgr.PutIntoBuf = function(/*int */fromGroup,
 };
 
 ComputeMgr.CreateCrunEquation = function(/*CRUN2 * */inputCrun2, /*double * */buf)
-//½¨Á¢½áµã·½³Ì,Êä³öµ½»º´æÉÏ
+//å»ºç«‹ç»“ç‚¹æ–¹ç¨‹,è¾“å‡ºåˆ°ç¼“å­˜ä¸Š
 {
 	/*CIRCU ***/var tempCircu = inputCrun2.c;
 	/*int*/var connectNum = 0;
@@ -99,84 +99,84 @@ ComputeMgr.CreateCrunEquation = function(/*CRUN2 * */inputCrun2, /*double * */bu
 };
 
 ComputeMgr.CollectCircuitInfo = function()
-//±éÀúÒ»´ÎµçÂ·,»ñµÃÃ¿¸öÈº×éµÄÏßÂ·µçÑ§ĞÅÏ¢
+//éå†ä¸€æ¬¡ç”µè·¯,è·å¾—æ¯ä¸ªç¾¤ç»„çš„çº¿è·¯ç”µå­¦ä¿¡æ¯
 {
-	/*Pointer*/var now, pre;	//µ±Ç°µÄÎïÌå
-	/*int*/var dir;			    //ÏÂÒ»¸öÎïÌåÔÚµ±Ç°ÎïÌåµÄ·½Ïò
-	/*int*/var i, j, tempVar;	//Ñ­»·±äÁ¿
-	/*int*/var endCrunIndex;	//ÏßÂ·½áÊø½áµã±àºÅ
-	/*int **/var group;		    //ÎïÌå·Ö×é
-	/*int*/var groupSize = 0;	//µ±Ç°Ê¹ÓÃµÄgroupÊı×éµÄ´óĞ¡
+	/*Pointer*/var now, pre;	//å½“å‰çš„ç‰©ä½“
+	/*int*/var dir;			    //ä¸‹ä¸€ä¸ªç‰©ä½“åœ¨å½“å‰ç‰©ä½“çš„æ–¹å‘
+	/*int*/var i, j, tempVar;	//å¾ªç¯å˜é‡
+	/*int*/var endCrunIndex;	//çº¿è·¯ç»“æŸç»“ç‚¹ç¼–å·
+	/*int **/var group;		    //ç‰©ä½“åˆ†ç»„
+	/*int*/var groupSize = 0;	//å½“å‰ä½¿ç”¨çš„groupæ•°ç»„çš„å¤§å°
 
-	//1,³õÊ¼»¯----------------------------------------------------
-	ComputeMgr.groupCount = 0;	//×éÊı,Í¬Ò»×éµÄÔÚÒ»¸öÁ¬Í¨Í¼ÖĞ,·Ö×é½¨Á¢·½³Ì
-	ComputeMgr.circuitCount = 0;	//ÏßÂ·Êı
-	group = new Array(ComputeMgr.crunCount);		//×éÊı²»»á³¬¹ıComputeMgr.crunCount
-	ComputeMgr.crun2 = genrateArrayWithElementInitFunc(CRUN2.CreateNew, ComputeMgr.crunCount);		//ÓÃÓÚ¼ÆËãµÄ½áµã
-	ComputeMgr.circu = genrateArrayWithElementInitFunc(CIRCU.CreateNew, ComputeMgr.crunCount*2);	//ÏßÂ·Êı²»»á³¬¹ıComputeMgr.crunCount*2
+	//1,åˆå§‹åŒ–----------------------------------------------------
+	ComputeMgr.groupCount = 0;	//ç»„æ•°,åŒä¸€ç»„çš„åœ¨ä¸€ä¸ªè¿é€šå›¾ä¸­,åˆ†ç»„å»ºç«‹æ–¹ç¨‹
+	ComputeMgr.circuitCount = 0;	//çº¿è·¯æ•°
+	group = new Array(ComputeMgr.crunCount);		//ç»„æ•°ä¸ä¼šè¶…è¿‡ComputeMgr.crunCount
+	ComputeMgr.crun2 = genrateArrayWithElementInitFunc(CRUN2.CreateNew, ComputeMgr.crunCount);		//ç”¨äºè®¡ç®—çš„ç»“ç‚¹
+	ComputeMgr.circu = genrateArrayWithElementInitFunc(CIRCU.CreateNew, ComputeMgr.crunCount*2);	//çº¿è·¯æ•°ä¸ä¼šè¶…è¿‡ComputeMgr.crunCount*2
 	for (i=ComputeMgr.crunCount-1; i>=0; --i)group[i] = i;
 
-	//2£¬¼ìË÷µçÂ·,ÒÔ½áµãÎªÍ·ºÍÎ²-----------------------------------
+	//2ï¼Œæ£€ç´¢ç”µè·¯,ä»¥ç»“ç‚¹ä¸ºå¤´å’Œå°¾-----------------------------------
 	for (i=ComputeMgr.crunCount-1; i>=0; --i) if (crun[i].GetConnectNum() >= 3)
-	//Âú×ã½áµãÁ¬½Óµ¼Ïß¸öÊıÖÁÉÙÊÇ3,·ñÔò½áµã²»ĞèÒª¼ìË÷
-	//0--½áµãÊÇ¹ÂÁ¢µÄ;1--½áµã¶ÏÂ·;2--½áµãÏàµ±ÓÚµ¼Ïß
+	//æ»¡è¶³ç»“ç‚¹è¿æ¥å¯¼çº¿ä¸ªæ•°è‡³å°‘æ˜¯3,å¦åˆ™ç»“ç‚¹ä¸éœ€è¦æ£€ç´¢
+	//0--ç»“ç‚¹æ˜¯å­¤ç«‹çš„;1--ç»“ç‚¹æ–­è·¯;2--ç»“ç‚¹ç›¸å½“äºå¯¼çº¿
 		for (j=0; j<4; ++j) if (crun[i].lead[j] && ComputeMgr.crun2[i].c[j] == null)
-	//Âú×ãµ±Ç°·½ÏòÓĞµ¼ÏßÁ¬½Ó ¶øÇÒ Ã»ÓĞ¼ìË÷¹ı(ComputeMgr.crun2[i].c[j] == null)
+	//æ»¡è¶³å½“å‰æ–¹å‘æœ‰å¯¼çº¿è¿æ¥ è€Œä¸” æ²¡æœ‰æ£€ç´¢è¿‡(ComputeMgr.crun2[i].c[j] == null)
 	{
 		now = lead[j];
 		dir = true1AndFalse0(now.conBody[0].p == crun[i]);
 
-		ComputeMgr.circu[ComputeMgr.circuitCount].resistance = 0;	//µç×èÇå0
-		ComputeMgr.circu[ComputeMgr.circuitCount].pressure   = 0;	//µçÑ¹Çå0
+		ComputeMgr.circu[ComputeMgr.circuitCount].resistance = 0;	//ç”µé˜»æ¸…0
+		ComputeMgr.circu[ComputeMgr.circuitCount].pressure   = 0;	//ç”µå‹æ¸…0
 
-		while (true)	//Óöµ½ÏÂÒ»¸öÁ¬½ÓÎïÌå²»ÊÇ2¸öµÄ½áµã½áÊø
+		while (true)	//é‡åˆ°ä¸‹ä¸€ä¸ªè¿æ¥ç‰©ä½“ä¸æ˜¯2ä¸ªçš„ç»“ç‚¹ç»“æŸ
 		{
 			pre = now;
 
-			if (now.hasOwnProperty("resist"))	//¿Ø¼ş
+			if (now.hasOwnProperty("resist"))	//æ§ä»¶
 			{
-				//´¦Àí¿Ø¼ş
-				if (now.resist < 0 || now.lead[dir] == null)	//¶ÏÂ·ÁË
+				//å¤„ç†æ§ä»¶
+				if (now.resist < 0 || now.lead[dir] == null)	//æ–­è·¯äº†
 				{
 					ComputeMgr.circu[ComputeMgr.circuitCount].resistance = -1;
 					break;
 				}
 				ComputeMgr.circu[ComputeMgr.circuitCount].resistance += now.resist;
-				ComputeMgr.circu[ComputeMgr.circuitCount].pressure   += now.GetPressure(1-dir);	//·½ÏòÏà·´
+				ComputeMgr.circu[ComputeMgr.circuitCount].pressure   += now.GetPressure(1-dir);	//æ–¹å‘ç›¸å
 
-				//µ½ÏÂÒ»¸öÎïÌå
+				//åˆ°ä¸‹ä¸€ä¸ªç‰©ä½“
 				now = pre.lead[dir];
 				dir = true1AndFalse0(now.conBody[0].p == pre);
 			}
-			else	//µ¼Ïß,µ½ÏÂÒ»¸öÎïÌå
+			else	//å¯¼çº¿,åˆ°ä¸‹ä¸€ä¸ªç‰©ä½“
 			{
 				now = pre.conBody[dir].p;
-				if (IsOnCrun(now))	//Óöµ½Á¬½ÓÎïÌå²»ÊÇ2¸öµÄ½áµã½áÊø
+				if (IsOnCrun(now))	//é‡åˆ°è¿æ¥ç‰©ä½“ä¸æ˜¯2ä¸ªçš„ç»“ç‚¹ç»“æŸ
 				{
 					tempVar = now.GetConnectNum();
-					if (tempVar >= 3)	//Í¨Â·
+					if (tempVar >= 3)	//é€šè·¯
 					{
-						dir = now.GetDirect(pre);	//¼ÇÂ¼ÏÂ½áÊøµÄ½áµãºÍ·½Ïò
+						dir = now.GetDirect(pre);	//è®°å½•ä¸‹ç»“æŸçš„ç»“ç‚¹å’Œæ–¹å‘
 						break;
 					}
-					else if (tempVar == 2)	//Ìø¹ı,Ïàµ±ÓÚµ¼Ïß
+					else if (tempVar == 2)	//è·³è¿‡,ç›¸å½“äºå¯¼çº¿
 					{
-						//ÕÒµ½½áµãÁ¬½ÓµÄÁíÒ»¸öµ¼Ïß
+						//æ‰¾åˆ°ç»“ç‚¹è¿æ¥çš„å¦ä¸€ä¸ªå¯¼çº¿
 						for (dir=0; dir<4; ++dir)
 							if (now.lead[dir]!=null && pre != now.lead[dir]) break;
-						//×ªµ½½áµãÁ¬½ÓµÄÁíÒ»¸öµ¼Ïß
+						//è½¬åˆ°ç»“ç‚¹è¿æ¥çš„å¦ä¸€ä¸ªå¯¼çº¿
 						pre = now;
 						now = pre.lead[dir];
 						dir = true1AndFalse0(now.conBody[0].p == pre);
 					}
-					else if (tempVar == 1)	//¶ÏÂ·
+					else if (tempVar == 1)	//æ–­è·¯
 					{
 						ComputeMgr.circu[ComputeMgr.circuitCount].resistance = -1;
-						break;	//¶ÏÂ··µ»Ø
+						break;	//æ–­è·¯è¿”å›
 					}
 					else
 					{
-						throw "µçÂ·ÎÄ¼şÓĞ´í !µ¼ÏßÁ¬½Ó½áµã,µ«ÊÇ½áµã²»Á¬½Óµ¼Ïß !";
+						throw "ç”µè·¯æ–‡ä»¶æœ‰é”™ !å¯¼çº¿è¿æ¥ç»“ç‚¹,ä½†æ˜¯ç»“ç‚¹ä¸è¿æ¥å¯¼çº¿ !";
 						break;
 					}
 				}
@@ -186,12 +186,12 @@ ComputeMgr.CollectCircuitInfo = function()
 				}
 				else if (IsOnLead(now))
 				{
-					throw "2¸öµ¼ÏßÖ±½ÓÁ¬½Ó³öÏÖ»áÒıÆğ´íÎó !";
+					throw "2ä¸ªå¯¼çº¿ç›´æ¥è¿æ¥å‡ºç°ä¼šå¼•èµ·é”™è¯¯ !";
 					break;
 				}
 				else
 				{
-					throw "µçÂ·ÎÄ¼şÓĞ´í !µ¼ÏßÖ»Á¬½ÓÒ»¸öÎïÌå !";
+					throw "ç”µè·¯æ–‡ä»¶æœ‰é”™ !å¯¼çº¿åªè¿æ¥ä¸€ä¸ªç‰©ä½“ !";
 					break;
 				}
 				
@@ -208,36 +208,36 @@ ComputeMgr.CollectCircuitInfo = function()
 			ComputeMgr.circu[ComputeMgr.circuitCount].to = ComputeMgr.crun2[endCrunIndex];
 			ComputeMgr.circu[ComputeMgr.circuitCount].dirTo = dir;
 			ComputeMgr.crun2[endCrunIndex].c[dir] = ComputeMgr.crun2[i].c[j] = ComputeMgr.circu[ComputeMgr.circuitCount];
-			++ ComputeMgr.circuitCount;	//²»ÊÇ¶ÏÂ·,¼ÆÈëÓĞĞ§ÏßÂ·
+			++ ComputeMgr.circuitCount;	//ä¸æ˜¯æ–­è·¯,è®¡å…¥æœ‰æ•ˆçº¿è·¯
 
 			if (ComputeMgr.crun2[i].group >= 0)
 			{
 				if (ComputeMgr.crun2[endCrunIndex].group >= 0 && group[ComputeMgr.crun2[i].group] == group[ComputeMgr.crun2[endCrunIndex].group])
 					continue;
-				if (ComputeMgr.crun2[endCrunIndex].group >= 0)	//groupºÏ²¢
+				if (ComputeMgr.crun2[endCrunIndex].group >= 0)	//groupåˆå¹¶
 				{
 					CombineGroup(   group[ComputeMgr.crun2[endCrunIndex].group],
 									group[ComputeMgr.crun2[i].group],
 									group,
 									groupSize);
-					--ComputeMgr.groupCount;	//ºÏ²¢
+					--ComputeMgr.groupCount;	//åˆå¹¶
 				}
-				else	//¼Ì³ĞÁ¬½ÓÎïÌåµÄgroup
+				else	//ç»§æ‰¿è¿æ¥ç‰©ä½“çš„group
 				{
 					ComputeMgr.crun2[endCrunIndex].group = ComputeMgr.crun2[i].group;
 				}
 			}
 			else
 			{
-				if (ComputeMgr.crun2[endCrunIndex].group>=0)	//¼Ì³ĞÁ¬½ÓÎïÌåµÄgroup
+				if (ComputeMgr.crun2[endCrunIndex].group>=0)	//ç»§æ‰¿è¿æ¥ç‰©ä½“çš„group
 				{
 					ComputeMgr.crun2[i].group=ComputeMgr.crun2[endCrunIndex].group;
 				}
-				else	//½¨Á¢ĞÂµÄgroup
+				else	//å»ºç«‹æ–°çš„group
 				{
 					ComputeMgr.crun2[i].group = ComputeMgr.crun2[endCrunIndex].group = groupSize;
 					++groupSize;
-					++ComputeMgr.groupCount;	//½¨Á¢ĞÂµÄ
+					++ComputeMgr.groupCount;	//å»ºç«‹æ–°çš„
 				}
 			}
 
@@ -245,7 +245,7 @@ ComputeMgr.CollectCircuitInfo = function()
 
 	}//for
 
-	//3,½«groupÅÅÁĞ³É´Ó0¿ªÊ¼µÄÁ¬ĞøÊı×Ö-----------------------------------
+	//3,å°†groupæ’åˆ—æˆä»0å¼€å§‹çš„è¿ç»­æ•°å­—-----------------------------------
 	dir = 0;
 	for (i=ComputeMgr.groupCount-1; i>=0; --i)
 	{
@@ -256,20 +256,20 @@ ComputeMgr.CollectCircuitInfo = function()
 	}
 	for (j=groupSize-1; j>=0; --j) group[j] = -group[j] - 1;
 
-	//4,ÒÔÉÏWmMgr.crun2µÄgroup²»ÊÇÕæÕıµÄ×é¶Ó±êÖ¾,¶øÊÇÖ¸ÏògroupÊı×éµÄÖ¸Õë-------
-	//ÏÖÔÚ×ª»¯ÎªÕæÕıµÄ×é¶Ó±êÖ¾
+	//4,ä»¥ä¸ŠWmMgr.crun2çš„groupä¸æ˜¯çœŸæ­£çš„ç»„é˜Ÿæ ‡å¿—,è€Œæ˜¯æŒ‡å‘groupæ•°ç»„çš„æŒ‡é’ˆ-------
+	//ç°åœ¨è½¬åŒ–ä¸ºçœŸæ­£çš„ç»„é˜Ÿæ ‡å¿—
 	for (i=ComputeMgr.crunCount-1; i>=0; --i) if (ComputeMgr.crun2[i].group >= 0) ComputeMgr.crun2[i].group = group[ComputeMgr.crun2[i].group];
 
 	group = null;//delete [] group;
 };
 
 /*bool*/ComputeMgr.FindRoad = function(/*const CRUNMAP * */map, /*ROAD * */roads, /*int */j, /*int */k)
-//ĞÎ³ÉÒ»¸ö½áµãj µ½ ÆäËû½áµãµÄÂ·¾¶,ÆÁ±Îj kÖ®¼äµÄÖ±½ÓÁ¬Ïß
+//å½¢æˆä¸€ä¸ªç»“ç‚¹j åˆ° å…¶ä»–ç»“ç‚¹çš„è·¯å¾„,å±è”½j kä¹‹é—´çš„ç›´æ¥è¿çº¿
 {
 	/*const int*/var size = map.size;
-	/*bool*/var state;			//¼ÇÂ¼ÊÇ·ñ¸Ä±äÁË
-	/*int*/var i, next;		    //Ñ­»·±äÁ¿
-	/*bool **/var interFlag;	//j ÊÇ·ñÕÒµ½ÓëÄ³µãÁ¬ÏßµÄ±ê¼Ç
+	/*bool*/var state;			//è®°å½•æ˜¯å¦æ”¹å˜äº†
+	/*int*/var i, next;		    //å¾ªç¯å˜é‡
+	/*bool **/var interFlag;	//j æ˜¯å¦æ‰¾åˆ°ä¸æŸç‚¹è¿çº¿çš„æ ‡è®°
 
 	interFlag = new Array(size);
 	for (i=size-1; i>j; --i) interFlag[i] = map.direct[CONVERT(j,i,size)] > 0;
@@ -278,33 +278,33 @@ ComputeMgr.CollectCircuitInfo = function()
 
 	do
 	{
-		state = false;	//Çå³ıÉÏ´Î×´Ì¬
+		state = false;	//æ¸…é™¤ä¸Šæ¬¡çŠ¶æ€
 
 		for (i=size-1; i>=0; --i) if (i!=j && i!=k && interFlag[i])
 		{
 			for (next=size-1; next>i; --next)
 				if (next-j && !interFlag[next] && map.direct[CONVERT(i,next,size)]>0)
 			{
-				state = true;	//¸Ä±äÁË
+				state = true;	//æ”¹å˜äº†
 				interFlag[next] = true;
 				roads[i].Clone(roads[next]);
 				roads[next].InsertPointAtTail(i);
 			}
 
-			if (interFlag[k]) {state = false;break;}	//ÍË³öÑ­»·
+			if (interFlag[k]) {state = false;break;}	//é€€å‡ºå¾ªç¯
 
 			for (next=i-1; next>=0; --next)
 			{
 				if (next != j && !interFlag[next] && map.direct[CONVERT(next,i,size)] > 0)
 				{
-					state = true;	//¸Ä±äÁË
+					state = true;	//æ”¹å˜äº†
 					interFlag[next] = true;
 					roads[i].Clone(roads[next]);
 					roads[next].InsertPointAtTail(i);
 				}
 			}
 
-			if (interFlag[k]) {state = false;break;}	//ÍË³öÑ­»·
+			if (interFlag[k]) {state = false;break;}	//é€€å‡ºå¾ªç¯
 		}
 
 	}
@@ -313,18 +313,18 @@ ComputeMgr.CollectCircuitInfo = function()
 
 	state = interFlag[k];
 	interFlag = null;//delete [] interFlag;
-	return state;	//·µ»ØÊÇ·ñÕÒµ½ j.k µÄÏßÂ·
+	return state;	//è¿”å›æ˜¯å¦æ‰¾åˆ° j.k çš„çº¿è·¯
 }
 
 ComputeMgr.CreateEquation = function()
-//¸ù¾İÏßÂ·ĞÅÏ¢,·ÖÈº×é½¨Á¢·½³Ì
+//æ ¹æ®çº¿è·¯ä¿¡æ¯,åˆ†ç¾¤ç»„å»ºç«‹æ–¹ç¨‹
 {
 	/*int*/var group, i, j, k, size;
 	/*CRUNMAP **/var nowMap;
 	/*CRUNMAP **/var maps;
 
-	//1 ³õÊ¼»¯maps---------------------------------------------------------
-	//1.1 ³õÊ¼»¯Ã¿¸ögroupµÄcrun³ÉÔ±¸öÊı
+	//1 åˆå§‹åŒ–maps---------------------------------------------------------
+	//1.1 åˆå§‹åŒ–æ¯ä¸ªgroupçš„crunæˆå‘˜ä¸ªæ•°
     var mapsSizeArray = new Array(ComputeMgr.groupCount);
     zeroArray(mapsSizeArray);
     for (i=ComputeMgr.crunCount-1; i>=0; --i) if (ComputeMgr.crun2[i].group >= 0)
@@ -343,7 +343,7 @@ ComputeMgr.CreateEquation = function()
 		++nowMap.size;
 	}
 
-	//1.2 ³õÊ¼»¯Ã¿¸ögroupµÄWmMgr.circu³ÉÔ±¸öÊı
+	//1.2 åˆå§‹åŒ–æ¯ä¸ªgroupçš„WmMgr.circuæˆå‘˜ä¸ªæ•°
 	for (i=ComputeMgr.groupCount-1; i>=0; --i) maps[i].circuitCount = 0;
 	for (i=ComputeMgr.circuitCount-1; i>=0; --i)
 	{
@@ -352,7 +352,7 @@ ComputeMgr.CreateEquation = function()
 		++nowMap.circuitCount;
 	}
 
-	//1.3 ³õÊ¼»¯Ã¿¸ögroupµÄdirect³ÉÔ±¸öÊı
+	//1.3 åˆå§‹åŒ–æ¯ä¸ªgroupçš„directæˆå‘˜ä¸ªæ•°
 	for (group=ComputeMgr.groupCount-1; group>=0; --group)
 	{
 		nowMap = maps[group];
@@ -365,7 +365,7 @@ ComputeMgr.CreateEquation = function()
 		}
 	}
 
-	//1.4  ³õÊ¼»¯Á¬½Ó2¸ö½áµãµÄµÚÒ»¸öÏßÂ·
+	//1.4  åˆå§‹åŒ–è¿æ¥2ä¸ªç»“ç‚¹çš„ç¬¬ä¸€ä¸ªçº¿è·¯
 	for (group=ComputeMgr.groupCount-1; group>=0; --group)
 	{
 		nowMap = maps[group];
@@ -381,33 +381,33 @@ ComputeMgr.CreateEquation = function()
 	}
 
 
-	//2	2¸ö½áµãÖ®¼äÓĞ>=2ÌõÖ±½ÓÁ¬½ÓµÄÏßÂ·,	-----------------------------
-	//	ËûÃÇÖ®¼äĞÎ³É»·Â·,µÃµ½²¿·Ö·½³Ì		-----------------------------
-	/*double **/var outPutBuf;	//Êä³öµ½·½³ÌµÄ»º´æÊı×é
-	/*double*/var saveForBuf;	//±£´æ²¿·ÖÊı¾İ
+	//2	2ä¸ªç»“ç‚¹ä¹‹é—´æœ‰>=2æ¡ç›´æ¥è¿æ¥çš„çº¿è·¯,	-----------------------------
+	//	ä»–ä»¬ä¹‹é—´å½¢æˆç¯è·¯,å¾—åˆ°éƒ¨åˆ†æ–¹ç¨‹		-----------------------------
+	/*double **/var outPutBuf;	//è¾“å‡ºåˆ°æ–¹ç¨‹çš„ç¼“å­˜æ•°ç»„
+	/*double*/var saveForBuf;	//ä¿å­˜éƒ¨åˆ†æ•°æ®
 	/*CRUN2 **/var crunNum1, crunNum2;
 	/*int*/var connect, firstConnect, nextConnect;
 
-	ComputeMgr.equation = new Array(ComputeMgr.groupCount);	//ÉêÇëÖ¸Õë
+	ComputeMgr.equation = new Array(ComputeMgr.groupCount);	//ç”³è¯·æŒ‡é’ˆ
 	for (group=ComputeMgr.groupCount-1; group>=0; --group)
 	{
 		nowMap = maps[group];
 		size = nowMap.size;
 
-		outPutBuf = new Array(nowMap.circuitCount+1);	//³õÊ¼»¯Êä³öµ½·½³ÌµÄÊı×é
-		ComputeMgr.equation[group] = Equation.CreateNew(size, nowMap.circuitCount);	//³õÊ¼»¯·½³ÌÀà
+		outPutBuf = new Array(nowMap.circuitCount+1);	//åˆå§‹åŒ–è¾“å‡ºåˆ°æ–¹ç¨‹çš„æ•°ç»„
+		ComputeMgr.equation[group] = Equation.CreateNew(size, nowMap.circuitCount);	//åˆå§‹åŒ–æ–¹ç¨‹ç±»
 
 		for (j=size-2; j>=0; --j) for (k=size-1; k>j; --k)
 		{
-			ZeroArray(outPutBuf);	//»º´æÇåÁã
+			ZeroArray(outPutBuf);	//ç¼“å­˜æ¸…é›¶
 			i = CONVERT(j, k, size);
 			if (nowMap.direct[i] < 2) continue;
 
 			crunNum1 = ComputeMgr.crun2[nowMap.crunOrderMap[j]];
 			crunNum2 = ComputeMgr.crun2[nowMap.crunOrderMap[k]];
-			firstConnect = nowMap.dir[i];	//µÚÒ»¸öÁ¬Ïß
+			firstConnect = nowMap.dir[i];	//ç¬¬ä¸€ä¸ªè¿çº¿
 
-			//»ñÈ¡²¢±£´æ²¿·ÖÏßÂ·Êı¾İ
+			//è·å–å¹¶ä¿å­˜éƒ¨åˆ†çº¿è·¯æ•°æ®
 			if (crunNum1.c[firstConnect].from == crunNum2)
 			{
 				outPutBuf[crunNum1.c[firstConnect].indexInGroup] =
@@ -422,10 +422,10 @@ ComputeMgr.CreateEquation = function()
 			}
 			nextConnect = firstConnect + 1;
 
-			//2¸ö½áµãÖ®¼äÓĞ>=2ÌõÖ±½ÓÁ¬½ÓµÄÏßÂ·,ËûÃÇÖ®¼äĞÎ³É»·Â·,µÃµ½²¿·Ö·½³Ì
+			//2ä¸ªç»“ç‚¹ä¹‹é—´æœ‰>=2æ¡ç›´æ¥è¿æ¥çš„çº¿è·¯,ä»–ä»¬ä¹‹é—´å½¢æˆç¯è·¯,å¾—åˆ°éƒ¨åˆ†æ–¹ç¨‹
 			for (connect=nowMap.direct[i]-2; connect>=0; --connect)
 			{
-				//1,Ñ°ÕÒÏÂÒ»¸öÁ¬½ÓµÄÏßÂ·
+				//1,å¯»æ‰¾ä¸‹ä¸€ä¸ªè¿æ¥çš„çº¿è·¯
 				while (	crunNum1.c[nextConnect] == null
 						|| 
 						(	crunNum1.c[nextConnect].to != crunNum2 
@@ -435,8 +435,8 @@ ComputeMgr.CreateEquation = function()
 					 )
 					++ nextConnect;
 
-				//2,½«µç×è,µçÑ¹¼ÆÈë
-				outPutBuf[nowMap.circuitCount] = saveForBuf;	//Ğ´Èë±£´æµÄÊı¾İ
+				//2,å°†ç”µé˜»,ç”µå‹è®¡å…¥
+				outPutBuf[nowMap.circuitCount] = saveForBuf;	//å†™å…¥ä¿å­˜çš„æ•°æ®
 				if (crunNum1.c[nextConnect].from == crunNum2)
 				{
 					outPutBuf[crunNum1.c[nextConnect].indexInGroup] =
@@ -452,73 +452,73 @@ ComputeMgr.CreateEquation = function()
 						crunNum1.c[nextConnect].pressure;
 				}
 
-				//3,ÊäÈë·½³Ì
+				//3,è¾“å…¥æ–¹ç¨‹
 				ComputeMgr.equation[group].InputARow(outPutBuf);
 
-				//4,»Ö¸´
+				//4,æ¢å¤
 				outPutBuf[crunNum1.c[nextConnect].indexInGroup] = 0;
 
-				//5,ÏÂÒ»¸ö
+				//5,ä¸‹ä¸€ä¸ª
 				++ nextConnect;
 			}
 		}
 
-		outPutBuf = null;//delete [] outPutBuf;	//ÊÍ·Å»º´æ
+		outPutBuf = null;//delete [] outPutBuf;	//é‡Šæ”¾ç¼“å­˜
 	}//for (group
 
 
-	//3 ½ö°üº¬Ò»¸ö½áµãµÄ»·Â·,Ö±½Ó¼ÆËã½á¹û·ÅÈë·½³Ì  ----------------------
+	//3 ä»…åŒ…å«ä¸€ä¸ªç»“ç‚¹çš„ç¯è·¯,ç›´æ¥è®¡ç®—ç»“æœæ”¾å…¥æ–¹ç¨‹  ----------------------
 	for (i=ComputeMgr.circuitCount-1; i>=0; --i) if (ComputeMgr.circu[i].from == ComputeMgr.circu[i].to)
 	{
-		//³õÊ¼»¯»º´æ
+		//åˆå§‹åŒ–ç¼“å­˜
 		group  = ComputeMgr.circu[i].from.group;
 		nowMap = maps[group];
-		outPutBuf = new Array(nowMap.circuitCount+1);	//Êä³öµ½·½³ÌµÄ»º´æ
-		ZeroArray(outPutBuf);	//»º´æÇåÁã
+		outPutBuf = new Array(nowMap.circuitCount+1);	//è¾“å‡ºåˆ°æ–¹ç¨‹çš„ç¼“å­˜
+		ZeroArray(outPutBuf);	//ç¼“å­˜æ¸…é›¶
 
 		if (IsFloatZero(ComputeMgr.circu[i].resistance) && IsFloatZero(ComputeMgr.circu[i].pressure))
-		{//µç×èµçÑ¹¶¼ÊÇ0;Éèµç×èÎª1,µçÑ¹Îª0
+		{//ç”µé˜»ç”µå‹éƒ½æ˜¯0;è®¾ç”µé˜»ä¸º1,ç”µå‹ä¸º0
 			outPutBuf[ComputeMgr.circu[i].indexInGroup]	= 1;
 			outPutBuf[nowMap.circuitCount]		= 0;
 		}
 		else
-		{//Õı³£Çé¿ö»ò¶ÌÂ·Çé¿ö
+		{//æ­£å¸¸æƒ…å†µæˆ–çŸ­è·¯æƒ…å†µ
 			outPutBuf[ComputeMgr.circu[i].indexInGroup]	= ComputeMgr.circu[i].resistance;
 			outPutBuf[nowMap.circuitCount]		= ComputeMgr.circu[i].pressure;
 		}
 
-		ComputeMgr.equation[group].InputARow(outPutBuf);	//ÊäÈë·½³ÌµÄÒ»ĞĞ
+		ComputeMgr.equation[group].InputARow(outPutBuf);	//è¾“å…¥æ–¹ç¨‹çš„ä¸€è¡Œ
 
-		outPutBuf = null;//delete [] outPutBuf;	//ÊÍ·Å»º´æ
+		outPutBuf = null;//delete [] outPutBuf;	//é‡Šæ”¾ç¼“å­˜
 	}
 
 
-	//4	ÓĞÖ±½ÓÏßÂ·Á¬½ÓµÄ2¸ö½áµã, ĞÎ³ÉÒ»¸ö»·Â·£¬		---------------------
-	//	¸Ã»·Â·°üº¬Ò»´ÎÕâ¸öÁ¬½ÓËüÃÇµÄÏßÂ·,			---------------------
-	//	ÓÉ»·Â·ĞÅÏ¢µÃ³ö·½³Ì .						---------------------
+	//4	æœ‰ç›´æ¥çº¿è·¯è¿æ¥çš„2ä¸ªç»“ç‚¹, å½¢æˆä¸€ä¸ªç¯è·¯ï¼Œ		---------------------
+	//	è¯¥ç¯è·¯åŒ…å«ä¸€æ¬¡è¿™ä¸ªè¿æ¥å®ƒä»¬çš„çº¿è·¯,			---------------------
+	//	ç”±ç¯è·¯ä¿¡æ¯å¾—å‡ºæ–¹ç¨‹ .						---------------------
 	for (group=ComputeMgr.groupCount-1; group>=0; --group)
 	{
 		nowMap = maps[group];
 		size = nowMap.size;
-		outPutBuf = new Array(nowMap.circuitCount+1);	//Êä³öµ½·½³ÌµÄ»º´æ
+		outPutBuf = new Array(nowMap.circuitCount+1);	//è¾“å‡ºåˆ°æ–¹ç¨‹çš„ç¼“å­˜
 		/*ROAD **/var roads ;
 
 		for (j=size-2; j>=0; --j) for (k=size-1; k>j; --k)
 		{
-			//³õÊ¼»¯
+			//åˆå§‹åŒ–
 			i = CONVERT(j, k, size);
 			if (nowMap.direct[i] <= 0) continue;
 			
 			roads = genrateArrayWithElementInitFunc(ROAD.CreateNew, size);
-			ZeroArray(outPutBuf);	//»º´æÇåÁã
+			ZeroArray(outPutBuf);	//ç¼“å­˜æ¸…é›¶
 
-			//»ñµÃÂ·¾¶,½¨Á¢·½³Ì
-			if (FindRoad(nowMap, roads, j, k))	//ÓĞÂ·¾¶µÃµ½·½³ÌµÄÒ»ĞĞ
+			//è·å¾—è·¯å¾„,å»ºç«‹æ–¹ç¨‹
+			if (FindRoad(nowMap, roads, j, k))	//æœ‰è·¯å¾„å¾—åˆ°æ–¹ç¨‹çš„ä¸€è¡Œ
 			{
 				/*ROADSTEP **/var prep = roads[k].first;
 				/*ROADSTEP **/var nowp;
 
-				if (prep == null) continue;	//³ö´í
+				if (prep == null) continue;	//å‡ºé”™
 
 				nowp = prep.next;
 				PutIntoBuf(j, prep.crunIndex, nowMap, outPutBuf);
@@ -527,48 +527,48 @@ ComputeMgr.CreateEquation = function()
 				{
 					PutIntoBuf(prep.crunIndex, nowp.crunIndex, nowMap, outPutBuf);
 
-					//ÏÂÒ»¸ö
+					//ä¸‹ä¸€ä¸ª
 					prep = nowp;
 					nowp = nowp.next;
 				}
 
 				PutIntoBuf(prep.crunIndex, k, nowMap, outPutBuf);
 
-				PutIntoBuf(k, j, nowMap, outPutBuf);	//×îºó¼ÓÈëjµ½kµÄµÚÒ»¸öÏßÂ·
+				PutIntoBuf(k, j, nowMap, outPutBuf);	//æœ€ååŠ å…¥jåˆ°kçš„ç¬¬ä¸€ä¸ªçº¿è·¯
 
-				ComputeMgr.equation[group].InputARow(outPutBuf);	//ÊäÈë·½³Ì
+				ComputeMgr.equation[group].InputARow(outPutBuf);	//è¾“å…¥æ–¹ç¨‹
 			}
-			else if (1 == nowMap.direct[i])	//Ã»ÓĞÂ·¾¶,¸Ãµ¼ÏßµçÁ÷ÊÇ0
+			else if (1 == nowMap.direct[i])	//æ²¡æœ‰è·¯å¾„,è¯¥å¯¼çº¿ç”µæµæ˜¯0
 			{
-				//µ¼ÏßµçÁ÷ÉèÎª0
+				//å¯¼çº¿ç”µæµè®¾ä¸º0
 				outPutBuf[nowMap.firstCircuit[i].indexInGroup] = 1;
 				outPutBuf[nowMap.circuitCount] = 0;
 
-				ComputeMgr.equation[group].InputARow(outPutBuf);	//ÊäÈë·½³Ì
+				ComputeMgr.equation[group].InputARow(outPutBuf);	//è¾“å…¥æ–¹ç¨‹
 			}
 
 			roads = null;//delete [] roads;
 		}
 
-		outPutBuf = null;//delete [] outPutBuf;	//ÊÍ·Å»º´æ
+		outPutBuf = null;//delete [] outPutBuf;	//é‡Šæ”¾ç¼“å­˜
 	}//for (group
 
 
-	//5ĞÎ³É½áµã·½³Ì------------------------------------------------------
+	//5å½¢æˆç»“ç‚¹æ–¹ç¨‹------------------------------------------------------
 	for (group=ComputeMgr.groupCount-1; group>=0; --group)
 	{
 		nowMap = maps[group];
 		size = nowMap.size;
-		outPutBuf = new Array(nowMap.circuitCount+1);	//Êä³öµ½·½³ÌµÄ»º´æ
+		outPutBuf = new Array(nowMap.circuitCount+1);	//è¾“å‡ºåˆ°æ–¹ç¨‹çš„ç¼“å­˜
 
-		for (k=size-2; k>=0; --k)	//Ö»ĞèÊäÈëk-1¸ö½áµã·½³Ì
+		for (k=size-2; k>=0; --k)	//åªéœ€è¾“å…¥k-1ä¸ªç»“ç‚¹æ–¹ç¨‹
 		{
-			ZeroArray(outPutBuf);	//»º´æÇåÁã
-			if (CreateCrunEquation(ComputeMgr.crun2[nowMap.crunOrderMap[k]], outPutBuf))	//½¨Á¢·½³Ì
-				ComputeMgr.equation[group].InputARow(outPutBuf);	//ÊäÈë·½³Ì
+			ZeroArray(outPutBuf);	//ç¼“å­˜æ¸…é›¶
+			if (CreateCrunEquation(ComputeMgr.crun2[nowMap.crunOrderMap[k]], outPutBuf))	//å»ºç«‹æ–¹ç¨‹
+				ComputeMgr.equation[group].InputARow(outPutBuf);	//è¾“å…¥æ–¹ç¨‹
 		}
 
-		outPutBuf = null;//delete [] outPutBuf;	//ÊÍ·Å»º´æ
+		outPutBuf = null;//delete [] outPutBuf;	//é‡Šæ”¾ç¼“å­˜
 	}
 };
 
@@ -577,7 +577,7 @@ ComputeMgr.TravelCircuitPutElec = function(/*Pointer */now,
 									/*int */dir,
 									/*double */elec,
 									/*ELEC_STATE */flag)
-//´ÓÖ¸¶¨ÎïÌå±éÀú,½«ÏßÂ·µçÁ÷¸³Öµµ½ÎïÌåÉÏ
+//ä»æŒ‡å®šç‰©ä½“éå†,å°†çº¿è·¯ç”µæµèµ‹å€¼åˆ°ç‰©ä½“ä¸Š
 {
 	/*Pointer*/var pre;
 
@@ -585,44 +585,44 @@ ComputeMgr.TravelCircuitPutElec = function(/*Pointer */now,
 	{
 		pre = now;
 
-		if (now.hasOwnProperty("resist"))	//¿Ø¼ş
+		if (now.hasOwnProperty("resist"))	//æ§ä»¶
 		{
-			if (NORMALELEC == flag) //Õı³£ÏßÂ·
+			if (NORMALELEC == flag) //æ­£å¸¸çº¿è·¯
 			{
 				now.elec	= elec;
-				now.elecDir	= (1-dir);	//·½ÏòÏà·´
+				now.elecDir	= (1-dir);	//æ–¹å‘ç›¸å
 			}
-			else	//²»Õı³£ÏßÂ·
+			else	//ä¸æ­£å¸¸çº¿è·¯
 			{
 				now.elecDir = flag;
 			}
 
-			//µ½ÏÂÒ»¸öÎïÌå
+			//åˆ°ä¸‹ä¸€ä¸ªç‰©ä½“
 			now = pre.lead[dir];
 			dir = true1AndFalse0(now.conBody[0].p == pre);
 		}
-		else	//µ¼Ïß,µ½ÏÂÒ»¸öÎïÌå
+		else	//å¯¼çº¿,åˆ°ä¸‹ä¸€ä¸ªç‰©ä½“
 		{
-			if (NORMALELEC == flag) //Õı³£ÏßÂ·
+			if (NORMALELEC == flag) //æ­£å¸¸çº¿è·¯
 			{
 				now.elec	= elec;
-				now.elecDir	= (1-dir);	//·½ÏòÏà·´
+				now.elecDir	= (1-dir);	//æ–¹å‘ç›¸å
 			}
-			else	//²»Õı³£ÏßÂ·
+			else	//ä¸æ­£å¸¸çº¿è·¯
 			{
 				now.elecDir = flag;
 			}
 
 			now = now.conBody[dir].p;
-			if (IsOnCrun(now))	//Óöµ½ÖÕµã(last½áµã)½áÊø
+			if (IsOnCrun(now))	//é‡åˆ°ç»ˆç‚¹(lastç»“ç‚¹)ç»“æŸ
 			{
-				if (now == last) break;	//µ½´ïÖÕµã
-				else //Ìø¹ı,Ïàµ±ÓÚµ¼Ïß
+				if (now == last) break;	//åˆ°è¾¾ç»ˆç‚¹
+				else //è·³è¿‡,ç›¸å½“äºå¯¼çº¿
 				{
-					//ÕÒµ½½áµãÁ¬½ÓµÄÁíÒ»¸öµ¼Ïß
+					//æ‰¾åˆ°ç»“ç‚¹è¿æ¥çš„å¦ä¸€ä¸ªå¯¼çº¿
 					for (dir=0; dir<4; ++dir)
 						if (now.lead[dir]!=null && pre != now.lead[dir]) break;
-					//Ö¸ÕëÖ¸Ïò½áµãÁ¬½ÓµÄÁíÒ»¸öµ¼Ïß
+					//æŒ‡é’ˆæŒ‡å‘ç»“ç‚¹è¿æ¥çš„å¦ä¸€ä¸ªå¯¼çº¿
 					pre = now;
 					now = pre.lead[dir];
 					dir = true1AndFalse0(now.conBody[0].p == pre);
@@ -630,7 +630,7 @@ ComputeMgr.TravelCircuitPutElec = function(/*Pointer */now,
 			}
 			else if (IsOnLead(now))
 			{
-				throw "2¸öµ¼ÏßÖ±½ÓÁ¬½Ó³öÏÖ»áÒıÆğ´íÎó !";
+				throw "2ä¸ªå¯¼çº¿ç›´æ¥è¿æ¥å‡ºç°ä¼šå¼•èµ·é”™è¯¯ !";
 			}
 			else //now.IsOnBody
 			{
@@ -638,12 +638,12 @@ ComputeMgr.TravelCircuitPutElec = function(/*Pointer */now,
 			}
 		}
 	}//do
-	while (!IsOnCrun(now) || now != last);	//Óöµ½ÖÕµã(last½áµã)½áÊø
+	while (!IsOnCrun(now) || now != last);	//é‡åˆ°ç»ˆç‚¹(lastç»“ç‚¹)ç»“æŸ
 };
 
 ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
-//´ÓÖ¸¶¨ÎïÌå±éÀú,½«¶ÏÂ·ÎïÌåÉèÖÃµçÁ÷¶ÏÂ·
-//ÖÕµãÌõ¼ş:¶ÏÂ·¿Ø¼ş,Á¬½ÓÊı²»µÈÓÚ2µÄ½áµã
+//ä»æŒ‡å®šç‰©ä½“éå†,å°†æ–­è·¯ç‰©ä½“è®¾ç½®ç”µæµæ–­è·¯
+//ç»ˆç‚¹æ¡ä»¶:æ–­è·¯æ§ä»¶,è¿æ¥æ•°ä¸ç­‰äº2çš„ç»“ç‚¹
 {
 	/*const Pointer*/var first = now;
 	/*Pointer*/var pre;
@@ -652,36 +652,36 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 	{
 		pre = now;
 
-		if (now.hasOwnProperty("resist"))	//¿Ø¼ş
+		if (now.hasOwnProperty("resist"))	//æ§ä»¶
 		{
-			//ÊäÈëµçÁ÷
+			//è¾“å…¥ç”µæµ
 			now.elecDir = OPENELEC;
 			now.elec = 0;
 
-			//µ½ÏÂÒ»¸öÎïÌå
+			//åˆ°ä¸‹ä¸€ä¸ªç‰©ä½“
 			now = pre.lead[dir];
-			if (now == null) break;	//½áÊø±éÀú
+			if (now == null) break;	//ç»“æŸéå†
 			dir = true1AndFalse0(now.conBody[0].p == pre);
 		}
-		else	//µ¼Ïß,µ½ÏÂÒ»¸öÎïÌå
+		else	//å¯¼çº¿,åˆ°ä¸‹ä¸€ä¸ªç‰©ä½“
 		{
-			//ÊäÈëµçÁ÷
+			//è¾“å…¥ç”µæµ
 			now.elecDir = OPENELEC;
 			now.elec = 0;
 
 			now = now.conBody[dir].p;
-			if (IsOnCrun(now))	//Óöµ½ÖÕµã(last½áµã)½áÊø
+			if (IsOnCrun(now))	//é‡åˆ°ç»ˆç‚¹(lastç»“ç‚¹)ç»“æŸ
 			{
-				if (2 != now.GetConnectNum())	//µ½´ïÖÕµã
+				if (2 != now.GetConnectNum())	//åˆ°è¾¾ç»ˆç‚¹
 				{
 					break;
 				}
-				else //Ìø¹ı,Ïàµ±ÓÚµ¼Ïß
+				else //è·³è¿‡,ç›¸å½“äºå¯¼çº¿
 				{
-					//ÕÒµ½½áµãÁ¬½ÓµÄÁíÒ»¸öµ¼Ïß
+					//æ‰¾åˆ°ç»“ç‚¹è¿æ¥çš„å¦ä¸€ä¸ªå¯¼çº¿
 					for (dir=0; dir<4; ++dir)
 						if (now.lead[dir]!=null && pre != now.lead[dir]) break;
-					//Ö¸ÕëÖ¸Ïò½áµãÁ¬½ÓµÄÁíÒ»¸öµ¼Ïß
+					//æŒ‡é’ˆæŒ‡å‘ç»“ç‚¹è¿æ¥çš„å¦ä¸€ä¸ªå¯¼çº¿
 					pre = now;
 					now = pre.lead[dir];
 					dir = true1AndFalse0(now.conBody[0].p == pre);
@@ -689,7 +689,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 			}
 			else if (IsOnLead(now))
 			{
-				throw "2¸öµ¼ÏßÖ±½ÓÁ¬½Ó³öÏÖ»áÒıÆğ´íÎó";
+				throw "2ä¸ªå¯¼çº¿ç›´æ¥è¿æ¥å‡ºç°ä¼šå¼•èµ·é”™è¯¯";
 			}
 			else //now.IsOnBody()
 			{
@@ -697,71 +697,71 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 			}
 		}
 	}//do
-	while (now != first);	//±éÀúµ½ÖÕµã
+	while (now != first);	//éå†åˆ°ç»ˆç‚¹
 };
 
 /*ELEC_STATE*/ComputeMgr.TravelCircuitGetOrSetInfo = function(/*Pointer */now, /*int */dir, /*double &*/elec, /*ELEC_STATE */flag)
-//´ÓÖ¸¶¨ÎïÌå±éÀú,»ñµÃµçÑ¹ºÍµç×èĞÅÏ¢,Æğµã¾ÍÊÇÖÕµã
-//Ö¸¶¨ÎïÌå²»ÄÜÊÇÏßÂ·ÖĞ°üº¬µÄ½áµã,·ñÔòº¯Êı½øÈëËÀÑ­»·
+//ä»æŒ‡å®šç‰©ä½“éå†,è·å¾—ç”µå‹å’Œç”µé˜»ä¿¡æ¯,èµ·ç‚¹å°±æ˜¯ç»ˆç‚¹
+//æŒ‡å®šç‰©ä½“ä¸èƒ½æ˜¯çº¿è·¯ä¸­åŒ…å«çš„ç»“ç‚¹,å¦åˆ™å‡½æ•°è¿›å…¥æ­»å¾ªç¯
 {
 	/*double*/var press = 0;
 	/*double*/var resist = 0;
-	/*const Pointer*/var self = now;	//¼ÇÂ¼ÏÂÆğµã
+	/*const Pointer*/var self = now;	//è®°å½•ä¸‹èµ·ç‚¹
 	/*Pointer*/var pre;
-	if (IsOnCrun(now)) return ERRORELEC;	//Ö¸¶¨ÎïÌå²»ÄÜÊÇÏßÂ·ÖĞ°üº¬µÄ½áµã
+	if (IsOnCrun(now)) return ERRORELEC;	//æŒ‡å®šç‰©ä½“ä¸èƒ½æ˜¯çº¿è·¯ä¸­åŒ…å«çš„ç»“ç‚¹
 
 	do
 	{
 		pre = now;
 
-		if (now.hasOwnProperty("resist"))	//¿Ø¼ş
+		if (now.hasOwnProperty("resist"))	//æ§ä»¶
 		{
-			if (UNKNOWNELEC == flag)	//»ñµÃµçÑ¹µç×è
+			if (UNKNOWNELEC == flag)	//è·å¾—ç”µå‹ç”µé˜»
 			{
 				resist	+= now.resist;
-				press	+= now.GetPressure(1-dir);	//·½ÏòÏà·´
+				press	+= now.GetPressure(1-dir);	//æ–¹å‘ç›¸å
 			}
-			else if (NORMALELEC == flag)	//·ÅÈëÕı³£µçÁ÷ĞÅÏ¢
+			else if (NORMALELEC == flag)	//æ”¾å…¥æ­£å¸¸ç”µæµä¿¡æ¯
 			{
-				now.elecDir	= (1-dir);	//·½ÏòÏà·´
+				now.elecDir	= (1-dir);	//æ–¹å‘ç›¸å
 				now.elec	= elec;
 			}
-			else	//·ÅÈë²»Õı³£µçÁ÷ĞÅÏ¢
+			else	//æ”¾å…¥ä¸æ­£å¸¸ç”µæµä¿¡æ¯
 			{
 				now.elecDir = flag;
 			}
 
-			//µ½ÏÂÒ»¸öÎïÌå
+			//åˆ°ä¸‹ä¸€ä¸ªç‰©ä½“
 			now = pre.lead[dir]);
-			if (now == null) return ERRORELEC;	//½áÊø±éÀú,ÕâÖÖÇé¿öÊÇ´íÎó
+			if (now == null) return ERRORELEC;	//ç»“æŸéå†,è¿™ç§æƒ…å†µæ˜¯é”™è¯¯
 			dir = true1AndFalse0(now.conBody[0].p == pre);
 		}
-		else	//µ¼Ïß,µ½ÏÂÒ»¸öÎïÌå
+		else	//å¯¼çº¿,åˆ°ä¸‹ä¸€ä¸ªç‰©ä½“
 		{
-			if (NORMALELEC == flag)	//·ÅÈëÕı³£µçÁ÷ĞÅÏ¢
+			if (NORMALELEC == flag)	//æ”¾å…¥æ­£å¸¸ç”µæµä¿¡æ¯
 			{
-				now.elecDir	= (1-dir);	//·½ÏòÏà·´
+				now.elecDir	= (1-dir);	//æ–¹å‘ç›¸å
 				now.elec	= elec;
 			}
-			else if (UNKNOWNELEC != flag)	//·ÅÈë²»Õı³£µçÁ÷ĞÅÏ¢
+			else if (UNKNOWNELEC != flag)	//æ”¾å…¥ä¸æ­£å¸¸ç”µæµä¿¡æ¯
 			{
 				now.elecDir = flag;
 			}
 
 			now = now.conBody[dir].p;
-			if (IsOnCrun(now))	//´ËÊ±½áµãÒ»¶¨Á¬½Ó2¸öµ¼Ïß,Ìø¹ı,Ïàµ±ÓÚµ¼Ïß
+			if (IsOnCrun(now))	//æ­¤æ—¶ç»“ç‚¹ä¸€å®šè¿æ¥2ä¸ªå¯¼çº¿,è·³è¿‡,ç›¸å½“äºå¯¼çº¿
 			{
-				//ÕÒµ½½áµãÁ¬½ÓµÄÁíÒ»¸öµ¼Ïß
+				//æ‰¾åˆ°ç»“ç‚¹è¿æ¥çš„å¦ä¸€ä¸ªå¯¼çº¿
 				for (dir=0; dir<4; ++dir)
 					if (now.lead[dir]!=null && pre != now.lead[dir]) break;
-				//Ö¸ÕëÖ¸Ïò½áµãÁ¬½ÓµÄÁíÒ»¸öµ¼Ïß
+				//æŒ‡é’ˆæŒ‡å‘ç»“ç‚¹è¿æ¥çš„å¦ä¸€ä¸ªå¯¼çº¿
 				pre = now;
 				now = pre.lead[dir];
 				dir = true1AndFalse0(now.conBody[0].p == pre);
 			}
 			else if (IsOnLead(now))
 			{
-				throw "2¸öµ¼ÏßÖ±½ÓÁ¬½Ó³öÏÖ»áÒıÆğ´íÎó";
+				throw "2ä¸ªå¯¼çº¿ç›´æ¥è¿æ¥å‡ºç°ä¼šå¼•èµ·é”™è¯¯";
 			}
 			else	//now.IsOnBody
 			{
@@ -769,21 +769,21 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 			}
 		}
 	}//do
-	while (now!=self);	//±éÀúµ½ÖÕµã
+	while (now!=self);	//éå†åˆ°ç»ˆç‚¹
 
-	if (UNKNOWNELEC == flag)	//»ñµÃµçÑ¹µç×è
+	if (UNKNOWNELEC == flag)	//è·å¾—ç”µå‹ç”µé˜»
 	{
-		if (!IsFloatZero(resist))	//Õı³£--µç×è²»ÊÇ0
+		if (!IsFloatZero(resist))	//æ­£å¸¸--ç”µé˜»ä¸æ˜¯0
 		{
 			elec = press/resist;
 			return NORMALELEC;
 		}
-		else if (IsFloatZero(press))	//Õı³£--µç×èµçÑ¹¶¼ÊÇ0
+		else if (IsFloatZero(press))	//æ­£å¸¸--ç”µé˜»ç”µå‹éƒ½æ˜¯0
 		{
 			elec = 0;
 			return NORMALELEC;
 		}
-		else	//¶ÌÂ·
+		else	//çŸ­è·¯
 		{
 			elec = 0;
 			return SHORTELEC;
@@ -794,115 +794,115 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 };
 
 ComputeMgr.DistributeAnswer = function()
-//½«¼ÆËãµÄµçÁ÷½á¹û·Ö²¼µ½Ã¿¸öµ¼Ïß,¿Ø¼ş
+//å°†è®¡ç®—çš„ç”µæµç»“æœåˆ†å¸ƒåˆ°æ¯ä¸ªå¯¼çº¿,æ§ä»¶
 {
-	/*int*/var i;			//Ñ­»·±äÁ¿
-	/*int*/var dir;		//ÏÂÒ»¸öÎïÌåÔÚµ±Ç°ÎïÌåµÄ·½Ïò
-	/*Pointer*/var now;	//µ±Ç°·ÃÎÊµÄÏßÂ·¿Ø¼ş
-	/*CRUN **/var end;		//ÏßÂ·µÄÖÕµã
+	/*int*/var i;			//å¾ªç¯å˜é‡
+	/*int*/var dir;		//ä¸‹ä¸€ä¸ªç‰©ä½“åœ¨å½“å‰ç‰©ä½“çš„æ–¹å‘
+	/*Pointer*/var now;	//å½“å‰è®¿é—®çš„çº¿è·¯æ§ä»¶
+	/*CRUN **/var end;		//çº¿è·¯çš„ç»ˆç‚¹
 	/*double*/var elec;
 
-	//1,³õÊ¼»¯Ã¿¸öµ¼ÏßºÍµçÑ§Ôª¼şµÄelecDir,µ±×ö±ê¼ÇÊ¹ÓÃ
+	//1,åˆå§‹åŒ–æ¯ä¸ªå¯¼çº¿å’Œç”µå­¦å…ƒä»¶çš„elecDir,å½“åšæ ‡è®°ä½¿ç”¨
 	for (i=leadNum-1; i>=0; --i) lead[i].elecDir = UNKNOWNELEC;
 	for (i=ctrlNum-1; i>=0; --i) ctrl[i].elecDir = UNKNOWNELEC;
 
-	//2,½«WmMgr.circuµÄ½á¹û·Ö²¼µ½Ã¿¸öÏßÂ·ÖĞµÄÎïÌå
+	//2,å°†WmMgr.circuçš„ç»“æœåˆ†å¸ƒåˆ°æ¯ä¸ªçº¿è·¯ä¸­çš„ç‰©ä½“
 	for (i=ComputeMgr.circuitCount-1; i>=0; --i)
 	{
-		//1,ÕÒµ½ÏßÂ·µÄÆğµã,end×öÁÙÊ±±äÁ¿
+		//1,æ‰¾åˆ°çº¿è·¯çš„èµ·ç‚¹,endåšä¸´æ—¶å˜é‡
 		end = crun[indexOfArray(ComputeMgr.crun2, ComputeMgr.circu[i].from)];
 		now = end.lead[ComputeMgr.circu[i].dirFrom];
 
-		//2,È·¶¨²éÕÒ·½Ïò,end×öÁÙÊ±±äÁ¿
+		//2,ç¡®å®šæŸ¥æ‰¾æ–¹å‘,endåšä¸´æ—¶å˜é‡
 		dir = true1AndFalse0(now.conBody[0].p == end);
 
-		//3,ÕÒµ½ÏßÂ·µÄÖÕµã,end´æ·ÅÖÕµã½áµãÖ¸Õë
+		//3,æ‰¾åˆ°çº¿è·¯çš„ç»ˆç‚¹,endå­˜æ”¾ç»ˆç‚¹ç»“ç‚¹æŒ‡é’ˆ
 		end = crun[indexOfArray(ComputeMgr.crun2, ComputeMgr.circu[i].to)];
 
-		//4,±éÀúÏßÂ·
+		//4,éå†çº¿è·¯
 		TravelCircuitPutElec(now, end, dir, ComputeMgr.circu[i].elec, ComputeMgr.circu[i].elecDir);
 	}
 
-	//Çå³ıWmMgr.circu,ComputeMgr.crun2µÄÄÚ´æ
+	//æ¸…é™¤WmMgr.circu,ComputeMgr.crun2çš„å†…å­˜
 	ComputeMgr.circu = null;
 	ComputeMgr.circuitCount = 0;
 	ComputeMgr.crun2 = null;
 
-	//3,ÕÒµ½¹ÂÁ¢¿Ø¼ş,½«µçÁ÷ĞÅÏ¢ÉèÖÃÎª¶ÏÂ·
+	//3,æ‰¾åˆ°å­¤ç«‹æ§ä»¶,å°†ç”µæµä¿¡æ¯è®¾ç½®ä¸ºæ–­è·¯
 	for (i=ctrlNum-1; i>=0; --i) if (!ctrl[i].lead[0] && !ctrl[i].lead[1])
 	{
 		ctrl[i].elecDir = OPENELEC;
 		ctrl[i].elec = 0;
 	}
 
-	//4,ÕÒµ½Ò»¶ËÓĞÁ¬½ÓµÄ¿Ø¼ş,½«Á¬½ÓµÄËùÓĞ¶ÏÂ·ÎïÌåµçÁ÷ĞÅÏ¢ÉèÖÃºÃ
-	//Ë¼Â·:(Ã¿Ò»²½±éÀú¶¼½«¶ÏÂ·ĞÅÏ¢Ğ´Èë)
-	//		1,ÕÒµ½¶ÏÂ·ÎïÌå
-	//		2,±éÀúµ½ÖÕµã(ÖÕµãÌõ¼ş:¶ÏÂ·¿Ø¼ş,Á¬½ÓÊı²»µÈÓÚ2µÄ½áµã)
+	//4,æ‰¾åˆ°ä¸€ç«¯æœ‰è¿æ¥çš„æ§ä»¶,å°†è¿æ¥çš„æ‰€æœ‰æ–­è·¯ç‰©ä½“ç”µæµä¿¡æ¯è®¾ç½®å¥½
+	//æ€è·¯:(æ¯ä¸€æ­¥éå†éƒ½å°†æ–­è·¯ä¿¡æ¯å†™å…¥)
+	//		1,æ‰¾åˆ°æ–­è·¯ç‰©ä½“
+	//		2,éå†åˆ°ç»ˆç‚¹(ç»ˆç‚¹æ¡ä»¶:æ–­è·¯æ§ä»¶,è¿æ¥æ•°ä¸ç­‰äº2çš„ç»“ç‚¹)
 	for (i=ctrlNum-1; i>=0; --i) if (1 == ctrl[i].GetConnectNum())
 	{
-		//1,ÕÒµ½ÏßÂ·µÄÆğµã
+		//1,æ‰¾åˆ°çº¿è·¯çš„èµ·ç‚¹
 		now = ctrl[i];
 
-		//2,È·¶¨²éÕÒ·½Ïò
+		//2,ç¡®å®šæŸ¥æ‰¾æ–¹å‘
 		dir = true1AndFalse0(now.lead[1] != null);
 
-		//3,±éÀúÏßÂ·
+		//3,éå†çº¿è·¯
 		TravelCircuitFindOpenBody(now, dir);
 	}
 	for (i=ComputeMgr.crunCount-1; i>=0; --i) if (1 == crun[i].GetConnectNum())
 	{
-		//1,ÕÒµ½ÏßÂ·µÄÆğµã
+		//1,æ‰¾åˆ°çº¿è·¯çš„èµ·ç‚¹
 		for (dir=0;dir<4;dir++) if (crun[i].lead[dir]) break;
 		now = crun[i].lead[dir];
 
-		//2,È·¶¨²éÕÒ·½Ïò
+		//2,ç¡®å®šæŸ¥æ‰¾æ–¹å‘
 		dir = true1AndFalse0(now.conBody[0].p == crun[i]);
 
-		//3,±éÀúÏßÂ·
+		//3,éå†çº¿è·¯
 		TravelCircuitFindOpenBody(now, dir);
 	}
 
-	//5,¶ÔÓÚUNKNOWNELEC == elecDir,¶øÇÒ¿Ø¼şÊÇÁ½±ß¶¼ÓĞÁ¬½Ó,µ«ÊÇresist<0
-	//	³öÏÖÕâÖÖÇé¿öµÄÔ­Òò:ÏßÂ·ÖĞÓĞ¶ÏÂ·Ôª¼ş(±ÈÈçµçÈİÆ÷),µ«ÊÇÏßÂ·Á¬½ÓÍêºÃ
-	//	±éÀú¶ÏÂ·µçÂ·,°Ñ¶ÏÂ·ĞÅÏ¢Ğ´ÈëÎïÌå
+	//5,å¯¹äºUNKNOWNELEC == elecDir,è€Œä¸”æ§ä»¶æ˜¯ä¸¤è¾¹éƒ½æœ‰è¿æ¥,ä½†æ˜¯resist<0
+	//	å‡ºç°è¿™ç§æƒ…å†µçš„åŸå› :çº¿è·¯ä¸­æœ‰æ–­è·¯å…ƒä»¶(æ¯”å¦‚ç”µå®¹å™¨),ä½†æ˜¯çº¿è·¯è¿æ¥å®Œå¥½
+	//	éå†æ–­è·¯ç”µè·¯,æŠŠæ–­è·¯ä¿¡æ¯å†™å…¥ç‰©ä½“
 	for (i=ctrlNum-1; i>=0; --i)
 	{
 		if (UNKNOWNELEC != ctrl[i].elecDir || ctrl[i].resist >= 0) continue;
 
-		//1,ÉèÖÃÏßÂ·µÄÆğµã
+		//1,è®¾ç½®çº¿è·¯çš„èµ·ç‚¹
 		now = ctrl[i];
 
-		//2,´Ó2¸ö·½Ïò±éÀú
+		//2,ä»2ä¸ªæ–¹å‘éå†
 		TravelCircuitFindOpenBody(now, 0);
 		TravelCircuitFindOpenBody(now, 1);
 	}
 
-	//6,¶ÔÓÚ UNKNOWNELEC == elecDirµÄÎïÌå,¼ÆËãµçÁ÷ºÍ·½Ïò
-	//³öÏÖÕâÖÖÇé¿öµÄÔ­Òò:ÏßÂ·ÖĞÃ»ÓĞ½Úµã,ÊÇÓÉµ¼ÏßºÍµçÑ§Ôª¼şÁ¬½ÓµÄ»·Â·
-	//Ë¼Â· :(Ã¿Ò»²½¶¼Òª¼ÇÂ¼ÏÂ×ß¹ıµÄµç×èºÍµçÑ¹,ÒòÎªĞèÒª¼ÆËã)
-	// 1 ´ÓÎïÌå×ó±ß¿ªÊ¼ÕÒ,Ò»Ö±ÕÒµ½×Ô¼ºÍ£Ö¹
-	// 2 ¼ÆËãµçÁ÷´óĞ¡,ÖØĞÂ±éÀúÒ»±é,°ÑĞÅÏ¢·ÅÈëµ½ÎïÌåÖĞ
+	//6,å¯¹äº UNKNOWNELEC == elecDirçš„ç‰©ä½“,è®¡ç®—ç”µæµå’Œæ–¹å‘
+	//å‡ºç°è¿™ç§æƒ…å†µçš„åŸå› :çº¿è·¯ä¸­æ²¡æœ‰èŠ‚ç‚¹,æ˜¯ç”±å¯¼çº¿å’Œç”µå­¦å…ƒä»¶è¿æ¥çš„ç¯è·¯
+	//æ€è·¯ :(æ¯ä¸€æ­¥éƒ½è¦è®°å½•ä¸‹èµ°è¿‡çš„ç”µé˜»å’Œç”µå‹,å› ä¸ºéœ€è¦è®¡ç®—)
+	// 1 ä»ç‰©ä½“å·¦è¾¹å¼€å§‹æ‰¾,ä¸€ç›´æ‰¾åˆ°è‡ªå·±åœæ­¢
+	// 2 è®¡ç®—ç”µæµå¤§å°,é‡æ–°éå†ä¸€é,æŠŠä¿¡æ¯æ”¾å…¥åˆ°ç‰©ä½“ä¸­
 	for (i=ctrlNum-1; i>=0; --i)
 	{
 		if (UNKNOWNELEC != ctrl[i].elecDir) continue;
 
-		//1,ÉèÖÃÏßÂ·µÄÆğµã
+		//1,è®¾ç½®çº¿è·¯çš„èµ·ç‚¹
 		now = ctrl[i];
 
-		//2,´Ó×ó±ß±éÀú,»ñµÃµç×èºÍµçÑ¹
+		//2,ä»å·¦è¾¹éå†,è·å¾—ç”µé˜»å’Œç”µå‹
 		dir = TravelCircuitGetOrSetInfo(now, 0, elec, UNKNOWNELEC);
 
-		//3,°Ñ½á¹û·ÅÈëÎïÌå
+		//3,æŠŠç»“æœæ”¾å…¥ç‰©ä½“
 		if (ERRORELEC == dir)
 		{
-			throw "¼ÆËãµçÁ÷³öÏÖ´íÎó!!!";
+			throw "è®¡ç®—ç”µæµå‡ºç°é”™è¯¯!!!";
 		}
 		else
 		{
 			if (NORMALELEC == dir && elec < 0)
 			{
-				//µçÁ÷¸ÄÎªÕıÊı,µ÷×ª±éÀú·½Ïò
+				//ç”µæµæ”¹ä¸ºæ­£æ•°,è°ƒè½¬éå†æ–¹å‘
 				elec = -elec;
 				TravelCircuitGetOrSetInfo(now, 1, elec, dir);
 			}
@@ -913,9 +913,9 @@ ComputeMgr.DistributeAnswer = function()
 		}
 	}
 
-	//7,¶ÔÓÚÏßÂ·ÖĞÖ»´æÔÚ: Èô¸É(µ¼Ïß) ºÍ Èô¸É(2¶ËÁ¬½Óµ¼ÏßµÄ½áµã), ½«µçÁ÷ÉèÖÃÎª0
-	//	³öÏÖÕâÖÖÇé¿öµÄÔ­Òò:ÏßÂ·Ã»ÓĞ³¬¹ı3¶ËÁ¬ÏßµÄ½Úµã,²»»á¼ÓÈëµ½ÏßÂ·ÁĞ±íÖĞ
-	//	ÏßÂ·ÓĞÃ»ÓĞ¶ÌÂ·,Ç°ÃæÒ²²»»á¼ì²éµ½;µÚÁù²½Ö»¼ì²é¿Ø¼şÒ²²»»á¼ì²éµ½
+	//7,å¯¹äºçº¿è·¯ä¸­åªå­˜åœ¨: è‹¥å¹²(å¯¼çº¿) å’Œ è‹¥å¹²(2ç«¯è¿æ¥å¯¼çº¿çš„ç»“ç‚¹), å°†ç”µæµè®¾ç½®ä¸º0
+	//	å‡ºç°è¿™ç§æƒ…å†µçš„åŸå› :çº¿è·¯æ²¡æœ‰è¶…è¿‡3ç«¯è¿çº¿çš„èŠ‚ç‚¹,ä¸ä¼šåŠ å…¥åˆ°çº¿è·¯åˆ—è¡¨ä¸­
+	//	çº¿è·¯æœ‰æ²¡æœ‰çŸ­è·¯,å‰é¢ä¹Ÿä¸ä¼šæ£€æŸ¥åˆ°;ç¬¬å…­æ­¥åªæ£€æŸ¥æ§ä»¶ä¹Ÿä¸ä¼šæ£€æŸ¥åˆ°
 	for (i=leadNum-1; i>=0; --i) if (UNKNOWNELEC == lead[i].elecDir)
 	{
 		lead[i].elecDir = LEFTELEC;
@@ -924,32 +924,32 @@ ComputeMgr.DistributeAnswer = function()
 };
 
 ComputeMgr.ComputeElec = function()
-//ÓÉĞÎ³ÉµÄnÔª1´Î·½³Ì¼ÆËã¸÷¸öÏßÂ·µçÁ÷Öµ
+//ç”±å½¢æˆçš„nå…ƒ1æ¬¡æ–¹ç¨‹è®¡ç®—å„ä¸ªçº¿è·¯ç”µæµå€¼
 {
 	/*int*/var group;
 	/*int*/var i;
 	/*ELEC_STATE*/var flag;
 	/*const double **/var ans;
 
-	ClearCircuitState();	//Çå³ıµçÂ·×´Ì¬ĞÅÏ¢
-	CollectCircuitInfo();	//±éÀúÒ»´ÎµçÂ·,»ñµÃÃ¿¸öÈº×éµÄÏßÂ·µçÑ§ĞÅÏ¢
-	CreateEquation();		//¸ù¾İÏßÂ·ĞÅÏ¢,·ÖÈº×é½¨Á¢·½³Ì
+	ClearCircuitState();	//æ¸…é™¤ç”µè·¯çŠ¶æ€ä¿¡æ¯
+	CollectCircuitInfo();	//éå†ä¸€æ¬¡ç”µè·¯,è·å¾—æ¯ä¸ªç¾¤ç»„çš„çº¿è·¯ç”µå­¦ä¿¡æ¯
+	CreateEquation();		//æ ¹æ®çº¿è·¯ä¿¡æ¯,åˆ†ç¾¤ç»„å»ºç«‹æ–¹ç¨‹
 
-	for (group=0; group<ComputeMgr.groupCount; ++group)	//·ÖÈº×é¼ÆËã
+	for (group=0; group<ComputeMgr.groupCount; ++group)	//åˆ†ç¾¤ç»„è®¡ç®—
 	{
-		flag = ComputeMgr.equation[group].Count();	//¼ÆËã·½³Ì
+		flag = ComputeMgr.equation[group].Count();	//è®¡ç®—æ–¹ç¨‹
 
-		if (NORMALELEC == flag)	//ÏßÂ·Õı³£
+		if (NORMALELEC == flag)	//çº¿è·¯æ­£å¸¸
 		{
-			ans = ComputeMgr.equation[group].GetAnswer();	//»ñµÃ½á¹ûÊı×éÖ¸Õë
+			ans = ComputeMgr.equation[group].GetAnswer();	//è·å¾—ç»“æœæ•°ç»„æŒ‡é’ˆ
 			for (i=ComputeMgr.circuitCount-1; i>=0; --i) if (group == ComputeMgr.circu[i].from.group)
 			{
 				ComputeMgr.circu[i].elecDir = NORMALELEC;
 				ComputeMgr.circu[i].elec = ans[ComputeMgr.circu[i].indexInGroup];
-				ComputeMgr.circu[i].ConvertWhenElecLessZero();	//µ±µçÁ÷¸ºÊıÊ±¸ÄÎªÕıÊı,²¢µ÷×ªµçÁ÷·½Ïò
+				ComputeMgr.circu[i].ConvertWhenElecLessZero();	//å½“ç”µæµè´Ÿæ•°æ—¶æ”¹ä¸ºæ­£æ•°,å¹¶è°ƒè½¬ç”µæµæ–¹å‘
 			}
 		}
-		else	//¶ÌÂ·»òÎŞ·¨È·¶¨µçÁ÷
+		else	//çŸ­è·¯æˆ–æ— æ³•ç¡®å®šç”µæµ
 		{
 			for (i=ComputeMgr.circuitCount-1; i>=0; --i) if (group == ComputeMgr.circu[i].from.group)
 			{
@@ -957,11 +957,11 @@ ComputeMgr.ComputeElec = function()
 			}
 		}
 
-		ComputeMgr.maps[group] = null;//ComputeMgr.maps[group].Uninit();	//É¾³ıÒ»¸öÏßÂ·Í¼
-		ComputeMgr.equation[group] = null;//delete ComputeMgr.equation[group];	//É¾³ıÒ»¸ö·½³Ì
+		ComputeMgr.maps[group] = null;//ComputeMgr.maps[group].Uninit();	//åˆ é™¤ä¸€ä¸ªçº¿è·¯å›¾
+		ComputeMgr.equation[group] = null;//delete ComputeMgr.equation[group];	//åˆ é™¤ä¸€ä¸ªæ–¹ç¨‹
 	}
 
-	ComputeMgr.maps = null;//delete [] ComputeMgr.maps;		//É¾³ıÏßÂ·Í¼Êı×é
-	ComputeMgr.equation = null;//delete [] ComputeMgr.equation;	//É¾³ı·½³ÌÊı×éÖ¸Õë
-	DistributeAnswer();	//½«½á¹û·Ö²¼µ½Ã¿¸öÎïÌå,º¯ÊıÖĞÊÍ·ÅÁËWmMgr.circuºÍWmMgr.crun2
+	ComputeMgr.maps = null;//delete [] ComputeMgr.maps;		//åˆ é™¤çº¿è·¯å›¾æ•°ç»„
+	ComputeMgr.equation = null;//delete [] ComputeMgr.equation;	//åˆ é™¤æ–¹ç¨‹æ•°ç»„æŒ‡é’ˆ
+	DistributeAnswer();	//å°†ç»“æœåˆ†å¸ƒåˆ°æ¯ä¸ªç‰©ä½“,å‡½æ•°ä¸­é‡Šæ”¾äº†WmMgr.circuå’ŒWmMgr.crun2
 };

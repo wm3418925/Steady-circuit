@@ -41,7 +41,7 @@ function subArray(array, startIndex, endIndex/*array.length*/) {
 	return newArray;
 }
 
-// Éî¶È¸´ÖÆ¶ÔÏó
+// æ·±åº¦å¤åˆ¶å¯¹è±¡
 function deepCopy(source) { 
 	var result = {};
 	for (var key in source) {
@@ -57,20 +57,20 @@ function ASSERT(flag) {
     return flag;
 }
 
-function IsFloatZero(/*double*/x) {   //ÅĞ¶ÏÄ³¸ö¸¡µãÊıÊÇ·ñ½üËÆÎª0
+function IsFloatZero(/*double*/x) {   //åˆ¤æ–­æŸä¸ªæµ®ç‚¹æ•°æ˜¯å¦è¿‘ä¼¼ä¸º0
     return x > -(1e-9) && x < (1e-9);
 }
 
-function IsElecError(/*const ELEC_STATE */e)	//µçÁ÷ÊÇ·ñ²»Õı³£
+function IsElecError(/*const ELEC_STATE */e)	//ç”µæµæ˜¯å¦ä¸æ­£å¸¸
 {
 	return e < NORMALELEC || e > OPENELEC;
 }
 
-/*bool*/function IsStrPositiveFloat(/*const char * */str)	//ÅĞ¶Ï×Ö·û´®ÊÇ·ñÊÇÕıÊı
+/*bool*/function IsStrPositiveFloat(/*const char * */str)	//åˆ¤æ–­å­—ç¬¦ä¸²æ˜¯å¦æ˜¯æ­£æ•°
 {
 	/*int*/var count = 0;
 
-	//¼ì²éÊÇ·ñ×î¶àÖ»ÓĞÒ»¸ö'.',Ã»ÓĞÆäËûÊı×ÖÒÔÍâµÄ×Ö·û
+	//æ£€æŸ¥æ˜¯å¦æœ€å¤šåªæœ‰ä¸€ä¸ª'.',æ²¡æœ‰å…¶ä»–æ•°å­—ä»¥å¤–çš„å­—ç¬¦
 	for (var i=0; i<str.length; ++i)
 	{
 	    var c = str.charCodeAt(i);
@@ -88,7 +88,7 @@ function IsElecError(/*const ELEC_STATE */e)	//µçÁ÷ÊÇ·ñ²»Õı³£
 	return true;
 }
 
-/*bool*/function IsUnsignedInteger(/*const char * */str)	//ÅĞ¶Ï×Ö·û´®ÊÇ·ñÊÇÕıÕûÊı
+/*bool*/function IsUnsignedInteger(/*const char * */str)	//åˆ¤æ–­å­—ç¬¦ä¸²æ˜¯å¦æ˜¯æ­£æ•´æ•°
 {
     for (var i=0; i<str.length; ++i) {
         var c = str.charCodeAt(i);

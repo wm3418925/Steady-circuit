@@ -1,27 +1,29 @@
 
-//Ö¸Ïò3¸ö»ù±¾ÎïÌåµÄ½á¹¹
+//æŒ‡å‘3ä¸ªåŸºæœ¬ç‰©ä½“çš„ç»“æ„
 var Pointer = {
 
 	/*
-	// Ö¸Ïò»ù±¾ÎïÌå
+	// æŒ‡å‘åŸºæœ¬ç‰©ä½“
 	void * p;	
 	
-	// ÎïÌåµÄÎ»ÖÃ:
-	// -3,-5,-7,... ºáÏß , -2,-4,-6,... ÊúÏß
-	// -1 ÎïÌå(½áµã,¿Ø¼ş)
-	// 1,2,3,4 ÉÏÏÂ×óÓÒÁ¬½Óµã
-	// 0²»Ö¸ÏòÎïÌå
-	// 5,6,7...²»ºÏ·¨
+	// ç‰©ä½“çš„ä½ç½®:
+	// -3,-5,-7,... æ¨ªçº¿ , -2,-4,-6,... ç«–çº¿
+	// -1 ç‰©ä½“(ç»“ç‚¹,æ§ä»¶)
+	// 1,2,3,4 ä¸Šä¸‹å·¦å³è¿æ¥ç‚¹
+	// 0ä¸æŒ‡å‘ç‰©ä½“
+	// 5,6,7...ä¸åˆæ³•
 	int atState;
 	
-	// Ö¸ÏòÎïÌåÀàĞÍ
+	// æŒ‡å‘ç‰©ä½“ç±»å‹
 	BODY_TYPE style;
 	*/
 
 	CreateNew: function() {
-		return {p: null, atState: 0, style: BODY_NO};
+		var newObj = {p: null, atState: 0, style: BODY_NO};
+		newObj.__proto__ = Pointer.prototype;
+		return newObj;
 	},
-	//±£´æĞÅÏ¢µ½json
+	//ä¿å­˜ä¿¡æ¯åˆ°json
 	GenerateStoreJsonObj: function() {
 		var index = 0;
 		if (p != null)
@@ -29,7 +31,7 @@ var Pointer = {
 
 		return {index:index, atState:atState, style:style};
 	},
-	//´Ójson¶ÁÈ¡ĞÅÏ¢
+	//ä»jsonè¯»å–ä¿¡æ¯
 	ReadFromStoreJsonObj: function(jsonObj, leadList, crunList, ctrlList) {
 		Clear();
 		
@@ -59,64 +61,64 @@ var Pointer = {
 		return true;
 	},
 	
-	//Çå¿ÕÖ¸Õë
+	//æ¸…ç©ºæŒ‡é’ˆ
 	Clear: function() {
 		p = null;
 		atState = 0;
 		style = BODY_NO;
 	},
 
-	//ÉèÖÃaddState
+	//è®¾ç½®addState
 	SetAtState: function(newState) {
 		this.atState = newState;
 	},
-	//»ñµÃaddState
+	//è·å¾—addState
 	GetAtState: function() {
 		return this.atState;
 	},
-	//»ñµÃstyle
+	//è·å¾—style
 	GetStyle: function() {
 		return this.style;
 	},
-	//ÅĞ¶Ï½á¹¹ÌåÊÇ·ñÖ¸ÏòÎïÌå
+	//åˆ¤æ–­ç»“æ„ä½“æ˜¯å¦æŒ‡å‘ç‰©ä½“
 	IsOnAny: function() {
 		return atState != 0 && atState <= 4;
 	},
-	//ÅĞ¶ÏÊÇ·ñÔÚµ¼ÏßÉÏ
+	//åˆ¤æ–­æ˜¯å¦åœ¨å¯¼çº¿ä¸Š
 	IsOnLead: function() {
 		return BODY_LEAD == style || atState <= -2;
 	},
-	//ÅĞ¶ÏÊÇ·ñÔÚË®Æ½ÏßÉÏ
+	//åˆ¤æ–­æ˜¯å¦åœ¨æ°´å¹³çº¿ä¸Š
 	IsOnHoriLead: function() {
 		return atState <= -2 && (-atState)&1;
 	},
-	//ÅĞ¶ÏÊÇ·ñÔÚÊúÖ±ÏßÉÏ
+	//åˆ¤æ–­æ˜¯å¦åœ¨ç«–ç›´çº¿ä¸Š
 	IsOnVertLead: function() {
 		return atState <= -2 && !( (-atState)&1 );
 	},
-	//ÅĞ¶ÏÊÇ·ñÔÚÎïÌå(½áµã»ò¿Ø¼ş)ÉÏ
+	//åˆ¤æ–­æ˜¯å¦åœ¨ç‰©ä½“(ç»“ç‚¹æˆ–æ§ä»¶)ä¸Š
 	IsOnBody: function(isNotIncludeConnPoint/*true*/) {
 		if (isNotIncludeConnPoint == undefined) isNotIncludeConnPoint = true;
 		
-		if (isNotIncludeConnPoint)	//ÅĞ¶ÏÊÇ·ñÔÚÎïÌåÉÏ,²»°üÀ¨Á¬½Óµã
+		if (isNotIncludeConnPoint)	//åˆ¤æ–­æ˜¯å¦åœ¨ç‰©ä½“ä¸Š,ä¸åŒ…æ‹¬è¿æ¥ç‚¹
 			return -1 == atState && (BODY_CRUN == style || IsCtrl(style));
-		else		//ÅĞ¶ÏÊÇ·ñÔÚÎïÌåÉÏ,°üÀ¨Á¬½Óµã
+		else		//åˆ¤æ–­æ˜¯å¦åœ¨ç‰©ä½“ä¸Š,åŒ…æ‹¬è¿æ¥ç‚¹
 			return BODY_CRUN == style || IsCtrl(style);
 	},
-	//ÅĞ¶ÏÊÇ·ñÔÚ½áµãÉÏ
+	//åˆ¤æ–­æ˜¯å¦åœ¨ç»“ç‚¹ä¸Š
 	IsOnCrun: function() {
 		return BODY_CRUN == style;
 	},
-	//ÅĞ¶ÏÊÇ·ñÔÚ¿Ø¼şÉÏ
+	//åˆ¤æ–­æ˜¯å¦åœ¨æ§ä»¶ä¸Š
 	IsOnCtrl: function() {
 		return IsCtrl(style);
 	},
-	//ÅĞ¶ÏÊÇ·ñÔÚÁ¬½ÓµãÉÏ
+	//åˆ¤æ–­æ˜¯å¦åœ¨è¿æ¥ç‚¹ä¸Š
 	IsOnConnectPos: function() {
 		return atState >= 1 && atState <= 4;
 	},
 	
-	//Ö¸Ïòµ¼Ïß
+	//æŒ‡å‘å¯¼çº¿
 	SetOnLead: function(lead, isSetAt/*true*/) {
 		if (isSetAt == undefined) isSetAt = true;
 		
@@ -124,7 +126,7 @@ var Pointer = {
 		style = BODY_LEAD;
 		if (isSetAt) atState = -2;
 	},
-	//Ö¸Ïò½áµã
+	//æŒ‡å‘ç»“ç‚¹
 	SetOnCrun: function(crun, isSetAt/*true*/) {
 		if (isSetAt == undefined) isSetAt = true;
 		
@@ -132,76 +134,76 @@ var Pointer = {
 		style = BODY_CRUN;
 		if (isSetAt) atState = -1;
 	},
-	//Ö¸Ïò¿Ø¼ş
+	//æŒ‡å‘æ§ä»¶
 	SetOnCtrl: function(ctrl, isSetAt) {
 		p = ctrl;
-		style = ctrl.GetStyle();	//ÕâÀï¿Ø¼ş±ØĞë³õÊ¼»¯Íê±Ï
+		style = ctrl.GetStyle();	//è¿™é‡Œæ§ä»¶å¿…é¡»åˆå§‹åŒ–å®Œæ¯•
 		if (isSetAt) atState = -1;
 	},
 	
-	//ÅĞ¶Ïµ±Ç°ÎïÌåÊÇ·ñÖ¸ÏòÕâ¸öµ¼Ïß
+	//åˆ¤æ–­å½“å‰ç‰©ä½“æ˜¯å¦æŒ‡å‘è¿™ä¸ªå¯¼çº¿
 	IsLeadSame: function(other) {
 		return this.IsOnLead() && p == other;
 	},
-	//ÅĞ¶Ïµ±Ç°ÎïÌåÊÇ·ñÖ¸ÏòÕâ¸ö½áµã
+	//åˆ¤æ–­å½“å‰ç‰©ä½“æ˜¯å¦æŒ‡å‘è¿™ä¸ªç»“ç‚¹
 	IsCrunSame: function(other) {
 		return this.IsOnCrun() && p == other;
 	},
-	//ÅĞ¶Ïµ±Ç°ÎïÌåÊÇ·ñÖ¸ÏòÕâ¸ö¿Ø¼ş
+	//åˆ¤æ–­å½“å‰ç‰©ä½“æ˜¯å¦æŒ‡å‘è¿™ä¸ªæ§ä»¶
 	IsCtrlSame: function(other) {
 		return this.IsOnCtrl() && p == other;
 	},
-	//ÅĞ¶ÏÁ½¸öPointerÊÇ·ñÖ¸ÏòÍ¬Ò»¸öÎïÌå,²»ÅĞ¶ÏatState
+	//åˆ¤æ–­ä¸¤ä¸ªPointeræ˜¯å¦æŒ‡å‘åŒä¸€ä¸ªç‰©ä½“,ä¸åˆ¤æ–­atState
 	IsBodySame: function(other) {
 		return (this.style == other.style) && (this.p == other.p);
 	},
-	//ÅĞ¶ÏÁ½¸öPointer½á¹¹ÊÇ·ñÒ»Ñù,ÅĞ¶ÏatState
+	//åˆ¤æ–­ä¸¤ä¸ªPointerç»“æ„æ˜¯å¦ä¸€æ ·,åˆ¤æ–­atState
 	IsAllSame: function(other) {
 		return (this.atState == other.atState)&& (this.style == other.style) && (this.p == other.p);
 	},
-	//»ñµÃÁ¬½Óµã¶ÔÓ¦µÄµ¼Ïß±àºÅ(0,1,2,3)
+	//è·å¾—è¿æ¥ç‚¹å¯¹åº”çš„å¯¼çº¿ç¼–å·(0,1,2,3)
 	GetLeadIndex: function() {
 		return atState - 1;
 	},
-	// staticº¯Êı
+	// staticå‡½æ•°
 	IsCtrl: function(type) {
 		return (type >= SOURCE) && (type <= SWITCH);
 	},
 
-	//´ÓÎïÌåºÍÁ¬½ÓµãÎ»ÖÃ»ñµÃµ¼Ïß¶Ëµã×ø±ê
+	//ä»ç‰©ä½“å’Œè¿æ¥ç‚¹ä½ç½®è·å¾—å¯¼çº¿ç«¯ç‚¹åæ ‡
 	GetPosFromBody: function() {
 		var pos = {};
 		var leadIndex = GetLeadIndex();
 
-		if (this.IsOnCrun()) {	//Á¬½Ó½áµã
+		if (this.IsOnCrun()) {	//è¿æ¥ç»“ç‚¹
 			pos.x = p.x;
 			pos.y = p.y;
 			switch (leadIndex) {
-			case 0:	//ÔÚÉÏ¶Ë
+			case 0:	//åœ¨ä¸Šç«¯
 				pos.y -= DD;
 				break;
-			case 1:	//ÔÚÏÂ¶Ë
-				pos.y += DD - 1;	//ÏÔÊ¾´æÔÚ×ø±ê²î(-1)
+			case 1:	//åœ¨ä¸‹ç«¯
+				pos.y += DD - 1;	//æ˜¾ç¤ºå­˜åœ¨åæ ‡å·®(-1)
 				break;
-			case 2:	//ÔÚ×ó¶Ë
+			case 2:	//åœ¨å·¦ç«¯
 				pos.x -= DD;
 				break;
-			case 3:	//ÔÚÓÒ¶Ë
-				pos.x += DD - 1;	//ÏÔÊ¾´æÔÚ×ø±ê²î(-1)
+			case 3:	//åœ¨å³ç«¯
+				pos.x += DD - 1;	//æ˜¾ç¤ºå­˜åœ¨åæ ‡å·®(-1)
 				break;
 			}
-		} else if(this.IsOnCtrl()) {	//Á¬½Ó¿Ø¼ş
+		} else if(this.IsOnCtrl()) {	//è¿æ¥æ§ä»¶
 			pos.x = p.x;
 			pos.y = p.y;
-			if (0 == (p.dir & 1)) {	//ºáÏò
+			if (0 == (p.dir & 1)) {	//æ¨ªå‘
 				pos.y += (BODYSIZE.cy>>1);
-				if ((p.dir!=0) ^ (leadIndex!=0)) {	//ÔÚÓÒ¶Ë
-					pos.x += BODYSIZE.cx - 1;	//ÏÔÊ¾´æÔÚ×ø±ê²î(-1)
+				if ((p.dir!=0) ^ (leadIndex!=0)) {	//åœ¨å³ç«¯
+					pos.x += BODYSIZE.cx - 1;	//æ˜¾ç¤ºå­˜åœ¨åæ ‡å·®(-1)
 				}
-			} else {	//×İÏò
+			} else {	//çºµå‘
 				pos.x += (BODYSIZE.cx>>1);
-				if (((p.dir-1)!=0) ^ (leadIndex!=0)) {	//ÔÚÏÂ¶Ë
-					pos.y += BODYSIZE.cy - 1;	//ÏÔÊ¾´æÔÚ×ø±ê²î(-1)
+				if (((p.dir-1)!=0) ^ (leadIndex!=0)) {	//åœ¨ä¸‹ç«¯
+					pos.y += BODYSIZE.cy - 1;	//æ˜¾ç¤ºå­˜åœ¨åæ ‡å·®(-1)
 				}
 			}
 		}
@@ -209,7 +211,7 @@ var Pointer = {
 		return pos;
 	},
 
-	//»ñµÃÁ¬½ÓµãÎ»ÖÃ
+	//è·å¾—è¿æ¥ç‚¹ä½ç½®
 	GetConnectPosDir: function() {
 		ASSERT(IsOnConnectPos());
 		

@@ -1,8 +1,8 @@
 
-// ËÑË÷º¯Êı
+// æœç´¢å‡½æ•°
 
 bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, bool isMatchCase, char * keyWord)
-//ËÑË÷ÏÂÒ»¸öÎïÌå
+//æœç´¢ä¸‹ä¸€ä¸ªç‰©ä½“
 {
 	bool isAfterFocus = false;
 	char str[32];
@@ -11,7 +11,7 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 	bool isSearchLead = (range == BODY_ALL || range == BODY_LEAD) && searchBy == SEARCH_BY_ID;
 	bool isSearchCrun = (range == BODY_ALL || range == BODY_CRUN);
 	bool isSearchCtrl = (range == BODY_ALL || range == BODY_ALLCTRL || Pointer::IsCtrl(range));
-	KMP kmp(keyWord, isWholeWord, isMatchCase || searchBy == SEARCH_BY_ID);	//ËÑË÷ĞòºÅÊ±¿ÉÒÔÇø·Ö´óĞ¡Ğ´, ¼Ó¿ìËÙ¶È
+	KMP kmp(keyWord, isWholeWord, isMatchCase || searchBy == SEARCH_BY_ID);	//æœç´¢åºå·æ—¶å¯ä»¥åŒºåˆ†å¤§å°å†™, åŠ å¿«é€Ÿåº¦
 	Pointer newFocus;
 
 	for(round=0; round<2; ++round)
@@ -152,7 +152,7 @@ bool Manager::SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, 
 }
 
 bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, bool isMatchCase, char * keyWord)
-//ËÑË÷ÉÏÒ»¸öÎïÌå
+//æœç´¢ä¸Šä¸€ä¸ªç‰©ä½“
 {
 	bool isAfterFocus = false;
 	char str[32];
@@ -161,7 +161,7 @@ bool Manager::SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 	bool isSearchLead = (range == BODY_ALL || range == BODY_LEAD) && searchBy == SEARCH_BY_ID;
 	bool isSearchCrun = (range == BODY_ALL || range == BODY_CRUN);
 	bool isSearchCtrl = (range == BODY_ALL || range == BODY_ALLCTRL || Pointer::IsCtrl(range));
-	KMP kmp(keyWord, isWholeWord, isMatchCase || searchBy == SEARCH_BY_ID);	//ËÑË÷ĞòºÅÊ±¿ÉÒÔÇø·Ö´óĞ¡Ğ´, ¼Ó¿ìËÙ¶È
+	KMP kmp(keyWord, isWholeWord, isMatchCase || searchBy == SEARCH_BY_ID);	//æœç´¢åºå·æ—¶å¯ä»¥åŒºåˆ†å¤§å°å†™, åŠ å¿«é€Ÿåº¦
 	Pointer newFocus;
 
 	for(round=0; round<2; ++round)

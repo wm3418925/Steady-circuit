@@ -1,16 +1,16 @@
 
-var NAME_LEN = 32;	//Ãû³ÆµÄ×Ö·û´®Õ¼ÄÚ´æ´óÐ¡
+var NAME_LEN = 32;	//åç§°çš„å­—ç¬¦ä¸²å å†…å­˜å¤§å°
 
-var FILE_EXTENT = "wan";						//ÎÄ¼þºó×º, ²»´ø.
-var FILE_EXTENT_DOT = ".wan";					//ÎÄ¼þºó×º, ´ø.
-var DEFAULT_FILE_NAME = "data.wan";				//Ä¬ÈÏÎÄ¼þÃû
-var FILE_LIST = "µçÂ·ÎÄ¼þ(*.wan)|*.wan||";		//Ö§³ÖÎÄ¼þÁÐ±í
+var FILE_EXTENT = "wan";						//æ–‡ä»¶åŽç¼€, ä¸å¸¦.
+var FILE_EXTENT_DOT = ".wan";					//æ–‡ä»¶åŽç¼€, å¸¦.
+var DEFAULT_FILE_NAME = "data.wan";				//é»˜è®¤æ–‡ä»¶å
+var FILE_LIST = "ç”µè·¯æ–‡ä»¶(*.wan)|*.wan||";		//æ”¯æŒæ–‡ä»¶åˆ—è¡¨
 
-var FILE_VERSION = 13;					//ÎÄ¼þ°æ±¾,²»Í¬°æ±¾ÎÄ¼þ²»Óè¶ÁÈ¡
+var FILE_VERSION = 13;					//æ–‡ä»¶ç‰ˆæœ¬,ä¸åŒç‰ˆæœ¬æ–‡ä»¶ä¸äºˆè¯»å–
 
 
 
-//Ö¸ÏòÎïÌåµÄÀàÐÍ
+//æŒ‡å‘ç‰©ä½“çš„ç±»åž‹
 var BODY_ALL		= -5;
 var BODY_ALLCTRL	= -4;
 var BODY_LEAD		= -3;
@@ -23,36 +23,36 @@ var CAPA			= 3;
 var SWITCH			= 4;
 
 
-// Õý³£, Ñ¡ÖÐ, ÓÒ»÷ ÑÕÉ«
+// æ­£å¸¸, é€‰ä¸­, å³å‡» é¢œè‰²
 var COLOR_NORMAL = PaintCommonFunc.RGBToHex(0,0,0);
 var COLOR_FOCUS = PaintCommonFunc.RGBToHex(30,250,30);
 var COLOR_SPECIAL = PaintCommonFunc.RGBToHex(190,30,100);
 
 
-//¹©ENUM_STYLEÊ¹ÓÃ
-var CTRL_TYPE_ENUM	= 0;	//¿Ø¼þÀàÐÍ
-var LEAD_STYLE_ENUM	= 1;	//µ¼ÏßÑùÊ½
+//ä¾›ENUM_STYLEä½¿ç”¨
+var CTRL_TYPE_ENUM	= 0;	//æŽ§ä»¶ç±»åž‹
+var LEAD_STYLE_ENUM	= 1;	//å¯¼çº¿æ ·å¼
 
 
 
-var CTRL_TYPE_COUNT = 5;	//¿Ø¼þÀàÐÍ¸öÊý
-var CTRL_TYPE_NAMES = new Array(	//¿Ø¼þÀàÐÍ¶ÔÓ¦µÄÃû³Æ
-	"µçÔ´",
-	"µç×è",
-	"Ð¡µÆÅÝ",
-	"µçÈÝÆ÷",
-	"¿ª¹Ø"
+var CTRL_TYPE_COUNT = 5;	//æŽ§ä»¶ç±»åž‹ä¸ªæ•°
+var CTRL_TYPE_NAMES = new Array(	//æŽ§ä»¶ç±»åž‹å¯¹åº”çš„åç§°
+	"ç”µæº",
+	"ç”µé˜»",
+	"å°ç¯æ³¡",
+	"ç”µå®¹å™¨",
+	"å¼€å…³"
 );
 
 
-// »æÖÆµÄ½ÚµãÑùÊ½
-var PAINT_CRUN_STYLE_NORMAL = 0;	// Õý³£
-var PAINT_CRUN_STYLE_FOCUS = 1;		// ½¹µã, ÂÌÉ«
-var PAINT_CRUN_STYLE_SPECIAL = 2;	// ×ÏÉ«
+// ç»˜åˆ¶çš„èŠ‚ç‚¹æ ·å¼
+var PAINT_CRUN_STYLE_NORMAL = 0;	// æ­£å¸¸
+var PAINT_CRUN_STYLE_FOCUS = 1;		// ç„¦ç‚¹, ç»¿è‰²
+var PAINT_CRUN_STYLE_SPECIAL = 2;	// ç´«è‰²
 var PAINT_CRUN_STYLE_COUNT = 3;
 
 
-//LISTDATAµÄÊý¾ÝÀàÐÍ¶¨Òå
+//LISTDATAçš„æ•°æ®ç±»åž‹å®šä¹‰
 var DATA_TYPE_float		= 0;
 var DATA_TYPE_uint		= 1;
 var DATA_TYPE_bool		= 2;
@@ -61,49 +61,49 @@ var DATA_TYPE_enum		= 4;
 
 
 
-//µ¼ÏßÑùÊ½
-var SOLID_SPECIAL_COLOR		= 0;	//ÊµÏß±£ÁôÉ«
-var SOLID_ORIGINAL_COLOR	= 1;	//ÊµÏßÔ­À´ÑÕÉ«
-var DOT_SPECIAL_COLOR		= 2;	//ÐéÏß±£ÁôÉ«
-var DOT_ORIGINAL_COLOR		= 3;	//ÐéÏßÔ­À´ÑÕÉ«
-var LEAD_STYLE_COUNT = 4;	//µ¼ÏßÑùÊ½¸öÊý
-//µ¼ÏßÑùÊ½¶ÔÓ¦µÄÃû³Æ
+//å¯¼çº¿æ ·å¼
+var SOLID_SPECIAL_COLOR		= 0;	//å®žçº¿ä¿ç•™è‰²
+var SOLID_ORIGINAL_COLOR	= 1;	//å®žçº¿åŽŸæ¥é¢œè‰²
+var DOT_SPECIAL_COLOR		= 2;	//è™šçº¿ä¿ç•™è‰²
+var DOT_ORIGINAL_COLOR		= 3;	//è™šçº¿åŽŸæ¥é¢œè‰²
+var LEAD_STYLE_COUNT = 4;	//å¯¼çº¿æ ·å¼ä¸ªæ•°
+//å¯¼çº¿æ ·å¼å¯¹åº”çš„åç§°
 var LEAD_STYLE_NAMES = new Array(
-	"ÊµÏß×ÏÉ«",
-	"ÊµÏßÔ­À´ÑÕÉ«",
-	"ÐéÏß×ÏÉ«",
-	"ÐéÏßÔ­À´ÑÕÉ«"
+	"å®žçº¿ç´«è‰²",
+	"å®žçº¿åŽŸæ¥é¢œè‰²",
+	"è™šçº¿ç´«è‰²",
+	"è™šçº¿åŽŸæ¥é¢œè‰²"
 );
 
-var TITLE_NOTE     = "±êÇ©         (¿ÉÒÔÎª¿Õ)";	//±êÇ©¶ÔÓ¦µÄÌáÊ¾
-var TITLESHOW_NOTE = "ÏÔÊ¾±êÇ©";				//ÏÔÊ¾±êÇ©¶ÔÓ¦µÄÌáÊ¾
+var TITLE_NOTE     = "æ ‡ç­¾         (å¯ä»¥ä¸ºç©º)";	//æ ‡ç­¾å¯¹åº”çš„æç¤º
+var TITLESHOW_NOTE = "æ˜¾ç¤ºæ ‡ç­¾";				//æ˜¾ç¤ºæ ‡ç­¾å¯¹åº”çš„æç¤º
 
 
-//µçÁ÷×´Ì¬Ã¶¾Ù
-var UNKNOWNELEC		= -2;	//µçÁ÷Î´¼ÆËã
-var ERRORELEC		= -1;	//¼ÆËã´íÎó
-var NORMALELEC		= 0;	//µçÁ÷Õý³£
-var LEFTELEC		= 0;	//µçÁ÷´Ó×óµ½ÓÒ
-var RIGHTELEC		= 1;	//µçÁ÷´ÓÓÒµ½×ó
-var OPENELEC		= 6;	//¶ÏÂ·
-var SHORTELEC		= 7;	//¶ÌÂ·
-var UNCOUNTABLEELEC	= 8;	//º¬ÓÐÎÞ·¨¼ÆËãµÄ·ÖÖ§
+//ç”µæµçŠ¶æ€æžšä¸¾
+var UNKNOWNELEC		= -2;	//ç”µæµæœªè®¡ç®—
+var ERRORELEC		= -1;	//è®¡ç®—é”™è¯¯
+var NORMALELEC		= 0;	//ç”µæµæ­£å¸¸
+var LEFTELEC		= 0;	//ç”µæµä»Žå·¦åˆ°å³
+var RIGHTELEC		= 1;	//ç”µæµä»Žå³åˆ°å·¦
+var OPENELEC		= 6;	//æ–­è·¯
+var SHORTELEC		= 7;	//çŸ­è·¯
+var UNCOUNTABLEELEC	= 8;	//å«æœ‰æ— æ³•è®¡ç®—çš„åˆ†æ”¯
 
 
-var MAX_CTRL_COUNT	= 128;	//¿Ø¼þ×î´óÊýÁ¿
-var MAX_CRUN_COUNT	= 64;	//½áµã×î´óÊýÁ¿
-var MAX_LEAD_COUNT	= MAX_CRUN_COUNT*2 + MAX_CTRL_COUNT;	//µ¼Ïß×î´óÊýÁ¿
+var MAX_CTRL_COUNT	= 128;	//æŽ§ä»¶æœ€å¤§æ•°é‡
+var MAX_CRUN_COUNT	= 64;	//ç»“ç‚¹æœ€å¤§æ•°é‡
+var MAX_LEAD_COUNT	= MAX_CRUN_COUNT*2 + MAX_CTRL_COUNT;	//å¯¼çº¿æœ€å¤§æ•°é‡
 
-var CTRL_SIZE = {cx:29, cy:29};	//¿Ø¼þµÄ´óÐ¡
-var DD = 4;	//µ±ÓëÄ³¸öÎïÌå¾àÀë<=DDÊ±,ÈÏÎªÒÆ¶¯µ½ÁËÎïÌåÉÏ
+var CTRL_SIZE = {cx:29, cy:29};	//æŽ§ä»¶çš„å¤§å°
+var DD = 4;	//å½“ä¸ŽæŸä¸ªç‰©ä½“è·ç¦»<=DDæ—¶,è®¤ä¸ºç§»åŠ¨åˆ°äº†ç‰©ä½“ä¸Š
 
-//¸´ÖÆÎïÌåÄ¿µÄÃ¶¾Ù
-var CLONE_FOR_USE		= 0;	//¸´ÖÆÎªÁËµ±Ç°Ê¹ÓÃ
-var CLONE_FOR_SAVE		= 1;	//¸´ÖÆÎªÁË±£´æ
-var CLONE_FOR_CLIPBOARD	= 2;	//¸´ÖÆÎªÁË¼ôÇÐ°åÊ¹ÓÃ
+//å¤åˆ¶ç‰©ä½“ç›®çš„æžšä¸¾
+var CLONE_FOR_USE		= 0;	//å¤åˆ¶ä¸ºäº†å½“å‰ä½¿ç”¨
+var CLONE_FOR_SAVE		= 1;	//å¤åˆ¶ä¸ºäº†ä¿å­˜
+var CLONE_FOR_CLIPBOARD	= 2;	//å¤åˆ¶ä¸ºäº†å‰ªåˆ‡æ¿ä½¿ç”¨
 
 
-//½¹µãÎïÌå»òÕß×ø±êÉÏµÄÎïÌå
+//ç„¦ç‚¹ç‰©ä½“æˆ–è€…åæ ‡ä¸Šçš„ç‰©ä½“
 var FOCUS_OR_POS = {
 	CreateNew: function() {
 		return {isFocusBody:false, x:0, y:0};
@@ -111,10 +111,10 @@ var FOCUS_OR_POS = {
 };
 
 
-var MAX_MOVE_BODY_DIS	= 50;					//Ê¹ÓÃ·½Ïò¼üÒ»´ÎÒÆ¶¯ÎïÌå¾àÀë·¶Î§1~MAX_MOVE_BODY_DIS
-var MAX_LEAVE_OUT_DIS	= 15;					//ÏàÁÚµ¼ÏßºÏ²¢¾àÀë·¶Î§1~MAX_LEAVE_OUT_DIS
+var MAX_MOVE_BODY_DIS	= 50;					//ä½¿ç”¨æ–¹å‘é”®ä¸€æ¬¡ç§»åŠ¨ç‰©ä½“è·ç¦»èŒƒå›´1~MAX_MOVE_BODY_DIS
+var MAX_LEAVE_OUT_DIS	= 15;					//ç›¸é‚»å¯¼çº¿åˆå¹¶è·ç¦»èŒƒå›´1~MAX_LEAVE_OUT_DIS
 
 
-// ËÑË÷¹Ø¼ü×Ö
-var SEARCH_BY_NAME	= 0;	//¸ù¾ÝÃû³ÆËÑË÷
-var SEARCH_BY_ID	= 1;	//¸ù¾ÝÐòºÅËÑË÷
+// æœç´¢å…³é”®å­—
+var SEARCH_BY_NAME	= 0;	//æ ¹æ®åç§°æœç´¢
+var SEARCH_BY_ID	= 1;	//æ ¹æ®åºå·æœç´¢

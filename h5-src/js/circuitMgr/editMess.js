@@ -1,36 +1,36 @@
 
 bool Manager::AddBody(POINT pos)
-//Ìí¼ÓÎïÌå
+//æ·»åŠ ç‰©ä½“
 {
 	BODY_TYPE temp = addState;
 
-	addState = BODY_NO;	//²»ÔÙÌí¼ÓÎïÌå
+	addState = BODY_NO;	//ä¸å†æ·»åŠ ç‰©ä½“
 	ctx.DPtoLP(&pos);
 
 	if(BODY_CRUN == temp)
 	{
 		if(crunCount >= MAX_CRUN_COUNT)
 		{
-			this.canvas.MessageBox("½áµã³¬¹ı×î´óÊıÁ¿!", "½áµã²»ÄÜÌí¼Ó", MB_ICONWARNING);
+			this.canvas.MessageBox("ç»“ç‚¹è¶…è¿‡æœ€å¤§æ•°é‡!", "ç»“ç‚¹ä¸èƒ½æ·»åŠ ", MB_ICONWARNING);
 			return false;
 		}
 
-		CloneCircuitBeforeChange();	//±à¼­Ç°¸´ÖÆµçÂ·
-		AddCrun(pos);				//±à¼­º¯Êı
-		PutCircuitToVector();		//½«ĞÂµÄµçÂ·ĞÅÏ¢±£´æµ½ÈİÆ÷
+		CloneCircuitBeforeChange();	//ç¼–è¾‘å‰å¤åˆ¶ç”µè·¯
+		AddCrun(pos);				//ç¼–è¾‘å‡½æ•°
+		PutCircuitToVector();		//å°†æ–°çš„ç”µè·¯ä¿¡æ¯ä¿å­˜åˆ°å®¹å™¨
 		return true;
 	}
 	else if(Pointer::IsCtrl(temp))
 	{
 		if(ctrlCount >= MAX_CTRL_COUNT)
 		{
-			this.canvas.MessageBox("µçÑ§Ôª¼ş³¬¹ı×î´óÊıÁ¿!", "µçÑ§Ôª¼ş²»ÄÜÌí¼Ó", MB_ICONWARNING);
+			this.canvas.MessageBox("ç”µå­¦å…ƒä»¶è¶…è¿‡æœ€å¤§æ•°é‡!", "ç”µå­¦å…ƒä»¶ä¸èƒ½æ·»åŠ ", MB_ICONWARNING);
 			return false;
 		}
 
-		CloneCircuitBeforeChange();	//±à¼­Ç°¸´ÖÆµçÂ·
-		AddCtrl(pos, temp);			//±à¼­º¯Êı
-		PutCircuitToVector();		//½«ĞÂµÄµçÂ·ĞÅÏ¢±£´æµ½ÈİÆ÷
+		CloneCircuitBeforeChange();	//ç¼–è¾‘å‰å¤åˆ¶ç”µè·¯
+		AddCtrl(pos, temp);			//ç¼–è¾‘å‡½æ•°
+		PutCircuitToVector();		//å°†æ–°çš„ç”µè·¯ä¿¡æ¯ä¿å­˜åˆ°å®¹å™¨
 		return true;
 	}
 	else
@@ -40,7 +40,7 @@ bool Manager::AddBody(POINT pos)
 }
 
 void Manager::Property(FOCUS_OR_POS &body, bool isReadOnly)
-//ÏÔÊ¾ºÍ¸Ä±äÎïÌåÊôĞÔ
+//æ˜¾ç¤ºå’Œæ”¹å˜ç‰©ä½“å±æ€§
 {
 	char tempStr[NAME_LEN*3];
 	LISTDATA list;
@@ -50,22 +50,22 @@ void Manager::Property(FOCUS_OR_POS &body, bool isReadOnly)
 	if(pointer.IsOnLead())
 	{
 		GetName(pointer, tempStr);
-		strcat(tempStr, " µÄÑÕÉ«");					//´°¿Ú±êÌâ
-		pointer.p1.GetDataList(tempStr, &list);	//Êı¾İ
+		strcat(tempStr, " çš„é¢œè‰²");					//çª—å£æ ‡é¢˜
+		pointer.p1.GetDataList(tempStr, &list);	//æ•°æ®
 	}
 	else if(pointer.IsOnCrun())
 	{
 		GetName(pointer, tempStr);
-		strcat(tempStr, " µÄ±êÇ©");					//´°¿Ú±êÌâ
-		pointer.p2.GetDataList(&list);				//Êı¾İ
-		model = &crunImageData;							//Ê¾Àı
+		strcat(tempStr, " çš„æ ‡ç­¾");					//çª—å£æ ‡é¢˜
+		pointer.p2.GetDataList(&list);				//æ•°æ®
+		model = &crunImageData;							//ç¤ºä¾‹
 	}
 	else if(pointer.IsOnCtrl())
 	{
 		GetName(pointer, tempStr);
-		strcat(tempStr, " µÄ±êÇ©ºÍµçÑ§ÊôĞÔ");		//´°¿Ú±êÌâ
-		pointer.p3.GetDataList(&list);				//Êı¾İ
-		model = GetCtrlPaintImage(pointer.p3);		//Ê¾Àı
+		strcat(tempStr, " çš„æ ‡ç­¾å’Œç”µå­¦å±æ€§");		//çª—å£æ ‡é¢˜
+		pointer.p3.GetDataList(&list);				//æ•°æ®
+		model = GetCtrlPaintImage(pointer.p3);		//ç¤ºä¾‹
 	}
 	else
 	{
@@ -78,7 +78,7 @@ void Manager::Property(FOCUS_OR_POS &body, bool isReadOnly)
 }
 
 void Manager::ChangeCtrlStyle(FOCUS_OR_POS &body)
-//¸Ä±äµçÑ§Ôª¼şÀàĞÍ
+//æ”¹å˜ç”µå­¦å…ƒä»¶ç±»å‹
 {
 	BODY_TYPE preStyle, newStyle;
 	char tempStr[NAME_LEN*3];
@@ -86,38 +86,38 @@ void Manager::ChangeCtrlStyle(FOCUS_OR_POS &body)
 	Pointer pointer = GetBodyPointer(body);
 	if(!pointer.IsOnCtrl()) return;
 
-	//»ñµÃÔ­À´ÀàĞÍ
+	//è·å¾—åŸæ¥ç±»å‹
 	preStyle = newStyle = pointer.p3.GetStyle();
 
-	//³õÊ¼»¯listÊı¾İ
+	//åˆå§‹åŒ–listæ•°æ®
 	LISTDATA list;
 	list.Init(1);
-	list.SetAEnumMember("µçÑ§Ôª¼şµÄÀàĞÍ", &newStyle, ENUM_CTRL);
+	list.SetAEnumMember("ç”µå­¦å…ƒä»¶çš„ç±»å‹", &newStyle, ENUM_CTRL);
 
-	//»ñµÃ´°¿Ú±êÌâ
+	//è·å¾—çª—å£æ ‡é¢˜
 	GetName(pointer, tempStr);
-	strcat(tempStr, " µÄÀàĞÍ");
+	strcat(tempStr, " çš„ç±»å‹");
 
-	//ÏÔÊ¾¶Ô»°¿ò
+	//æ˜¾ç¤ºå¯¹è¯æ¡†
 	PaintWithSpecialColorAndRect(pointer, false);
 	MyPropertyDlg dlg(&list, false, GetCtrlPaintImage(pointer.p3), tempStr, this.canvas);
 	dlg.DoModal();
 
-	//¸Ä±äÀàĞÍ
+	//æ”¹å˜ç±»å‹
 	if(preStyle != newStyle)
 	{
-		if(IDYES != AfxMessageBox("¸Ä±äÀàĞÍ»á¶ªÊ§Ô­ÓĞµçÑ§Ôª¼şµÄÊı¾İ!\n¼ÌĞøÂğ?", MB_YESNO)) return;
+		if(IDYES != AfxMessageBox("æ”¹å˜ç±»å‹ä¼šä¸¢å¤±åŸæœ‰ç”µå­¦å…ƒä»¶çš„æ•°æ®!\nç»§ç»­å—?", MB_YESNO)) return;
 		pointer.p3.ChangeStyle(newStyle);
 	}
 }
 
 void Manager::PosBodyMove(Pointer * body, POINT firstPos, POINT lastPos)
-//ÒÆ¶¯ÎïÌå
+//ç§»åŠ¨ç‰©ä½“
 {
 	int i;
 	POINT inter;
 
-	//»ñµÃÏà¶Ô×ø±ê
+	//è·å¾—ç›¸å¯¹åæ ‡
 	inter.x = lastPos.x - firstPos.x;
 	inter.y = lastPos.y - firstPos.y;
 	if(inter.x==0 && inter.y==0) return;
@@ -140,62 +140,62 @@ void Manager::PosBodyMove(Pointer * body, POINT firstPos, POINT lastPos)
 }
 
 bool Manager::PosBodyClone(const Pointer * body, POINT firstPos, POINT lastPos)
-//ÔÚÖ¸¶¨Î»ÖÃ¸´ÖÆÎïÌå
+//åœ¨æŒ‡å®šä½ç½®å¤åˆ¶ç‰©ä½“
 {
-	//»ñµÃÏà¶Ô×ø±ê
+	//è·å¾—ç›¸å¯¹åæ ‡
 	POINT inter;
 	inter.x = lastPos.x - firstPos.x;
 	inter.y = lastPos.y - firstPos.y;
 
-	//¸´ÖÆ
+	//å¤åˆ¶
 	if(body.IsOnCrun())
 	{
-		//ÑéÖ¤
+		//éªŒè¯
 		if(crunCount >= MAX_CRUN_COUNT)
 		{
-			this.canvas.MessageBox("½áµã³¬¹ı×î´óÊıÁ¿!", "½áµã²»ÄÜÌí¼Ó", MB_ICONWARNING);
+			this.canvas.MessageBox("ç»“ç‚¹è¶…è¿‡æœ€å¤§æ•°é‡!", "ç»“ç‚¹ä¸èƒ½æ·»åŠ ", MB_ICONWARNING);
 			return false;
 		}
 
-		//±à¼­Ç°¸´ÖÆµçÂ·
+		//ç¼–è¾‘å‰å¤åˆ¶ç”µè·¯
 		CloneCircuitBeforeChange();
 
-		//±à¼­µçÂ·
+		//ç¼–è¾‘ç”µè·¯
 		crun[crunCount] = body.p2.Clone(CLONE_FOR_USE);
 		crun[crunCount]->coord.x += inter.x;
 		crun[crunCount]->coord.y += inter.y;
 		crun[crunCount]->num = crunCount;
 		++crunCount;
 
-		//½«ĞÂµÄµçÂ·ĞÅÏ¢±£´æµ½ÈİÆ÷
+		//å°†æ–°çš„ç”µè·¯ä¿¡æ¯ä¿å­˜åˆ°å®¹å™¨
 		PutCircuitToVector();
 
-		//ÖØ»æµçÂ·
+		//é‡ç»˜ç”µè·¯
 		PaintCrun(crun[crunCount-1], true);
 	}
 	else //if(body.IsOnCtrl())
 	{
-		//ÑéÖ¤
+		//éªŒè¯
 		if(ctrlCount >= MAX_CTRL_COUNT)
 		{
-			this.canvas.MessageBox("µçÑ§Ôª¼ş³¬¹ı×î´óÊıÁ¿!", "µçÑ§Ôª¼ş²»ÄÜÌí¼Ó", MB_ICONWARNING);
+			this.canvas.MessageBox("ç”µå­¦å…ƒä»¶è¶…è¿‡æœ€å¤§æ•°é‡!", "ç”µå­¦å…ƒä»¶ä¸èƒ½æ·»åŠ ", MB_ICONWARNING);
 			return false;
 		}
 
-		//±à¼­Ç°¸´ÖÆµçÂ·
+		//ç¼–è¾‘å‰å¤åˆ¶ç”µè·¯
 		CloneCircuitBeforeChange();
 
-		//±à¼­²¿·Ö
+		//ç¼–è¾‘éƒ¨åˆ†
 		ctrl[ctrlCount] = body.p3.Clone(CLONE_FOR_USE);
 		ctrl[ctrlCount]->coord.x += inter.x;
 		ctrl[ctrlCount]->coord.y += inter.y;
 		ctrl[ctrlCount]->num = ctrlCount;
 		++ctrlCount;
 
-		//½«ĞÂµÄµçÂ·ĞÅÏ¢±£´æµ½ÈİÆ÷
+		//å°†æ–°çš„ç”µè·¯ä¿¡æ¯ä¿å­˜åˆ°å®¹å™¨
 		PutCircuitToVector();
 
-		//ÖØ»æµçÂ·
+		//é‡ç»˜ç”µè·¯
 		PaintCtrl(ctrl[ctrlCount-1], true);
 	}
 
@@ -203,7 +203,7 @@ bool Manager::PosBodyClone(const Pointer * body, POINT firstPos, POINT lastPos)
 }
 
 void Manager::RotateCtrl(FOCUS_OR_POS &body, int rotateAngle)
-//Ğı×ª¿Ø¼ş
+//æ—‹è½¬æ§ä»¶
 {
 	Pointer pointer = GetBodyPointer(body);
 	if(!pointer.IsOnCtrl()) return;

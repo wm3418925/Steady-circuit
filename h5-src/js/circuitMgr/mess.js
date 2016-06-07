@@ -1,39 +1,39 @@
 
-//4ÆäËûº¯Êı------------------------------------------------------------------------
+//4å…¶ä»–å‡½æ•°------------------------------------------------------------------------
 
-//ÉèÖÃÌí¼ÓºÎÖÖÎïÌå
+//è®¾ç½®æ·»åŠ ä½•ç§ç‰©ä½“
 Manager.SetAddState = function(type) {
 	ASSERT(type>=BODY_NO && type<CTRL_TYPE_NUM);
 	Manager.addState = type;
 };
 
-//»ñµÃ¿Ø¼ş»­Í¼¾ä±ú
+//è·å¾—æ§ä»¶ç”»å›¾å¥æŸ„
 Manager.GetCtrlPaintImage = function(c) {
-	if (c.IsBulbOn() || c.SwitchOnOff(false))	//Ğ¡µÆÅİ´ïµ½¶î¶¨¹¦ÂÊ, ¿ª¹Ø±ÕºÏ
+	if (c.IsBulbOn() || c.SwitchOnOff(false))	//å°ç¯æ³¡è¾¾åˆ°é¢å®šåŠŸç‡, å¼€å…³é—­åˆ
 		return Manager.ctrlImageList[(CTRL_TYPE_COUNT + c.GetStyle())*4 + c.dir];
 	else
-		return Manager.ctrlImageList[c.GetStyle()*4 + c.dir];	//Ä¬ÈÏµÄ»­Í¼¾ä±ú
+		return Manager.ctrlImageList[c.GetStyle()*4 + c.dir];	//é»˜è®¤çš„ç”»å›¾å¥æŸ„
 };
 
-//»ñµÃÃû³Æ,str³¤¶ÈÓ¦¸Ã´óÓÚµÈÓÚNAME_LEN*2
+//è·å¾—åç§°,stré•¿åº¦åº”è¯¥å¤§äºç­‰äºNAME_LEN*2
 Manager.GetBodyDefaultName = function(pointer) {
 	ASSERT(pointer.IsOnAny());
 	if (pointer.IsOnLead()) {
-		return "µ¼Ïß[" + pointer.p.GetInitOrder() + "]";
+		return "å¯¼çº¿[" + pointer.p.GetInitOrder() + "]";
 	} else if(pointer.IsOnCrun()) {
-		return "½áµã[±àºÅ("+pointer.p.GetInitOrder()+"), µ±Ç°Ãû³Æ("+pointer.p.name+")]";
+		return "ç»“ç‚¹[ç¼–å·("+pointer.p.GetInitOrder()+"), å½“å‰åç§°("+pointer.p.name+")]";
 	} else { //if(pointer.IsOnCtrl())
-		return "¿Ø¼ş[±àºÅ("+pointer.p.GetInitOrder()+"), µ±Ç°Ãû³Æ("+pointer.p.name+")]";
+		return "æ§ä»¶[ç¼–å·("+pointer.p.GetInitOrder()+"), å½“å‰åç§°("+pointer.p.name+")]";
 	}
 };
 
-//É¾³ıÌáÊ¾,·µ»ØÖµÎªfalseÓÃ»§È¡ÏûÉ¾³ı
+//åˆ é™¤æç¤º,è¿”å›å€¼ä¸ºfalseç”¨æˆ·å–æ¶ˆåˆ é™¤
 Manager.DeleteNote = function(body) {
-	var conCount;	//Á¬½Óµ¼ÏßÊı
-	var name;	//ÎïÌåÃû³Æ
-	var note;	//ÌáÊ¾×Ö·û´®
+	var conCount;	//è¿æ¥å¯¼çº¿æ•°
+	var name;	//ç‰©ä½“åç§°
+	var note;	//æç¤ºå­—ç¬¦ä¸²
 
-	//»ñµÃÁ¬½Óµ¼ÏßÊı
+	//è·å¾—è¿æ¥å¯¼çº¿æ•°
 	if(body.IsOnLead())
 		conCount = 0;
 	else if(body.IsOnCrun())
@@ -43,28 +43,28 @@ Manager.DeleteNote = function(body) {
 	else
 		return false;
 
-	//¸ù¾İÁ¬½Óµ¼ÏßÊıÌáÊ¾É¾³ıĞÅÏ¢
+	//æ ¹æ®è¿æ¥å¯¼çº¿æ•°æç¤ºåˆ é™¤ä¿¡æ¯
 	name = GetBodyDefaultName(body);
 	if (conCount > 0)
-		note = "ÒªÉ¾³ı "+name+" Âğ ?\nËüÁ¬½ÓµÄ "+conCount+" ¶Îµ¼ÏßÒ²½«É¾³ı!";
+		note = "è¦åˆ é™¤ "+name+" å— ?\nå®ƒè¿æ¥çš„ "+conCount+" æ®µå¯¼çº¿ä¹Ÿå°†åˆ é™¤!";
 	else
-		note = "ÒªÉ¾³ı "+name+" Âğ ?";
+		note = "è¦åˆ é™¤ "+name+" å— ?";
 
 	PaintWithSpecialColorAndRect(body, false);
-	return IDYES == this.canvas.MessageBox(note, "É¾³ıÎïÌåÌáÊ¾", MB_YESNO|MB_ICONWARNING);
+	return IDYES == this.canvas.MessageBox(note, "åˆ é™¤ç‰©ä½“æç¤º", MB_YESNO|MB_ICONWARNING);
 };
 
-//Çå³ıµçÂ·×´Ì¬
+//æ¸…é™¤ç”µè·¯çŠ¶æ€
 Manager.ClearCircuitState = function() {
-	FocusBodyClear(null);	//½¹µã
-	ClearPressBody();		//ÏÔÊ¾µçÊÆ²î
-	motiCount = 0;			//¼¤»îÎïÌåÊıÁ¿
-	addState = BODY_NO;		//Ìí¼ÓÎïÌåÀàĞÍ
-	lastMoveOnBody.Clear();	//Êó±êÉÏ´ÎÒÆ¶¯µ½µÄÎïÌå
-	lButtonDownState = 0;	//Êó±ê×ó»÷×´Ì¬
+	FocusBodyClear(null);	//ç„¦ç‚¹
+	ClearPressBody();		//æ˜¾ç¤ºç”µåŠ¿å·®
+	motiCount = 0;			//æ¿€æ´»ç‰©ä½“æ•°é‡
+	addState = BODY_NO;		//æ·»åŠ ç‰©ä½“ç±»å‹
+	lastMoveOnBody.Clear();	//é¼ æ ‡ä¸Šæ¬¡ç§»åŠ¨åˆ°çš„ç‰©ä½“
+	lButtonDownState = 0;	//é¼ æ ‡å·¦å‡»çŠ¶æ€
 };
 
-//»ñµÃÎïÌåÖ¸Õë
+//è·å¾—ç‰©ä½“æŒ‡é’ˆ
 Manager.GetBodyPointer = function(body) {
 	var pointer;
 
@@ -80,8 +80,8 @@ Manager.GetBodyPointer = function(body) {
 	return pointer;
 };
 
-//±£´æµçÂ·µ½Í¼Æ¬
+//ä¿å­˜ç”µè·¯åˆ°å›¾ç‰‡
 Manager.SaveAsPicture = function(path) {
-	PaintAll();	//»­µçÂ·, bitmapForRefresh±£´æÓĞÎ»Í¼
+	PaintAll();	//ç”»ç”µè·¯, bitmapForRefreshä¿å­˜æœ‰ä½å›¾
 	SaveBitmapToFile(HBITMAP(bitmapForRefresh), path);
 };

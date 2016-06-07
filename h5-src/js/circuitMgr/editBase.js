@@ -1,7 +1,7 @@
 
-//5±à¼­º¯Êı------------------------------------------------------------------------¡ı
+//5ç¼–è¾‘å‡½æ•°------------------------------------------------------------------------â†“
 void Manager::AddCtrl(POINT pos, BODY_TYPE style)
-//Ìí¼Ó¿Ø¼ş
+//æ·»åŠ æ§ä»¶
 {
 	ASSERT(ctrlCount < MAX_CTRL_COUNT);
 
@@ -15,7 +15,7 @@ void Manager::AddCtrl(POINT pos, BODY_TYPE style)
 }
 
 void Manager::AddCrun(POINT pos)
-//Ìí¼Ó½áµã
+//æ·»åŠ ç»“ç‚¹
 {
 	ASSERT(crunCount < MAX_CRUN_COUNT);
 
@@ -29,17 +29,17 @@ void Manager::AddCrun(POINT pos)
 }
 
 void Manager::AddLead(Pointer a, Pointer b)
-//ÓÃµ¼ÏßÁ¬½Ó2¸öÎïÌå
+//ç”¨å¯¼çº¿è¿æ¥2ä¸ªç‰©ä½“
 {
-	ASSERT(leadCount < MAX_LEAD_COUNT);						//µ¼Ïß¹»ÓÃ
-	ASSERT(a.IsOnConnectPos() && b.IsOnConnectPos());	//Á¬½Óµã
-	ASSERT(!a.IsBodySame(&b));							//²»ÊÇÍ¬Ò»¸öÎïÌå
+	ASSERT(leadCount < MAX_LEAD_COUNT);						//å¯¼çº¿å¤Ÿç”¨
+	ASSERT(a.IsOnConnectPos() && b.IsOnConnectPos());	//è¿æ¥ç‚¹
+	ASSERT(!a.IsBodySame(&b));							//ä¸æ˜¯åŒä¸€ä¸ªç‰©ä½“
 
-	//Ìí¼Óµ¼Ïß
+	//æ·»åŠ å¯¼çº¿
 	lead[leadCount] = new LEAD(leadCount, a, b);
 	++leadCount;
 
-	//Á¬½ÓÎïÌåÖ¸Ïòµ¼Ïß
+	//è¿æ¥ç‰©ä½“æŒ‡å‘å¯¼çº¿
 	if(a.IsOnCrun())
 		a.p2.lead[a.GetLeadNum()] = lead[leadCount-1];
 	else 
@@ -49,31 +49,31 @@ void Manager::AddLead(Pointer a, Pointer b)
 	else 
 		b.p3.lead[b.GetLeadNum()] = lead[leadCount-1];
 
-	//ÏÔÊ¾Ìí¼ÓµÄµ¼Ïß
+	//æ˜¾ç¤ºæ·»åŠ çš„å¯¼çº¿
 	PaintLead(lead[leadCount-1]);
 }
 
 void Manager::DeleteLead(LEAD * l)
-//É¾³ıÁ¬½Ó2¸öÎïÌåµÄÁ¬Ïß
-//Ê¹ÓÃº¯Êı: Delete(Pointer), ConnectBodyLead
+//åˆ é™¤è¿æ¥2ä¸ªç‰©ä½“çš„è¿çº¿
+//ä½¿ç”¨å‡½æ•°: Delete(Pointer), ConnectBodyLead
 {
 	ASSERT(l != null);
 	Pointer * a = l.conBody, * b = l.conBody + 1;
 	int dira = a.GetLeadNum(), dirb = b.GetLeadNum();
 	int num = l.num;
 
-	//Èç¹ûÉ¾³ıÎïÌåÊÇ½¹µã,Çå³ı½¹µã
+	//å¦‚æœåˆ é™¤ç‰©ä½“æ˜¯ç„¦ç‚¹,æ¸…é™¤ç„¦ç‚¹
 	Pointer pointer;
 	pointer.SetOnLead(l);
 	FocusBodyClear(&pointer);
 
-	//Çå¿ÕÁ¬½ÓµÄÖ¸Õë
+	//æ¸…ç©ºè¿æ¥çš„æŒ‡é’ˆ
 	if(a.IsOnCrun()) a.p2.lead[dira] = null;
 	else if(a.IsOnCtrl()) a.p3.lead[dira] = null;
 	if(b.IsOnCrun()) b.p2.lead[dirb] = null;
 	else if(b.IsOnCtrl()) b.p3.lead[dirb] = null;
 
-	//É¾³ıµ¼Ïß
+	//åˆ é™¤å¯¼çº¿
 	delete l;
 	if(num != leadCount-1)
 	{
@@ -85,12 +85,12 @@ void Manager::DeleteLead(LEAD * l)
 }
 
 void Manager::DeleteSingleBody(Pointer pointer)
-//½ö½öÊÇÉ¾³ıÒ»¸ö½áµã»òÕß¿Ø¼ş,²»Ó°ÏìÖÜÎ§ÎïÌå
+//ä»…ä»…æ˜¯åˆ é™¤ä¸€ä¸ªç»“ç‚¹æˆ–è€…æ§ä»¶,ä¸å½±å“å‘¨å›´ç‰©ä½“
 {
 	ASSERT(pointer.IsOnBody());
 	int num;
 
-	FocusBodyClear(&pointer);	//Èç¹ûÉ¾³ıÎïÌåÊÇ½¹µã,Çå³ı½¹µã
+	FocusBodyClear(&pointer);	//å¦‚æœåˆ é™¤ç‰©ä½“æ˜¯ç„¦ç‚¹,æ¸…é™¤ç„¦ç‚¹
 
 	if(pointer.IsOnCrun())
 	{
@@ -119,10 +119,10 @@ void Manager::DeleteSingleBody(Pointer pointer)
 }
 
 void Manager::Delete(Pointer pointer)
-//É¾³ı
+//åˆ é™¤
 {
 	ASSERT(pointer.IsOnAny() && !pointer.IsOnConnectPos());
-	CloneCircuitBeforeChange();	//±à¼­Ç°¸´ÖÆµçÂ·
+	CloneCircuitBeforeChange();	//ç¼–è¾‘å‰å¤åˆ¶ç”µè·¯
 
 	if(pointer.IsOnLead())
 	{
@@ -141,40 +141,40 @@ void Manager::Delete(Pointer pointer)
 		DeleteSingleBody(pointer);
 	}
 
-	PutCircuitToVector();	//½«ĞÂµÄµçÂ·ĞÅÏ¢±£´æµ½ÈİÆ÷
+	PutCircuitToVector();	//å°†æ–°çš„ç”µè·¯ä¿¡æ¯ä¿å­˜åˆ°å®¹å™¨
 }
 
 bool Manager::ConnectBodyLead(POINT posb)
-//Á¬½ÓÒ»¸öÁ¬½ÓµãºÍµ¼Ïß
+//è¿æ¥ä¸€ä¸ªè¿æ¥ç‚¹å’Œå¯¼çº¿
 {
-	Pointer a;				//ÏÈµã»÷ÎïÌåºÍÁ¬½Óµã
-	Pointer x, y;			//ºóµã»÷ÎïÌå(µ¼Ïß)µÄ2¸öÁ¬½ÓÎïÌå
-	Pointer newCrun;		//ĞÂÌí¼ÓµÄ½áµã
-	POINT posa;				//ÏÈµã»÷ÎïÌåµÄ×ø±ê
-	char dir1, dir2, dir3;	//½áµãÁ¬½Óx,y,aµÄÁ¬½ÓµãÎ»ÖÃ
+	Pointer a;				//å…ˆç‚¹å‡»ç‰©ä½“å’Œè¿æ¥ç‚¹
+	Pointer x, y;			//åç‚¹å‡»ç‰©ä½“(å¯¼çº¿)çš„2ä¸ªè¿æ¥ç‰©ä½“
+	Pointer newCrun;		//æ–°æ·»åŠ çš„ç»“ç‚¹
+	POINT posa;				//å…ˆç‚¹å‡»ç‰©ä½“çš„åæ ‡
+	char dir1, dir2, dir3;	//ç»“ç‚¹è¿æ¥x,y,açš„è¿æ¥ç‚¹ä½ç½®
 	LEADSTEP newLeadPosx, newLeadPosy;
 
-	//1,¼ì²éº¯ÊıÔËĞĞÌõ¼ş
+	//1,æ£€æŸ¥å‡½æ•°è¿è¡Œæ¡ä»¶
 	ASSERT(motiCount == 2 && motiBody[0].IsOnConnectPos() && motiBody[1].IsOnLead());
 	motiCount = 0;
-	if(crunCount >= MAX_CRUN_COUNT)	//Ö»Òª½áµãÊıÁ¿¹»,µ¼ÏßÒ»¶¨¹»
+	if(crunCount >= MAX_CRUN_COUNT)	//åªè¦ç»“ç‚¹æ•°é‡å¤Ÿ,å¯¼çº¿ä¸€å®šå¤Ÿ
 	{
-		this.canvas.MessageBox("½áµã³¬¹ı×î´óÊıÁ¿!", "½áµã²»ÄÜÌí¼Ó", MB_ICONWARNING);
+		this.canvas.MessageBox("ç»“ç‚¹è¶…è¿‡æœ€å¤§æ•°é‡!", "ç»“ç‚¹ä¸èƒ½æ·»åŠ ", MB_ICONWARNING);
 		return false;
 	}
 
-	//2,±à¼­Ç°¸´ÖÆµçÂ·
+	//2,ç¼–è¾‘å‰å¤åˆ¶ç”µè·¯
 	CloneCircuitBeforeChange();
 
-	//3,»ñµÃÎïÌåºÍ×ø±ê
+	//3,è·å¾—ç‰©ä½“å’Œåæ ‡
 	a = motiBody[0];
 	x = motiBody[1].p1.conBody[0];
 	y = motiBody[1].p1.conBody[1];
 	if(a.IsOnCrun())posa = a.p2.coord;
-	else posa = a.p3.coord;	//»ñµÃÏÈµã»÷ÎïÌåµÄ×ø±ê
+	else posa = a.p3.coord;	//è·å¾—å…ˆç‚¹å‡»ç‰©ä½“çš„åæ ‡
 
-	//4,³õÊ¼»¯Á¬½ÓĞÂÌí¼Ó½áµãµÄ·½Ïò
-	if(motiBody[1].IsOnHoriLead())	//-3,-5,-7....ºáÏß
+	//4,åˆå§‹åŒ–è¿æ¥æ–°æ·»åŠ ç»“ç‚¹çš„æ–¹å‘
+	if(motiBody[1].IsOnHoriLead())	//-3,-5,-7....æ¨ªçº¿
 	{
 		if(motiBody[1].p1.GetBodyPos() & 2)
 		{
@@ -187,10 +187,10 @@ bool Manager::ConnectBodyLead(POINT posb)
 			dir2 = 4;
 		}
 
-		if(posa.y > posb.y)dir3 = 2;	//ÏÈµã»÷ÎïÌåÔÚºóµã»÷Î»ÖÃµÄÏÂÃæ
-		else dir3 = 1;	//ÏÈµã»÷ÎïÌåÔÚºóµã»÷Î»ÖÃµÄÉÏÃæ
+		if(posa.y > posb.y)dir3 = 2;	//å…ˆç‚¹å‡»ç‰©ä½“åœ¨åç‚¹å‡»ä½ç½®çš„ä¸‹é¢
+		else dir3 = 1;	//å…ˆç‚¹å‡»ç‰©ä½“åœ¨åç‚¹å‡»ä½ç½®çš„ä¸Šé¢
 	}
-	else	//-2,-4,-6....ÊúÏß
+	else	//-2,-4,-6....ç«–çº¿
 	{
 		if(motiBody[1].p1.GetBodyPos() & 1)
 		{
@@ -203,36 +203,36 @@ bool Manager::ConnectBodyLead(POINT posb)
 			dir2 = 2;
 		}
 
-		if(posa.x > posb.x)dir3 = 4;	//ÏÈµã»÷ÎïÌåÔÚºóµã»÷Î»ÖÃµÄÓÒÃæ
-		else dir3 = 3;	//ÏÈµã»÷ÎïÌåÔÚºóµã»÷Î»ÖÃµÄ×óÃæ
+		if(posa.x > posb.x)dir3 = 4;	//å…ˆç‚¹å‡»ç‰©ä½“åœ¨åç‚¹å‡»ä½ç½®çš„å³é¢
+		else dir3 = 3;	//å…ˆç‚¹å‡»ç‰©ä½“åœ¨åç‚¹å‡»ä½ç½®çš„å·¦é¢
 	}
 
-	//5,Ìí¼ÓÉ¾³ıÎïÌå
-	motiBody[1].p1.Divide(motiBody[1].GetAtState(), posb, newLeadPosx, newLeadPosy);	//¼ÇÒäÔ­À´µ¼Ïß×ø±ê
-	DeleteLead(motiBody[1].p1);	//É¾³ıÔ­À´µ¼Ïß
-	AddCrun(posb);	//Ìí¼Ó½áµã
+	//5,æ·»åŠ åˆ é™¤ç‰©ä½“
+	motiBody[1].p1.Divide(motiBody[1].GetAtState(), posb, newLeadPosx, newLeadPosy);	//è®°å¿†åŸæ¥å¯¼çº¿åæ ‡
+	DeleteLead(motiBody[1].p1);	//åˆ é™¤åŸæ¥å¯¼çº¿
+	AddCrun(posb);	//æ·»åŠ ç»“ç‚¹
 
-	newCrun.SetOnCrun(crun[crunCount-1]);	//newCrunÖ¸ÏòĞÂÌí¼Ó½áµã
+	newCrun.SetOnCrun(crun[crunCount-1]);	//newCrunæŒ‡å‘æ–°æ·»åŠ ç»“ç‚¹
 
 	newCrun.SetAtState(dir1);
-	AddLead(x, newCrun);	//xºÍ½ÚµãÁ¬Ïß,xÊÇÆğµã,ĞÂ½ÚµãÊÇÖÕµã
-	lead[leadCount-1]->ReplacePos(newLeadPosx);	//×ø±ê»¹Ô­
+	AddLead(x, newCrun);	//xå’ŒèŠ‚ç‚¹è¿çº¿,xæ˜¯èµ·ç‚¹,æ–°èŠ‚ç‚¹æ˜¯ç»ˆç‚¹
+	lead[leadCount-1]->ReplacePos(newLeadPosx);	//åæ ‡è¿˜åŸ
 
 	newCrun.SetAtState(dir2);
-	AddLead(newCrun, y);	//yºÍ½ÚµãÁ¬Ïß,yÊÇÖÕµã,ĞÂ½ÚµãÊÇÆğµã
-	lead[leadCount-1]->ReplacePos(newLeadPosy);	//×ø±ê»¹Ô­
+	AddLead(newCrun, y);	//yå’ŒèŠ‚ç‚¹è¿çº¿,yæ˜¯ç»ˆç‚¹,æ–°èŠ‚ç‚¹æ˜¯èµ·ç‚¹
+	lead[leadCount-1]->ReplacePos(newLeadPosy);	//åæ ‡è¿˜åŸ
 
 	newCrun.SetAtState(dir3);
-	AddLead(a, newCrun);	//aºÍ½ÚµãÁ¬Ïß
+	AddLead(a, newCrun);	//aå’ŒèŠ‚ç‚¹è¿çº¿
 
-	//6,½«ĞÂµÄµçÂ·ĞÅÏ¢±£´æµ½ÈİÆ÷
+	//6,å°†æ–°çš„ç”µè·¯ä¿¡æ¯ä¿å­˜åˆ°å®¹å™¨
 	PutCircuitToVector();
 
 	return true;
 }
 
 bool Manager::Delete(FOCUS_OR_POS &body)
-//É¾³ıÎïÌå
+//åˆ é™¤ç‰©ä½“
 {
 	Pointer pointer = GetBodyPointer(body);
 	if(!pointer.IsOnAny()) return false;

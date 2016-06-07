@@ -1,7 +1,7 @@
 
-//13ÏÔÊ¾µçÊÆ²îº¯Êı-----------------------------------------------------------------¡ı
+//13æ˜¾ç¤ºç”µåŠ¿å·®å‡½æ•°-----------------------------------------------------------------â†“
 void Manager::ClearPressBody()
-//Çå¿ÕÏÔÊ¾µçÊÆ²îµÄ³ÉÔ±±äÁ¿
+//æ¸…ç©ºæ˜¾ç¤ºç”µåŠ¿å·®çš„æˆå‘˜å˜é‡
 {
 	pressStart.Clear();
 	pressEnd.Clear();
@@ -9,17 +9,17 @@ void Manager::ClearPressBody()
 }
 
 bool Manager::SetStartBody(POINT pos)
-//ÉèÖÃ¼ÆËãµçÊÆ²îµÄÆğÊ¼Î»ÖÃ
+//è®¾ç½®è®¡ç®—ç”µåŠ¿å·®çš„èµ·å§‹ä½ç½®
 {
 	motiCount = 0;
-	if(!MotivateAll(pos)) return false;	//Ã»ÓĞµã»÷ÎïÌå
+	if(!MotivateAll(pos)) return false;	//æ²¡æœ‰ç‚¹å‡»ç‰©ä½“
 	motiCount = 0;
 
 	if(motiBody[0].IsOnLead())
 	{
 		if(StaticClass::IsElecError(motiBody[0].p1.elecDir))
 		{
-			this.canvas.MessageBox("µ±Ç°Ñ¡ÔñµÄµçÂ·²»Õı³£", "ÎŞ·¨¼ÆËãµçÊÆ²î", MB_ICONWARNING);
+			this.canvas.MessageBox("å½“å‰é€‰æ‹©çš„ç”µè·¯ä¸æ­£å¸¸", "æ— æ³•è®¡ç®—ç”µåŠ¿å·®", MB_ICONWARNING);
 			return false;
 		}
 	}
@@ -28,13 +28,13 @@ bool Manager::SetStartBody(POINT pos)
 		CRUN * c = motiBody[0].p2;
 		for(int i=0; i<4; ++i) if(c.lead[i] && StaticClass::IsElecError(c.lead[i]->elecDir))
 		{
-			this.canvas.MessageBox("µ±Ç°Ñ¡ÔñµÄµçÂ·²»Õı³£", "ÎŞ·¨¼ÆËãµçÊÆ²î", MB_ICONWARNING);
+			this.canvas.MessageBox("å½“å‰é€‰æ‹©çš„ç”µè·¯ä¸æ­£å¸¸", "æ— æ³•è®¡ç®—ç”µåŠ¿å·®", MB_ICONWARNING);
 			return false;
 		}
 	}
 	else 
 	{
-		return false;	//Ã»ÓĞµã»÷µ¼Ïß»òÕß½Úµã
+		return false;	//æ²¡æœ‰ç‚¹å‡»å¯¼çº¿æˆ–è€…èŠ‚ç‚¹
 	}
 
 	pressStart = pressEnd = motiBody[0];
@@ -45,11 +45,11 @@ bool Manager::SetStartBody(POINT pos)
 }
 
 bool Manager::NextBodyByInputNum(UINT nChar)
-//ÓÃ»§ÊäÈëÊı×Ö1,2,3,4À´ÒÆ¶¯µçÊÆ²î½áÎ²Î»ÖÃ
+//ç”¨æˆ·è¾“å…¥æ•°å­—1,2,3,4æ¥ç§»åŠ¨ç”µåŠ¿å·®ç»“å°¾ä½ç½®
 {
 	if(!pressStart.IsOnAny() || !pressEnd.IsOnAny())
 	{
-		AfxMessageBox("ÇëÏÈÊó±êµã»÷µ¼Ïß»òÕßÁ¬ÏßÑ¡ÔñµçÊÆ²îÆğÊ¼Î»ÖÃ,\nÈ»ºóÊäÈëÊı×ÖÒÆ¶¯µçÊÆ²î½áÎ²Î»ÖÃ.");
+		AfxMessageBox("è¯·å…ˆé¼ æ ‡ç‚¹å‡»å¯¼çº¿æˆ–è€…è¿çº¿é€‰æ‹©ç”µåŠ¿å·®èµ·å§‹ä½ç½®,\nç„¶åè¾“å…¥æ•°å­—ç§»åŠ¨ç”µåŠ¿å·®ç»“å°¾ä½ç½®.");
 		return false;
 	}
 
@@ -58,22 +58,22 @@ bool Manager::NextBodyByInputNum(UINT nChar)
 	{
 	case '#':
 	case 'a':
-		dir = 0; //Ğ¡¼üÅÌ'1'¼ü
+		dir = 0; //å°é”®ç›˜'1'é”®
 		break;
 
 	case '(':
 	case 'b':
-		dir = 1; //Ğ¡¼üÅÌ'2'¼ü
+		dir = 1; //å°é”®ç›˜'2'é”®
 		break;
 
 	case 34:
 	case 'c':
-		dir = 2; //Ğ¡¼üÅÌ'3'¼ü
+		dir = 2; //å°é”®ç›˜'3'é”®
 		break;
 
 	case '%':
 	case 'd':
-		dir = 3; //Ğ¡¼üÅÌ'4'¼ü
+		dir = 3; //å°é”®ç›˜'4'é”®
 		break;
 
 	default:
@@ -83,7 +83,7 @@ bool Manager::NextBodyByInputNum(UINT nChar)
 			return false;
 	}
 
-	if(pressEnd.IsOnLead())	//½áÎ²Î»ÖÃÔÚµ¼ÏßÉÏ
+	if(pressEnd.IsOnLead())	//ç»“å°¾ä½ç½®åœ¨å¯¼çº¿ä¸Š
 	{
 		if(dir < 0 || dir > 1) return false;
 		
@@ -96,18 +96,18 @@ bool Manager::NextBodyByInputNum(UINT nChar)
 		}
 		else //if(temp.IsOnCtrl())
 		{
-			if(temp.p3.GetResist() < 0)	//¶ÏÂ·¿Ø¼ş
+			if(temp.p3.GetResist() < 0)	//æ–­è·¯æ§ä»¶
 			{
-				this.canvas.MessageBox("ÕâÊÇÒ»¸ö¶ÏÂ·µçÑ§Ôª¼ş !", "µçÁ÷ÎŞ·¨Á÷¹ı !", MB_ICONINFORMATION);
+				this.canvas.MessageBox("è¿™æ˜¯ä¸€ä¸ªæ–­è·¯ç”µå­¦å…ƒä»¶ !", "ç”µæµæ— æ³•æµè¿‡ !", MB_ICONINFORMATION);
 				return false;
 			}
-			if(temp.p3.GetConnectNum() < 2)	//¿Ø¼şÃ»ÓĞÁ¬½Ó2¶Îµ¼Ïß
+			if(temp.p3.GetConnectNum() < 2)	//æ§ä»¶æ²¡æœ‰è¿æ¥2æ®µå¯¼çº¿
 			{
-				this.canvas.MessageBox("µçÑ§Ôª¼şÁíÒ»¶ËÃ»ÓĞÁ¬½Óµ¼Ïß !", "µçÁ÷ÎŞ·¨Á÷¹ı !", MB_ICONINFORMATION);
+				this.canvas.MessageBox("ç”µå­¦å…ƒä»¶å¦ä¸€ç«¯æ²¡æœ‰è¿æ¥å¯¼çº¿ !", "ç”µæµæ— æ³•æµè¿‡ !", MB_ICONINFORMATION);
 				return false;
 			}
-			dir = temp.p3.lead[0] == pressEnd.p1;	//ÏÂÒ»¸öµ¼ÏßË÷Òı(0»ò1)
-			if(temp.p3.lead[dir] == pressEnd.p1) return false;	//µçÂ·ÊÇÒ»¸ö¿Ø¼ş2¶Ë¶¼Á¬½ÓÍ¬Ò»¶Îµ¼Ïß
+			dir = temp.p3.lead[0] == pressEnd.p1;	//ä¸‹ä¸€ä¸ªå¯¼çº¿ç´¢å¼•(0æˆ–1)
+			if(temp.p3.lead[dir] == pressEnd.p1) return false;	//ç”µè·¯æ˜¯ä¸€ä¸ªæ§ä»¶2ç«¯éƒ½è¿æ¥åŒä¸€æ®µå¯¼çº¿
 			if(temp.p3.elecDir == dir)
 				startEndPressure -= temp.p3.GetResist() * temp.p3.elec;
 			else
@@ -116,7 +116,7 @@ bool Manager::NextBodyByInputNum(UINT nChar)
 			pressEnd.SetOnLead(temp.p3.lead[dir]);
 		}
 	}
-	else	//½áÎ²Î»ÖÃÔÚ½áµãÉÏ
+	else	//ç»“å°¾ä½ç½®åœ¨ç»“ç‚¹ä¸Š
 	{
 		if(dir < 0 || dir > 3) return false;
 		if(pressEnd.p2.lead[dir] != null)
@@ -125,7 +125,7 @@ bool Manager::NextBodyByInputNum(UINT nChar)
 		}
 		else 
 		{
-			this.canvas.MessageBox("½áµãÕâÒ»¶ËÃ»ÓĞÁ¬½Óµ¼Ïß !", "µçÁ÷ÎŞ·¨Á÷¹ı !", MB_ICONINFORMATION);
+			this.canvas.MessageBox("ç»“ç‚¹è¿™ä¸€ç«¯æ²¡æœ‰è¿æ¥å¯¼çº¿ !", "ç”µæµæ— æ³•æµè¿‡ !", MB_ICONINFORMATION);
 			return false;
 		}
 	}
@@ -135,15 +135,15 @@ bool Manager::NextBodyByInputNum(UINT nChar)
 }
 
 bool Manager::ShowPressure()
-//ÏÔÊ¾´ÓÆğÊ¼Î»ÖÃµ½½áÎ²Î»ÖÃµÄµçÊÆ²î(U0-U1)
+//æ˜¾ç¤ºä»èµ·å§‹ä½ç½®åˆ°ç»“å°¾ä½ç½®çš„ç”µåŠ¿å·®(U0-U1)
 {
 	if(!pressStart.IsOnAny() || !pressEnd.IsOnAny())
 	{
-		AfxMessageBox("ÇëÑ¡ÔñÆğÊ¼Î»ÖÃÔÙ²é¿´µçÊÆ²î!\nÆğÊ¼Î»ÖÃ¿ÉÒÔÓÃÊó±êµã»÷Ñ¡Ôñ!");
+		AfxMessageBox("è¯·é€‰æ‹©èµ·å§‹ä½ç½®å†æŸ¥çœ‹ç”µåŠ¿å·®!\nèµ·å§‹ä½ç½®å¯ä»¥ç”¨é¼ æ ‡ç‚¹å‡»é€‰æ‹©!");
 		return false;
 	}
 
-	char note[] = "µçÊÆ²î";
+	char note[] = "ç”µåŠ¿å·®";
 	char name1[NAME_LEN*2], name2[NAME_LEN*2];
 	GetName(pressStart, name1);
 	GetName(pressEnd, name2);
@@ -153,8 +153,8 @@ bool Manager::ShowPressure()
 
 	if(StaticClass::IsZero(startEndPressure)) startEndPressure = 0;
 	list.SetAMember(DATA_STYLE_double, note, (void *)(&startEndPressure));
-	list.SetAMember(DATA_STYLE_LPCTSTR, "ÆğÊ¼Î»ÖÃ", name1);
-	list.SetAMember(DATA_STYLE_LPCTSTR, "½áÊøÎ»ÖÃ", name2);
+	list.SetAMember(DATA_STYLE_LPCTSTR, "èµ·å§‹ä½ç½®", name1);
+	list.SetAMember(DATA_STYLE_LPCTSTR, "ç»“æŸä½ç½®", name2);
 
 	MyPropertyDlg dlg(&list, true, null, note, this.canvas);
 	dlg.DoModal();

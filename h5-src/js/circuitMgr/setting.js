@@ -1,7 +1,7 @@
 
-//12ÉèÖÃº¯Êı-----------------------------------------------------------------------¡ı
+//12è®¾ç½®å‡½æ•°-----------------------------------------------------------------------â†“
 void Manager::SetViewOrig(int xPos, int yPos)
-//ÉèÖÃ»­Í¼µÄ³õÊ¼×ø±ê
+//è®¾ç½®ç”»å›¾çš„åˆå§‹åæ ‡
 {
 	viewOrig.x = xPos * mouseWheelSense.cx;
 	viewOrig.y = yPos * mouseWheelSense.cy;
@@ -9,42 +9,42 @@ void Manager::SetViewOrig(int xPos, int yPos)
 }
 
 void Manager::SetMoveBodySense()
-//ÉèÖÃ°´·½Ïò¼üÒ»´ÎÒÆ¶¯ÎïÌåµÄ¾àÀë
+//è®¾ç½®æŒ‰æ–¹å‘é”®ä¸€æ¬¡ç§»åŠ¨ç‰©ä½“çš„è·ç¦»
 {
 	LISTDATA list;
 	char title[NAME_LEN*2];
 
 	list.Init(1);
-	list.SetAMember(DATA_STYLE_UINT, "·½Ïò¼üÒÆ¶¯ÎïÌåµÄ¾àÀë", &moveBodySense, 1, MAX_MOVE_BODY_DIS);
+	list.SetAMember(DATA_STYLE_UINT, "æ–¹å‘é”®ç§»åŠ¨ç‰©ä½“çš„è·ç¦»", &moveBodySense, 1, MAX_MOVE_BODY_DIS);
 
-	sprintf(title, "ÁéÃô¶È·¶Î§ : 1 ~ %d", MAX_MOVE_BODY_DIS);
+	sprintf(title, "çµæ•åº¦èŒƒå›´ : 1 ~ %d", MAX_MOVE_BODY_DIS);
 	MyPropertyDlg dlg(&list, false, null, title, this.canvas);
 	dlg.DoModal();
 }
 
 void Manager::SetLeaveOutDis()
-//ÉèÖÃ×î´óµ¼ÏßºÏ²¢¾àÀë
+//è®¾ç½®æœ€å¤§å¯¼çº¿åˆå¹¶è·ç¦»
 {
 	LISTDATA list;
 	char title[NAME_LEN*2];
 
 	list.Init(1);
-	list.SetAMember(DATA_STYLE_UINT, "µ¼ÏßÏàÁÚÁ½½ÚºÏ²¢ÁÙ½ç¾àÀë", &maxLeaveOutDis, 1, MAX_LEAVE_OUT_DIS);
+	list.SetAMember(DATA_STYLE_UINT, "å¯¼çº¿ç›¸é‚»ä¸¤èŠ‚åˆå¹¶ä¸´ç•Œè·ç¦»", &maxLeaveOutDis, 1, MAX_LEAVE_OUT_DIS);
 
-	sprintf(title, "ÁÙ½ç¾àÀë·¶Î§ : 1 ~ %d", MAX_LEAVE_OUT_DIS);
+	sprintf(title, "ä¸´ç•Œè·ç¦»èŒƒå›´ : 1 ~ %d", MAX_LEAVE_OUT_DIS);
 	MyPropertyDlg dlg(&list, false, null, title, this.canvas);
 	dlg.DoModal();
 }
 
 void Manager::SetTextColor()
-//ÉèÖÃ×ÖÌåÑÕÉ«
+//è®¾ç½®å­—ä½“é¢œè‰²
 {
 	const enum COLOR preColor = textColor;
 	LISTDATA list;
 	list.Init(1);
-	list.SetAEnumMember("±êÇ©ÑÕÉ«", &textColor, ENUM_COLOR);
+	list.SetAEnumMember("æ ‡ç­¾é¢œè‰²", &textColor, ENUM_COLOR);
 
-	MyPropertyDlg dlg(&list, false, null, "ÉèÖÃ±êÇ©ÑÕÉ«", this.canvas);
+	MyPropertyDlg dlg(&list, false, null, "è®¾ç½®æ ‡ç­¾é¢œè‰²", this.canvas);
 	dlg.DoModal();
 
 	if(preColor != textColor)
@@ -55,14 +55,14 @@ void Manager::SetTextColor()
 }
 
 void Manager::SetFocusLeadStyle()
-//ÉèÖÃ½¹µãµ¼ÏßÑùÊ½
+//è®¾ç½®ç„¦ç‚¹å¯¼çº¿æ ·å¼
 {
 	const enum LEADSTYLE save = focusLeadStyle;
 	LISTDATA list;
 	list.Init(1);
-	list.SetAEnumMember("Ñ¡¶¨µ¼ÏßÑùÊ½", &focusLeadStyle, ENUM_LEADSTYLE);
+	list.SetAEnumMember("é€‰å®šå¯¼çº¿æ ·å¼", &focusLeadStyle, ENUM_LEADSTYLE);
 
-	MyPropertyDlg dlg(&list, false, null, "ÉèÖÃÑ¡¶¨µ¼ÏßÑùÊ½", this.canvas);
+	MyPropertyDlg dlg(&list, false, null, "è®¾ç½®é€‰å®šå¯¼çº¿æ ·å¼", this.canvas);
 	dlg.DoModal();
 
 	if(save != focusLeadStyle && focusBody.IsOnLead())
@@ -70,14 +70,14 @@ void Manager::SetFocusLeadStyle()
 }
 
 void Manager::SetFocusCrunColor()
-//ÉèÖÃ½¹µã½áµãÑÕÉ«
+//è®¾ç½®ç„¦ç‚¹ç»“ç‚¹é¢œè‰²
 {
 	const enum COLOR save = focusCrunColor;
 	LISTDATA list;
 	list.Init(1);
-	list.SetAEnumMember("Ñ¡¶¨½áµãÑÕÉ«", &focusCrunColor, ENUM_COLOR, RED, BLUE);
+	list.SetAEnumMember("é€‰å®šç»“ç‚¹é¢œè‰²", &focusCrunColor, ENUM_COLOR, RED, BLUE);
 
-	MyPropertyDlg dlg(&list, false, null, "ÉèÖÃÑ¡¶¨½áµãÑÕÉ«", this.canvas);
+	MyPropertyDlg dlg(&list, false, null, "è®¾ç½®é€‰å®šç»“ç‚¹é¢œè‰²", this.canvas);
 	dlg.DoModal();
 
 	if(save != focusCrunColor && focusBody.IsOnCrun())
@@ -85,14 +85,14 @@ void Manager::SetFocusCrunColor()
 }
 
 void Manager::SetFocusCtrlColor()
-//ÉèÖÃ½¹µã¿Ø¼şÑÕÉ«
+//è®¾ç½®ç„¦ç‚¹æ§ä»¶é¢œè‰²
 {
 	const enum COLOR save = focusCtrlColor;
 	LISTDATA list;
 	list.Init(1);
-	list.SetAEnumMember("Ñ¡¶¨µçÑ§Ôª¼şÑÕÉ«", &focusCtrlColor, ENUM_COLOR, RED, BLUE);
+	list.SetAEnumMember("é€‰å®šç”µå­¦å…ƒä»¶é¢œè‰²", &focusCtrlColor, ENUM_COLOR, RED, BLUE);
 
-	MyPropertyDlg dlg(&list, false, null, "ÉèÖÃÑ¡¶¨µçÑ§Ôª¼şÑÕÉ«", this.canvas);
+	MyPropertyDlg dlg(&list, false, null, "è®¾ç½®é€‰å®šç”µå­¦å…ƒä»¶é¢œè‰²", this.canvas);
 	dlg.DoModal();
 
 	if(save != focusCtrlColor && focusBody.IsOnCtrl())

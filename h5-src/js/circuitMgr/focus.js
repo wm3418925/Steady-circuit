@@ -1,7 +1,7 @@
 
-//11Êó±ê½¹µãÎïÌåº¯Êı---------------------------------------------------------------¡ı
+//11é¼ æ ‡ç„¦ç‚¹ç‰©ä½“å‡½æ•°---------------------------------------------------------------â†“
 void Manager::UpdateEditMenuState()
-//¸üĞÂ±à¼­²Ëµ¥×´Ì¬(MF_ENABLED or MF_GRAYED)
+//æ›´æ–°ç¼–è¾‘èœå•çŠ¶æ€(MF_ENABLED or MF_GRAYED)
 {
 	CMenu * cm = this.canvas.GetMenu();
 	UINT menuState;
@@ -55,9 +55,9 @@ void Manager::UpdateEditMenuState()
 }
 
 void Manager::FocusBodyClear(const Pointer * deleteBody)
-//ÅĞ¶ÏÉ¾³ıÎïÌåÊÇ·ñÊÇµ±Ç°½¹µã,Èç¹ûÊÇÔòÇå³ıÊó±ê½¹µãÎïÌå
-//Èç¹ûdeleteBody==null,Ö±½ÓÉ¾³ı½¹µã
-//º¯ÊıÖ´ĞĞÔÚ:Manager,DeleteSingleBody,ClearCircuitState
+//åˆ¤æ–­åˆ é™¤ç‰©ä½“æ˜¯å¦æ˜¯å½“å‰ç„¦ç‚¹,å¦‚æœæ˜¯åˆ™æ¸…é™¤é¼ æ ‡ç„¦ç‚¹ç‰©ä½“
+//å¦‚æœdeleteBody==null,ç›´æ¥åˆ é™¤ç„¦ç‚¹
+//å‡½æ•°æ‰§è¡Œåœ¨:Manager,DeleteSingleBody,ClearCircuitState
 {
 	if(deleteBody == null || focusBody.IsBodySame(deleteBody))
 	{
@@ -67,8 +67,8 @@ void Manager::FocusBodyClear(const Pointer * deleteBody)
 }
 
 void Manager::FocusBodySet(const Pointer &newFocus)
-//ÉèÖÃ½¹µãÎïÌå
-//º¯ÊıÖ´ĞĞÔÚ:FocusBodyPaint,ReadCircuitFromVector,ReadFile
+//è®¾ç½®ç„¦ç‚¹ç‰©ä½“
+//å‡½æ•°æ‰§è¡Œåœ¨:FocusBodyPaint,ReadCircuitFromVector,ReadFile
 {
 	ASSERT(!newFocus.IsOnConnectPos());
 	focusBody = newFocus;
@@ -76,15 +76,15 @@ void Manager::FocusBodySet(const Pointer &newFocus)
 }
 
 bool Manager::FocusBodyPaint(const Pointer * newFocus)
-//»­»ñµÃÊó±ê½¹µãµÄÎïÌå,²¢¸²¸ÇÔ­À´µÄ½¹µã
-//Èç¹ûnewFocus==NULLÖØ»æÔ­À´½¹µã;·ñÔò¸²¸ÇÔ­À´µÄ½¹µã,ĞÂµÄ½¹µãÓÃ½¹µãÉ«»­
+//ç”»è·å¾—é¼ æ ‡ç„¦ç‚¹çš„ç‰©ä½“,å¹¶è¦†ç›–åŸæ¥çš„ç„¦ç‚¹
+//å¦‚æœnewFocus==NULLé‡ç»˜åŸæ¥ç„¦ç‚¹;å¦åˆ™è¦†ç›–åŸæ¥çš„ç„¦ç‚¹,æ–°çš„ç„¦ç‚¹ç”¨ç„¦ç‚¹è‰²ç”»
 {
-	if(newFocus != null)	//½¹µã¸Ä±ä
+	if(newFocus != null)	//ç„¦ç‚¹æ”¹å˜
 	{
 		if(focusBody.IsBodySame(newFocus))
 			return false;
 
-		//Ô­À´µÄ½¹µãÓÃºÚÉ«»­
+		//åŸæ¥çš„ç„¦ç‚¹ç”¨é»‘è‰²ç”»
 		if(focusBody.IsOnLead())
 			PaintLead(focusBody.p1);
 		if(focusBody.IsOnCrun())
@@ -92,7 +92,7 @@ bool Manager::FocusBodyPaint(const Pointer * newFocus)
 		else if(focusBody.IsOnCtrl())
 			PaintCtrl(focusBody.p3, false);
 
-		//½¹µãÎïÌå¸üĞÂ
+		//ç„¦ç‚¹ç‰©ä½“æ›´æ–°
 		FocusBodySet(*newFocus);
 	}
 
@@ -126,30 +126,30 @@ bool Manager::FocusBodyPaint(const Pointer * newFocus)
 }
 
 void Manager::FocusBodyChangeUseTab()
-//ÓÃ»§°´Tab¼üÇĞ»»½¹µã´¦Àí
+//ç”¨æˆ·æŒ‰Tabé”®åˆ‡æ¢ç„¦ç‚¹å¤„ç†
 {
 	const int bodyNum = crunCount + ctrlCount;
 	Pointer newFocus;
 	int num;
 
-	if(bodyNum == 0) return;	//Ã»ÓĞÎïÌå
+	if(bodyNum == 0) return;	//æ²¡æœ‰ç‰©ä½“
 
-	if(focusBody.IsOnLead())	//µ±Ç°½¹µãÊÇµ¼Ïß
+	if(focusBody.IsOnLead())	//å½“å‰ç„¦ç‚¹æ˜¯å¯¼çº¿
 	{
 		num = (focusBody.p1.num + 1) % leadCount;
 		newFocus.SetOnLead(lead[num]);
 	}
-	else if(focusBody.IsOnCrun())	//µ±Ç°½¹µãÊÇ½áµã
+	else if(focusBody.IsOnCrun())	//å½“å‰ç„¦ç‚¹æ˜¯ç»“ç‚¹
 	{
 		num = (focusBody.p2.num + 1) % crunCount;
 		newFocus.SetOnCrun(crun[num], true);
 	}
-	else if(focusBody.IsOnCtrl())	//µ±Ç°½¹µãÊÇ¿Ø¼ş
+	else if(focusBody.IsOnCtrl())	//å½“å‰ç„¦ç‚¹æ˜¯æ§ä»¶
 	{
 		num = (focusBody.p3.num + 1) % ctrlCount;
 		newFocus.SetOnCtrl(ctrl[num], true);
 	}
-	else	//Ã»ÓĞÉè¶¨½¹µã
+	else	//æ²¡æœ‰è®¾å®šç„¦ç‚¹
 	{
 		if(crunCount > 0)
 			newFocus.SetOnCrun(crun[0], true);
@@ -161,41 +161,41 @@ void Manager::FocusBodyChangeUseTab()
 }
 
 bool Manager::FocusBodyMove(int dir)
-//ÓÃ»§°´ÉÏÏÂ×óÓÒ¼üÒÆ¶¯½¹µãÎïÌå
+//ç”¨æˆ·æŒ‰ä¸Šä¸‹å·¦å³é”®ç§»åŠ¨ç„¦ç‚¹ç‰©ä½“
 {
 	motiCount = 0;
 	if(!focusBody.IsOnBody()) return false;
 
 	POINT fromPos, toPos;
 
-	//»ñµÃÎïÌå×ø±ê
+	//è·å¾—ç‰©ä½“åæ ‡
 	if(focusBody.IsOnCrun()) fromPos = focusBody.p2.coord;
 	else fromPos = focusBody.p3.coord;
 	toPos = fromPos;
 
-	//ÉèÖÃÒÆ¶¯ºóµÄ×ø±ê
+	//è®¾ç½®ç§»åŠ¨åçš„åæ ‡
 	switch(dir)
 	{
-	case VK_UP:		//ÏòÉÏÒÆ¶¯½¹µã
+	case VK_UP:		//å‘ä¸Šç§»åŠ¨ç„¦ç‚¹
 		toPos.y -= moveBodySense;
 		break;
-	case VK_DOWN:	//ÏòÏÂÒÆ¶¯½¹µã
+	case VK_DOWN:	//å‘ä¸‹ç§»åŠ¨ç„¦ç‚¹
 		toPos.y += moveBodySense;
 		break;
-	case VK_LEFT:	//Ïò×óÒÆ¶¯½¹µã
+	case VK_LEFT:	//å‘å·¦ç§»åŠ¨ç„¦ç‚¹
 		toPos.x -= moveBodySense;
 		break;
-	case VK_RIGHT:	//ÏòÓÒÒÆ¶¯½¹µã
+	case VK_RIGHT:	//å‘å³ç§»åŠ¨ç„¦ç‚¹
 		toPos.x += moveBodySense;
 		break;
 	default:
 		return false;
 	}
 
-	//¼ì²é×ø±êÊÇ·ñÔ½½ç
+	//æ£€æŸ¥åæ ‡æ˜¯å¦è¶Šç•Œ
 	if(toPos.x < -CTRL_SIZE.cx/2 || toPos.y < -CTRL_SIZE.cy/2) return false;
 
-	//ÒÆ¶¯¶ÔÏó
+	//ç§»åŠ¨å¯¹è±¡
 	PosBodyMove(&focusBody, fromPos, toPos);
 	return true;
 }

@@ -8,7 +8,7 @@ var PaintCommonFunc = {
 	  return s;
 	},
 	HexToRGBStr: function(color) {
-		return "#" + ZeroFixHex(color, 6);
+		return "#" + PaintCommonFunc.ZeroFixHex(color, 6);
 	},
 	RGBStrToHex: function(rgbStr) {
 		if (rgbStr.charAt(0) == '#')
@@ -28,7 +28,7 @@ var PaintCommonFunc = {
 		return (r << 16) | (g << 8) | b;
 	},
 	RGBToRGBStr: function(r, g, b) {
-		return HexToRGBStr(RGBToHex(r,g,b));
+		return PaintCommonFunc.HexToRGBStr(PaintCommonFunc.RGBToHex(r,g,b));
 	},
 	RedOfHexRGB: function(color) {
 		return (color>>16) & 0xff;
@@ -44,14 +44,14 @@ var PaintCommonFunc = {
 	},
 
 	
-	// ÔÚÎïÌåÍâ²¿»­¾ØĞÎ°üÎ§ÎïÌå
+	// åœ¨ç‰©ä½“å¤–éƒ¨ç”»çŸ©å½¢åŒ…å›´ç‰©ä½“
 	PaintSurrendedRect: function(ctx, x,y, cx,cy, rectColor) {
 		ctx.lineWidth = 1;
 		ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(rectColor);
 		ctx.strokeRect(x-1,y-1,cx+2,cy+2);
 	},
 	
-	// ÒÔÒì»òµÄÂß¼­ »­ÎïÌå
+	// ä»¥å¼‚æˆ–çš„é€»è¾‘ ç”»ç‰©ä½“
 	PaintImageDataXor: function(ctx, imageData, x,y) {
 		var orgImgData = ctx.getImageData(x,y, imageData.width,imageData.height);
 		for (var i=0; i<imageData.data.length; ) {
@@ -66,7 +66,7 @@ var PaintCommonFunc = {
 		}
 		ctx.putImageData(orgImgData, x,y);
 	},
-	// ÒÔ»òµÄÂß¼­ »­ÎïÌå
+	// ä»¥æˆ–çš„é€»è¾‘ ç”»ç‰©ä½“
 	PaintImageDataOr: function(ctx, imageData, x,y) {
 		var orgImgData = ctx.getImageData(x,y, imageData.width,imageData.height);
 		for (var i=0; i<imageData.data.length; ) {

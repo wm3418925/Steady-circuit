@@ -1,10 +1,10 @@
 
-var CTRL_BITMAP_COUNT = CTRL_TYPE_COUNT*8;	//¿Ø¼şÎ»Í¼µÄ¸öÊı(°üÀ¨Ğı×ªÖ®ºóµÄ)
+var CTRL_BITMAP_COUNT = CTRL_TYPE_COUNT*8;	//æ§ä»¶ä½å›¾çš„ä¸ªæ•°(åŒ…æ‹¬æ—‹è½¬ä¹‹åçš„)
 
-//1³õÊ¼»¯ºÍÇåÀíº¯Êı------------------------------------------------------------
+//1åˆå§‹åŒ–å’Œæ¸…ç†å‡½æ•°------------------------------------------------------------
 var Manager = {
 
-	// ³õÊ¼»¯Á¬½ÓµãÎ»Í¼
+	// åˆå§‹åŒ–è¿æ¥ç‚¹ä½å›¾
 	CreateShowConnectImageData: function() {
 		var len = 16*9;
 		var imgData = Manager.ctx.createImageData(6,6);
@@ -17,9 +17,10 @@ var Manager = {
 		}
 		imgData.data[3]=imgData.data[7]=imgData.data[19]=imgData.data[23]=imgData.data[27]=imgData.data[47]=0;
 		imgData.data[len-1]=imgData.data[len-5]=imgData.data[len-17]=imgData.data[len-21]=imgData.data[len-25]=imgData.data[len-45]=0;
+		return imgData;
 	},
 	
-	// ÒÔÖ¸¶¨ÑÕÉ«³õÊ¼»¯Ò»¸ö½Úµã
+	// ä»¥æŒ‡å®šé¢œè‰²åˆå§‹åŒ–ä¸€ä¸ªèŠ‚ç‚¹
 	CreateCrunImageWithColor: function(colorHex) {
 		var r = PaintCommonFunc.RedOfHexRGB(colorHex);
 		var g = PaintCommonFunc.GreenOfHexRGB(colorHex);
@@ -36,8 +37,9 @@ var Manager = {
 		}
 		imgData.data[3]=imgData.data[7]=imgData.data[DD*8-5]=imgData.data[DD*8-1]=imgData.data[DD*8+3]=imgData.data[DD*16-1]=0;
 		imgData.data[len-1]=imgData.data[len-5]=imgData.data[len-DD*8+7]=imgData.data[len-DD*8+3]=imgData.data[len-DD*8-1]=imgData.data[len-DD*16+3]=0;
+		return imgData;
 	},
-	// ³õÊ¼»¯ËùÓĞ½ÚµãÎ»Í¼
+	// åˆå§‹åŒ–æ‰€æœ‰èŠ‚ç‚¹ä½å›¾
 	CreateAllCrunImageData: function() {
 		var crunImageData = new Array(PAINT_CRUN_STYLE_COUNT);
 		crunImageData[PAINT_CRUN_STYLE_NORMAL] = Manager.CreateCrunImageWithColor(COLOR_NORMAL);
@@ -47,27 +49,29 @@ var Manager = {
 		Manager.crunImageData = crunImageData;
 	},
 	
-	//³õÊ¼»¯Î»Í¼¾ä±ú
+	//åˆå§‹åŒ–ä½å›¾å¥æŸ„
 	InitBitmap: function() {
-		//¼¤»îµãÎ»Í¼
+		//æ¿€æ´»ç‚¹ä½å›¾
 		Manager.showConnectImageData = Manager.CreateShowConnectImageData();
 
-		//½ÚµãÎ»Í¼
+		//èŠ‚ç‚¹ä½å›¾
 		Manager.CreateAllCrunImageData();
 
-		//¿Ø¼şÎ»Í¼,´¦ÀíµÃµ½Ğı×ª¿Ø¼ş
+		//æ§ä»¶ä½å›¾,å¤„ç†å¾—åˆ°æ—‹è½¬æ§ä»¶
 		Manager.ctrlImageList = new Array(CTRL_BITMAP_COUNT);
 		for (var i=0; i<CTRL_TYPE_COUNT; ++i) {
-			Manager.ctrlImageList[i*4] = document.getElementById("N-"+(i+1)+"-0");
-			Manager.ctrlImageList[i*4+1] = document.getElementById("N-"+(i+2)+"-1");
-			Manager.ctrlImageList[i*4+2] = document.getElementById("N-"+(i+3)+"-2");
-			Manager.ctrlImageList[i*4+3] = document.getElementById("N-"+(i+4)+"-3");
+			var iMuti4 = i*4, iPlus1 = i+1;
+			Manager.ctrlImageList[iMuti4] = document.getElementById("N-"+iPlus1+"-0");
+			Manager.ctrlImageList[iMuti4+1] = document.getElementById("N-"+iPlus1+"-1");
+			Manager.ctrlImageList[iMuti4+2] = document.getElementById("N-"+iPlus1+"-2");
+			Manager.ctrlImageList[iMuti4+3] = document.getElementById("N-"+iPlus1+"-3");
 		}
 		for (var i=0; i<CTRL_TYPE_COUNT; ++i) {
-			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + i*4] = document.getElementById("S-"+(i+1)+"-0");
-			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + i*4+1] = document.getElementById("S-"+(i+2)+"-1");
-			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + i*4+2] = document.getElementById("S-"+(i+3)+"-2");
-			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + i*4+3] = document.getElementById("S-"+(i+4)+"-3");
+			var iMuti4 = i*4, iPlus1 = i+1;
+			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + iMuti4] = document.getElementById("S-"+iPlus1+"-0");
+			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + iMuti4+1] = document.getElementById("S-"+iPlus1+"-1");
+			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + iMuti4+2] = document.getElementById("S-"+iPlus1+"-2");
+			Manager.ctrlImageList[CTRL_TYPE_COUNT*4 + iMuti4+3] = document.getElementById("S-"+iPlus1+"-3");
 		}
 		for (var i=0; i<CTRL_BITMAP_COUNT; ++i) {
 			if (Manager.ctrlImageList[i]) {
@@ -80,29 +84,29 @@ var Manager = {
 	},
 	
 	Init: function(canvas) {
-		//´°¿ÚÏÔÊ¾-------------------------------------------------------
+		//çª—å£æ˜¾ç¤º-------------------------------------------------------
 		Manager.canvas = canvas;
 		Manager.ctx = Manager.canvas.getContext("2d");
 
-		//Manager.bitmapForRefresh.CreateBitmap(1, 1, 1, 32, null);	//Ê¹Ë¢ĞÂ²»ÉÁ¶øÊ¹ÓÃµÄbitmap
-		//Manager.dcForRefresh.CreateCompatibleDC(ctx);				//Ê¹Ë¢ĞÂ²»ÉÁ¶øÊ¹ÓÃµÄDC
+		//Manager.bitmapForRefresh.CreateBitmap(1, 1, 1, 32, null);	//ä½¿åˆ·æ–°ä¸é—ªè€Œä½¿ç”¨çš„bitmap
+		//Manager.dcForRefresh.CreateCompatibleDC(ctx);				//ä½¿åˆ·æ–°ä¸é—ªè€Œä½¿ç”¨çš„DC
 		//Manager.dcForRefresh.SelectObject(bitmapForRefresh);
 
 
-		//Ïà¶Ô±äÁ¿-------------------------------------------------------
-		Manager.viewOrig = {x:0, y:0};				//ÊÓ½Ç³õÊ¼×ø±ê
-		Manager.mouseWheelSense = {cx:32, cy:32};	//mouseWheelµÄÁé»î¶È
-		Manager.moveBodySense = 3;					//°´ÉÏÏÂ×óÓÒ¼üÎïÌåÒ»´ÎÒÆ¶¯µÄ¾àÀë
-		Manager.maxLeaveOutDis = 7;					//µ¼ÏßºÏ²¢×î´ó¾àÀë
+		//ç›¸å¯¹å˜é‡-------------------------------------------------------
+		Manager.viewOrig = {x:0, y:0};				//è§†è§’åˆå§‹åæ ‡
+		Manager.mouseWheelSense = {cx:32, cy:32};	//mouseWheelçš„çµæ´»åº¦
+		Manager.moveBodySense = 3;					//æŒ‰ä¸Šä¸‹å·¦å³é”®ç‰©ä½“ä¸€æ¬¡ç§»åŠ¨çš„è·ç¦»
+		Manager.maxLeaveOutDis = 7;					//å¯¼çº¿åˆå¹¶æœ€å¤§è·ç¦»
 
 
-		//µçÂ·Ôª¼ş±äÁ¿---------------------------------------------------
+		//ç”µè·¯å…ƒä»¶å˜é‡---------------------------------------------------
 		Manager.crun = new Array();
 		Manager.ctrl = new Array();
 		Manager.lead = new Array();
 
 
-		//Êó±êµã»÷ĞÅÏ¢¼ÇÂ¼-----------------------------------------------
+		//é¼ æ ‡ç‚¹å‡»ä¿¡æ¯è®°å½•-----------------------------------------------
 		Manager.motiCount = 0;
 		Manager.addState = BODY_NO;
 		Manager.lButtonDownPos = {x:-100, y:-100};
@@ -111,14 +115,14 @@ var Manager = {
 		//Manager.FocusBodyClear(null);
 
 
-		//»­Í¼±äÁ¿-------------------------------------------------------
-		Manager.textColor = COLOR_NORMAL;				//Ä¬ÈÏ×ÖÌåÑÕÉ«
-		Manager.focusLeadStyle = SOLID_SPECIAL_COLOR;	//Ä¬ÈÏ½¹µãµ¼ÏßÑùÊ½
-		Manager.focusCrunColor = COLOR_FOCUS;			//Ä¬ÈÏ½¹µã½áµãÑÕÉ«
-		Manager.focusCtrlColor = COLOR_FOCUS;			//Ä¬ÈÏ½¹µã¿Ø¼şÑÕÉ«
-		Manager.InitBitmap();							//³õÊ¼»¯Î»Í¼
+		//ç”»å›¾å˜é‡-------------------------------------------------------
+		Manager.textColor = COLOR_NORMAL;				//é»˜è®¤å­—ä½“é¢œè‰²
+		Manager.focusLeadStyle = SOLID_SPECIAL_COLOR;	//é»˜è®¤ç„¦ç‚¹å¯¼çº¿æ ·å¼
+		Manager.focusCrunColor = COLOR_FOCUS;			//é»˜è®¤ç„¦ç‚¹ç»“ç‚¹é¢œè‰²
+		Manager.focusCtrlColor = COLOR_FOCUS;			//é»˜è®¤ç„¦ç‚¹æ§ä»¶é¢œè‰²
+		Manager.InitBitmap();							//åˆå§‹åŒ–ä½å›¾
 
-		//Êó±êÍ¼±ê
+		//é¼ æ ‡å›¾æ ‡
 		/*HINSTANCE hinst = AfxGetInstanceHandle();
 		Manager.hcSizeNS		= LoadCursor(null,	IDC_SIZENS);
 		Manager.hcSizeWE		= LoadCursor(null,	IDC_SIZEWE);
@@ -129,7 +133,7 @@ var Manager = {
 		Manager.hcAddCrun		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_ADDCRUN));*/
 
 
-		//¶ÁÈ¡ÎÄ¼ş-------------------------------------------------------
+		//è¯»å–æ–‡ä»¶-------------------------------------------------------
 		Manager.fileName = "";
 	}
 

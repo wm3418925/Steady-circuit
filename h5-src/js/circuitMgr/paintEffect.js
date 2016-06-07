@@ -1,5 +1,5 @@
 
-//Á¬½Óµ¼Ïß¹ı³ÌÏÔÊ¾
+//è¿æ¥å¯¼çº¿è¿‡ç¨‹æ˜¾ç¤º
 Manager.ShowAddLead = function(pos) {
 	if(1 != motiCount) return false;
 
@@ -8,17 +8,17 @@ Manager.ShowAddLead = function(pos) {
 
 	if(!body.IsOnConnectPos()) return false;
 
-	PaintAll();		//ÏÈË¢ĞÂ
-	motiCount = 1;	//»¹Ô­±äÁ¿
+	PaintAll();		//å…ˆåˆ·æ–°
+	motiCount = 1;	//è¿˜åŸå˜é‡
 
-	//dcÒÆ¶¯µ½Æğµã
+	//dcç§»åŠ¨åˆ°èµ·ç‚¹
 	Manager.ctx.DPtoLP(&pos);
 	Manager.ctx.MoveTo(pos);
 
-	//ÉèÖÃºÚÉ«»­±Ê
+	//è®¾ç½®é»‘è‰²ç”»ç¬”
 	Manager.ctx.SelectStockObject(BLACK_PEN);
 
-	//»­Ö±Ïß
+	//ç”»ç›´çº¿
 	body.GetPosFromBody(firstPos);
 	Manager.ctx.LineTo(firstPos);
 
@@ -26,7 +26,7 @@ Manager.ShowAddLead = function(pos) {
 };
 
 bool Manager::ShowAddBody(POINT point)
-//Ìí¼ÓÎïÌå¹ı³ÌÏÔÊ¾
+//æ·»åŠ ç‰©ä½“è¿‡ç¨‹æ˜¾ç¤º
 {
 	if(addState == BODY_CRUN)
 	{
@@ -58,7 +58,7 @@ bool Manager::ShowAddBody(POINT point)
 }
 
 bool Manager::ShowMoveBody(POINT pos, bool isLButtonDown)
-//ÒÆ¶¯ÎïÌå¹ı³ÌÏÔÊ¾,lastMoveOnPos.x³õÊ¼ÖµÉèÎª-100,ÔÚLButtonDownºÍPaintAllÖĞÉèÖÃ
+//ç§»åŠ¨ç‰©ä½“è¿‡ç¨‹æ˜¾ç¤º,lastMoveOnPos.xåˆå§‹å€¼è®¾ä¸º-100,åœ¨LButtonDownå’ŒPaintAllä¸­è®¾ç½®
 {
 	ASSERT(motiCount >= 0 && motiCount <= 2);
 	if(motiCount == 0) return false;
@@ -67,37 +67,37 @@ bool Manager::ShowMoveBody(POINT pos, bool isLButtonDown)
 	POINT bodyPos = {0, 0};
 
 	if(!body.IsOnBody()) return false;
-	if(!isLButtonDown)	//Êó±êÃ»ÓĞ°´ÏÂ
+	if(!isLButtonDown)	//é¼ æ ‡æ²¡æœ‰æŒ‰ä¸‹
 	{
 		PaintAll(); 
 		return false;
 	}
 
-	//»ñµÃÎïÌå×ø±ê
+	//è·å¾—ç‰©ä½“åæ ‡
 	Manager.ctx.DPtoLP(&pos);
 	if(body.IsOnCrun()) bodyPos = body.p2.coord;
 	else if(body.IsOnCtrl()) bodyPos = body.p3.coord;
 
-	//¸ù¾İ×ø±ê²î¼ÆËã»­Í¼×ø±ê
+	//æ ¹æ®åæ ‡å·®è®¡ç®—ç”»å›¾åæ ‡
 	pos.x += bodyPos.x - lButtonDownPos.x;
 	pos.y += bodyPos.y - lButtonDownPos.y;
 
-	//Çå³ıÉÏ´Î×ø±ê»­µÄÎïÌå
+	//æ¸…é™¤ä¸Šæ¬¡åæ ‡ç”»çš„ç‰©ä½“
 	if(lastMoveOnPos.x > -100)
 		PaintInvertBodyAtPos(*body, lastMoveOnPos);
 
-	//ÔÚĞÂµÄ×ø±êÎïÌå
-	lastMoveOnPos = pos;	//»ñµÃĞÂµÄ×ø±ê
+	//åœ¨æ–°çš„åæ ‡ç‰©ä½“
+	lastMoveOnPos = pos;	//è·å¾—æ–°çš„åæ ‡
 	PaintInvertBodyAtPos(*body, lastMoveOnPos);
 
-	//×ó»òÓÒctrl¼ü±»°´ÏÂÏàµ±ÓÚ¸´ÖÆ
+	//å·¦æˆ–å³ctrlé”®è¢«æŒ‰ä¸‹ç›¸å½“äºå¤åˆ¶
 	if(StaticClass::IsCtrlDown()) SetCursor(hcAddCrun);
 
 	return true;
 }
 
 bool Manager::ShowMoveLead(bool isLButtonDown)
-//ÒÆ¶¯µ¼Ïß¹ı³ÌÏÔÊ¾
+//ç§»åŠ¨å¯¼çº¿è¿‡ç¨‹æ˜¾ç¤º
 {
 	ASSERT(motiCount>=0 && motiCount<=2);
 
@@ -105,23 +105,23 @@ bool Manager::ShowMoveLead(bool isLButtonDown)
 	{
 		return false;
 	}
-	if(!isLButtonDown)	//Êó±êÃ»ÓĞ°´ÏÂ
+	if(!isLButtonDown)	//é¼ æ ‡æ²¡æœ‰æŒ‰ä¸‹
 	{
 		PaintAll();
 		return true;
 	}
 
 	if(motiBody[motiCount-1].IsOnHoriLead())
-		SetCursor(hcMoveHorz);	//ÔÚºáÏß,Êó±ê±ä³É"ÉÏÏÂÖ¸Õë"
+		SetCursor(hcMoveHorz);	//åœ¨æ¨ªçº¿,é¼ æ ‡å˜æˆ"ä¸Šä¸‹æŒ‡é’ˆ"
 	else 
-		SetCursor(hcMoveVert);	//ÔÚÊúÏß,Êó±ê±ä³É"×óÓÒÖ¸Õë"
+		SetCursor(hcMoveVert);	//åœ¨ç«–çº¿,é¼ æ ‡å˜æˆ"å·¦å³æŒ‡é’ˆ"
 
 	return true;
 }
 
 
 BODY_TYPE Manager::PosBodyPaintRect(POINT pos)
-//Í»³öÓÒ»÷ÎïÌå
+//çªå‡ºå³å‡»ç‰©ä½“
 {
 	Pointer * body = motiBody; //&motiBody[0]
 
@@ -152,20 +152,20 @@ BODY_TYPE Manager::PosBodyPaintRect(POINT pos)
 
 
 bool Manager::ShowBodyElec(FOCUS_OR_POS &body)
-//¼ÆËãµçÁ÷ºó,ÏÔÊ¾Á÷¹ıÎïÌåµÄµçÁ÷
+//è®¡ç®—ç”µæµå,æ˜¾ç¤ºæµè¿‡ç‰©ä½“çš„ç”µæµ
 {
 	Pointer pointer = GetBodyPointer(body);
-	if(!pointer.IsOnLead() && !pointer.IsOnCtrl()) return false;	//Ö»ÏÔÊ¾µ¼ÏßºÍ¿Ø¼ş
+	if(!pointer.IsOnLead() && !pointer.IsOnCtrl()) return false;	//åªæ˜¾ç¤ºå¯¼çº¿å’Œæ§ä»¶
 
-	char tempStr1[NAME_LEN*2];	//×Ö·û´®
-	char tempStr2[NAME_LEN*2];	//×Ö·û´®
-	char title[NAME_LEN*3];		//´°¿Ú±êÌâ
-	double elec;				//µçÁ÷´óĞ¡
-	ELEC_STATE elecDir;			//µçÁ÷·½Ïò
-	CDC * model = null;			//propertyÏÔÊ¾ÎïÌåµÄÊ¾Àı
-	LISTDATA list;				//propertyÏÔÊ¾µÄÊı¾İ
+	char tempStr1[NAME_LEN*2];	//å­—ç¬¦ä¸²
+	char tempStr2[NAME_LEN*2];	//å­—ç¬¦ä¸²
+	char title[NAME_LEN*3];		//çª—å£æ ‡é¢˜
+	double elec;				//ç”µæµå¤§å°
+	ELEC_STATE elecDir;			//ç”µæµæ–¹å‘
+	CDC * model = null;			//propertyæ˜¾ç¤ºç‰©ä½“çš„ç¤ºä¾‹
+	LISTDATA list;				//propertyæ˜¾ç¤ºçš„æ•°æ®
 
-	//1,»ñµÃµçÁ÷ĞÅÏ¢
+	//1,è·å¾—ç”µæµä¿¡æ¯
 	if(pointer.IsOnLead())
 	{
 		elec = pointer.p1.elec;
@@ -176,40 +176,40 @@ bool Manager::ShowBodyElec(FOCUS_OR_POS &body)
 		elec = pointer.p3.elec;
 		elecDir  = pointer.p3.elecDir;
 
-		model = GetCtrlPaintImage(pointer.p3);	//Ê¾Àı
+		model = GetCtrlPaintImage(pointer.p3);	//ç¤ºä¾‹
 	}
 
-	//2,Éú³ÉLISTDATA
+	//2,ç”ŸæˆLISTDATA
 	switch(elecDir)
 	{
 	case UNKNOWNELEC:
 		list.Init(1);
-		list.SetAMember(DATA_STYLE_LPCTSTR, "µçÁ÷Çé¿ö :", "µçÁ÷Ã»ÓĞ¼ÆËã¹ı!");
+		list.SetAMember(DATA_STYLE_LPCTSTR, "ç”µæµæƒ…å†µ :", "ç”µæµæ²¡æœ‰è®¡ç®—è¿‡!");
 		break;
 
 	case OPENELEC:
 		list.Init(1);
-		list.SetAMember(DATA_STYLE_LPCTSTR, "µçÁ÷Çé¿ö :", "Ã»ÓĞµçÁ÷Á÷¹ı, ¶ÏÂ·!");
+		list.SetAMember(DATA_STYLE_LPCTSTR, "ç”µæµæƒ…å†µ :", "æ²¡æœ‰ç”µæµæµè¿‡, æ–­è·¯!");
 		break;
 
 	case SHORTELEC:
 		list.Init(1);
-		list.SetAMember(DATA_STYLE_LPCTSTR, "µçÁ÷Çé¿ö :", "ÏßÂ·¶ÌÂ·!!!");
+		list.SetAMember(DATA_STYLE_LPCTSTR, "ç”µæµæƒ…å†µ :", "çº¿è·¯çŸ­è·¯!!!");
 		break;
 
 	case UNCOUNTABLEELEC:
 		list.Init(1);
-		list.SetAMember(DATA_STYLE_LPCTSTR, "µçÁ÷Çé¿ö :", "Á½ÌõÎŞµç×èÏßÂ··ÖÒ»¶ÎµçÁ÷,µçÁ÷ÎŞ·¨È·¶¨!");
+		list.SetAMember(DATA_STYLE_LPCTSTR, "ç”µæµæƒ…å†µ :", "ä¸¤æ¡æ— ç”µé˜»çº¿è·¯åˆ†ä¸€æ®µç”µæµ,ç”µæµæ— æ³•ç¡®å®š!");
 		break;
 
 	case LEFTELEC:
 	case RIGHTELEC:
-		ASSERT(elec >= 0);	//²»»á³öÏÖ¸ºµçÁ÷
+		ASSERT(elec >= 0);	//ä¸ä¼šå‡ºç°è´Ÿç”µæµ
 
 		if(StaticClass::IsZero(elec))
 		{
 			list.Init(1);
-			list.SetAMember(DATA_STYLE_LPCTSTR, "µçÁ÷Çé¿ö :", "µçÁ÷Îª0");
+			list.SetAMember(DATA_STYLE_LPCTSTR, "ç”µæµæƒ…å†µ :", "ç”µæµä¸º0");
 			break;
 		}
 
@@ -220,40 +220,40 @@ bool Manager::ShowBodyElec(FOCUS_OR_POS &body)
 
 			list.Init(3);
 			list.SetAMember(DATA_STYLE_double, DATA_NOTE[DATA_NOTE_CURRENT], &elec);
-			list.SetAMember(DATA_STYLE_LPCTSTR, "µçÁ÷Æğµã :", tempStr1);
-			list.SetAMember(DATA_STYLE_LPCTSTR, "µçÁ÷ÖÕµã :", tempStr2);
+			list.SetAMember(DATA_STYLE_LPCTSTR, "ç”µæµèµ·ç‚¹ :", tempStr1);
+			list.SetAMember(DATA_STYLE_LPCTSTR, "ç”µæµç»ˆç‚¹ :", tempStr2);
 		}
 		else //if(pointer.IsOnCtrl())
 		{
 			switch(pointer.p3.dir ^ ((RIGHTELEC == elecDir)<<1))
 			{
 			case 0:
-				strcpy(tempStr1, "´Ó×óµ½ÓÒ");
+				strcpy(tempStr1, "ä»å·¦åˆ°å³");
 				break;
 			case 1:
-				strcpy(tempStr1, "´ÓÉÏµ½ÏÂ");
+				strcpy(tempStr1, "ä»ä¸Šåˆ°ä¸‹");
 				break;
 			case 2:
-				strcpy(tempStr1, "´ÓÓÒµ½×ó");
+				strcpy(tempStr1, "ä»å³åˆ°å·¦");
 				break;
 			case 3:
-				strcpy(tempStr1, "´ÓÏÂµ½ÉÏ");
+				strcpy(tempStr1, "ä»ä¸‹åˆ°ä¸Š");
 				break;
 			}
 
 			list.Init(2);
 			list.SetAMember(DATA_STYLE_double, DATA_NOTE[DATA_NOTE_CURRENT], &elec);
-			list.SetAMember(DATA_STYLE_LPCTSTR, "·½Ïò :", tempStr1);
+			list.SetAMember(DATA_STYLE_LPCTSTR, "æ–¹å‘ :", tempStr1);
 		}
 		break;
 	}	//switch(elecDir)
 
-	//3,Éú³É´°¿Ú±êÌâ
-	strcpy(title, "Á÷¹ı");
+	//3,ç”Ÿæˆçª—å£æ ‡é¢˜
+	strcpy(title, "æµè¿‡");
 	GetName(pointer, title+strlen(title));
-	strcat(title, "µÄµçÁ÷");
+	strcat(title, "çš„ç”µæµ");
 
-	//4,ÏÔÊ¾¶Ô»°¿ò
+	//4,æ˜¾ç¤ºå¯¹è¯æ¡†
 	PaintWithSpecialColorAndRect(pointer, false);
 	MyPropertyDlg dlg(&list, true, model, title, this.canvas);
 	dlg.DoModal();
