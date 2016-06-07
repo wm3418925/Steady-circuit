@@ -1,12 +1,5 @@
 
-//12设置函数-----------------------------------------------------------------------↓
-void Manager::SetViewOrig(int xPos, int yPos)
-//设置画图的初始坐标
-{
-	viewOrig.x = xPos * mouseWheelSense.cx;
-	viewOrig.y = yPos * mouseWheelSense.cy;
-	ctx.SetViewportOrg(-viewOrig.x, -viewOrig.y);
-}
+//12设置函数-----------------------------------------------------------------------
 
 void Manager::SetMoveBodySense()
 //设置按方向键一次移动物体的距离

@@ -94,7 +94,6 @@ var Manager = {
 
 
 		//相对变量-------------------------------------------------------
-		Manager.viewOrig = {x:0, y:0};				//视角初始坐标
 		Manager.mouseWheelSense = {cx:32, cy:32};	//mouseWheel的灵活度
 		Manager.moveBodySense = 3;					//按上下左右键物体一次移动的距离
 		Manager.maxLeaveOutDis = 7;					//导线合并最大距离

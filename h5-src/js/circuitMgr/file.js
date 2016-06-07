@@ -38,7 +38,6 @@ Manager.SaveFile = function(newFileName) {
 	data.focusCrunColor = Manager.focusCrunColor;	//焦点结点颜色
 	data.focusCtrlColor = Manager.focusCtrlColor;	//焦点控件颜色
 	data.focusBody = Manager.focusBody.GenerateStoreJsonObj();	//焦点物体
-	data.viewOrig = Manager.viewOrig;				//视角初始坐标
 	
 	// 发送请求
 	var callbackFunc = function(response) {};
@@ -117,9 +116,6 @@ function readFileCallbackFunc(data) {
 		Manager.viewOrig = data.viewOrig;				//视角初始坐标
 
 		//ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);	//初始化字体颜色
-		//ctx.SetViewportOrg(-Manager.viewOrig.x, -Manager.viewOrig.y);		//初始化视角初始坐标
-		//Manager.canvas.SetScrollPos(SB_HORZ, viewOrig.x/mouseWheelSense.cx);	//初始化水平滚动条
-		//Manager.canvas.SetScrollPos(SB_VERT, viewOrig.y/mouseWheelSense.cy);	//初始化竖直滚动条
 	/*} catch(e) {
 		alert("文件可能损坏了 ! 读取文件错误");
 		return false;

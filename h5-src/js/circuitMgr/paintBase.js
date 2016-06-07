@@ -82,7 +82,6 @@ Manager.PaintAll = function() {
 
 	//设置字体和视角起点
 	Manager.ctx.font = "15px Georgia";
-	//Manager.ctx.SetViewportOrg(-viewOrig.x, -viewOrig.y);	//初始化视角起始坐标
 
 	//3,内存画图------------------------------------------------------------
 	//用白色矩形覆盖整个客户区
