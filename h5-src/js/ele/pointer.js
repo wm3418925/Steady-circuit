@@ -137,7 +137,7 @@ var Pointer = {
 	//指向控件
 	SetOnCtrl: function(ctrl, isSetAt) {
 		this.p = ctrl;
-		this.style = ctrl.GetStyle();	//这里控件必须初始化完毕
+		this.style = ctrl.style;	//这里控件必须初始化完毕
 		if (isSetAt) this.atState = -1;
 	},
 	
