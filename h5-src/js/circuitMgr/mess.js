@@ -37,9 +37,9 @@ Manager.DeleteNote = function(body) {
 	if (body.IsOnLead())
 		conCount = 0;
 	else if (body.IsOnCrun())
-		conCount = body.p.GetConnectNum();
+		conCount = body.p.GetConnectCount();
 	else if (body.IsOnCtrl())
-		conCount = body.p.GetConnectNum();
+		conCount = body.p.GetConnectCount();
 	else
 		return false;
 

@@ -151,7 +151,6 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 			break;
 		case SWITCH:
 			this.closed = false;
-			this.RefreshSwitchResist();
 			break;
 		}
 	},
@@ -173,7 +172,6 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 			break;
 		case SWITCH:
 			toCtrl.closed = fromCtrl.closed;
-			toCtrl.RefreshSwitchResist();
 			break;
 		}
         return toCtrl;
@@ -215,7 +213,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 	},
 
 	//获得控件连接的导线数
-	GetConnectNum: function() {
+	GetConnectCount: function() {
 		return (lead[0] != NULL) + (lead[1] != NULL); 
 	},
 
@@ -316,7 +314,6 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 		if (SWITCH != style) return false;	//不是开关
 		if (isSwitch) {
 			this.closed = !this.closed;
-			RefreshSwitchResist();
 		}
 		return this.closed;
 	},
@@ -353,8 +350,8 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 			break;
 		}
 	},
-	//@CProperty设置数据之后
-	AfterSetProperty: function() {
+	//@在计算之前, 根据控件信息准备电压电阻等信息
+	PrepareForComputing: function() {
 		switch (style) {
 		case SWITCH:
 			RefreshSwitchResist();

@@ -251,14 +251,14 @@ var Equation = {
 	    }
 		
 		var newObj = {
-			gotoRow:0,
-			m : m,
-			n : n,
-			c : c,
-			x : x,
-			a : a
+			"gotoRow" : 0,
+			"m" : m,
+			"n" : n,
+			"c" : c,
+			"x" : x,
+			"a" : a
 		};
-		newObj.__proto__ = CRUNMAP;
+		newObj.__proto__ = Equation;
 		return newObj;
     },
 
@@ -288,7 +288,7 @@ var Equation = {
 	    ++gotoRow;
     },
 
-    OutputToFile: function(/*FILE * */fp)
+    OutputToFile: function()
     //将方程保存到文件,测试函数
     {
 	    /*int*/var i, j;

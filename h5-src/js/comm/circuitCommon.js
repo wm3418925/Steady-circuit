@@ -1,10 +1,10 @@
 
-IsOnCrun = function(element) {
-    return element.hasOwnProperty("lead") && element.lead.length == 4;
+IsOnCrun = function(checkElement) {
+    return checkElement.__proto__ == CRUN;
 };
-IsOnCtrl = function(element) {
-    return element.hasOwnProperty("resist");
+IsOnCtrl = function(checkElement) {
+    return checkElement.__proto__ == CTRL;
 };
-IsOnLead = function(element) {
-    return element.hasOwnProperty("conBody");
+IsOnLead = function(checkElement) {
+    return checkElement.__proto__ == LEAD;
 };

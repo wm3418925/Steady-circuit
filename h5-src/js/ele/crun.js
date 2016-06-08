@@ -125,7 +125,7 @@ var CRUN = {
 	},
 
 	//获得连接了几个导线
-	GetConnectNum: function() {
+	GetConnectCount: function() {
 		return  (lead[0] != null) + 
 				(lead[1] != null) + 
 				(lead[2] != null) + 
