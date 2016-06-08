@@ -49,7 +49,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 			isPaintName : true,			//默认显示结点标签
 			name : "Ctrl" + initOrder,	//默认名称
 			x : x, y : y,				//坐标
-			lead : [null,null],			//结点连接导线的位置,0↑,1↓,2←,3→*/
+			lead : new Array(null,null),	//结点连接导线的位置,0↑,1↓,2←,3→*/
 			
 			dir : 0,					//控件默认方向
 			style : ctrlStyle,
@@ -58,9 +58,9 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 			elecDir : UNKNOWNELEC		//电流方向
 		};
 		
-		this.InitDefaultData(ctrlStyle);
-        
 		newObj.__proto__ = CTRL;
+		newObj.InitDefaultData(ctrlStyle);
+        
 		return newObj;
 	},
 	// 拷贝控件信息到新的控件
@@ -81,8 +81,8 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 	GenerateStoreJsonObj: function() {
 		var leadIndexArray = new Array();
 		for (var i=0; i<2; ++i) {
-			if (lead[i] != null)
-				leadIndexArray.push(lead[i].index);
+			if (this.lead[i] != null)
+				leadIndexArray.push(this.lead[i].index);
 			else 
 				leadIndexArray.push(-1);
 		}
@@ -178,7 +178,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 	},
 	// @获得控件的特征数据
 	GetSpecialData: function() {
-		switch (style) {
+		switch (this.style) {
 		case SOURCE:
 			return this.pressure;
 		case RESIST:
@@ -209,19 +209,19 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 	ChangeStyle: function(newStyle) {
 		ASSERT(this.style != newStyle);
 		this.style = newStyle;
-		InitDefaultData(newStyle);
+		this.InitDefaultData(newStyle);
 	},
 
 	//获得控件连接的导线数
 	GetConnectCount: function() {
-		return (lead[0] != NULL) + (lead[1] != NULL); 
+		return (this.lead[0] != NULL) + (this.lead[1] != NULL); 
 	},
 
 	//寻找导线在哪个方向 : 0↑,1↓,2←,3→
 	GetDirect: function(l) {
 		var i;
 		for (i=0; i<2; ++i) {
-			if (lead[i] == l) break;
+			if (this.lead[i] == l) break;
 		}
 		if (i >= 2) return -1;	//没有找到
 
@@ -244,17 +244,17 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 		var xInter = xPos - this.x - (BODYSIZE.cx>>1);
 		var yInter = yPos - this.y - (BODYSIZE.cy>>1);
 
-		if (0 == (dir&1)) {	//横向
+		if (0 == (this.dir&1)) {	//横向
 			if (xInter < 0) {
 				xInter += (BODYSIZE.cx>>1);
 				if (xInter*xInter + yInter*yInter <= DD*DD) {	//选中左连接点
-					if (0 == (dir&2)) ret = 1;
+					if (0 == (this.dir&2)) ret = 1;
 					else ret = 2;
 				}
 			} else {
 				xInter -= (BODYSIZE.cx>>1);
 				if (xInter*xInter + yInter*yInter <= DD*DD) {	//选中右连接点
-					if (0 == (dir&2)) ret = 2;
+					if (0 == (this.dir&2)) ret = 2;
 					else ret = 1;
 				}
 			}
@@ -262,20 +262,20 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 			if (yInter < 0) {
 				yInter += (BODYSIZE.cy>>1);
 				if (xInter*xInter + yInter*yInter <= DD*DD) {	//选中上连接点
-					if (0 == (dir&2)) ret = 1;
+					if (0 == (this.dir&2)) ret = 1;
 					else ret = 2;
 				}
 			} else {
 				yInter -= (BODYSIZE.cy>>1);
 				if (xInter*xInter + yInter*yInter <= DD*DD) {	//选中下连接点
-					if (0 == (dir&2)) ret = 2;
+					if (0 == (this.dir&2)) ret = 2;
 					else ret = 1;
 				}
 			}
 		}
 
 		if (ret != 0) {
-			if (lead[ret-1] == null)
+			if (this.lead[ret-1] == null)
 				return ret;
 			else
 				return -1;
@@ -291,27 +291,27 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 	//旋转控件
 	Rotate: function(rotateAngle90) {
 		this.dir = (this.dir + rotateAngle90) % 4;
-		if (lead[0]!=null) lead[0].RefreshPos();
-		if (lead[1]!=null) lead[1].RefreshPos();
+		if (this.lead[0]!=null) this.lead[0].RefreshPos();
+		if (this.lead[1]!=null) this.lead[1].RefreshPos();
 	},
 
 	//@小灯泡是否达到额定功率而发光
 	IsBulbOn: function() {
 		var sData = this.GetSpecialData();
 
-		if (BULB != style)
+		if (BULB != this.style)
 			return false;	//不是小灯泡
-		if (elecDir != LEFTELEC && elecDir != RIGHTELEC)
+		if (this.elecDir != LEFTELEC && this.elecDir != RIGHTELEC)
 			return false;	//电流没有计算或者不符合条件
 
-		var tempData = this.GetResist() * elec * elec;
+		var tempData = this.GetResist() * this.elec * this.elec;
 
 		return (!IsFloatZero(sData) && tempData >= sData);
 	},
 
 	//@开关闭合或者断开
 	SwitchClosed: function(isSwitch) {
-		if (SWITCH != style) return false;	//不是开关
+		if (SWITCH != this.style) return false;	//不是开关
 		if (isSwitch) {
 			this.closed = !this.closed;
 		}
@@ -325,7 +325,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 		list.SetAMember(DATA_TYPE_string, TITLE_NOTE, "name");
 		list.SetAMember(DATA_TYPE_bool, TITLESHOW_NOTE, "isPaintName");
 
-		switch (style) {
+		switch (this.style) {
 		case SOURCE:
 			list.SetAMember(DATA_TYPE_float, DATA_NOTE[DATA_NOTE_PRESS], "pressure");
 			list.SetAMember(DATA_TYPE_float, DATA_NOTE[DATA_NOTE_RESIST], "resist");
@@ -352,9 +352,9 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 	},
 	//@在计算之前, 根据控件信息准备电压电阻等信息
 	PrepareForComputing: function() {
-		switch (style) {
+		switch (this.style) {
 		case SWITCH:
-			RefreshSwitchResist();
+			this.RefreshSwitchResist();
 			break;
 		}
 	}

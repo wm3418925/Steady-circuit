@@ -18,7 +18,7 @@ var CRUN = {
 			isPaintName : false,		//默认不显示结点标签
 			name : "Crun" + initOrder,	//默认名称
 			x:x, y:y,					//坐标
-			lead:[null,null,null,null]	//连接导线的位置,0↑,1↓,2←,3→
+			lead : new Array(null,null,null,null)	//连接导线的位置,0↑,1↓,2←,3→
 		};
         
 		newObj.__proto__ = CRUN;
@@ -29,8 +29,8 @@ var CRUN = {
 	GenerateStoreJsonObj: function() {
 		var leadIndexArray = new Array();
 		for (var i=0; i<4; ++i) {
-			if (lead[i] != null)
-				leadIndexArray.push(lead[i].index);
+			if (this.lead[i] != null)
+				leadIndexArray.push(this.lead[i].index);
 			else 
 				leadIndexArray.push(-1);
 		}
@@ -70,26 +70,26 @@ var CRUN = {
 
 		dis = (xPox-this.x)*(xPox-this.x)+(yPox-this.y+DD)*(yPox-this.y+DD);
 		if (dis <= DD) {	//在上连接点
-			if (lead[0] != null) return -1;
+			if (this.lead[0] != null) return -1;
 			else return 1;
 		}
 
 		dis = (xPox-this.x)*(xPox-this.x)+(yPox-this.y-DD)*(yPox-this.y-DD);
 		if (dis <= DD) {	//在下连接点
-			if (lead[1] != null) return -1;
+			if (this.lead[1] != null) return -1;
 			else return 2;
 		}
 
 		dis = (xPox-this.x+DD)*(xPox-this.x+DD)+(yPox-this.y)*(yPox-this.y);
 		if (dis <= DD) {	//在左连接点
-			if (lead[2] != null) return -1;
+			if (this.lead[2] != null) return -1;
 			else return 3;
 		}
 
 		dis = (xPox-this.x-DD)*(xPox-this.x-DD)+(yPox-this.y)*(yPox-this.y);
 		if (dis <= DD)	//在右连接点
 		{
-			if (lead[3] != null) return -1;
+			if (this.lead[3] != null) return -1;
 			else return 4;
 		}
 
@@ -120,15 +120,15 @@ var CRUN = {
 
 	//寻找导线在哪个方向
 	GetDirect: function(l) {
-		for (var i=0; i<4; ++i) if (lead[i] == l) return i;
+		for (var i=0; i<4; ++i) if (this.lead[i] == l) return i;
 		return -1;	//没有找到
 	},
 
 	//获得连接了几个导线
 	GetConnectCount: function() {
-		return  (lead[0] != null) + 
-				(lead[1] != null) + 
-				(lead[2] != null) + 
-				(lead[3] != null);
+		return  (this.lead[0] != null) + 
+				(this.lead[1] != null) + 
+				(this.lead[2] != null) + 
+				(this.lead[3] != null);
 	}
 };

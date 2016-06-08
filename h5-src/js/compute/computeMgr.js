@@ -1,12 +1,13 @@
 IsBodyCrun = function(checkElement) {
-    return checkElement.__proto__ == CRUN;
+    return checkElement && checkElement.hasOwnProperty("lead") && checkElement.lead.length == 4;
 };
 IsBodyCtrl = function(checkElement) {
-    return checkElement.__proto__ == CTRL;
+    return checkElement && checkElement.hasOwnProperty("resist");
 };
 IsBodyLead = function(checkElement) {
-    return checkElement.__proto__ == LEAD;
+    return checkElement && checkElement.hasOwnProperty("conBody");
 };
+
 
 
 var ComputeMgr = {};

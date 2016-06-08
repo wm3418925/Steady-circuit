@@ -26,10 +26,10 @@ var Pointer = {
 	//保存信息到json
 	GenerateStoreJsonObj: function() {
 		var index = 0;
-		if (p != null)
-			index = p.index;
+		if (this.p != null)
+			index = this.p.index;
 
-		return {index:index, atState:atState, style:style};
+		return {"index":index, "atState":this.atState, "style":this.style};
 	},
 	//从json读取信息
 	ReadFromStoreJsonObj: function(jsonObj, leadList, crunList, ctrlList) {
@@ -41,17 +41,17 @@ var Pointer = {
 		var index = jsonObj.index;
 		if (this.IsOnLead()) {
 			if (index >= 0 && index < leadList.length)
-				SetOnLead(leadList[index]);
+				this.SetOnLead(leadList[index]);
 			else
 				return false;
 		} else if(this.IsOnCrun()) {
 			if (index >= 0 && index < crunList.length)
-				SetOnCrun(crunList[index]);
+				this.SetOnCrun(crunList[index]);
 			else
 				return false;
 		} else if(this.IsOnCtrl()) {
 			if (index >= 0 && index < ctrlList.length)
-				SetOnCtrl(ctrlList[index]);
+				this.SetOnCtrl(ctrlList[index]);
 			else
 				return false;
 		} else {
@@ -63,9 +63,9 @@ var Pointer = {
 	
 	//清空指针
 	Clear: function() {
-		p = null;
-		atState = 0;
-		style = BODY_NO;
+		this.p = null;
+		this.atState = 0;
+		this.style = BODY_NO;
 	},
 
 	//设置addState
@@ -82,76 +82,76 @@ var Pointer = {
 	},
 	//判断结构体是否指向物体
 	IsOnAny: function() {
-		return atState != 0 && atState <= 4;
+		return this.atState != 0 && this.atState <= 4;
 	},
 	//判断是否在导线上
 	IsOnLead: function() {
-		return BODY_LEAD == style || atState <= -2;
+		return BODY_LEAD == this.style || this.atState <= -2;
 	},
 	//判断是否在水平线上
 	IsOnHoriLead: function() {
-		return atState <= -2 && (-atState)&1;
+		return this.atState <= -2 && (-this.atState)&1;
 	},
 	//判断是否在竖直线上
 	IsOnVertLead: function() {
-		return atState <= -2 && !( (-atState)&1 );
+		return this.atState <= -2 && !( (-this.atState)&1 );
 	},
 	//判断是否在物体(结点或控件)上
 	IsOnBody: function(isNotIncludeConnPoint/*true*/) {
 		if (isNotIncludeConnPoint == undefined) isNotIncludeConnPoint = true;
 		
 		if (isNotIncludeConnPoint)	//判断是否在物体上,不包括连接点
-			return -1 == atState && (BODY_CRUN == style || IsCtrl(style));
+			return -1 == this.atState && (BODY_CRUN == this.style || Pointer.IsCtrl(this.style));
 		else		//判断是否在物体上,包括连接点
-			return BODY_CRUN == style || IsCtrl(style);
+			return BODY_CRUN == this.style || Pointer.IsCtrl(this.style);
 	},
 	//判断是否在结点上
 	IsOnCrun: function() {
-		return BODY_CRUN == style;
+		return BODY_CRUN == this.style;
 	},
 	//判断是否在控件上
 	IsOnCtrl: function() {
-		return Pointer.IsCtrl(style);
+		return Pointer.IsCtrl(this.style);
 	},
 	//判断是否在连接点上
 	IsOnConnectPos: function() {
-		return atState >= 1 && atState <= 4;
+		return this.atState >= 1 && this.atState <= 4;
 	},
 	
 	//指向导线
 	SetOnLead: function(lead, isSetAt/*true*/) {
 		if (isSetAt == undefined) isSetAt = true;
 		
-		p = lead;
-		style = BODY_LEAD;
-		if (isSetAt) atState = -2;
+		this.p = lead;
+		this.style = BODY_LEAD;
+		if (isSetAt) this.atState = -2;
 	},
 	//指向结点
 	SetOnCrun: function(crun, isSetAt/*true*/) {
 		if (isSetAt == undefined) isSetAt = true;
 		
-		p = crun;
-		style = BODY_CRUN;
-		if (isSetAt) atState = -1;
+		this.p = crun;
+		this.style = BODY_CRUN;
+		if (isSetAt) this.atState = -1;
 	},
 	//指向控件
 	SetOnCtrl: function(ctrl, isSetAt) {
-		p = ctrl;
-		style = ctrl.GetStyle();	//这里控件必须初始化完毕
-		if (isSetAt) atState = -1;
+		this.p = ctrl;
+		this.style = ctrl.GetStyle();	//这里控件必须初始化完毕
+		if (isSetAt) this.atState = -1;
 	},
 	
 	//判断当前物体是否指向这个导线
 	IsLeadSame: function(other) {
-		return this.IsOnLead() && p == other;
+		return this.IsOnLead() && this.p == other;
 	},
 	//判断当前物体是否指向这个结点
 	IsCrunSame: function(other) {
-		return this.IsOnCrun() && p == other;
+		return this.IsOnCrun() && this.p == other;
 	},
 	//判断当前物体是否指向这个控件
 	IsCtrlSame: function(other) {
-		return this.IsOnCtrl() && p == other;
+		return this.IsOnCtrl() && this.p == other;
 	},
 	//判断两个Pointer是否指向同一个物体,不判断atState
 	IsBodySame: function(other) {
@@ -163,7 +163,7 @@ var Pointer = {
 	},
 	//获得连接点对应的导线编号(0,1,2,3)
 	GetLeadIndex: function() {
-		return atState - 1;
+		return this.atState - 1;
 	},
 	// static函数
 	IsCtrl: function(type) {
@@ -173,11 +173,11 @@ var Pointer = {
 	//从物体和连接点位置获得导线端点坐标
 	GetPosFromBody: function() {
 		var pos = {};
-		var leadIndex = GetLeadIndex();
+		var leadIndex = this.GetLeadIndex();
 
 		if (this.IsOnCrun()) {	//连接结点
-			pos.x = p.x;
-			pos.y = p.y;
+			pos.x = this.p.x;
+			pos.y = this.p.y;
 			switch (leadIndex) {
 			case 0:	//在上端
 				pos.y -= DD;
@@ -193,16 +193,16 @@ var Pointer = {
 				break;
 			}
 		} else if(this.IsOnCtrl()) {	//连接控件
-			pos.x = p.x;
-			pos.y = p.y;
-			if (0 == (p.dir & 1)) {	//横向
+			pos.x = this.p.x;
+			pos.y = this.p.y;
+			if (0 == (this.p.dir & 1)) {	//横向
 				pos.y += (BODYSIZE.cy>>1);
-				if ((p.dir!=0) ^ (leadIndex!=0)) {	//在右端
+				if ((this.p.dir!=0) ^ (leadIndex!=0)) {	//在右端
 					pos.x += BODYSIZE.cx - 1;	//显示存在坐标差(-1)
 				}
 			} else {	//纵向
 				pos.x += (BODYSIZE.cx>>1);
-				if (((p.dir-1)!=0) ^ (leadIndex!=0)) {	//在下端
+				if (((this.p.dir-1)!=0) ^ (leadIndex!=0)) {	//在下端
 					pos.y += BODYSIZE.cy - 1;	//显示存在坐标差(-1)
 				}
 			}
@@ -213,15 +213,15 @@ var Pointer = {
 
 	//获得连接点位置
 	GetConnectPosDir: function() {
-		ASSERT(IsOnConnectPos());
+		ASSERT(this.IsOnConnectPos());
 		
 		if (this.IsOnCrun()) {
-			return atState;
+			return this.atState;
 		} else { //if(this.IsOnCtrl())
-			ASSERT(p.dir >=0 && p.dir <= 3);
+			ASSERT(this.p.dir >=0 && this.p.dir <= 3);
 
-			if (atState == 1) {
-				switch (p.dir) {
+			if (this.atState == 1) {
+				switch (this.p.dir) {
 				case 0:
 					return 3;
 				case 1: 
@@ -231,8 +231,8 @@ var Pointer = {
 				case 3: 
 					return 2;
 				}
-			} else { //if(atState == 2)
-				switch (p.dir) {
+			} else { //if(this.atState == 2)
+				switch (this.p.dir) {
 				case 0:
 					return 4;
 				case 1: 

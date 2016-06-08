@@ -23,18 +23,18 @@ var LEAD = {
 			conBody : new Array(null, null)
 		};
 		
+		newObj.__proto__ = LEAD;
 		if (isInit) {
 			newObj.conBody[0] = p1;	//连接物体
 			newObj.conBody[1] = p2;	//连接物体
-			RefreshPos();		//更新坐标链表
+			newObj.RefreshPos();	//更新坐标链表
 		}
-		
-		newObj.__proto__ = LEAD;
+
 		return newObj;
 	},
 
 	Clone: function(clonePurpose) {
-		var newLead = LEAD.CreateNew(index, color, conBody[0], conBody[1], false);
+		var newLead = LEAD.CreateNew(this.index, this.color, this.conBody[0], this.conBody[1], false);
 
 		//复制坐标
 		newLead.coord = deepCopy(this.coord);
@@ -49,9 +49,9 @@ var LEAD = {
 	//保存信息到json
 	GenerateStoreJsonObj: function() {
 		return {
-			color : color,
+			color : this.color,
 			coord : deepCopy(this.coord),
-			conBody  : new Array(conBody[0].GenerateStoreJsonObj(), conBody[1].GenerateStoreJsonObj())
+			conBody  : new Array(this.conBody[0].GenerateStoreJsonObj(), this.conBody[1].GenerateStoreJsonObj())
 		};
 	},
 	//从json读取信息
@@ -60,8 +60,8 @@ var LEAD = {
 
 		this.color = jsonObj.color;
 		this.coord = deepCopy(jsonObj.coord);
-		this.conBody[0] = Pointer.ReadFromStoreJsonObj(jsonObj, leadList, crunList, ctrlList);
-		this.conBody[1] = Pointer.ReadFromStoreJsonObj(jsonObj, leadList, crunList, ctrlList);
+		this.conBody[0] = Pointer.CreateNew(); this.conBody[0].ReadFromStoreJsonObj(jsonObj.conBody[0], leadList, crunList, ctrlList);
+		this.conBody[1] = Pointer.CreateNew(); this.conBody[1].ReadFromStoreJsonObj(jsonObj.conBody[1], leadList, crunList, ctrlList);
 	},
 
 	//获得导线两个连接物体的相对位置
@@ -72,8 +72,8 @@ var LEAD = {
 	//			0 起点物体 在 终点物体 左面
 	//			1 起点物体 在 终点物体 右面
 	GetBodyPos: function() {
-		var a = conBody[0].p;
-		var b = conBody[1].p;
+		var a = this.conBody[0].p;
+		var b = this.conBody[1].p;
 
 		return ((a.x > b.x) << 1) + (a.y > b.y);
 	},
@@ -90,15 +90,15 @@ var LEAD = {
 		this.coord.length = 0;
 
 		//起始坐标
-		coord.push({x:from.x, y:from.y});
+		this.coord.push({x:from.x, y:from.y});
 
 		//中间点坐标
 		if (from.x != to.x && from.y != to.y) {
-			coord.push({x:from.x, y:to.y});
+			this.coord.push({x:from.x, y:to.y});
 		}
 
 		//终点坐标
-		coord.push({x:to.x, y:to.y});
+		this.coord.push({x:to.x, y:to.y});
 	},
 
 	//导线坐标一分为二
@@ -259,17 +259,17 @@ var LEAD = {
 		ASSERT(this.coord.length >= 2);
 		
 		//初始化变量 -------------------------------------------------------
-		var dir = conBody[0].GetConnectPosDir();
-		var dirSum = dir + conBody[1].GetConnectPosDir();
+		var dir = this.conBody[0].GetConnectPosDir();
+		var dirSum = dir + this.conBody[1].GetConnectPosDir();
 		
 		var oppositeFlag = (dirSum == 3 || dirSum == 7);
 		var dis2 = 15;
 		if (dir & 1 != 0) dis2 = -15;
 		
-		var next1 = coord[1];
+		var next1 = this.coord[1];
 		var next2 = null;
 		if (this.coord.length >= 3)
-			next2 = coord[2];
+			next2 = this.coord[2];
 		
 		var theLast;
 
@@ -339,7 +339,7 @@ var LEAD = {
 					theLast = this.coord[0];
 					this.coord.push({x:theLast.x, y:theLast.y + dis2});
 					theLast = this.coord[1];
-					this.coord.push({x:GetPosFit(this.coord[0].x, next2.x, dis, false), y:theLast.y});
+					this.coord.push({x:this.GetPosFit(this.coord[0].x, next2.x, dis, false), y:theLast.y});
 					theLast = this.coord[2];
 					this.coord.push({x:theLast.x, y:next2.y - dis2});
 					theLast = this.coord[3];
@@ -354,7 +354,7 @@ var LEAD = {
 					theLast = this.coord[0];
 					this.coord.push({y:theLast.y, x:theLast.x + dis2});
 					theLast = this.coord[1];
-					this.coord.push({y:GetPosFit(this.coord[0].y, next2.y, dis, false), x:theLast.x});
+					this.coord.push({y:this.GetPosFit(this.coord[0].y, next2.y, dis, false), x:theLast.x});
 					theLast = this.coord[2];
 					this.coord.push({y:theLast.y, x:next2.x - dis2});
 					theLast = this.coord[3];
@@ -391,14 +391,14 @@ var LEAD = {
 		
 		//导线只有4个节点且连接点相对 ---------------------------------------
 		else if (oppositeFlag && this.coord.length == 4) {
-			var next3 = coord[3];
+			var next3 = this.coord[3];
 			switch (dir) {
 			case 1:	//上连接点
 			case 2:	//下连接点
 				this.coord.length = 1;
 				
 				theLast = this.coord[0];
-				this.coord.push({x:GetPosFit(theLast.x, next2.x, dis, false), y:theLast.y});
+				this.coord.push({x:this.GetPosFit(theLast.x, next2.x, dis, false), y:theLast.y});
 				
 				theLast = this.coord[1];
 				this.coord.push({x:theLast.x, y:next1.y});
@@ -411,7 +411,7 @@ var LEAD = {
 				this.coord.length = 1;
 				
 				theLast = this.coord[0];
-				this.coord.push({y:GetPosFit(theLast.y, next2.y, dis, false), x:theLast.x});
+				this.coord.push({y:this.GetPosFit(theLast.y, next2.y, dis, false), x:theLast.x});
 				
 				theLast = this.coord[1];
 				this.coord.push({y:theLast.y, x:next1.x});
@@ -442,8 +442,8 @@ var LEAD = {
 		ASSERT(this.coord.length >= 2);
 		
 		//初始化变量 -------------------------------------------------------
-		var dir = conBody[1].GetConnectPosDir();
-		var dirOther = conBody[0].GetConnectPosDir();
+		var dir = this.conBody[1].GetConnectPosDir();
+		var dirOther = this.conBody[0].GetConnectPosDir();
 		var dis2 = 15;
 		if ((dir & 1) != 0) dis2 = -15;
 
@@ -534,7 +534,7 @@ var LEAD = {
 				else if (dirOther == 3)
 					next1.x = next2.x - dis;
 				else
-					next1.x = GetPosFit(this.coord[0].x, next2.x, dis, true);
+					next1.x = this.GetPosFit(this.coord[0].x, next2.x, dis, true);
 
 				this.coord.length = 2;
 				this.coord.push({x:next1.x, y:next2.y});
@@ -549,7 +549,7 @@ var LEAD = {
 				else if (dirOther == 1)
 					next1.y = next2.y - dis;
 				else
-					next1.y = GetPosFit(this.coord[0].y, next2.y, dis, true);
+					next1.y = this.GetPosFit(this.coord[0].y, next2.y, dis, true);
 
 				this.coord.length = 2;
 				this.coord.push({x:next2.x, y:next1.y});
@@ -569,7 +569,7 @@ var LEAD = {
 					this.coord.length = 3;
 					
 					temp = {y: now.y};
-					next2.x = temp.x = GetPosFit(this.coord[0].x, next2.x, dis, true);
+					next2.x = temp.x = this.GetPosFit(this.coord[0].x, next2.x, dis, true);
 					this.coord.push(temp);
 					this.coord.push(now);
 				}
@@ -583,7 +583,7 @@ var LEAD = {
 					this.coord.length = 3;
 					
 					temp = {x: now.x};
-					next2.y = temp.y = GetPosFit(this.coord[0].y, next2.y, dis, true);
+					next2.y = temp.y = this.GetPosFit(this.coord[0].y, next2.y, dis, true);
 					this.coord.push(temp);
 					this.coord.push(now);
 				}
@@ -609,18 +609,18 @@ var LEAD = {
 
 	//当新的导线位置覆盖连接的物体时,美化导线
 	MakeFit: function() {
-		ASSERT(coord.next != null);
+		ASSERT(this.coord.length > 1);
 
-		if (conBody[0].IsOnCrun()) {
-			FitStart(DD*3);
-		} else { //if (conBody[0].IsOnCtrl())
-			FitStart(BODYSIZE.cx);
+		if (this.conBody[0].IsOnCrun()) {
+			this.FitStart(DD*3);
+		} else { //if (this.conBody[0].IsOnCtrl())
+			this.FitStart(BODYSIZE.cx);
 		}
 
-		if (conBody[1].IsOnCrun()) {
-			FitEnd(DD*3);
-		} else { //if (conBody[1].IsOnCtrl())
-			FitEnd(BODYSIZE.cx);
+		if (this.conBody[1].IsOnCrun()) {
+			this.FitEnd(DD*3);
+		} else { //if (this.conBody[1].IsOnCtrl())
+			this.FitEnd(BODYSIZE.cx);
 		}
 	},
 
@@ -689,7 +689,7 @@ var LEAD = {
 					this.coord.splice(currentIndex, 0, tmp1, tmp2);	//在pre1后面插入元素
 				}
 
-				CleanLead(); return true;
+				this.CleanLead(); return true;
 			}//以下pre不是头
 
 			//2.2处理now是结尾.........................
@@ -698,7 +698,7 @@ var LEAD = {
 				if (inter < 0) inter = -inter;
 
 				if (inter <= dis) {
-					if (pre2 != coord[0]) {	//pre2不是头
+					if (pre2 != this.coord[0]) {	//pre2不是头
 						pre2.y = now.y;
 						this.coord.splice(currentIndex-1, 1);	// 删除pre1
 					} else {	//pre2是头
@@ -711,7 +711,7 @@ var LEAD = {
 					this.coord.splice(currentIndex-1, 0, tmp);	//在pre1后面插入元素
 				}
 
-				CleanLead(); return true;
+				this.CleanLead(); return true;
 			}//以下now不是结尾
 
 			//2.3处理与前面合并..........................
@@ -719,7 +719,7 @@ var LEAD = {
 			if (inter < 0) inter = -inter;
 
 			if (inter <= dis) {	//导线合并
-				if (pre2 != coord[0]) {	//pre2不是头
+				if (pre2 != this.coord[0]) {	//pre2不是头
 					pre2.y = next1.y;
 					this.coord.splice(currentIndex-1, 2);	// 删除pre1,now
 				} else {	//pre2是头
@@ -732,7 +732,7 @@ var LEAD = {
 					}
 				}
 				
-				CleanLead(); return true;
+				this.CleanLead(); return true;
 			}
 
 			//2.4处理与后面合并..........................
@@ -747,13 +747,13 @@ var LEAD = {
 					pre1.x = next1.x;
 					this.coord.splice(currentIndex, 1);	// 删除now
 				}
-				CleanLead(); return true;
+				this.CleanLead(); return true;
 			}
 
 			//2.5处理其他情况..........................
 			now.x = pos.x;
 			pre1.x = pos.x;
-			CleanLead(); return true;
+			this.CleanLead(); return true;
 
 		}//重新设置竖线坐标
 
@@ -783,7 +783,7 @@ var LEAD = {
 					this.coord.splice(currentIndex-1, 0, {x:pre1.x, y:pos.y}, {x:now.x, y:pos.y});	//在pre1后面插入元素
 				}
 
-				CleanLead(); return true;
+				this.CleanLead(); return true;
 			}//以下pre不是头
 
 			//3.2处理now是结尾.........................
@@ -792,7 +792,7 @@ var LEAD = {
 				if (inter < 0) inter = -inter;
 
 				if (inter <= dis) {
-					if (pre2 != coord) {	//pre2不是头
+					if (pre2 != this.coord) {	//pre2不是头
 						pre2.x = now.x;
 						this.coord.splice(currentIndex-1, 1);	// 删除pre1
 					} else {	//pre2是头
@@ -804,7 +804,7 @@ var LEAD = {
 					this.coord.splice(currentIndex-1, 0, {x:now.x, y:pos.y});	//在pre1后面插入元素
 				}
 
-				CleanLead(); return true;
+				this.CleanLead(); return true;
 			}//以下now不是结尾
 
 			//3.3处理与前面合并..........................
@@ -812,7 +812,7 @@ var LEAD = {
 			if (inter < 0) inter = -inter;
 
 			if (inter <= dis) {	//导线合并
-				if (pre2 != coord[0]) {	//pre2不是头
+				if (pre2 != this.coord[0]) {	//pre2不是头
 					pre2.x = next1.x;
 					this.coord.splice(currentIndex-1, 2);	// 删除pre1,now
 				} else {	//pre2是头
@@ -825,7 +825,7 @@ var LEAD = {
 					}
 				}
 
-				CleanLead(); return true;
+				this.CleanLead(); return true;
 			}
 
 			//3.4处理与后面合并..........................
@@ -840,31 +840,31 @@ var LEAD = {
 					pre1.y = next1.y;
 					this.coord.splice(currentIndex, 1);	// 删除now
 				}
-				CleanLead(); return true;
+				this.CleanLead(); return true;
 			}
 
 			//3.5处理其他情况..........................
 			now.y = pos.y;
 			pre1.y = pos.y;
-			CleanLead(); return true;
+			this.CleanLead(); return true;
 
 		}	//重新设置横线坐标
 
 
-		CleanLead();	//删除有相同坐标的导线结点
+		this.CleanLead();	//删除有相同坐标的导线结点
 		return true;
 	},
 
 	//连接物体坐标改变,更新导线位置
 	RefreshPos: function() {
 		//重新获得两个端点坐标
-		var from = conBody[0].GetPosFromBody();
-		var to = conBody[1].GetPosFromBody();
+		var from = this.conBody[0].GetPosFromBody();
+		var to = this.conBody[1].GetPosFromBody();
 
 		//初始化
 		if (this.coord.length <= 2) {
-			EasyInitPos(from, to);
-			MakeFit();	//美化导线
+			this.EasyInitPos(from, to);
+			this.MakeFit();	//美化导线
 			return;
 		}
 
@@ -924,8 +924,8 @@ var LEAD = {
 			}
 		}
 
-		CleanLead();	//去除相同坐标的导线节点
-		MakeFit();		//美化导线
+		this.CleanLead();	//去除相同坐标的导线节点
+		this.MakeFit();		//美化导线
 	},
 
 	//画导线
@@ -933,8 +933,8 @@ var LEAD = {
 		ASSERT(cxt != null);
 
 		cxt.moveTo(this.coord[0].x, this.coord[0].y);
-		for (var index=1; index < this.coord.length; ++index) {
-			cxt.lineTo(this.coord[index].x, this.coord[index].y);
+		for (var i=1; i<this.coord.length; ++i) {
+			cxt.lineTo(this.coord[i].x, this.coord[i].y);
 		}
 	},
 
