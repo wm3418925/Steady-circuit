@@ -80,7 +80,7 @@ ComputeMgr.PutIntoBuf = function(/*int */fromGroup,
 
 	c = map.firstCircuit[i];
 
-	if (indexOfArray(ComputeMgr.crun2, c.from) == map.crunOrderMap[fromGroup]) {
+	if (IndexOfArray(ComputeMgr.crun2, c.from) == map.crunOrderMap[fromGroup]) {
 		buf[ c.indexInGroup ]  =  c.resistance;
 		buf[ map.circuitCount ] += c.pressure;
 	} else {
@@ -123,8 +123,8 @@ ComputeMgr.CollectCircuitInfo = function()
 	ComputeMgr.groupCount = 0;	//组数,同一组的在一个连通图中,分组建立方程
 	ComputeMgr.circuitCount = 0;	//线路数
 	group = new Array(ComputeMgr.crun.length);		//组数不会超过ComputeMgr.crunCount
-	ComputeMgr.crun2 = genrateArrayWithElementInitFunc(CRUN2.CreateNew, ComputeMgr.crun.length);	//用于计算的结点
-	ComputeMgr.circu = genrateArrayWithElementInitFunc(CIRCU.CreateNew, ComputeMgr.crun.length*2);	//线路数不会超过ComputeMgr.crunCount*2
+	ComputeMgr.crun2 = GenrateArrayWithElementInitFunc(CRUN2.CreateNew, ComputeMgr.crun.length);	//用于计算的结点
+	ComputeMgr.circu = GenrateArrayWithElementInitFunc(CIRCU.CreateNew, ComputeMgr.crun.length*2);	//线路数不会超过ComputeMgr.crunCount*2
 	for (i=ComputeMgr.crun.length-1; i>=0; --i) group[i] = i;
 
 	//2，检索电路,以结点为头和尾-----------------------------------
@@ -135,7 +135,7 @@ ComputeMgr.CollectCircuitInfo = function()
 	//满足当前方向有导线连接 而且 没有检索过(ComputeMgr.crun2[i].c[j] == null)
 	{
 		now = ComputeMgr.crun[i].lead[j];
-		dir = true1AndFalse0(now.conBody[0].p == ComputeMgr.crun[i]);
+		dir = True1_False0(now.conBody[0].p == ComputeMgr.crun[i]);
 
 		ComputeMgr.circu[ComputeMgr.circuitCount].resistance = 0;	//电阻清0
 		ComputeMgr.circu[ComputeMgr.circuitCount].pressure   = 0;	//电压清0
@@ -157,7 +157,7 @@ ComputeMgr.CollectCircuitInfo = function()
 
 				//到下一个物体
 				now = pre.lead[dir];
-				dir = true1AndFalse0(now.conBody[0].p == pre);
+				dir = True1_False0(now.conBody[0].p == pre);
 			}
 			else	//导线,到下一个物体
 			{
@@ -178,7 +178,7 @@ ComputeMgr.CollectCircuitInfo = function()
 						//转到结点连接的另一个导线
 						pre = now;
 						now = pre.lead[dir];
-						dir = true1AndFalse0(now.conBody[0].p == pre);
+						dir = True1_False0(now.conBody[0].p == pre);
 					}
 					else if (tempVar == 1)	//断路
 					{
@@ -193,7 +193,7 @@ ComputeMgr.CollectCircuitInfo = function()
 				}
 				else if (IsBodyCtrl(now))
 				{
-					dir = true1AndFalse0(now.lead[0] == pre);
+					dir = True1_False0(now.lead[0] == pre);
 				}
 				else if (IsBodyLead(now))
 				{
@@ -227,7 +227,7 @@ ComputeMgr.CollectCircuitInfo = function()
 					continue;
 				if (ComputeMgr.crun2[endCrunIndex].group >= 0)	//group合并
 				{
-					CombineGroup(   group[ComputeMgr.crun2[endCrunIndex].group],
+					ComputeMgr.CombineGroup(   group[ComputeMgr.crun2[endCrunIndex].group],
 									group[ComputeMgr.crun2[i].group],
 									group,
 									groupSize);
@@ -298,7 +298,7 @@ ComputeMgr.CollectCircuitInfo = function()
 			{
 				state = true;	//改变了
 				interFlag[next] = true;
-				roads[i].Clone(roads[next]);
+				ROAD.Clone(roads[next], roads[i]);
 				roads[next].InsertPointAtTail(i);
 			}
 
@@ -310,7 +310,7 @@ ComputeMgr.CollectCircuitInfo = function()
 				{
 					state = true;	//改变了
 					interFlag[next] = true;
-					roads[i].Clone(roads[next]);
+					ROAD.Clone(roads[next], roads[i]);
 					roads[next].InsertPointAtTail(i);
 				}
 			}
@@ -337,7 +337,7 @@ ComputeMgr.CreateEquation = function()
 	//1 初始化maps---------------------------------------------------------
 	//1.1 初始化每个group的crun成员个数
     var mapsSizeArray = new Array(ComputeMgr.groupCount);
-    zeroArray(mapsSizeArray);
+    ZeroArray(mapsSizeArray);
     for (i=ComputeMgr.crun.length-1; i>=0; --i) if (ComputeMgr.crun2[i].group >= 0)
 		++ mapsSizeArray[ComputeMgr.crun2[i].group];
 
@@ -385,9 +385,11 @@ ComputeMgr.CreateEquation = function()
 		for (j=size-2; j>=0; --j) for (k=size-1; k>j; --k)
 		{
 			i = ComputeMgr.CONVERT(j, k, size);
-            var crunfc = ComputeMgr.GetCrun2FirstCircu(nowMap.crunOrderMap[j], nowMap.crunOrderMap[k]);
-			nowMap.firstCircuit[i] = crunfc.c;
-            nowMap.dir[i] = crunfc.dir;
+            var crunFC = ComputeMgr.GetCrun2FirstCircu(nowMap.crunOrderMap[j], nowMap.crunOrderMap[k]);
+			if (crunFC) {
+				nowMap.firstCircuit[i] = crunFC.c;
+				nowMap.dir[i] = crunFC.dir;
+			}
 		}
 	}
 
@@ -520,11 +522,11 @@ ComputeMgr.CreateEquation = function()
 			i = ComputeMgr.CONVERT(j, k, size);
 			if (nowMap.direct[i] <= 0) continue;
 			
-			roads = genrateArrayWithElementInitFunc(ROAD.CreateNew, size);
+			roads = GenrateArrayWithElementInitFunc(ROAD.CreateNew, size);
 			ZeroArray(outPutBuf);	//缓存清零
 
 			//获得路径,建立方程
-			if (FindRoad(nowMap, roads, j, k))	//有路径得到方程的一行
+			if (this.FindRoad(nowMap, roads, j, k))	//有路径得到方程的一行
 			{
 				/*ROADSTEP **/var prep = roads[k].first;
 				/*ROADSTEP **/var nowp;
@@ -610,7 +612,7 @@ ComputeMgr.TravelCircuitPutElec = function(/*Pointer */now,
 
 			//到下一个物体
 			now = pre.lead[dir];
-			dir = true1AndFalse0(now.conBody[0].p == pre);
+			dir = True1_False0(now.conBody[0].p == pre);
 		}
 		else	//导线,到下一个物体
 		{
@@ -636,7 +638,7 @@ ComputeMgr.TravelCircuitPutElec = function(/*Pointer */now,
 					//指针指向结点连接的另一个导线
 					pre = now;
 					now = pre.lead[dir];
-					dir = true1AndFalse0(now.conBody[0].p == pre);
+					dir = True1_False0(now.conBody[0].p == pre);
 				}
 			}
 			else if (IsBodyLead(now))
@@ -645,7 +647,7 @@ ComputeMgr.TravelCircuitPutElec = function(/*Pointer */now,
 			}
 			else //now.IsOnBody
 			{
-				dir = true1AndFalse0(now.lead[0] == pre);
+				dir = True1_False0(now.lead[0] == pre);
 			}
 		}
 	}//do
@@ -672,7 +674,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 			//到下一个物体
 			now = pre.lead[dir];
 			if (now == null) break;	//结束遍历
-			dir = true1AndFalse0(now.conBody[0].p == pre);
+			dir = True1_False0(now.conBody[0].p == pre);
 		}
 		else	//导线,到下一个物体
 		{
@@ -695,7 +697,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 					//指针指向结点连接的另一个导线
 					pre = now;
 					now = pre.lead[dir];
-					dir = true1AndFalse0(now.conBody[0].p == pre);
+					dir = True1_False0(now.conBody[0].p == pre);
 				}
 			}
 			else if (IsBodyLead(now))
@@ -704,7 +706,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 			}
 			else //now.IsOnBody()
 			{
-				dir = true1AndFalse0(now.lead[0] == pre);
+				dir = True1_False0(now.lead[0] == pre);
 			}
 		}
 	}//do
@@ -745,7 +747,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 			//到下一个物体
 			now = pre.lead[dir];
 			if (now == null) return ERRORELEC;	//结束遍历,这种情况是错误
-			dir = true1AndFalse0(now.conBody[0].p == pre);
+			dir = True1_False0(now.conBody[0].p == pre);
 		}
 		else	//导线,到下一个物体
 		{
@@ -768,7 +770,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 				//指针指向结点连接的另一个导线
 				pre = now;
 				now = pre.lead[dir];
-				dir = true1AndFalse0(now.conBody[0].p == pre);
+				dir = True1_False0(now.conBody[0].p == pre);
 			}
 			else if (IsBodyLead(now))
 			{
@@ -776,7 +778,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 			}
 			else	//now.IsOnBody
 			{
-				dir = true1AndFalse0(now.lead[0] == pre);
+				dir = True1_False0(now.lead[0] == pre);
 			}
 		}
 	}//do
@@ -821,14 +823,14 @@ ComputeMgr.DistributeAnswer = function()
 	for (i=ComputeMgr.circuitCount-1; i>=0; --i)
 	{
 		//1,找到线路的起点,end做临时变量
-		end = ComputeMgr.crun[indexOfArray(ComputeMgr.crun2, ComputeMgr.circu[i].from)];
+		end = ComputeMgr.crun[IndexOfArray(ComputeMgr.crun2, ComputeMgr.circu[i].from)];
 		now = end.lead[ComputeMgr.circu[i].dirFrom];
 
 		//2,确定查找方向,end做临时变量
-		dir = true1AndFalse0(now.conBody[0].p == end);
+		dir = True1_False0(now.conBody[0].p == end);
 
 		//3,找到线路的终点,end存放终点结点指针
-		end = ComputeMgr.crun[indexOfArray(ComputeMgr.crun2, ComputeMgr.circu[i].to)];
+		end = ComputeMgr.crun[IndexOfArray(ComputeMgr.crun2, ComputeMgr.circu[i].to)];
 
 		//4,遍历线路
 		ComputeMgr.TravelCircuitPutElec(now, end, dir, ComputeMgr.circu[i].elec, ComputeMgr.circu[i].elecDir);
@@ -856,7 +858,7 @@ ComputeMgr.DistributeAnswer = function()
 		now = ComputeMgr.ctrl[i];
 
 		//2,确定查找方向
-		dir = true1AndFalse0(now.lead[1] != null);
+		dir = True1_False0(now.lead[1] != null);
 
 		//3,遍历线路
 		ComputeMgr.TravelCircuitFindOpenBody(now, dir);
@@ -868,7 +870,7 @@ ComputeMgr.DistributeAnswer = function()
 		now = ComputeMgr.crun[i].lead[dir];
 
 		//2,确定查找方向
-		dir = true1AndFalse0(now.conBody[0].p == ComputeMgr.crun[i]);
+		dir = True1_False0(now.conBody[0].p == ComputeMgr.crun[i]);
 
 		//3,遍历线路
 		ComputeMgr.TravelCircuitFindOpenBody(now, dir);
@@ -882,7 +884,7 @@ ComputeMgr.DistributeAnswer = function()
 		if (UNKNOWNELEC != ComputeMgr.ctrl[i].elecDir || ComputeMgr.ctrl[i].resist >= 0) continue;
 
 		//1,设置线路的起点
-		now = ctrl[i];
+		now = ComputeMgr.ctrl[i];
 
 		//2,从2个方向遍历
 		ComputeMgr.TravelCircuitFindOpenBody(now, 0);

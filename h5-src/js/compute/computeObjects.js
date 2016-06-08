@@ -88,8 +88,8 @@ var ROAD = {
     },
 
 	/*~ROAD() {
-		if(first == null || last == null) return;
-		ROADSTEP * now = first, * next;
+		if (this.first == null || this.last == null) return;
+		ROADSTEP * now = this.first, * next;
 		while(now)
 		{
 			next = now->next;
@@ -98,13 +98,13 @@ var ROAD = {
 		}
 	}*/
 
-    Clone: function(road, newRoad) {
+    Clone: function(newRoad, srcRoad) {
 	    var temp, now, pre;
 
 	    newRoad.first = newRoad.last = null;
-	    if (road.first == null) return;
+	    if (srcRoad.first == null) return;
 
-	    temp = road.first;
+	    temp = srcRoad.first;
 	    now = newRoad.first = ROADSTEP.CreateNew();
 	    now.crunIndex = temp.crunIndex;
 	    now.pre = null;
@@ -238,16 +238,16 @@ var Equation = {
 	    n = eleCount + 1;
 
 	    x = new Array(eleCount);
-	    zeroArray(x);
+	    ZeroArray(x);
 	
 	    c = new Array(m);
-        zeroArray(c);
+        ZeroArray(c);
 	
 	    a = new Array(m);
 	    for(/*int*/var i=m-1; i>=0; --i)
 	    {
 		    a[i] = new Array(n);
-		    zeroArray(a[i]);
+		    ZeroArray(a[i]);
 	    }
 		
 		var newObj = {
@@ -264,28 +264,28 @@ var Equation = {
 
     /*Equation::~Equation()
     {
-	    if(m > 0 && n > 1)
+	    if (this.m > 0 && this.n > 1)
 	    {
-		    free(c);
-		    free(x);
-		    for(int i=m-1; i>=0; --i) free(a[i]);
-		    free(a);
+		    free(this.c);
+		    free(this.x);
+		    for(int i=this.m-1; i>=0; --i) free(this.a[i]);
+		    free(this.a);
 	    }
     }*/
 
     /*const double **/GetAnswer: function()
     //获得方程解的数组
     {
-	    return x;
+	    return this.x;
     },
 
     InputARow: function(/*const double * */buf)
     //输入从gotoRows开始的1行数据到主数组中
     {
-	    ASSERT(gotoRow < m);
+	    ASSERT(this.gotoRow < this.m);
 
-        arrayCopyWithSize(a[gotoRow], buf, n);
-	    ++gotoRow;
+        ArrayCopyWithSize(this.a[this.gotoRow], buf, this.n);
+	    ++this.gotoRow;
     },
 
     OutputToFile: function()
@@ -293,18 +293,18 @@ var Equation = {
     {
 	    /*int*/var i, j;
 
-	    console.log("已输入到 第 %d 行 .\n\n", gotoRow);
+	    console.log("已输入到 第 %d 行 .\n\n", this.gotoRow);
 
 	    console.log("x数组(解):\n");
-	    for(i=0; i<n-1; ++i) console.log("%6.2f ", x[i]);
+	    for(i=0; i<this.n-1; ++i) console.log("%6.2f ", this.x[i]);
 
 	    console.log("\n\nc数组(某一行第一个不是0的数的位置):\n");
-	    for(i=0; i<m; ++i) console.log("%3d ", c[i]);
+	    for(i=0; i<this.m; ++i) console.log("%3d ", this.c[i]);
 
 	    console.log("\n\na数组(主数组,存储n元一次方程):\n");
-	    for(i=0; i<m; ++i)
+	    for(i=0; i<this.m; ++i)
 	    {
-		    for(j=0; j<n; ++j) console.log("%6.2f ", a[i][j]);
+		    for(j=0; j<this.n; ++j) console.log("%6.2f ", this.a[i][j]);
 		    console.log('\n');
 	    }
 	    console.log('\n');
@@ -312,21 +312,21 @@ var Equation = {
 
     /*ELEC_STATE*/Count: function()
     {
-	    /*const int*/var m = gotoRow;	//记录已经输入到的行,而不是this->m
+	    /*const int*/var m = this.gotoRow;	//记录已经输入到的行,而不是this.m
         /*int*/var i, j, l, k, w;
         /*double*/var temp;
-	    if(m <= 0 || n <= 1) return NORMALELEC;	//无须计算
-	    w = n<m-1 ? n : m-1;					//w的值为m-1,n的较小值
+	    if(m <= 0 || this.n <= 1) return NORMALELEC;	//无须计算
+	    w = this.n<m-1 ? this.n : m-1;					//w的值为m-1,n的较小值
 
-	    for(i=n-2; i>=0; --i) x[i] = 0;
+	    for(i=this.n-2; i>=0; --i) this.x[i] = 0;
 
 	    //化阶梯-----------------------------------------------------------------------------
 	    for(l=0,k=0; l<w; ++l,++k)
 	    {
-		    while(k < n)
+		    while(k < this.n)
 		    {
 			    for(i=l; i<m; ++i)
-				    if(!IsFloatZero(a[i][k])) break;
+				    if(!IsFloatZero(this.a[i][k])) break;
 			    if(i == m)
 			    {
 				    --w; 
@@ -338,45 +338,45 @@ var Equation = {
 			    }
 		    }
 
-		    if(k == n)
+		    if(k == this.n)
 		    {
 			    if(l == 0) return NORMALELEC;	//l==0,电流都为0
 			    break;
 		    }
 
-		    if(k == n-1) return SHORTELEC;	//电路短路
+		    if(k == this.n-1) return SHORTELEC;	//电路短路
 
 		    if(i != l)
 		    {
-			    for(j=k; j<n; ++j)
+			    for(j=k; j<this.n; ++j)
 			    {
-				    temp = a[i][j];
-				    a[i][j] = a[l][j];
-				    a[l][j] = temp;
+				    temp = this.a[i][j];
+				    this.a[i][j] = this.a[l][j];
+				    this.a[l][j] = temp;
 			    }
 		    }
 
 		    for(i=l+1; i<m; ++i)
 		    {
-			    if(!IsFloatZero(a[i][k]))
+			    if(!IsFloatZero(this.a[i][k]))
 			    {
-				    temp = a[i][k] / a[l][k];
-				    for(j=k; j<n; ++j) a[i][j] -= a[l][j] * temp;
+				    temp = this.a[i][k] / this.a[l][k];
+				    for(j=k; j<this.n; ++j) this.a[i][j] -= this.a[l][j] * temp;
 			    }
-			    else a[i][k] = 0;
+			    else this.a[i][k] = 0;
 		    }
 	    }
 
 	    //判断并返回电流---------------------------------------------------------------------
-	    w = n - 1;	//m代表含有非0值行的个数
+	    w = this.n - 1;	//m代表含有非0值行的个数
 	    for(i=0; i<w; ++i)
 	    {
-		    for(j=i; j<n; ++j) if(!IsFloatZero(a[i][j])) break;
-		    c[i] = j;
+		    for(j=i; j<this.n; ++j) if(!IsFloatZero(this.a[i][j])) break;
+		    this.c[i] = j;
 
 		    if(j > i)
 		    {
-			    if(j == n-1)
+			    if(j == this.n-1)
 				    return SHORTELEC;		//电路短路
 			    else
 				    return UNCOUNTABLEELEC;	//无法计算
@@ -385,23 +385,23 @@ var Equation = {
 
 	    for(i=0; i<w; ++i)
 	    {
-		    for(j=n-1; j>c[i]; --j) a[i][j] /= a[i][c[i]];
-		    a[i][c[i]] = 1;
+		    for(j=this.n-1; j>this.c[i]; --j) this.a[i][j] /= this.a[i][this.c[i]];
+		    this.a[i][this.c[i]] = 1;
 	    }
 
 	    for(l=w-1; l>0; --l) 
 	    {
-		    ASSERT(!IsFloatZero(a[l][c[l]]));
+		    ASSERT(!IsFloatZero(this.a[l][this.c[l]]));
 
 		    for(i=0; i<l; ++i)
 		    {
-			    for(j=c[l]+1; j<n; ++j) a[i][j] -= a[l][j] * a[i][c[l]];
-			    a[i][c[l]] = 0;
+			    for(j=this.c[l]+1; j<this.n; ++j) this.a[i][j] -= this.a[l][j] * this.a[i][this.c[l]];
+			    this.a[i][this.c[l]] = 0;
 		    }
 	    }
 
-	    for(i=n-2; i>=0; --i) x[i] = a[i][n-1];					//放入结果到数组
-	    for(i=n-2; i>=0; --i) if(IsFloatZero(x[i])) x[i] = 0;	//近似0的数设为0
+	    for(i=this.n-2; i>=0; --i) this.x[i] = this.a[i][this.n-1];					//放入结果到数组
+	    for(i=this.n-2; i>=0; --i) if(IsFloatZero(this.x[i])) this.x[i] = 0;	//近似0的数设为0
 
 	    return NORMALELEC;	//正常返回
     }

@@ -1,13 +1,13 @@
-function true1AndFalse0(flag) { if (flag) return 1; else return 0; }
+function True1_False0(flag) { if (flag) return 1; else return 0; }
 
-function zeroArray(array) {
+function ZeroArray(array) {
     for (var i = array.length - 1; i >= 0; --i) array[i] = 0;
 }
-function indexOfArray(array, element) {
+function IndexOfArray(array, element) {
     for (var i=array.length-1; i>=0; --i) if (array[i] == element) return i;
     return -1;
 }
-function nextElementOfArray(array, element) {
+function NextElementOfArray(array, element) {
     for (var i=array.length-1; i>=0; --i) {
 		if (array[i] == element) {
 			if (i+1 < array.length)
@@ -18,19 +18,19 @@ function nextElementOfArray(array, element) {
 	}
     return null;
 }
-function genrateArrayWithElementInitFunc(initFunc, size) {
+function GenrateArrayWithElementInitFunc(initFunc, size) {
     var a = new Array(size);
     for (var i=size-1; i>=0; --i) 
         a[i] = initFunc();
     return a;
 }
-function arrayCopyAll(to, from) {
+function ArrayCopyAll(to, from) {
     for (var i = from.length - 1; i >= 0; --i) to[i] = from[i];
 }
-function arrayCopyWithSize(to, from, size) {
+function ArrayCopyWithSize(to, from, size) {
     for (var i = size - 1; i >= 0; --i) to[i] = from[i];
 }
-function subArray(array, startIndex, endIndex/*array.length*/) {
+function SubArray(array, startIndex, endIndex/*array.length*/) {
 	var newArray = new Array();
 	if (endIndex <= 0)
 		return newArray;
@@ -42,20 +42,20 @@ function subArray(array, startIndex, endIndex/*array.length*/) {
 }
 
 // 深度复制对象
-function deepCopy(source) {
+function MyDeepCopy(source) {
 	if (!source)
 		return null;
 	
 	if (source instanceof Array) {
 		var result = new Array();
 		for (var i=0; i<source.length; ++i) {
-			result.push(deepCopy(source[i]));
+			result.push(MyDeepCopy(source[i]));
 		}
 		return result;
 	} else {
 		var result = {};
 		for (var key in source) {
-			result[key] = typeof source[key]==='object'? deepCopy(source[key]) : source[key];
+			result[key] = typeof source[key]==='object'? MyDeepCopy(source[key]) : source[key];
 		}
 		
 		result.__proto__ = source.__proto__;

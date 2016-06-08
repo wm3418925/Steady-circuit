@@ -37,7 +37,7 @@ var LEAD = {
 		var newLead = LEAD.CreateNew(this.index, this.color, this.conBody[0], this.conBody[1], false);
 
 		//复制坐标
-		newLead.coord = deepCopy(this.coord);
+		newLead.coord = MyDeepCopy(this.coord);
 
 		if (CLONE_FOR_USE != clonePurpose) {
 			newLead.initOrder = this.initOrder;
@@ -50,7 +50,7 @@ var LEAD = {
 	GenerateStoreJsonObj: function() {
 		return {
 			color : this.color,
-			coord : deepCopy(this.coord),
+			coord : MyDeepCopy(this.coord),
 			conBody  : new Array(this.conBody[0].GenerateStoreJsonObj(), this.conBody[1].GenerateStoreJsonObj())
 		};
 	},
@@ -59,7 +59,7 @@ var LEAD = {
 		ASSERT(jsonObj!=null && leadList!=null && crunList!=null && ctrlList!=null);
 
 		this.color = jsonObj.color;
-		this.coord = deepCopy(jsonObj.coord);
+		this.coord = MyDeepCopy(jsonObj.coord);
 		this.conBody[0] = Pointer.CreateNew(); this.conBody[0].ReadFromStoreJsonObj(jsonObj.conBody[0], leadList, crunList, ctrlList);
 		this.conBody[1] = Pointer.CreateNew(); this.conBody[1].ReadFromStoreJsonObj(jsonObj.conBody[1], leadList, crunList, ctrlList);
 	},

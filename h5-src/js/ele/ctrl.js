@@ -214,7 +214,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 
 	//获得控件连接的导线数
 	GetConnectCount: function() {
-		return (this.lead[0] != NULL) + (this.lead[1] != NULL); 
+		return (this.lead[0] != null) + (this.lead[1] != null);
 	},
 
 	//寻找导线在哪个方向 : 0↑,1↓,2←,3→
