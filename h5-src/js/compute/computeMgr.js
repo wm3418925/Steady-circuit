@@ -1,9 +1,20 @@
+IsBodyCrun = function(checkElement) {
+    return checkElement.__proto__ == CRUN;
+};
+IsBodyCtrl = function(checkElement) {
+    return checkElement.__proto__ == CTRL;
+};
+IsBodyLead = function(checkElement) {
+    return checkElement.__proto__ == LEAD;
+};
+
+
 var ComputeMgr = {};
 
-
-ComputeMgr.CONVERT = function(a,b,size)	{return size*a-(a+1)*a/2+b-a-1;}	//用于CRUNMAP成员的访问
-
-
+//用于CRUNMAP成员的访问
+ComputeMgr.CONVERT = function(a,b,size)	 {
+	return size*a-(a+1)*a/2+b-a-1;
+}
 
 
 ComputeMgr.CombineGroup = function(
@@ -122,7 +133,7 @@ ComputeMgr.CollectCircuitInfo = function()
 		for (j=0; j<4; ++j) if (ComputeMgr.crun[i].lead[j] && ComputeMgr.crun2[i].c[j] == null)
 	//满足当前方向有导线连接 而且 没有检索过(ComputeMgr.crun2[i].c[j] == null)
 	{
-		now = ComputeMgr.crun[i]->lead[j];
+		now = ComputeMgr.crun[i].lead[j];
 		dir = true1AndFalse0(now.conBody[0].p == ComputeMgr.crun[i]);
 
 		ComputeMgr.circu[ComputeMgr.circuitCount].resistance = 0;	//电阻清0
@@ -132,7 +143,7 @@ ComputeMgr.CollectCircuitInfo = function()
 		{
 			pre = now;
 
-			if (IsOnCtrl(now))	//控件
+			if (IsBodyCtrl(now))	//控件
 			{
 				//处理控件
 				if (now.resist < 0 || now.lead[dir] == null)	//断路了
@@ -150,7 +161,7 @@ ComputeMgr.CollectCircuitInfo = function()
 			else	//导线,到下一个物体
 			{
 				now = pre.conBody[dir].p;
-				if (IsOnCrun(now))	//遇到连接物体不是2个的结点结束
+				if (IsBodyCrun(now))	//遇到连接物体不是2个的结点结束
 				{
 					tempVar = now.GetConnectCount();
 					if (tempVar >= 3)	//通路
@@ -179,11 +190,11 @@ ComputeMgr.CollectCircuitInfo = function()
 						break;
 					}
 				}
-				else if (IsOnCtrl(now))
+				else if (IsBodyCtrl(now))
 				{
 					dir = true1AndFalse0(now.lead[0] == pre);
 				}
-				else if (IsOnLead(now))
+				else if (IsBodyLead(now))
 				{
 					throw "2个导线直接连接出现会引起错误 !";
 					break;
@@ -584,7 +595,7 @@ ComputeMgr.TravelCircuitPutElec = function(/*Pointer */now,
 	{
 		pre = now;
 
-		if (IsOnCtrl(now))	//控件
+		if (IsBodyCtrl(now))	//控件
 		{
 			if (NORMALELEC == flag) //正常线路
 			{
@@ -613,7 +624,7 @@ ComputeMgr.TravelCircuitPutElec = function(/*Pointer */now,
 			}
 
 			now = now.conBody[dir].p;
-			if (IsOnCrun(now))	//遇到终点(last结点)结束
+			if (IsBodyCrun(now))	//遇到终点(last结点)结束
 			{
 				if (now == last) break;	//到达终点
 				else //跳过,相当于导线
@@ -627,7 +638,7 @@ ComputeMgr.TravelCircuitPutElec = function(/*Pointer */now,
 					dir = true1AndFalse0(now.conBody[0].p == pre);
 				}
 			}
-			else if (IsOnLead(now))
+			else if (IsBodyLead(now))
 			{
 				throw "2个导线直接连接出现会引起错误 !";
 			}
@@ -637,7 +648,7 @@ ComputeMgr.TravelCircuitPutElec = function(/*Pointer */now,
 			}
 		}
 	}//do
-	while (!IsOnCrun(now) || now != last);	//遇到终点(last结点)结束
+	while (!IsBodyCrun(now) || now != last);	//遇到终点(last结点)结束
 };
 
 ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
@@ -651,7 +662,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 	{
 		pre = now;
 
-		if (IsOnCtrl(now))	//控件
+		if (IsBodyCtrl(now))	//控件
 		{
 			//输入电流
 			now.elecDir = OPENELEC;
@@ -669,7 +680,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 			now.elec = 0;
 
 			now = now.conBody[dir].p;
-			if (IsOnCrun(now))	//遇到终点(last结点)结束
+			if (IsBodyCrun(now))	//遇到终点(last结点)结束
 			{
 				if (2 != now.GetConnectCount())	//到达终点
 				{
@@ -686,7 +697,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 					dir = true1AndFalse0(now.conBody[0].p == pre);
 				}
 			}
-			else if (IsOnLead(now))
+			else if (IsBodyLead(now))
 			{
 				throw "2个导线直接连接出现会引起错误";
 			}
@@ -707,13 +718,13 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 	/*double*/var resist = 0;
 	/*const Pointer*/var self = now;	//记录下起点
 	/*Pointer*/var pre;
-	if (IsOnCrun(now)) return ERRORELEC;	//指定物体不能是线路中包含的结点
+	if (IsBodyCrun(now)) return ERRORELEC;	//指定物体不能是线路中包含的结点
 
 	do
 	{
 		pre = now;
 
-		if (IsOnCtrl(now))	//控件
+		if (IsBodyCtrl(now))	//控件
 		{
 			if (UNKNOWNELEC == flag)	//获得电压电阻
 			{
@@ -748,7 +759,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 			}
 
 			now = now.conBody[dir].p;
-			if (IsOnCrun(now))	//此时结点一定连接2个导线,跳过,相当于导线
+			if (IsBodyCrun(now))	//此时结点一定连接2个导线,跳过,相当于导线
 			{
 				//找到结点连接的另一个导线
 				for (dir=0; dir<4; ++dir)
@@ -758,7 +769,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 				now = pre.lead[dir];
 				dir = true1AndFalse0(now.conBody[0].p == pre);
 			}
-			else if (IsOnLead(now))
+			else if (IsBodyLead(now))
 			{
 				throw "2个导线直接连接出现会引起错误";
 			}
