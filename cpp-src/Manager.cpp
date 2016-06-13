@@ -98,7 +98,7 @@ Manager::Manager(CWnd * outWnd)
 
 
 	//读取文件-------------------------------------------------------
-	vectorPos = NULL;
+	vectorPos = circuitVector.end();//memset(&vectorPos, sizeof(vectorPos), 0);
 	fileName[0] = '\0';
 	PutCircuitToVector();	//将当前空电路信息保存到容器
 }
@@ -1874,10 +1874,10 @@ bool Manager::SaveFile(const char * newFile)
 	//6保存其他变量
 	fwrite(&moveBodySense, sizeof(int), 1, fp);		//按方向键一次物体移动的距离
 	fwrite(&maxLeaveOutDis, sizeof(int), 1, fp);	//导线合并最大距离
-	fwrite(&textColor, sizeof(enum), 1, fp);		//字体颜色
-	fwrite(&focusLeadStyle, sizeof(enum), 1, fp);	//焦点导线样式
-	fwrite(&focusCrunColor, sizeof(enum), 1, fp);	//焦点结点颜色
-	fwrite(&focusCtrlColor, sizeof(enum), 1, fp);	//焦点控件颜色
+	fwrite(&textColor, sizeof(enum BODY_TYPE), 1, fp);		//字体颜色
+	fwrite(&focusLeadStyle, sizeof(enum BODY_TYPE), 1, fp);	//焦点导线样式
+	fwrite(&focusCrunColor, sizeof(enum BODY_TYPE), 1, fp);	//焦点结点颜色
+	fwrite(&focusCtrlColor, sizeof(enum BODY_TYPE), 1, fp);	//焦点控件颜色
 	focusBody.SaveToFile(fp);						//焦点物体
 	fwrite(&viewOrig, sizeof(POINT), 1, fp);		//视角初始坐标
 
@@ -1926,9 +1926,9 @@ bool Manager::ReadFile(const char * newFile)
 
 		//检查读取的物体数量是否在允许的范围之内
 		if(crunNum < 0 || leadNum < 0 || ctrlNum < 0)
-			goto READFILEERROR;
+			throw "count error";
 		if(crunNum>MAXCRUNNUM || leadNum>MAXLEADNUM || ctrlNum>MAXCTRLNUM)
-			goto READFILEERROR;
+			throw "count error";
 
 		//为每个物体申请内存空间
 		for(i = crunNum-1; i >= 0; --i)
@@ -1956,10 +1956,10 @@ bool Manager::ReadFile(const char * newFile)
 		//6读取其他变量
 		fread(&moveBodySense, sizeof(UINT), 1, fp);		//按方向键一次物体移动的距离
 		fread(&maxLeaveOutDis, sizeof(UINT), 1, fp);	//导线合并最大距离
-		fread(&textColor, sizeof(enum), 1, fp);			//字体颜色
-		fread(&focusLeadStyle, sizeof(enum), 1, fp);	//焦点导线样式
-		fread(&focusCrunColor, sizeof(enum), 1, fp);	//焦点结点颜色
-		fread(&focusCtrlColor, sizeof(enum), 1, fp);	//焦点控件颜色
+		fread(&textColor, sizeof(enum BODY_TYPE), 1, fp);			//字体颜色
+		fread(&focusLeadStyle, sizeof(enum BODY_TYPE), 1, fp);	//焦点导线样式
+		fread(&focusCrunColor, sizeof(enum BODY_TYPE), 1, fp);	//焦点结点颜色
+		fread(&focusCtrlColor, sizeof(enum BODY_TYPE), 1, fp);	//焦点控件颜色
 		body.ReadFromFile(fp, lead, crun, ctrl);		//读取焦点物体
 		FocusBodySet(body);								//设置焦点物体
 		fread(&viewOrig, sizeof(POINT), 1, fp);			//视角初始坐标
@@ -1973,7 +1973,6 @@ bool Manager::ReadFile(const char * newFile)
 
 	catch(...)
 	{
-	READFILEERROR:
 		fclose(fp);
 		wndPointer->MessageBox("文件可能损坏了 !", "读取文件错误", MB_ICONERROR);
 		exit(0);
@@ -3536,7 +3535,7 @@ void Manager::PutCircuitToVector()
 //将当前电路信息保存到容器
 {
 	CircuitInfo ci;
-	DeleteVector(vectorPos+1, circuitVector.end());
+	if (vectorPos!=circuitVector.end()) DeleteVector(vectorPos+1, circuitVector.end());
 
 	ci.leadNum = this->leadNum;
 	if(leadNum != 0)
@@ -3589,14 +3588,14 @@ void Manager::ReadCircuitFromVector(MyIterator it)
 	PaintAll();
 }
 
-void Manager::DeleteVector(MyIterator first, MyIterator last)
+void Manager::DeleteVector(MyIterator first, MyIterator end)
 //删除连续的一段容器内容
 {
 	MyIterator it;
 	int i;
-	if(first >= circuitVector.end() || first >= last) return;
+	if(first >= circuitVector.end() || first >= end) return;
 
-	for(it=last-1; it>=first; --it)
+	for(it=end-1; it>=first; --it)
 	{
 		for(i = it->leadNum-1; i>=0; --i)
 			delete it->lead[i];

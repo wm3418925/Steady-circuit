@@ -545,13 +545,13 @@ void CMyDlg::OnRButtonUp(UINT, CPoint point)
 	m_c->PaintAll();	//刷新
 }
 
-void CMyDlg::OnKillFocus()
+void CMyDlg::OnKillFocus(CWnd *)
 //窗口失去焦点
 {
 	m_focusFlag = false;
 }
 
-void CMyDlg::OnSetFocus()
+void CMyDlg::OnSetFocus(CWnd *)
 //窗口获得焦点
 {
 	m_focusFlag = true;
@@ -1053,7 +1053,7 @@ void CMyDlg::OnFocusBodyDelete()
 	m_c->PaintAll();
 }
 
-void CMyDlg::OnSetAddState(WORD nID)
+void CMyDlg::OnSetAddState(UINT nID)
 //设置添加何种物体,具体添加位置由有鼠标点击位置确定
 {
 	if(m_inputLock) return;
@@ -1097,7 +1097,7 @@ void CMyDlg::OnFocusBodyChangeCtrlStyle()
 	m_c->PaintAll();
 }
 
-void CMyDlg::OnFocusBodyRotateCtrl(WORD nID)
+void CMyDlg::OnFocusBodyRotateCtrl(UINT nID)
 //旋转焦点电学元件
 {
 	if(m_inputLock) return;
@@ -1306,7 +1306,7 @@ void CMyDlg::OnDeleteLead()
 	m_c->PaintAll();
 }
 
-void CMyDlg::OnPosBodyRotateCtrl(WORD nID)
+void CMyDlg::OnPosBodyRotateCtrl(UINT nID)
 //旋转右击电学元件
 {
 	if(m_inputLock) return;

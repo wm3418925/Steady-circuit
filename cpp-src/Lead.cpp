@@ -1215,7 +1215,7 @@ void LEAD::SaveToFile(FILE * fp)const
 		temp = temp->next;
 	}
 
-	fwrite(&color, sizeof(enum), 1, fp);
+	fwrite(&color, sizeof(enum BODY_TYPE), 1, fp);
 
 	conBody[0].SaveToFile(fp);
 	conBody[1].SaveToFile(fp);
@@ -1234,7 +1234,7 @@ void LEAD::ReadFromFile(FILE * fp, LEAD ** allLead, CRUN ** allCrun, CTRL ** all
 		temp = temp->next;
 	}
 
-	fread(&color, sizeof(enum), 1, fp);
+	fread(&color, sizeof(enum BODY_TYPE), 1, fp);
 
 	conBody[0].ReadFromFile(fp, allLead, allCrun, allCtrl);
 	conBody[1].ReadFromFile(fp, allLead, allCrun, allCtrl);

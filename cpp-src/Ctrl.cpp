@@ -172,7 +172,8 @@ int CTRL::GetConnectNum()const
 int CTRL::GetDirect(const LEAD * l)const
 //寻找导线在哪个方向 : 0↑,1↓,2←,3→
 {
-	for(int i=0; i<2; ++i) if(lead[i] == l) break;
+	int i;
+	for(i=0; i<2; ++i) if(lead[i] == l) break;
 	if(i >= 2) return -1;	//没有找到
 
 	ASSERT(dir>=0 && dir < 4);

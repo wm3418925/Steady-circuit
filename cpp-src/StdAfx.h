@@ -16,6 +16,9 @@
 #include <afxext.h>         // MFC extensions
 
 ///////////////////////////////////////////////////////////////////////////
+#define _ITERATOR_DEBUG_LEVEL 0
+
+
 const long NAME_LEN = 32;									//名称的字符串占内存大小
 
 const char FILE_EXTENT[8] = "wan";							//文件后缀, 不带.

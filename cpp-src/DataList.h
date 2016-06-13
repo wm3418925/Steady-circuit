@@ -125,7 +125,7 @@ public:
 			delete [] noteText[i];
 		delete [] noteText;
 
-		for(i=listSize-1; i>=0; --i)if(DATA_STYLE_enum == listStyle[i])
+		for(int i=listSize-1; i>=0; --i)if(DATA_STYLE_enum == listStyle[i])
 			delete ((ENUM_STYLE *)(dataPoint[i]));
 		delete [] dataPoint;
 

@@ -50,8 +50,8 @@ protected:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnKillFocus();
-	afx_msg void OnSetFocus();
+	afx_msg void OnKillFocus(CWnd *);
+	afx_msg void OnSetFocus(CWnd *);
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar * pScrollBar);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar * pScrollBar);
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
@@ -71,12 +71,12 @@ protected:
 	afx_msg void OnFocusBodyCut();
 	afx_msg void OnFocusBodyCopy();
 	afx_msg void OnFocusBodyDelete();
-	afx_msg void OnSetAddState(WORD nID);
+	afx_msg void OnSetAddState(UINT nID);
 	afx_msg void OnUnDo();
 	afx_msg void OnReDo();
 	afx_msg void OnFocusBodyProperty();
 	afx_msg void OnFocusBodyChangeCtrlStyle();
-	afx_msg void OnFocusBodyRotateCtrl(WORD nID);
+	afx_msg void OnFocusBodyRotateCtrl(UINT nID);
 	afx_msg void OnFocusBodyShowElec();
 	afx_msg void OnSearch();
 
@@ -104,7 +104,7 @@ protected:
 	afx_msg void OnPosBodyDelete();
 	afx_msg void OnPaste();
 	afx_msg void OnDeleteLead();
-	afx_msg void OnPosBodyRotateCtrl(WORD nID);
+	afx_msg void OnPosBodyRotateCtrl(UINT nID);
 	afx_msg void OnPosBodyProperty();
 	afx_msg void OnPosBodyChangeCtrlStyle();
 	//}}AFX_MSG
