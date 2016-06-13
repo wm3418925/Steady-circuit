@@ -87,7 +87,7 @@ void Manager.ChangeCtrlStyle(FOCUS_OR_POS &body)
 	if(!pointer.IsOnCtrl()) return;
 
 	//获得原来类型
-	preStyle = newStyle = pointer.p3.GetStyle();
+	preStyle = newStyle = pointer.p3.style;
 
 	//初始化list数据
 	LISTDATA list;

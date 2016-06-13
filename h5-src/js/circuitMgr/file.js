@@ -82,7 +82,7 @@ function readFileCallbackFunc(data) {
 		CTRL.ResetGlobalInitOrder();
 		Manager.ctrl = new Array(ctrlCount);
 		for (var i = ctrlCount-1; i >= 0; --i)
-			Manager.ctrl[i] = CTRL.CreateNew(i, 0,0, 0);
+			Manager.ctrl[i] = CTRL.CreateNew(i, 0,0, data.ctrls[i].style);
 		
 		LEAD.ResetGlobalInitOrder(leadCount);
 		Manager.lead = new Array(leadCount);

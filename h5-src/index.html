@@ -6,9 +6,9 @@
 <link rel="shortcut icon" href="res/idr_main.ico">
 </head>
 
-<body>
+<body onload="pageOnload()">
 
-<div style="display:none;">
+<div id="imgDiv" style="display:none">
 <img id="N-1-0" src="res/ctrl/N-1-0.bmp" />
 <img id="N-1-1" src="res/ctrl/N-1-1.bmp" />
 <img id="N-1-2" src="res/ctrl/N-1-2.bmp" />
@@ -67,13 +67,13 @@ Your browser does not support the canvas element.
 
 
 <script type="text/javascript">
-$(document).ready(function () {
+function pageOnload() {
 	var canvas = document.getElementById("myCanvas");
 	Manager.Init(canvas);
 	Manager.ReadFile("testData.json");
 	Manager.PaintAll();
 	ComputeMgr.ComputeElec(Manager.lead,Manager.crun,Manager.ctrl);
-});
+};
 </script>
 
 

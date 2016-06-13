@@ -156,16 +156,17 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 	},
 	// @复制控件数据
 	CloneCtrlData: function(toCtrl, fromCtrl) {
-		toCtrl.resist = fromCtrl.resist;
-		
-		switch (fromCtrl.ctrlStyle) {
+		switch (fromCtrl.style) {
 		case SOURCE:
 			toCtrl.pressure = fromCtrl.pressure;
+			toCtrl.resist = fromCtrl.resist;
 			break;
 		case RESIST:
+			toCtrl.resist = fromCtrl.resist;
 			break;
 		case BULB:
 			toCtrl.rating = fromCtrl.rating;
+			toCtrl.resist = fromCtrl.resist;
 			break;
 		case CAPA:
 			toCtrl.capa = fromCtrl.capa;
@@ -195,7 +196,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 	},
 	// 获得控件的电压
 	GetPressure: function(direction) {
-		if (this.hasOwnProperty("pressure")) {
+		if (SOURCE == this.style) {
 			if (direction != 0)
 				return - this.pressure;
 			else
