@@ -71,6 +71,7 @@ $(document).ready(function () {
 	var canvas = document.getElementById("myCanvas");
 	Manager.Init(canvas);
 	Manager.ReadFile("testData.json");
+	Manager.PaintAll();
 	ComputeMgr.ComputeElec(Manager.lead,Manager.crun,Manager.ctrl);
 });
 </script>

@@ -121,7 +121,6 @@ function readFileCallbackFunc(data) {
 		return false;
 	}*/
 
-	Manager.PaintAll();
 	return true;			//正常退出
 }
 function readFileComplete(xhr, textStatus) {
