@@ -48,20 +48,20 @@ var CIRCU = {	//线路,不包括结点,由结点连接,电流方向为from->to
          return newObj;
 	},
 
-	ConvertWhenElecLessZero: function(circu) {	//当电流负数时改为正数,并调转电流方向
-		if(circu.elec >= 0) return;
-		if(circu.elecDir != NORMALELEC) return;
+	ConvertWhenElecLessZero: function() {	//当电流负数时改为正数,并调转电流方向
+		if(this.elec >= 0) return;
+		if(this.elecDir != NORMALELEC) return;
 
-		circu.pressure = -circu.pressure;
-		circu.elec = -circu.elec;
+		this.pressure = -this.pressure;
+		this.elec = -this.elec;
 
-		var tempCrun2 = circu.from;
-		circu.from = circu.to;
-		circu.to = tempCrun2;
+		var tempCrun2 = this.from;
+		this.from = this.to;
+		this.to = tempCrun2;
 
-		var tempDir = circu.dirFrom;
-		circu.dirFrom = circu. dirTo;
-		circu.dirTo = tempDir;
+		var tempDir = this.dirFrom;
+		this.dirFrom = this. dirTo;
+		this.dirTo = tempDir;
 	}
 };
 
@@ -139,8 +139,8 @@ var ROAD = {
     },
 
     //判断是否有结点point
-    HaveRoadPoint: function(road, point) {
-	    var now = road.first;
+    HaveRoadPoint: function(point) {
+	    var now = this.first;
 	    while (now) {
 		    if(now.crunIndex == point)
 			    return true;
@@ -150,10 +150,10 @@ var ROAD = {
     },
 
     //判断是否有from->to路径
-    HaveRoadStep: function(road, from, to) {
-	    if (!road.first)
+    HaveRoadStep: function(from, to) {
+	    if (!this.first)
             return false;
-	    var pre = road.first;
+	    var pre = this.first;
 	    var now = pre.next;
 	    while (now != null) {
 		    if (pre.crunIndex == from && now.crunIndex == to 
@@ -166,17 +166,17 @@ var ROAD = {
     },
 
     //在最后加入结点
-    InsertPointAtTail: function(road, crunIndex) {
+    InsertPointAtTail: function(crunIndex) {
 	    var now;
 
-	    if (road.first) {
-		    road.last.next = now = ROADSTEP.CreateNew();
-		    now.pre = road.last;
-		    road.last = now;
+	    if (this.first) {
+		    this.last.next = now = ROADSTEP.CreateNew();
+		    now.pre = this.last;
+		    this.last = now;
 		    now.crunIndex = crunIndex;
 		    now.next = null;
 	    } else {
-		    road.first = road.last = now = ROADSTEP.CreateNew();
+		    this.first = this.last = now = ROADSTEP.CreateNew();
 		    now.crunIndex = crunIndex;
 		    now.next = now.pre = null;
 	    }

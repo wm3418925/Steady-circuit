@@ -514,7 +514,7 @@ ComputeMgr.CreateEquation = function()
 		nowMap = maps[group];
 		size = nowMap.size;
 		outPutBuf = new Array(nowMap.circuitCount+1);	//输出到方程的缓存
-		/*ROAD **/var roads ;
+		/*ROAD **/var roads;
 
 		for (j=size-2; j>=0; --j) for (k=size-1; k>j; --k)
 		{
