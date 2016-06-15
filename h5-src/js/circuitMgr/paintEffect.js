@@ -56,10 +56,10 @@ Manager.ShowAddBody = function(point) {
 
 //移动物体过程显示,Manager.lastMoveOnPos.x初始值设为-100,在LButtonDown和PaintAll中设置
 Manager.ShowMoveBody = function(pos, isLButtonDown) {
-	ASSERT(motiCount >= 0 && motiCount <= 2);
-	if (motiCount == 0) return false;
+	ASSERT(Manager.motiCount >= 0 && Manager.motiCount <= 2);
+	if (Manager.motiCount == 0) return false;
 
-	var body = motiBody[motiCount - 1];
+	var body = Manager.motiBody[Manager.motiCount - 1];
 	var bodyPos = {x:0, y:0};
 
 	if (!body.IsOnBody()) return false;
@@ -74,8 +74,8 @@ Manager.ShowMoveBody = function(pos, isLButtonDown) {
 	else if (body.IsOnCtrl()) bodyPos = body.p3.coord;
 
 	//根据坐标差计算画图坐标
-	pos.x += bodyPos.x - lButtonDownPos.x;
-	pos.y += bodyPos.y - lButtonDownPos.y;
+	pos.x += bodyPos.x - Manager.lButtonDownPos.x;
+	pos.y += bodyPos.y - Manager.lButtonDownPos.y;
 
 	//清除上次坐标画的物体
 	if (Manager.lastMoveOnPos.x > -100)
@@ -93,9 +93,9 @@ Manager.ShowMoveBody = function(pos, isLButtonDown) {
 
 //移动导线过程显示
 Manager.ShowMoveLead = function(isLButtonDown) {
-	ASSERT(motiCount>=0 && motiCount<=2);
+	ASSERT(Manager.motiCount>=0 && Manager.motiCount<=2);
 
-	if (motiCount == 0 || !motiBody[motiCount-1].IsOnLead()) {
+	if (Manager.motiCount == 0 || !Manager.motiBody[Manager.motiCount-1].IsOnLead()) {
 		return false;
 	}
 	if (!isLButtonDown) {	//鼠标没有按下
@@ -103,7 +103,7 @@ Manager.ShowMoveLead = function(isLButtonDown) {
 		return true;
 	}
 
-	if (motiBody[motiCount-1].IsOnHoriLead())
+	if (Manager.motiBody[Manager.motiCount-1].IsOnHoriLead())
 		SetCursor(hcMoveHorz);	//在横线,鼠标变成"上下指针"
 	else 
 		SetCursor(hcMoveVert);	//在竖线,鼠标变成"左右指针"
@@ -114,11 +114,11 @@ Manager.ShowMoveLead = function(isLButtonDown) {
 
 //突出右击物体
 Manager.PosBodyPaintRect = function(pos) {
-	var body = motiBody[0]
+	var body = Manager.motiBody[0]
 
-	motiCount = 0;
+	Manager.motiCount = 0;
 	MotivateAll(pos);
-	motiCount = 0;
+	Manager.motiCount = 0;
 
 	if (!body.IsOnAny()) return BODY_NO;
 
@@ -233,7 +233,7 @@ Manager.ShowBodyElec = function(body) {
 
 	//4,显示对话框
 	PaintWithSpecialColorAndRect(pointer, false);
-	MyPropertyDlg dlg(&list, true, model, title, this.canvas);
+	MyPropertyDlg dlg(&list, true, model, title, Manager.canvas);
 	dlg.DoModal();
 
 	return true;

@@ -20,7 +20,7 @@ void Manager.CopyToClipboard(const Pointer &body)
 //拷贝body指向的物体到剪切板
 {
 	ASSERT(body.IsOnBody());
-	motiCount = 0;
+	Manager.motiCount = 0;
 	ClearClipboard();	//清空剪切板
 
 	if (body.IsOnCrun())
@@ -33,7 +33,7 @@ Pointer Manager.CopyBody(FOCUS_OR_POS &body)
 //复制物体到剪切板
 {
 	Pointer pointer = Manager.GetBodyPointer(body);
-	if(!pointer.IsOnBody()) return pointer;
+	if (!pointer.IsOnBody()) return pointer;
 	CopyToClipboard(pointer);
 	return pointer;
 }
@@ -42,7 +42,7 @@ void Manager.CutBody(FOCUS_OR_POS &body)
 //剪切物体到剪切板
 {
 	Pointer pointer = CopyBody(body);	//复制物体
-	if(!pointer.IsOnBody()) return;
+	if (!pointer.IsOnBody()) return;
 	Delete(pointer);					//删除物体
 	PaintAll();							//重绘电路
 }
@@ -50,7 +50,7 @@ void Manager.CutBody(FOCUS_OR_POS &body)
 bool Manager.PasteBody(POINT pos)
 //粘贴物体
 {
-	if(!clipBody.IsOnBody())
+	if (!clipBody.IsOnBody())
 	{
 		MessageBeep(0);
 		return false;
@@ -59,39 +59,39 @@ bool Manager.PasteBody(POINT pos)
 
 	if (clipBody.IsOnCrun())
 	{
-		if (crunCount >= MAX_CRUN_COUNT)
+		if (Manager.crun.length >= MAX_CRUN_COUNT)
 		{
-			this.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
+			Manager.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
 			return false;
 		}
 
 		CloneCircuitBeforeChange();	//编辑前复制电路
 		//编辑部分
-		crun[crunCount] = clipBody.p2.Clone(CLONE_FOR_USE);
-		crun[crunCount]->coord = pos;
-		crun[crunCount]->num = crunCount;
-		++ crunCount;
+		crun[Manager.crun.length] = clipBody.p2.Clone(CLONE_FOR_USE);
+		crun[Manager.crun.length].coord = pos;
+		crun[Manager.crun.length].num = Manager.crun.length;
+		++ Manager.crun.length;
 
 		PutCircuitToVector();	//将新的电路信息保存到容器
-		PaintCrun(crun[crunCount-1]);
+		PaintCrun(crun[Manager.crun.length-1]);
 	}
 	else if (clipBody.IsOnCtrl())
 	{
-		if (ctrlCount >= MAX_CTRL_COUNT)
+		if (Manager.ctrl.length >= MAX_CTRL_COUNT)
 		{
-			this.canvas.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
+			Manager.canvas.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
 			return false;
 		}
 
 		CloneCircuitBeforeChange();	//编辑前复制电路
 		//编辑部分
-		ctrl[ctrlCount] = clipBody.p3.Clone(CLONE_FOR_USE);
-		ctrl[ctrlCount]->coord = pos;
-		ctrl[ctrlCount]->num = ctrlCount;
-		++ ctrlCount;
+		ctrl[Manager.ctrl.length] = clipBody.p3.Clone(CLONE_FOR_USE);
+		ctrl[Manager.ctrl.length].coord = pos;
+		ctrl[Manager.ctrl.length].num = Manager.ctrl.length;
+		++ Manager.ctrl.length;
 
 		PutCircuitToVector();	//将新的电路信息保存到容器
-		PaintCtrl(ctrl[ctrlCount-1]);
+		PaintCtrl(ctrl[Manager.ctrl.length-1]);
 	}
 
 	return true;

@@ -3,54 +3,54 @@
 void Manager.AddCtrl(POINT pos, BODY_TYPE style)
 //添加控件
 {
-	ASSERT(ctrlCount < MAX_CTRL_COUNT);
+	ASSERT(Manager.ctrl.length < MAX_CTRL_COUNT);
 
-	ctrl[ctrlCount] = new CTRL(ctrlCount, pos, style);
-	++ ctrlCount;
+	ctrl[Manager.ctrl.length] = new CTRL(Manager.ctrl.length, pos, style);
+	++ Manager.ctrl.length;
 
-	PaintCtrlText(ctrl[ctrlCount-1]);
+	PaintCtrlText(ctrl[Manager.ctrl.length-1]);
 	Pointer newFocus;
-	newFocus.SetOnCtrl(ctrl[ctrlCount-1], 1);
+	newFocus.SetOnCtrl(ctrl[Manager.ctrl.length-1], 1);
 	FocusBodyPaint(&newFocus);
 }
 
 void Manager.AddCrun(POINT pos)
 //添加结点
 {
-	ASSERT(crunCount < MAX_CRUN_COUNT);
+	ASSERT(Manager.crun.length < MAX_CRUN_COUNT);
 
-	crun[crunCount] = new CRUN(crunCount, pos);
-	++ crunCount;
+	crun[Manager.crun.length] = new CRUN(Manager.crun.length, pos);
+	++ Manager.crun.length;
 
-	PaintCrunText(crun[crunCount-1]);
+	PaintCrunText(crun[Manager.crun.length-1]);
 	Pointer newFocus;
-	newFocus.SetOnCrun(crun[crunCount-1], 1);
+	newFocus.SetOnCrun(crun[Manager.crun.length-1], 1);
 	FocusBodyPaint(&newFocus);
 }
 
 void Manager.AddLead(Pointer a, Pointer b)
 //用导线连接2个物体
 {
-	ASSERT(leadCount < MAX_LEAD_COUNT);						//导线够用
+	ASSERT(Manager.lead.length < MAX_LEAD_COUNT);						//导线够用
 	ASSERT(a.IsOnConnectPos() && b.IsOnConnectPos());	//连接点
 	ASSERT(!a.IsBodySame(&b));							//不是同一个物体
 
 	//添加导线
-	lead[leadCount] = new LEAD(leadCount, a, b);
-	++leadCount;
+	lead[Manager.lead.length] = new LEAD(Manager.lead.length, a, b);
+	++Manager.lead.length;
 
 	//连接物体指向导线
 	if (a.IsOnCrun())
-		a.p2.lead[a.GetLeadNum()] = lead[leadCount-1];
+		a.p2.lead[a.GetLeadNum()] = lead[Manager.lead.length-1];
 	else 
-		a.p3.lead[a.GetLeadNum()] = lead[leadCount-1];
+		a.p3.lead[a.GetLeadNum()] = lead[Manager.lead.length-1];
 	if (b.IsOnCrun())
-		b.p2.lead[b.GetLeadNum()] = lead[leadCount-1];
+		b.p2.lead[b.GetLeadNum()] = lead[Manager.lead.length-1];
 	else 
-		b.p3.lead[b.GetLeadNum()] = lead[leadCount-1];
+		b.p3.lead[b.GetLeadNum()] = lead[Manager.lead.length-1];
 
 	//显示添加的导线
-	PaintLead(lead[leadCount-1]);
+	PaintLead(lead[Manager.lead.length-1]);
 }
 
 void Manager.DeleteLead(LEAD * l)
@@ -75,13 +75,13 @@ void Manager.DeleteLead(LEAD * l)
 
 	//删除导线
 	delete l;
-	if (num != leadCount-1)
+	if (num != Manager.lead.length-1)
 	{
-		lead[num] = lead[leadCount-1];
-		lead[num]->num = num;
+		lead[num] = lead[Manager.lead.length-1];
+		lead[num].num = num;
 	}
-	lead[leadCount-1] = null;
-	--leadCount;
+	lead[Manager.lead.length-1] = null;
+	--Manager.lead.length;
 }
 
 void Manager.DeleteSingleBody(Pointer pointer)
@@ -96,25 +96,25 @@ void Manager.DeleteSingleBody(Pointer pointer)
 	{
 		num = pointer.p2.num;
 		delete pointer.p2;
-		if (num != crunCount-1)
+		if (num != Manager.crun.length-1)
 		{
-			crun[num] = crun[crunCount-1];
-			crun[num]->num = num;
+			crun[num] = crun[Manager.crun.length-1];
+			crun[num].num = num;
 		}
-		crun[crunCount-1] = null;
-		--crunCount;
+		crun[Manager.crun.length-1] = null;
+		--Manager.crun.length;
 	}
 	else //if (pointer.IsOnCtrl())
 	{
 		num = pointer.p3.num;
 		delete pointer.p3;
-		if (num != ctrlCount-1)
+		if (num != Manager.ctrl.length-1)
 		{
-			ctrl[num] = ctrl[ctrlCount-1];
-			ctrl[num]->num = num;
+			ctrl[num] = ctrl[Manager.ctrl.length-1];
+			ctrl[num].num = num;
 		}
-		ctrl[ctrlCount-1] = null;
-		--ctrlCount;
+		ctrl[Manager.ctrl.length-1] = null;
+		--Manager.ctrl.length;
 	}
 }
 
@@ -130,13 +130,13 @@ void Manager.Delete(Pointer pointer)
 	}
 	else if (pointer.IsOnCrun())
 	{
-		for(int i=0; i<4; ++i) if (pointer.p2.lead[i] != null)
+		for (int i=0; i<4; ++i) if (pointer.p2.lead[i] != null)
 			DeleteLead(pointer.p2.lead[i]);
 		DeleteSingleBody(pointer);
 	}
 	else //if (pointer.IsOnCtrl())
 	{
-		for(int i=0; i<2; ++i) if (pointer.p3.lead[i] != null)
+		for (int i=0; i<2; ++i) if (pointer.p3.lead[i] != null)
 			DeleteLead(pointer.p3.lead[i]);
 		DeleteSingleBody(pointer);
 	}
@@ -155,11 +155,11 @@ bool Manager.ConnectBodyLead(POINT posb)
 	LEADSTEP newLeadPosx, newLeadPosy;
 
 	//1,检查函数运行条件
-	ASSERT(motiCount == 2 && motiBody[0].IsOnConnectPos() && motiBody[1].IsOnLead());
-	motiCount = 0;
-	if (crunCount >= MAX_CRUN_COUNT)	//只要结点数量够,导线一定够
+	ASSERT(Manager.motiCount == 2 && Manager.motiBody[0].IsOnConnectPos() && Manager.motiBody[1].IsOnLead());
+	Manager.motiCount = 0;
+	if (Manager.crun.length >= MAX_CRUN_COUNT)	//只要结点数量够,导线一定够
 	{
-		this.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
+		Manager.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
 		return false;
 	}
 
@@ -167,16 +167,16 @@ bool Manager.ConnectBodyLead(POINT posb)
 	CloneCircuitBeforeChange();
 
 	//3,获得物体和坐标
-	a = motiBody[0];
-	x = motiBody[1].p1.conBody[0];
-	y = motiBody[1].p1.conBody[1];
+	a = Manager.motiBody[0];
+	x = Manager.motiBody[1].p1.conBody[0];
+	y = Manager.motiBody[1].p1.conBody[1];
 	if (a.IsOnCrun())posa = a.p2.coord;
 	else posa = a.p3.coord;	//获得先点击物体的坐标
 
 	//4,初始化连接新添加结点的方向
-	if (motiBody[1].IsOnHoriLead())	//-3,-5,-7....横线
+	if (Manager.motiBody[1].IsOnHoriLead())	//-3,-5,-7....横线
 	{
-		if (motiBody[1].p1.GetBodyPos() & 2)
+		if (Manager.motiBody[1].p1.GetBodyPos() & 2)
 		{
 			dir1 = 4;
 			dir2 = 3;
@@ -192,7 +192,7 @@ bool Manager.ConnectBodyLead(POINT posb)
 	}
 	else	//-2,-4,-6....竖线
 	{
-		if (motiBody[1].p1.GetBodyPos() & 1)
+		if (Manager.motiBody[1].p1.GetBodyPos() & 1)
 		{
 			dir1 = 2;
 			dir2 = 1;
@@ -208,19 +208,19 @@ bool Manager.ConnectBodyLead(POINT posb)
 	}
 
 	//5,添加删除物体
-	motiBody[1].p1.Divide(motiBody[1].GetAtState(), posb, newLeadPosx, newLeadPosy);	//记忆原来导线坐标
-	DeleteLead(motiBody[1].p1);	//删除原来导线
+	Manager.motiBody[1].p1.Divide(Manager.motiBody[1].GetAtState(), posb, newLeadPosx, newLeadPosy);	//记忆原来导线坐标
+	DeleteLead(Manager.motiBody[1].p1);	//删除原来导线
 	AddCrun(posb);	//添加结点
 
-	newCrun.SetOnCrun(crun[crunCount-1]);	//newCrun指向新添加结点
+	newCrun.SetOnCrun(crun[Manager.crun.length-1]);	//newCrun指向新添加结点
 
 	newCrun.SetAtState(dir1);
 	AddLead(x, newCrun);	//x和节点连线,x是起点,新节点是终点
-	lead[leadCount-1]->ReplacePos(newLeadPosx);	//坐标还原
+	lead[Manager.lead.length-1].ReplacePos(newLeadPosx);	//坐标还原
 
 	newCrun.SetAtState(dir2);
 	AddLead(newCrun, y);	//y和节点连线,y是终点,新节点是起点
-	lead[leadCount-1]->ReplacePos(newLeadPosy);	//坐标还原
+	lead[Manager.lead.length-1].ReplacePos(newLeadPosy);	//坐标还原
 
 	newCrun.SetAtState(dir3);
 	AddLead(a, newCrun);	//a和节点连线
@@ -235,7 +235,7 @@ bool Manager.Delete(FOCUS_OR_POS &body)
 //删除物体
 {
 	Pointer pointer = Manager.GetBodyPointer(body);
-	if(!pointer.IsOnAny()) return false;
+	if (!pointer.IsOnAny()) return false;
 
 	if (DeleteNote(pointer))
 	{

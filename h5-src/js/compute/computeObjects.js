@@ -49,8 +49,8 @@ var CIRCU = {	//线路,不包括结点,由结点连接,电流方向为from->to
 	},
 
 	ConvertWhenElecLessZero: function() {	//当电流负数时改为正数,并调转电流方向
-		if(this.elec >= 0) return;
-		if(this.elecDir != NORMALELEC) return;
+		if (this.elec >= 0) return;
+		if (this.elecDir != NORMALELEC) return;
 
 		this.pressure = -this.pressure;
 		this.elec = -this.elec;
@@ -142,7 +142,7 @@ var ROAD = {
     HaveRoadPoint: function(point) {
 	    var now = this.first;
 	    while (now) {
-		    if(now.crunIndex == point)
+		    if (now.crunIndex == point)
 			    return true;
 		    now = now.next;
 	    }
@@ -315,7 +315,7 @@ var Equation = {
 	    /*const int*/var m = this.gotoRow;	//记录已经输入到的行,而不是this.m
         /*int*/var i, j, l, k, w;
         /*double*/var temp;
-	    if(m <= 0 || this.n <= 1) return NORMALELEC;	//无须计算
+	    if (m <= 0 || this.n <= 1) return NORMALELEC;	//无须计算
 	    w = this.n<m-1 ? this.n : m-1;					//w的值为m-1,n的较小值
 
 	    for(i=this.n-2; i>=0; --i) this.x[i] = 0;
@@ -326,8 +326,8 @@ var Equation = {
 		    while(k < this.n)
 		    {
 			    for(i=l; i<m; ++i)
-				    if(!IsFloatZero(this.a[i][k])) break;
-			    if(i == m)
+				    if (!IsFloatZero(this.a[i][k])) break;
+			    if (i == m)
 			    {
 				    --w; 
 				    ++k;
@@ -338,15 +338,15 @@ var Equation = {
 			    }
 		    }
 
-		    if(k == this.n)
+		    if (k == this.n)
 		    {
-			    if(l == 0) return NORMALELEC;	//l==0,电流都为0
+			    if (l == 0) return NORMALELEC;	//l==0,电流都为0
 			    break;
 		    }
 
-		    if(k == this.n-1) return SHORTELEC;	//电路短路
+		    if (k == this.n-1) return SHORTELEC;	//电路短路
 
-		    if(i != l)
+		    if (i != l)
 		    {
 			    for(j=k; j<this.n; ++j)
 			    {
@@ -358,7 +358,7 @@ var Equation = {
 
 		    for(i=l+1; i<m; ++i)
 		    {
-			    if(!IsFloatZero(this.a[i][k]))
+			    if (!IsFloatZero(this.a[i][k]))
 			    {
 				    temp = this.a[i][k] / this.a[l][k];
 				    for(j=k; j<this.n; ++j) this.a[i][j] -= this.a[l][j] * temp;
@@ -371,12 +371,12 @@ var Equation = {
 	    w = this.n - 1;	//m代表含有非0值行的个数
 	    for(i=0; i<w; ++i)
 	    {
-		    for(j=i; j<this.n; ++j) if(!IsFloatZero(this.a[i][j])) break;
+		    for(j=i; j<this.n; ++j) if (!IsFloatZero(this.a[i][j])) break;
 		    this.c[i] = j;
 
-		    if(j > i)
+		    if (j > i)
 		    {
-			    if(j == this.n-1)
+			    if (j == this.n-1)
 				    return SHORTELEC;		//电路短路
 			    else
 				    return UNCOUNTABLEELEC;	//无法计算
@@ -401,7 +401,7 @@ var Equation = {
 	    }
 
 	    for(i=this.n-2; i>=0; --i) this.x[i] = this.a[i][this.n-1];					//放入结果到数组
-	    for(i=this.n-2; i>=0; --i) if(IsFloatZero(this.x[i])) this.x[i] = 0;	//近似0的数设为0
+	    for(i=this.n-2; i>=0; --i) if (IsFloatZero(this.x[i])) this.x[i] = 0;	//近似0的数设为0
 
 	    return NORMALELEC;	//正常返回
     }

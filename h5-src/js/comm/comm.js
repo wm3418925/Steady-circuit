@@ -110,3 +110,13 @@ function IsElecError(/*const ELEC_STATE */e)	//电流是否不正常
     }
     return true;
 }
+
+
+// 获取当前时间中的鼠标坐标(相对client窗口)
+function GetClientPosOfEvent(client) {
+	var e = arguments[0] || window.event;
+	var x = e.clientX;
+	var y = e.clientY;
+	//client.
+	return {"x":x, "y":y};
+}

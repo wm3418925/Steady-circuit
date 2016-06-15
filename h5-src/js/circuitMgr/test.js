@@ -8,52 +8,52 @@ void Manager.SaveCircuitInfoToTextFile()
 	if (fp == null) return;
 
 	fprintf(fp, "{\ncruns:[\n");
-	for(i=0; i<crunCount; i++)
+	for (i=0; i<Manager.crun.length; i++)
 	{
-		fprintf(fp, "{id:%d,x:%d,y:%d,", crun[i]->GetInitOrder(), crun[i]->coord.x, crun[i]->coord.y);
-		fprintf(fp, "name:\"%s\",lead:[", crun[i]->name);
-		for(int j=0; j<4; j++)
+		fprintf(fp, "{id:%d,x:%d,y:%d,", crun[i].GetInitOrder(), crun[i].coord.x, crun[i].coord.y);
+		fprintf(fp, "name:\"%s\",lead:[", crun[i].name);
+		for (int j=0; j<4; j++)
 		{
-			if (crun[i]->lead[j]) fprintf(fp, "%d", crun[i]->lead[j]->GetInitOrder());
+			if (crun[i].lead[j]) fprintf(fp, "%d", crun[i].lead[j].GetInitOrder());
 			else fprintf(fp, "-1");
 			if (j!=4-1) fprintf(fp, ",");
 		}
 		fprintf(fp, "]}\n");
 
-		if (i != crunCount-1) fprintf(fp, ",");
+		if (i != Manager.crun.length-1) fprintf(fp, ",");
 	}
 	fprintf(fp, "],\n");
 
 	fprintf(fp, "leads:[\n");
-	for(i=0; i<leadCount; ++i)
+	for (i=0; i<Manager.lead.length; ++i)
 	{
-		fprintf(fp, "{id:%d,", (int)lead[i]->GetInitOrder());
-		lead[i]->SaveToTextFile(fp);
-		fprintf(fp, "color:%d,", (int)lead[i]->color);
-		fprintf(fp, "conBody[");	lead[i]->conBody[0].SaveToTextFile(fp);
-		fprintf(fp, ",");	lead[i]->conBody[1].SaveToTextFile(fp);
+		fprintf(fp, "{id:%d,", (int)lead[i].GetInitOrder());
+		lead[i].SaveToTextFile(fp);
+		fprintf(fp, "color:%d,", (int)lead[i].color);
+		fprintf(fp, "conBody[");	lead[i].conBody[0].SaveToTextFile(fp);
+		fprintf(fp, ",");	lead[i].conBody[1].SaveToTextFile(fp);
 		fprintf(fp, "]}\n");
 
-		if (i != leadCount-1) fprintf(fp, ",");
+		if (i != Manager.lead.length-1) fprintf(fp, ",");
 	}
 	fprintf(fp, "],\n");
 
-	fprintf(fp, "ctrls:[\n", ctrlCount);
+	fprintf(fp, "ctrls:[\n", Manager.ctrl.length);
 	const char * ctrlStyleStr[] = {"source","resistance","bulb","capa","switch"}; 
-	for(i=0; i<ctrlCount; ++i)
+	for (i=0; i<Manager.ctrl.length; ++i)
 	{
-		fprintf(fp, "{id:%d,x:%d,y:%d,", ctrl[i]->GetInitOrder(), ctrl[i]->coord.x, ctrl[i]->coord.y);
-		fprintf(fp, "name:\"%s\",lead:[", ctrl[i]->name);
-		if (ctrl[i]->lead[0])fprintf(fp, "%d,", ctrl[i]->lead[0]->GetInitOrder());
+		fprintf(fp, "{id:%d,x:%d,y:%d,", ctrl[i].GetInitOrder(), ctrl[i].coord.x, ctrl[i].coord.y);
+		fprintf(fp, "name:\"%s\",lead:[", ctrl[i].name);
+		if (ctrl[i].lead[0])fprintf(fp, "%d,", ctrl[i].lead[0].GetInitOrder());
 		else fputs("-1,", fp);
-		if (ctrl[i]->lead[1])fprintf(fp, "%d],", ctrl[i]->lead[1]->GetInitOrder());
+		if (ctrl[i].lead[1])fprintf(fp, "%d],", ctrl[i].lead[1].GetInitOrder());
 		else fputs("-1],", fp);
 
-		ctrl[i]->SaveToTextFile(fp);
+		ctrl[i].SaveToTextFile(fp);
 
-		fprintf(fp, "style:\"%s\"}", ctrlStyleStr[ctrl[i]->GetStyle()]);
+		fprintf(fp, "style:\"%s\"}", ctrlStyleStr[ctrl[i].GetStyle()]);
 		
-		if (i != leadCount-1) fprintf(fp, ",");
+		if (i != Manager.lead.length-1) fprintf(fp, ",");
 	}
 	fprintf(fp, "]\n}\n");
 
@@ -70,21 +70,21 @@ void Manager.SaveCountInfoToTextFile()
 
 	CollectCircuitInfo();
 
-	for(i=0; i<crunCount; ++i)
+	for (i=0; i<Manager.crun.length; ++i)
 	{
 		fprintf(fp, "crun[%d]:\n", i);
 		fprintf(fp, "\tgroup = %d\n", crun2[i].group);
 		//fprintf(fp, "\tgroup = %f\n", crun2[i].potential);
-		for(j=0;j<4;j++)
+		for (j=0;j<4;j++)
 		{
-			if (crun2[i].c[j])fprintf(fp, "\tcircuit[%d] = %d\n", j, crun2[i].c[j]->eleNum);
+			if (crun2[i].c[j])fprintf(fp, "\tcircuit[%d] = %d\n", j, crun2[i].c[j].eleNum);
 			else fprintf(fp, "\tcircuit[%d] = null\n", j);
 		}
 	}
 
 	fputc('\n', fp);
 
-	for(i=0; i<circuNum; ++i)
+	for (i=0; i<circuNum; ++i)
 	{
 		fprintf(fp, "circu[%d]:\n", i);
 		fprintf(fp, "\tnum in group = %d\n", circu[i].numInGroup);
@@ -101,11 +101,11 @@ void Manager.SaveCountInfoToTextFile()
 
 	//////////////////////
 	CreateEquation();
-	CRUNMAP * maps = this.maps;
+	CRUNMAP * maps = Manager.maps;
 	fp = fopen("D:\\Map.txt", "w");
 	if (fp == null) return;
 
-	for(group=0; group<groupNum; ++group) for(i=maps[group].size-2; i>=0; --i) for(j=maps[group].size-1; j>i; --j)
+	for (group=0; group<groupNum; ++group) for (i=maps[group].size-2; i>=0; --i) for (j=maps[group].size-1; j>i; --j)
 	{
 		ijPos = CONVERT(i, j, maps[group].size);
 		tempDir = maps[group].direct[ijPos];
@@ -123,15 +123,15 @@ void Manager.SaveCountInfoToTextFile()
 
 	fp = fopen("D:\\Equation.txt", "w");
 	if (fp == null) return;
-	for(group=0; group<groupNum; ++group)
+	for (group=0; group<groupNum; ++group)
 	{
 		fprintf(fp, "\ngroup[%d]------------\n", group);
-		//equation[group]->Simple_Equation();
-		equation[group]->OutputToFile(fp);
+		//equation[group].Simple_Equation();
+		equation[group].OutputToFile(fp);
 	}
 	fclose(fp);
 
-	for(group=0; group<groupNum; ++group)
+	for (group=0; group<groupNum; ++group)
 	{
 		maps[group].Uninit();
 		delete equation[group];

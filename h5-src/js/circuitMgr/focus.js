@@ -3,10 +3,10 @@
 void Manager.UpdateEditMenuState()
 //更新编辑菜单状态(MF_ENABLED or MF_GRAYED)
 {
-	CMenu * cm = this.canvas.GetMenu();
+	CMenu * cm = Manager.canvas.GetMenu();
 	UINT menuState;
 
-	if(!focusBody.IsOnAny())
+	if (!focusBody.IsOnAny())
 	{
 		cm.EnableMenuItem(IDM_FOCUSBODY_COPY, MF_GRAYED);
 		cm.EnableMenuItem(IDM_FOCUSBODY_CUT, MF_GRAYED);
@@ -128,7 +128,7 @@ bool Manager.FocusBodyPaint(const Pointer * newFocus)
 void Manager.FocusBodyChangeUseTab()
 //用户按Tab键切换焦点处理
 {
-	const int bodyNum = crunCount + ctrlCount;
+	const int bodyNum = Manager.crun.length + Manager.ctrl.length;
 	Pointer newFocus;
 	int num;
 
@@ -136,22 +136,22 @@ void Manager.FocusBodyChangeUseTab()
 
 	if (focusBody.IsOnLead())	//当前焦点是导线
 	{
-		num = (focusBody.p1.num + 1) % leadCount;
+		num = (focusBody.p1.num + 1) % Manager.lead.length;
 		newFocus.SetOnLead(lead[num]);
 	}
 	else if (focusBody.IsOnCrun())	//当前焦点是结点
 	{
-		num = (focusBody.p2.num + 1) % crunCount;
+		num = (focusBody.p2.num + 1) % Manager.crun.length;
 		newFocus.SetOnCrun(crun[num], true);
 	}
 	else if (focusBody.IsOnCtrl())	//当前焦点是控件
 	{
-		num = (focusBody.p3.num + 1) % ctrlCount;
+		num = (focusBody.p3.num + 1) % Manager.ctrl.length;
 		newFocus.SetOnCtrl(ctrl[num], true);
 	}
 	else	//没有设定焦点
 	{
-		if (crunCount > 0)
+		if (Manager.crun.length > 0)
 			newFocus.SetOnCrun(crun[0], true);
 		else
 			newFocus.SetOnCtrl(ctrl[0], true);
@@ -163,8 +163,8 @@ void Manager.FocusBodyChangeUseTab()
 bool Manager.FocusBodyMove(int dir)
 //用户按上下左右键移动焦点物体
 {
-	motiCount = 0;
-	if(!focusBody.IsOnBody()) return false;
+	Manager.motiCount = 0;
+	if (!focusBody.IsOnBody()) return false;
 
 	POINT fromPos, toPos;
 

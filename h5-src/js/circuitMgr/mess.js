@@ -51,17 +51,17 @@ Manager.DeleteNote = function(body) {
 		note = "要删除 "+name+" 吗 ?";
 
 	PaintWithSpecialColorAndRect(body, false);
-	return IDYES == this.canvas.MessageBox(note, "删除物体提示", MB_YESNO|MB_ICONWARNING);
+	return IDYES == Manager.canvas.MessageBox(note, "删除物体提示", MB_YESNO|MB_ICONWARNING);
 };
 
 //清除电路状态
 Manager.ClearCircuitState = function() {
 	FocusBodyClear(null);	//焦点
 	ClearPressBody();		//显示电势差
-	motiCount = 0;			//激活物体数量
+	Manager.motiCount = 0;			//激活物体数量
 	addState = BODY_NO;		//添加物体类型
 	lastMoveOnBody.Clear();	//鼠标上次移动到的物体
-	lButtonDownState = 0;	//鼠标左击状态
+	Manager.lButtonDownState = 0;	//鼠标左击状态
 };
 
 //获得物体指针
@@ -71,10 +71,10 @@ Manager.GetBodyPointer = function(body) {
 	if (body.isFocusBody) {
 		pointer = focusBody;
 	} else {
-		motiCount = 0;
+		Manager.motiCount = 0;
 		MotivateAll(body.pos);
-		motiCount = 0;
-		pointer = motiBody[0];
+		Manager.motiCount = 0;
+		pointer = Manager.motiBody[0];
 	}
 
 	return pointer;

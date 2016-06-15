@@ -966,9 +966,18 @@ ComputeMgr.ComputeElec = function(lead,crun,ctrl)
 				ComputeMgr.circu[i].elec = ans[ComputeMgr.circu[i].indexInGroup];
 				ComputeMgr.circu[i].ConvertWhenElecLessZero();	//当电流负数时改为正数,并调转电流方向
 			}
+			
+			// 测试, 打印电流
+			console.log("\n群组["+group+"]电流信息:");
+			for (var tt=0; tt<ans.length; ++tt) {
+				console.log("线路" + (tt+1) + "电流为" + ans[tt]);
+			}
 		}
 		else	//短路或无法确定电流
 		{
+			// 测试, 打印电流
+			console.log("\n群组["+group+"] 短路或无法确定电流");
+			
 			for (i=ComputeMgr.circuitCount-1; i>=0; --i) if (group == ComputeMgr.circu[i].from.group)
 			{
 				ComputeMgr.circu[i].elecDir = flag;

@@ -106,6 +106,7 @@ var Manager = {
 
 
 		//鼠标点击信息记录-----------------------------------------------
+		Manager.motiBody = GenrateArrayWithElementInitFunc(Pointer.CreateNew, 2);
 		Manager.motiCount = 0;
 		Manager.addState = BODY_NO;
 		Manager.lButtonDownPos = {x:-100, y:-100};

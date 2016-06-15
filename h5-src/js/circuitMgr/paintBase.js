@@ -90,9 +90,9 @@ Manager.PaintAll = function() {
 	Manager.ctx.fillRect(rect.left,rect.top, rect.width,rect.height);
 
 	//画控件结点以及他们的名称
-	for(var i=Manager.ctrl.length-1; i>=0; --i)
+	for (var i=Manager.ctrl.length-1; i>=0; --i)
 		Manager.PaintCtrl(Manager.ctrl[i], true);
-	for(var i=Manager.crun.length-1; i>=0; --i)
+	for (var i=Manager.crun.length-1; i>=0; --i)
 		Manager.PaintCrun(Manager.crun[i], true);
 	//画导线
 	Manager.PaintAllLead();
@@ -116,7 +116,7 @@ Manager.PaintMouseMotivate = function(mouseMoti) {
 
 	if (mm.IsOnLead()) {
 		//选定了连接点,鼠标变成添加结点图形,提示使用ConnectBodyLead函数
-		if (motiCount && motiBody[motiCount-1].IsOnConnectPos()) {
+		if (Manager.motiCount && Manager.motiBody[Manager.motiCount-1].IsOnConnectPos()) {
 			SetCursor(hcShowConnect);
 		//没有选定连接点,鼠标变成"指针",提示改变导线坐标
 		} else {

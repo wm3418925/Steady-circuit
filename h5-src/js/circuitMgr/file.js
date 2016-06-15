@@ -63,14 +63,14 @@ function readFileCallbackFunc(data) {
 	//Manager.fileName = newFileName;	//替换原有路径
 
 	// 可能因为文件问题而发生错误
-	//try {
+	try {
 		//2读取物体数量
 		var crunCount = data.cruns.length;
 		var ctrlCount = data.ctrls.length;
 		var leadCount = data.leads.length;
 
 		//检查读取的物体数量是否在允许的范围之内
-		if (crunCount>MAX_CRUN_COUNT || leadCount>MAX_LEAD_COUNT || ctrlCount>MAX_CTRL_COUNT)
+		if (crunCount>MAX_CRUN_COUNT || ctrlCount>MAX_LEAD_COUNT || leadCount>MAX_CTRL_COUNT)
 			throw new Error(10, "电路元件太多");
 		
 		//3新建原件
@@ -84,7 +84,7 @@ function readFileCallbackFunc(data) {
 		for (var i = ctrlCount-1; i >= 0; --i)
 			Manager.ctrl[i] = CTRL.CreateNew(i, 0,0, data.ctrls[i].style);
 		
-		LEAD.ResetGlobalInitOrder(leadCount);
+		LEAD.ResetGlobalInitOrder();
 		Manager.lead = new Array(leadCount);
 		for (var i = leadCount-1; i >= 0; --i)
 			Manager.lead[i] = LEAD.CreateNew(i, 0, null,null, false);
@@ -116,10 +116,10 @@ function readFileCallbackFunc(data) {
 		Manager.viewOrig = data.viewOrig;				//视角初始坐标
 
 		//ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);	//初始化字体颜色
-	/*} catch(e) {
+	} catch(e) {
 		alert("文件可能损坏了 ! 读取文件错误");
 		return false;
-	}*/
+	}
 
 	return true;			//正常退出
 }

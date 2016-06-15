@@ -11,24 +11,24 @@ void Manager.ClearPressBody()
 bool Manager.SetStartBody(POINT pos)
 //设置计算电势差的起始位置
 {
-	motiCount = 0;
-	if(!MotivateAll(pos)) return false;	//没有点击物体
-	motiCount = 0;
+	Manager.motiCount = 0;
+	if (!MotivateAll(pos)) return false;	//没有点击物体
+	Manager.motiCount = 0;
 
-	if (motiBody[0].IsOnLead())
+	if (Manager.motiBody[0].IsOnLead())
 	{
-		if (StaticClass.IsElecError(motiBody[0].p1.elecDir))
+		if (StaticClass.IsElecError(Manager.motiBody[0].p1.elecDir))
 		{
-			this.canvas.MessageBox("当前选择的电路不正常", "无法计算电势差", MB_ICONWARNING);
+			Manager.canvas.MessageBox("当前选择的电路不正常", "无法计算电势差", MB_ICONWARNING);
 			return false;
 		}
 	}
-	else if (motiBody[0].IsOnCrun() && !motiBody[0].IsOnConnectPos())
+	else if (Manager.motiBody[0].IsOnCrun() && !Manager.motiBody[0].IsOnConnectPos())
 	{
-		CRUN * c = motiBody[0].p2;
-		for(int i=0; i<4; ++i) if (c.lead[i] && StaticClass.IsElecError(c.lead[i]->elecDir))
+		CRUN * c = Manager.motiBody[0].p2;
+		for (int i=0; i<4; ++i) if (c.lead[i] && StaticClass.IsElecError(c.lead[i].elecDir))
 		{
-			this.canvas.MessageBox("当前选择的电路不正常", "无法计算电势差", MB_ICONWARNING);
+			Manager.canvas.MessageBox("当前选择的电路不正常", "无法计算电势差", MB_ICONWARNING);
 			return false;
 		}
 	}
@@ -37,7 +37,7 @@ bool Manager.SetStartBody(POINT pos)
 		return false;	//没有点击导线或者节点
 	}
 
-	pressStart = pressEnd = motiBody[0];
+	pressStart = pressEnd = Manager.motiBody[0];
 	startEndPressure = 0;
 
 	PaintAll();
@@ -47,7 +47,7 @@ bool Manager.SetStartBody(POINT pos)
 bool Manager.NextBodyByInputNum(UINT nChar)
 //用户输入数字1,2,3,4来移动电势差结尾位置
 {
-	if(!pressStart.IsOnAny() || !pressEnd.IsOnAny())
+	if (!pressStart.IsOnAny() || !pressEnd.IsOnAny())
 	{
 		AfxMessageBox("请先鼠标点击导线或者连线选择电势差起始位置,\n然后输入数字移动电势差结尾位置.");
 		return false;
@@ -98,12 +98,12 @@ bool Manager.NextBodyByInputNum(UINT nChar)
 		{
 			if (temp.p3.GetResist() < 0)	//断路控件
 			{
-				this.canvas.MessageBox("这是一个断路电学元件 !", "电流无法流过 !", MB_ICONINFORMATION);
+				Manager.canvas.MessageBox("这是一个断路电学元件 !", "电流无法流过 !", MB_ICONINFORMATION);
 				return false;
 			}
 			if (temp.p3.GetConnectNum() < 2)	//控件没有连接2段导线
 			{
-				this.canvas.MessageBox("电学元件另一端没有连接导线 !", "电流无法流过 !", MB_ICONINFORMATION);
+				Manager.canvas.MessageBox("电学元件另一端没有连接导线 !", "电流无法流过 !", MB_ICONINFORMATION);
 				return false;
 			}
 			dir = temp.p3.lead[0] == pressEnd.p1;	//下一个导线索引(0或1)
@@ -125,7 +125,7 @@ bool Manager.NextBodyByInputNum(UINT nChar)
 		}
 		else 
 		{
-			this.canvas.MessageBox("结点这一端没有连接导线 !", "电流无法流过 !", MB_ICONINFORMATION);
+			Manager.canvas.MessageBox("结点这一端没有连接导线 !", "电流无法流过 !", MB_ICONINFORMATION);
 			return false;
 		}
 	}
@@ -137,7 +137,7 @@ bool Manager.NextBodyByInputNum(UINT nChar)
 bool Manager.ShowPressure()
 //显示从起始位置到结尾位置的电势差(U0-U1)
 {
-	if(!pressStart.IsOnAny() || !pressEnd.IsOnAny())
+	if (!pressStart.IsOnAny() || !pressEnd.IsOnAny())
 	{
 		AfxMessageBox("请选择起始位置再查看电势差!\n起始位置可以用鼠标点击选择!");
 		return false;
@@ -156,7 +156,7 @@ bool Manager.ShowPressure()
 	list.SetAMember(DATA_STYLE_LPCTSTR, "起始位置", name1);
 	list.SetAMember(DATA_STYLE_LPCTSTR, "结束位置", name2);
 
-	MyPropertyDlg dlg(&list, true, null, note, this.canvas);
+	MyPropertyDlg dlg(&list, true, null, note, Manager.canvas);
 	dlg.DoModal();
 
 	return true;

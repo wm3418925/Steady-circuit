@@ -9,9 +9,9 @@ bool Manager.AddBody(POINT pos)
 
 	if (BODY_CRUN == temp)
 	{
-		if (crunCount >= MAX_CRUN_COUNT)
+		if (Manager.crun.length >= MAX_CRUN_COUNT)
 		{
-			this.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
+			Manager.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
 			return false;
 		}
 
@@ -22,9 +22,9 @@ bool Manager.AddBody(POINT pos)
 	}
 	else if (Pointer.IsCtrl(temp))
 	{
-		if (ctrlCount >= MAX_CTRL_COUNT)
+		if (Manager.ctrl.length >= MAX_CTRL_COUNT)
 		{
-			this.canvas.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
+			Manager.canvas.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
 			return false;
 		}
 
@@ -73,7 +73,7 @@ void Manager.Property(FOCUS_OR_POS &body, bool isReadOnly)
 	}
 
 	PaintWithSpecialColorAndRect(pointer, false);
-	MyPropertyDlg dlg(&list, isReadOnly, model, tempStr, this.canvas);
+	MyPropertyDlg dlg(&list, isReadOnly, model, tempStr, Manager.canvas);
 	dlg.DoModal();
 }
 
@@ -84,7 +84,7 @@ void Manager.ChangeCtrlStyle(FOCUS_OR_POS &body)
 	char tempStr[NAME_LEN*3];
 
 	Pointer pointer = Manager.GetBodyPointer(body);
-	if(!pointer.IsOnCtrl()) return;
+	if (!pointer.IsOnCtrl()) return;
 
 	//获得原来类型
 	preStyle = newStyle = pointer.p3.style;
@@ -100,7 +100,7 @@ void Manager.ChangeCtrlStyle(FOCUS_OR_POS &body)
 
 	//显示对话框
 	PaintWithSpecialColorAndRect(pointer, false);
-	MyPropertyDlg dlg(&list, false, GetCtrlPaintImage(pointer.p3), tempStr, this.canvas);
+	MyPropertyDlg dlg(&list, false, GetCtrlPaintImage(pointer.p3), tempStr, Manager.canvas);
 	dlg.DoModal();
 
 	//改变类型
@@ -127,15 +127,15 @@ void Manager.PosBodyMove(Pointer * body, POINT firstPos, POINT lastPos)
 	{
 		body.p2.coord.x += inter.x;
 		body.p2.coord.y += inter.y;
-		for(i=0; i<4; ++i) if (body.p2.lead[i])
-			body.p2.lead[i]->RefreshPos();
+		for (i=0; i<4; ++i) if (body.p2.lead[i])
+			body.p2.lead[i].RefreshPos();
 	}
 	else //if (body.IsOnCtrl())
 	{
 		body.p3.coord.x += inter.x;
 		body.p3.coord.y += inter.y;
-		for(i=0; i<2; ++i) if (body.p3.lead[i])
-			body.p3.lead[i]->RefreshPos();
+		for (i=0; i<2; ++i) if (body.p3.lead[i])
+			body.p3.lead[i].RefreshPos();
 	}
 }
 
@@ -151,9 +151,9 @@ bool Manager.PosBodyClone(const Pointer * body, POINT firstPos, POINT lastPos)
 	if (body.IsOnCrun())
 	{
 		//验证
-		if (crunCount >= MAX_CRUN_COUNT)
+		if (Manager.crun.length >= MAX_CRUN_COUNT)
 		{
-			this.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
+			Manager.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
 			return false;
 		}
 
@@ -161,24 +161,24 @@ bool Manager.PosBodyClone(const Pointer * body, POINT firstPos, POINT lastPos)
 		CloneCircuitBeforeChange();
 
 		//编辑电路
-		crun[crunCount] = body.p2.Clone(CLONE_FOR_USE);
-		crun[crunCount]->coord.x += inter.x;
-		crun[crunCount]->coord.y += inter.y;
-		crun[crunCount]->num = crunCount;
-		++crunCount;
+		crun[Manager.crun.length] = body.p2.Clone(CLONE_FOR_USE);
+		crun[Manager.crun.length].coord.x += inter.x;
+		crun[Manager.crun.length].coord.y += inter.y;
+		crun[Manager.crun.length].num = Manager.crun.length;
+		++Manager.crun.length;
 
 		//将新的电路信息保存到容器
 		PutCircuitToVector();
 
 		//重绘电路
-		PaintCrun(crun[crunCount-1], true);
+		PaintCrun(crun[Manager.crun.length-1], true);
 	}
 	else //if (body.IsOnCtrl())
 	{
 		//验证
-		if (ctrlCount >= MAX_CTRL_COUNT)
+		if (Manager.ctrl.length >= MAX_CTRL_COUNT)
 		{
-			this.canvas.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
+			Manager.canvas.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
 			return false;
 		}
 
@@ -186,17 +186,17 @@ bool Manager.PosBodyClone(const Pointer * body, POINT firstPos, POINT lastPos)
 		CloneCircuitBeforeChange();
 
 		//编辑部分
-		ctrl[ctrlCount] = body.p3.Clone(CLONE_FOR_USE);
-		ctrl[ctrlCount]->coord.x += inter.x;
-		ctrl[ctrlCount]->coord.y += inter.y;
-		ctrl[ctrlCount]->num = ctrlCount;
-		++ctrlCount;
+		ctrl[Manager.ctrl.length] = body.p3.Clone(CLONE_FOR_USE);
+		ctrl[Manager.ctrl.length].coord.x += inter.x;
+		ctrl[Manager.ctrl.length].coord.y += inter.y;
+		ctrl[Manager.ctrl.length].num = Manager.ctrl.length;
+		++Manager.ctrl.length;
 
 		//将新的电路信息保存到容器
 		PutCircuitToVector();
 
 		//重绘电路
-		PaintCtrl(ctrl[ctrlCount-1], true);
+		PaintCtrl(ctrl[Manager.ctrl.length-1], true);
 	}
 
 	return true;
@@ -206,6 +206,6 @@ void Manager.RotateCtrl(FOCUS_OR_POS &body, int rotateAngle)
 //旋转控件
 {
 	Pointer pointer = Manager.GetBodyPointer(body);
-	if(!pointer.IsOnCtrl()) return;
+	if (!pointer.IsOnCtrl()) return;
 	pointer.p3.Rotate(rotateAngle);
 }

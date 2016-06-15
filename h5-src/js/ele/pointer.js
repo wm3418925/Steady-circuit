@@ -44,12 +44,12 @@ var Pointer = {
 				this.SetOnLead(leadList[index]);
 			else
 				return false;
-		} else if(this.IsOnCrun()) {
+		} else if (this.IsOnCrun()) {
 			if (index >= 0 && index < crunList.length)
 				this.SetOnCrun(crunList[index]);
 			else
 				return false;
-		} else if(this.IsOnCtrl()) {
+		} else if (this.IsOnCtrl()) {
 			if (index >= 0 && index < ctrlList.length)
 				this.SetOnCtrl(ctrlList[index]);
 			else
@@ -192,7 +192,7 @@ var Pointer = {
 				pos.x += DD - 1;	//显示存在坐标差(-1)
 				break;
 			}
-		} else if(this.IsOnCtrl()) {	//连接控件
+		} else if (this.IsOnCtrl()) {	//连接控件
 			pos.x = this.p.x;
 			pos.y = this.p.y;
 			if (0 == (this.p.dir & 1)) {	//横向
@@ -217,7 +217,7 @@ var Pointer = {
 		
 		if (this.IsOnCrun()) {
 			return this.atState;
-		} else { //if(this.IsOnCtrl())
+		} else { //if (this.IsOnCtrl())
 			ASSERT(this.p.dir >=0 && this.p.dir <= 3);
 
 			if (this.atState == 1) {
@@ -231,7 +231,7 @@ var Pointer = {
 				case 3: 
 					return 2;
 				}
-			} else { //if(this.atState == 2)
+			} else { //if (this.atState == 2)
 				switch (this.p.dir) {
 				case 0:
 					return 4;

@@ -6,7 +6,7 @@
 <link rel="shortcut icon" href="res/idr_main.ico">
 </head>
 
-<body onload="pageOnload()">
+<body onload="pageOnload()" style="margin:0px;">
 
 <div id="imgDiv" style="display:none">
 <img id="N-1-0" src="res/ctrl/N-1-0.bmp" />
@@ -39,9 +39,11 @@
 <img id="S-5-3" src="res/ctrl/S-5-3.bmp" />
 </div>
 
-<canvas id="myCanvas" width="800" height="700" style="border:1px solid #c3c3c3;">
+<canvas id="myCanvas" width="800" height="570" style="margin:0px; border:1px solid #c3c3c3;" onclick="onLClick()" ondblclick="onDbLClick()" onmouseup="onMouseUp()">
 Your browser does not support the canvas element.
 </canvas>
+<input type="button" value="从json读取电路图" onclick="onReadFromJson()" />
+<input type="button" value="计算电流" onclick="onComputeElec()" />
 
 
 <script src="js/jquery-1.12.4.min.js" type="text/javascript" charset="UTF-8"></script>
@@ -70,10 +72,28 @@ Your browser does not support the canvas element.
 function pageOnload() {
 	var canvas = document.getElementById("myCanvas");
 	Manager.Init(canvas);
+	//Manager.ReadFile("testData.json");
+	//Manager.PaintAll();
+	//ComputeMgr.ComputeElec(Manager.lead,Manager.crun,Manager.ctrl);
+};
+function onReadFromJson() {
 	Manager.ReadFile("testData.json");
 	Manager.PaintAll();
+}
+function onComputeElec() {
 	ComputeMgr.ComputeElec(Manager.lead,Manager.crun,Manager.ctrl);
-};
+}
+</script>
+
+
+<script type="text/javascript">
+function onLClick() {
+	var pos = GetClientPosOfEvent();alert("x="+pos.x+", y="+pos.y);
+}
+function onDbLClick() {
+}
+function onMouseUp() {
+}
 </script>
 
 
