@@ -105,6 +105,7 @@ function readFileCallbackFunc(data) {
 		Manager.moveBodySense = data.moveBodySense;		//按方向键一次物体移动的距离
 		Manager.maxLeaveOutDis = data.maxLeaveOutDis;	//导线合并最大距离
 		Manager.textColor = data.textColor;				//字体颜色
+		if (!Manager.textColor) Manager.textColor = COLOR_NORMAL;
 		Manager.focusLeadStyle = data.focusLeadStyle;	//焦点导线样式
 		Manager.focusCrunColor = data.focusCrunColor;	//焦点结点颜色
 		Manager.focusCtrlColor = data.focusCtrlColor;	//焦点控件颜色
@@ -115,7 +116,7 @@ function readFileCallbackFunc(data) {
 		//Manager.FocusBodySet(focusBody);				//设置焦点物体
 		Manager.viewOrig = data.viewOrig;				//视角初始坐标
 
-		//ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);	//初始化字体颜色
+		//Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);	//初始化字体颜色
 	} catch(e) {
 		alert("文件可能损坏了 ! 读取文件错误");
 		return false;

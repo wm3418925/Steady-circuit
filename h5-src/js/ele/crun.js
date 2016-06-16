@@ -62,31 +62,31 @@ var CRUN = {
 	},
 
 	//获得鼠标在结点的位置
-	At: function (xPox, yPos) {
+	At: function (xPos, yPos) {
 		var dis, disBetweenCenter;
 
-		disBetweenCenter = (xPox-this.x)*(xPox-this.x)+(yPox-this.y)*(yPox-this.y);
+		disBetweenCenter = (xPos-this.x)*(xPos-this.x)+(yPos-this.y)*(yPos-this.y);
 		if (disBetweenCenter > 4 * DD * DD) return 0;	//距离点远
 
-		dis = (xPox-this.x)*(xPox-this.x)+(yPox-this.y+DD)*(yPox-this.y+DD);
+		dis = (xPos-this.x)*(xPos-this.x)+(yPos-this.y+DD)*(yPos-this.y+DD);
 		if (dis <= DD) {	//在上连接点
 			if (this.lead[0] != null) return -1;
 			else return 1;
 		}
 
-		dis = (xPox-this.x)*(xPox-this.x)+(yPox-this.y-DD)*(yPox-this.y-DD);
+		dis = (xPos-this.x)*(xPos-this.x)+(yPos-this.y-DD)*(yPos-this.y-DD);
 		if (dis <= DD) {	//在下连接点
 			if (this.lead[1] != null) return -1;
 			else return 2;
 		}
 
-		dis = (xPox-this.x+DD)*(xPox-this.x+DD)+(yPox-this.y)*(yPox-this.y);
+		dis = (xPos-this.x+DD)*(xPos-this.x+DD)+(yPos-this.y)*(yPos-this.y);
 		if (dis <= DD) {	//在左连接点
 			if (this.lead[2] != null) return -1;
 			else return 3;
 		}
 
-		dis = (xPox-this.x-DD)*(xPox-this.x-DD)+(yPox-this.y)*(yPox-this.y);
+		dis = (xPos-this.x-DD)*(xPos-this.x-DD)+(yPos-this.y)*(yPos-this.y);
 		if (dis <= DD)	//在右连接点
 		{
 			if (this.lead[3] != null) return -1;

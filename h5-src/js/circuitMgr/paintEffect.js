@@ -14,7 +14,7 @@ Manager.ShowAddLead = function(pos) {
 	Manager.ctx.SelectStockObject(BLACK_PEN);
 	
 	Manager.ctx.beginPath();
-	Manager.ctx.DPtoLP(&pos);
+	DPtoLP(pos, Manager.canvas);
 	Manager.ctx.moveTo(pos);
 	var firstPos = body.GetPosFromBody();
 	Manager.ctx.lineTo(firstPos);
@@ -29,12 +29,12 @@ Manager.ShowAddBody = function(point) {
 		if (Manager.lastMoveOnPos.x > -100)
 			PaintCommonFunc.PaintImageDataXor(Manager.ctx, crunImageData[PAINT_CRUN_STYLE_NORMAL], Manager.lastMoveOnPos.x-DD, Manager.lastMoveOnPos.y-DD);
 		
-		Manager.ctx.DPtoLP(&point);
+		DPtoLP(point, Manager.canvas);
 		Manager.lastMoveOnPos = point;
 		
 		PaintCommonFunc.PaintImageDataXor(Manager.ctx, crunImageData[PAINT_CRUN_STYLE_NORMAL], Manager.lastMoveOnPos.x-DD, Manager.lastMoveOnPos.y-DD);
 
-		::SetCursor(hcAddCrun);
+		SetCursor(hcAddCrun);
 		return true;
 	} else if (Pointer.IsCtrl(Manager.addState)) {
 		var tempImage = Manager.ctrlImageList[Manager.addState*4];
@@ -42,12 +42,12 @@ Manager.ShowAddBody = function(point) {
 		if (Manager.lastMoveOnPos.x > -100)
 			PaintCommonFunc.PaintImageDataXor(Manager.ctx, tempImage, Manager.lastMoveOnPos.x, Manager.lastMoveOnPos.y);
 		
-		Manager.ctx.DPtoLP(&point);
+		DPtoLP(point, Manager.canvas);
 		Manager.lastMoveOnPos = point;
 		
 		PaintCommonFunc.PaintImageDataXor(Manager.ctx, tempImage, Manager.lastMoveOnPos.x, Manager.lastMoveOnPos.y);
 
-		::SetCursor(null);
+		SetCursor(null);
 		return true;
 	} else {
 		return false;
@@ -64,14 +64,14 @@ Manager.ShowMoveBody = function(pos, isLButtonDown) {
 
 	if (!body.IsOnBody()) return false;
 	if (!isLButtonDown) {	//鼠标没有按下
-		PaintAll(); 
+		Manager.PaintAll(); 
 		return false;
 	}
 
 	//获得物体坐标
-	Manager.ctx.DPtoLP(&pos);
-	if (body.IsOnCrun()) bodyPos = body.p2.coord;
-	else if (body.IsOnCtrl()) bodyPos = body.p3.coord;
+	DPtoLP(pos, Manager.canvas);
+	if (body.IsOnCrun()) bodyPos = body.p.coord;
+	else if (body.IsOnCtrl()) bodyPos = body.p.coord;
 
 	//根据坐标差计算画图坐标
 	pos.x += bodyPos.x - Manager.lButtonDownPos.x;
@@ -79,14 +79,14 @@ Manager.ShowMoveBody = function(pos, isLButtonDown) {
 
 	//清除上次坐标画的物体
 	if (Manager.lastMoveOnPos.x > -100)
-		PaintInvertBodyAtPos(*body, Manager.lastMoveOnPos);
+		PaintInvertBodyAtPos(body, Manager.lastMoveOnPos);
 
 	//在新的坐标物体
 	Manager.lastMoveOnPos = pos;	//获得新的坐标
-	PaintInvertBodyAtPos(*body, Manager.lastMoveOnPos);
+	PaintInvertBodyAtPos(body, Manager.lastMoveOnPos);
 
 	//左或右ctrl键被按下相当于复制
-	if (StaticClass.IsCtrlDown()) SetCursor(hcAddCrun);
+	//if (IsCtrlDown()) SetCursor(hcAddCrun);
 
 	return true;
 };
@@ -99,7 +99,7 @@ Manager.ShowMoveLead = function(isLButtonDown) {
 		return false;
 	}
 	if (!isLButtonDown) {	//鼠标没有按下
-		PaintAll();
+		Manager.PaintAll();
 		return true;
 	}
 
@@ -117,7 +117,7 @@ Manager.PosBodyPaintRect = function(pos) {
 	var body = Manager.motiBody[0]
 
 	Manager.motiCount = 0;
-	MotivateAll(pos);
+	Manager.MotivateAll(pos);
 	Manager.motiCount = 0;
 
 	if (!body.IsOnAny()) return BODY_NO;
@@ -127,14 +127,14 @@ Manager.PosBodyPaintRect = function(pos) {
 	if (body.IsOnBody()) Manager.ctx.SelectObject(hp + BLUE);
 
 	if (body.IsOnCrun()) {
-		Manager.ctx.Rectangle(body.p2.coord.x-DD-2, body.p2.coord.y-DD-2, 
-			body.p2.coord.x+DD+2, body.p2.coord.y+DD+2);
+		Manager.ctx.Rectangle(body.p.coord.x-DD-2, body.p.coord.y-DD-2, 
+			body.p.coord.x+DD+2, body.p.coord.y+DD+2);
 	} else if (body.IsOnCtrl()) {
-		Manager.ctx.Rectangle(body.p3.coord.x-2, body.p3.coord.y-2, 
-			body.p3.coord.x+CTRL_SIZE.cx+2, body.p3.coord.y+CTRL_SIZE.cy+2);
+		Manager.ctx.Rectangle(body.p.coord.x-2, body.p3.coord.y-2, 
+			body.p.coord.x+CTRL_SIZE.cx+2, body.p.coord.y+CTRL_SIZE.cy+2);
 	}
 
-	PaintWithSpecialColorAndRect(*body, false);
+	Manager.PaintWithSpecialColorAndRect(body, false);
 	return body.GetStyle();
 };
 
@@ -154,87 +154,83 @@ Manager.ShowBodyElec = function(body) {
 
 	//1,获得电流信息
 	if (pointer.IsOnLead()) {
-		elec = pointer.p1.elec;
-		elecDir  = pointer.p1.elecDir;
+		elec = pointer.p.elec;
+		elecDir  = pointer.p.elecDir;
 	} else { //if (pointer.IsOnCtrl())
-		elec = pointer.p3.elec;
-		elecDir  = pointer.p3.elecDir;
+		elec = pointer.p.elec;
+		elecDir = pointer.p.elecDir;
 
-		model = GetCtrlPaintImage(pointer.p3);	//示例
+		model = Manager.GetCtrlPaintImage(pointer.p);	//示例
 	}
 
 	//2,生成LISTDATA
 	switch (elecDir) {
 	case UNKNOWNELEC:
-		list.Init(1);
-		list.SetAMember(DATA_STYLE_LPCTSTR, "电流情况 :", "电流没有计算过!");
+		list.SetAMember(DATA_TYPE_string, "电流情况 :", "电流没有计算过!");
 		break;
 
 	case OPENELEC:
-		list.Init(1);
-		list.SetAMember(DATA_STYLE_LPCTSTR, "电流情况 :", "没有电流流过, 断路!");
+		list.SetAMember(DATA_TYPE_string, "电流情况 :", "没有电流流过, 断路!");
 		break;
 
 	case SHORTELEC:
-		list.Init(1);
-		list.SetAMember(DATA_STYLE_LPCTSTR, "电流情况 :", "线路短路!!!");
+		list.SetAMember(DATA_TYPE_string, "电流情况 :", "线路短路!!!");
 		break;
 
 	case UNCOUNTABLEELEC:
-		list.Init(1);
-		list.SetAMember(DATA_STYLE_LPCTSTR, "电流情况 :", "两条无电阻线路分一段电流,电流无法确定!");
+		list.SetAMember(DATA_TYPE_string, "电流情况 :", "两条无电阻线路分一段电流,电流无法确定!");
 		break;
 
 	case LEFTELEC:
 	case RIGHTELEC:
 		ASSERT(elec >= 0);	//不会出现负电流
 
-		if (StaticClass.IsZero(elec)) {
-			list.Init(1);
-			list.SetAMember(DATA_STYLE_LPCTSTR, "电流情况 :", "电流为0");
+		if (IsFloatZero(elec)) {
+			list.SetAMember(DATA_TYPE_string, "电流情况 :", "电流为0");
 			break;
 		}
 
 		if (pointer.IsOnLead()) {
-			GetName(pointer.p1.conBody[LEFTELEC != elecDir], tempStr1);
-			GetName(pointer.p1.conBody[LEFTELEC == elecDir], tempStr2);
+			tempStr1 = Manager.GetBodyDefaultName(pointer.p.conBody[True1_False0(LEFTELEC != elecDir)]);
+			tempStr2 = Manager.GetBodyDefaultName(pointer.p.conBody[True1_False0(LEFTELEC == elecDir)]);
 
-			list.Init(3);
-			list.SetAMember(DATA_STYLE_double, DATA_NOTE[DATA_NOTE_CURRENT], &elec);
-			list.SetAMember(DATA_STYLE_LPCTSTR, "电流起点 :", tempStr1);
-			list.SetAMember(DATA_STYLE_LPCTSTR, "电流终点 :", tempStr2);
+			list.SetAMember(DATA_TYPE_float, DATA_NOTE[DATA_NOTE_CURRENT], elec);
+			list.SetAMember(DATA_TYPE_string, "电流起点 :", tempStr1);
+			list.SetAMember(DATA_TYPE_string, "电流终点 :", tempStr2);
 		} else { //if (pointer.IsOnCtrl())
-			switch (pointer.p3.dir ^ ((RIGHTELEC == elecDir)<<1)) {
+			switch (pointer.p.dir ^ (True1_False0(RIGHTELEC == elecDir)<<1)) {
 			case 0:
-				strcpy(tempStr1, "从左到右");
+				tempStr1 = "从左到右";
 				break;
 			case 1:
-				strcpy(tempStr1, "从上到下");
+				tempStr1 = "从上到下";
 				break;
 			case 2:
-				strcpy(tempStr1, "从右到左");
+				tempStr1 = "从右到左";
 				break;
 			case 3:
-				strcpy(tempStr1, "从下到上");
+				tempStr1 = "从下到上";
 				break;
 			}
 
-			list.Init(2);
-			list.SetAMember(DATA_STYLE_double, DATA_NOTE[DATA_NOTE_CURRENT], &elec);
-			list.SetAMember(DATA_STYLE_LPCTSTR, "方向 :", tempStr1);
+			list.SetAMember(DATA_TYPE_float, DATA_NOTE[DATA_NOTE_CURRENT], elec);
+			list.SetAMember(DATA_TYPE_string, "方向 :", tempStr1);
 		}
 		break;
 	}	//switch(elecDir)
 
 	//3,生成窗口标题
-	strcpy(title, "流过");
-	GetName(pointer, title+strlen(title));
-	strcat(title, "的电流");
+	title =  "流过" + Manager.GetBodyDefaultName(pointer) + "的电流";
 
 	//4,显示对话框
-	PaintWithSpecialColorAndRect(pointer, false);
-	MyPropertyDlg dlg(&list, true, model, title, Manager.canvas);
-	dlg.DoModal();
+	Manager.PaintWithSpecialColorAndRect(pointer, false);
+	//var dlg = MyPropertyDlg.CreateNew(list, true, model, title, Manager.canvas);
+	//dlg.DoModal();
+	var as = "";
+	for (var i=0; i<list.noteTextList.length; ++i) {
+		as += (list.noteTextList[i] + list.memberNameList[i] + "\n");
+	}
+	alert(as);
 
 	return true;
 };

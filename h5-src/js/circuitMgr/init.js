@@ -89,7 +89,7 @@ var Manager = {
 		Manager.ctx = Manager.canvas.getContext("2d");
 
 		//Manager.bitmapForRefresh.CreateBitmap(1, 1, 1, 32, null);	//使刷新不闪而使用的bitmap
-		//Manager.dcForRefresh.CreateCompatibleDC(ctx);				//使刷新不闪而使用的DC
+		//Manager.dcForRefresh.CreateCompatibleDC(Manager.ctx);				//使刷新不闪而使用的DC
 		//Manager.dcForRefresh.SelectObject(bitmapForRefresh);
 
 

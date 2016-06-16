@@ -242,18 +242,18 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 	At: function(xPos, yPos) {
 		var ret = 0;
 
-		var xInter = xPos - this.x - (BODYSIZE.cx>>1);
-		var yInter = yPos - this.y - (BODYSIZE.cy>>1);
+		var xInter = xPos - this.x - (CTRL_SIZE.cx>>1);
+		var yInter = yPos - this.y - (CTRL_SIZE.cy>>1);
 
 		if (0 == (this.dir&1)) {	//横向
 			if (xInter < 0) {
-				xInter += (BODYSIZE.cx>>1);
+				xInter += (CTRL_SIZE.cx>>1);
 				if (xInter*xInter + yInter*yInter <= DD*DD) {	//选中左连接点
 					if (0 == (this.dir&2)) ret = 1;
 					else ret = 2;
 				}
 			} else {
-				xInter -= (BODYSIZE.cx>>1);
+				xInter -= (CTRL_SIZE.cx>>1);
 				if (xInter*xInter + yInter*yInter <= DD*DD) {	//选中右连接点
 					if (0 == (this.dir&2)) ret = 2;
 					else ret = 1;
@@ -261,13 +261,13 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 			}
 		} else { //纵向
 			if (yInter < 0) {
-				yInter += (BODYSIZE.cy>>1);
+				yInter += (CTRL_SIZE.cy>>1);
 				if (xInter*xInter + yInter*yInter <= DD*DD) {	//选中上连接点
 					if (0 == (this.dir&2)) ret = 1;
 					else ret = 2;
 				}
 			} else {
-				yInter -= (BODYSIZE.cy>>1);
+				yInter -= (CTRL_SIZE.cy>>1);
 				if (xInter*xInter + yInter*yInter <= DD*DD) {	//选中下连接点
 					if (0 == (this.dir&2)) ret = 2;
 					else ret = 1;
@@ -282,8 +282,8 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 				return -1;
 		}
 
-		if (xPos>=this.x && xPos<this.x+BODYSIZE.cx 
-			&& yPos>=this.y && yPos<this.y+BODYSIZE.cy)
+		if (xPos>=this.x && xPos<this.x+CTRL_SIZE.cx 
+			&& yPos>=this.y && yPos<this.y+CTRL_SIZE.cy)
 			return -1;	//在控件上
 
 		return 0;
@@ -305,7 +305,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 		if (this.elecDir != LEFTELEC && this.elecDir != RIGHTELEC)
 			return false;	//电流没有计算或者不符合条件
 
-		var tempData = this.GetResist() * this.elec * this.elec;
+		var tempData = this.resist * this.elec * this.elec;
 
 		return (!IsFloatZero(sData) && tempData >= sData);
 	},

@@ -3,17 +3,17 @@
 void Manager.ClearClipboard()
 //清空剪切板
 {
-	if (clipBody.IsOnCrun())
-		delete clipBody.p2;
-	else if (clipBody.IsOnCtrl())
-		delete clipBody.p3;
-	clipBody.Clear();
+	if (Manager.clipBody.IsOnCrun())
+		delete Manager.clipBody.p2;
+	else if (Manager.clipBody.IsOnCtrl())
+		delete Manager.clipBody.p3;
+	Manager.clipBody.Clear();
 }
 
 bool Manager.GetClipboardState()
 //获取剪切板是否可用
 {
-	return clipBody.IsOnBody();
+	return Manager.clipBody.IsOnBody();
 }
 
 void Manager.CopyToClipboard(const Pointer &body)
@@ -24,9 +24,9 @@ void Manager.CopyToClipboard(const Pointer &body)
 	ClearClipboard();	//清空剪切板
 
 	if (body.IsOnCrun())
-		clipBody.SetOnCrun(body.p2.Clone(CLONE_FOR_CLIPBOARD), true);
+		Manager.clipBody.SetOnCrun(body.p2.Clone(CLONE_FOR_CLIPBOARD), true);
 	else //if (body.IsOnCtrl())
-		clipBody.SetOnCtrl(body.p3.Clone(CLONE_FOR_CLIPBOARD), true);
+		Manager.clipBody.SetOnCtrl(body.p3.Clone(CLONE_FOR_CLIPBOARD), true);
 }
 
 Pointer Manager.CopyBody(FOCUS_OR_POS &body)
@@ -50,14 +50,14 @@ void Manager.CutBody(FOCUS_OR_POS &body)
 bool Manager.PasteBody(POINT pos)
 //粘贴物体
 {
-	if (!clipBody.IsOnBody())
+	if (!Manager.clipBody.IsOnBody())
 	{
 		MessageBeep(0);
 		return false;
 	}
-	ctx.DPtoLP(&pos);
+	DPtoLP(pos, Manager.canvas);
 
-	if (clipBody.IsOnCrun())
+	if (Manager.clipBody.IsOnCrun())
 	{
 		if (Manager.crun.length >= MAX_CRUN_COUNT)
 		{
@@ -67,7 +67,7 @@ bool Manager.PasteBody(POINT pos)
 
 		CloneCircuitBeforeChange();	//编辑前复制电路
 		//编辑部分
-		crun[Manager.crun.length] = clipBody.p2.Clone(CLONE_FOR_USE);
+		crun[Manager.crun.length] = Manager.clipBody.p2.Clone(CLONE_FOR_USE);
 		crun[Manager.crun.length].coord = pos;
 		crun[Manager.crun.length].num = Manager.crun.length;
 		++ Manager.crun.length;
@@ -75,7 +75,7 @@ bool Manager.PasteBody(POINT pos)
 		PutCircuitToVector();	//将新的电路信息保存到容器
 		PaintCrun(crun[Manager.crun.length-1]);
 	}
-	else if (clipBody.IsOnCtrl())
+	else if (Manager.clipBody.IsOnCtrl())
 	{
 		if (Manager.ctrl.length >= MAX_CTRL_COUNT)
 		{
@@ -85,7 +85,7 @@ bool Manager.PasteBody(POINT pos)
 
 		CloneCircuitBeforeChange();	//编辑前复制电路
 		//编辑部分
-		ctrl[Manager.ctrl.length] = clipBody.p3.Clone(CLONE_FOR_USE);
+		ctrl[Manager.ctrl.length] = Manager.clipBody.p3.Clone(CLONE_FOR_USE);
 		ctrl[Manager.ctrl.length].coord = pos;
 		ctrl[Manager.ctrl.length].num = Manager.ctrl.length;
 		++ Manager.ctrl.length;

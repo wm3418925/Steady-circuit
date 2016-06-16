@@ -120,3 +120,33 @@ function GetClientPosOfEvent(client) {
 	//client.
 	return {"x":x, "y":y};
 }
+// 由设备坐标变换为逻辑坐标
+function DPtoLP(posOrRect, client) {
+	var l = document.body.scrollLeft + client.offsetLeft;
+	var t = document.body.scrollTop + client.offsetTop;
+	
+	if (posOrRect.hasOwnProperty("left")) {
+		posOrRect.left -= l;
+	}
+	if (posOrRect.hasOwnProperty("right")) {
+		posOrRect.right -= l;
+	}
+	if (posOrRect.hasOwnProperty("top")) {
+		posOrRect.top -= t;
+	}
+	if (posOrRect.hasOwnProperty("bottom")) {
+		posOrRect.bottom -= t;
+	}
+	if (posOrRect.hasOwnProperty("x")) {
+		posOrRect.x -= l;
+	}
+	if (posOrRect.hasOwnProperty("y")) {
+		posOrRect.y -= t;
+	}
+}
+
+//复制坐标值
+function SetPosition(leftValue, rightValue) {
+	leftValue.x = rightValue.x;
+	leftValue.y = rightValue.y;
+}

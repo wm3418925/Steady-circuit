@@ -3,8 +3,8 @@
 void Manager.ClearPressBody()
 //清空显示电势差的成员变量
 {
-	pressStart.Clear();
-	pressEnd.Clear();
+	Manager.pressStartBody.Clear();
+	Manager.pressEndBody.Clear();
 	startEndPressure = 0;
 }
 
@@ -37,7 +37,7 @@ bool Manager.SetStartBody(POINT pos)
 		return false;	//没有点击导线或者节点
 	}
 
-	pressStart = pressEnd = Manager.motiBody[0];
+	Manager.pressStartBody = Manager.pressEndBody = Manager.motiBody[0];
 	startEndPressure = 0;
 
 	PaintAll();
@@ -47,7 +47,7 @@ bool Manager.SetStartBody(POINT pos)
 bool Manager.NextBodyByInputNum(UINT nChar)
 //用户输入数字1,2,3,4来移动电势差结尾位置
 {
-	if (!pressStart.IsOnAny() || !pressEnd.IsOnAny())
+	if (!Manager.pressStartBody.IsOnAny() || !Manager.pressEndBody.IsOnAny())
 	{
 		AfxMessageBox("请先鼠标点击导线或者连线选择电势差起始位置,\n然后输入数字移动电势差结尾位置.");
 		return false;
@@ -83,16 +83,16 @@ bool Manager.NextBodyByInputNum(UINT nChar)
 			return false;
 	}
 
-	if (pressEnd.IsOnLead())	//结尾位置在导线上
+	if (Manager.pressEndBody.IsOnLead())	//结尾位置在导线上
 	{
 		if (dir < 0 || dir > 1) return false;
 		
-		Pointer temp = pressEnd.p1.conBody[dir];
+		Pointer temp = Manager.pressEndBody.p1.conBody[dir];
 		temp.SetAtState(-1);
 
 		if (temp.IsOnCrun())
 		{
-			pressEnd = temp;
+			Manager.pressEndBody = temp;
 		}
 		else //if (temp.IsOnCtrl())
 		{
@@ -106,22 +106,22 @@ bool Manager.NextBodyByInputNum(UINT nChar)
 				Manager.canvas.MessageBox("电学元件另一端没有连接导线 !", "电流无法流过 !", MB_ICONINFORMATION);
 				return false;
 			}
-			dir = temp.p3.lead[0] == pressEnd.p1;	//下一个导线索引(0或1)
-			if (temp.p3.lead[dir] == pressEnd.p1) return false;	//电路是一个控件2端都连接同一段导线
+			dir = temp.p3.lead[0] == Manager.pressEndBody.p1;	//下一个导线索引(0或1)
+			if (temp.p3.lead[dir] == Manager.pressEndBody.p1) return false;	//电路是一个控件2端都连接同一段导线
 			if (temp.p3.elecDir == dir)
 				startEndPressure -= temp.p3.GetResist() * temp.p3.elec;
 			else
 				startEndPressure += temp.p3.GetResist() * temp.p3.elec;
 			startEndPressure += temp.p3.GetPress(dir);
-			pressEnd.SetOnLead(temp.p3.lead[dir]);
+			Manager.pressEndBody.SetOnLead(temp.p3.lead[dir]);
 		}
 	}
 	else	//结尾位置在结点上
 	{
 		if (dir < 0 || dir > 3) return false;
-		if (pressEnd.p2.lead[dir] != null)
+		if (Manager.pressEndBody.p2.lead[dir] != null)
 		{
-			pressEnd.SetOnLead(pressEnd.p2.lead[dir]);
+			Manager.pressEndBody.SetOnLead(Manager.pressEndBody.p2.lead[dir]);
 		}
 		else 
 		{
@@ -137,21 +137,20 @@ bool Manager.NextBodyByInputNum(UINT nChar)
 bool Manager.ShowPressure()
 //显示从起始位置到结尾位置的电势差(U0-U1)
 {
-	if (!pressStart.IsOnAny() || !pressEnd.IsOnAny())
+	if (!Manager.pressStartBody.IsOnAny() || !Manager.pressEndBody.IsOnAny())
 	{
 		AfxMessageBox("请选择起始位置再查看电势差!\n起始位置可以用鼠标点击选择!");
 		return false;
 	}
 
 	char note[] = "电势差";
-	char name1[NAME_LEN*2], name2[NAME_LEN*2];
-	GetName(pressStart, name1);
-	GetName(pressEnd, name2);
+	var name1 = Manager.GetBodyDefaultName(Manager.pressStartBody);
+	var name2 = Manager.GetBodyDefaultName(Manager.pressEndBody);
 
 	LISTDATA list;
 	list.Init(3);
 
-	if (StaticClass.IsZero(startEndPressure)) startEndPressure = 0;
+	if (IsFloatZero(startEndPressure)) startEndPressure = 0;
 	list.SetAMember(DATA_STYLE_double, note, (void *)(&startEndPressure));
 	list.SetAMember(DATA_STYLE_LPCTSTR, "起始位置", name1);
 	list.SetAMember(DATA_STYLE_LPCTSTR, "结束位置", name2);

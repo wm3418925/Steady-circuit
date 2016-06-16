@@ -6,7 +6,7 @@ void Manager.UpdateEditMenuState()
 	CMenu * cm = Manager.canvas.GetMenu();
 	UINT menuState;
 
-	if (!focusBody.IsOnAny())
+	if (!Manager.focusBody.IsOnAny())
 	{
 		cm.EnableMenuItem(IDM_FOCUSBODY_COPY, MF_GRAYED);
 		cm.EnableMenuItem(IDM_FOCUSBODY_CUT, MF_GRAYED);
@@ -20,7 +20,7 @@ void Manager.UpdateEditMenuState()
 
 		cm.EnableMenuItem(IDM_FOCUSBODY_SHOWELEC, MF_GRAYED);
 	}
-	else if (focusBody.IsOnLead())
+	else if (Manager.focusBody.IsOnLead())
 	{
 		cm.EnableMenuItem(IDM_FOCUSBODY_COPY, MF_GRAYED);
 		cm.EnableMenuItem(IDM_FOCUSBODY_CUT, MF_GRAYED);
@@ -41,7 +41,7 @@ void Manager.UpdateEditMenuState()
 		cm.EnableMenuItem(IDM_FOCUSBODY_DELETE, MF_ENABLED);
 		cm.EnableMenuItem(IDM_FOCUSBODY_PROPERTY, MF_ENABLED);
 
-		if (focusBody.IsOnCtrl())
+		if (Manager.focusBody.IsOnCtrl())
 			menuState = MF_ENABLED;
 		else
 			menuState = MF_GRAYED;
@@ -59,9 +59,9 @@ void Manager.FocusBodyClear(const Pointer * deleteBody)
 //如果deleteBody==null,直接删除焦点
 //函数执行在:Manager,DeleteSingleBody,ClearCircuitState
 {
-	if (deleteBody == null || focusBody.IsBodySame(deleteBody))
+	if (deleteBody == null || Manager.focusBody.IsBodySame(deleteBody))
 	{
-		focusBody.Clear();
+		Manager.focusBody.Clear();
 		UpdateEditMenuState();
 	}
 }
@@ -71,7 +71,7 @@ void Manager.FocusBodySet(const Pointer &newFocus)
 //函数执行在:FocusBodyPaint,ReadCircuitFromVector,ReadFile
 {
 	ASSERT(!newFocus.IsOnConnectPos());
-	focusBody = newFocus;
+	Manager.focusBody = newFocus;
 	UpdateEditMenuState();
 }
 
@@ -81,45 +81,45 @@ bool Manager.FocusBodyPaint(const Pointer * newFocus)
 {
 	if (newFocus != null)	//焦点改变
 	{
-		if (focusBody.IsBodySame(newFocus))
+		if (Manager.focusBody.IsBodySame(newFocus))
 			return false;
 
 		//原来的焦点用黑色画
-		if (focusBody.IsOnLead())
-			PaintLead(focusBody.p1);
-		if (focusBody.IsOnCrun())
-			PaintCrun(focusBody.p2, false);
-		else if (focusBody.IsOnCtrl())
-			PaintCtrl(focusBody.p3, false);
+		if (Manager.focusBody.IsOnLead())
+			PaintLead(Manager.focusBody.p1);
+		if (Manager.focusBody.IsOnCrun())
+			PaintCrun(Manager.focusBody.p2, false);
+		else if (Manager.focusBody.IsOnCtrl())
+			PaintCtrl(Manager.focusBody.p3, false);
 
 		//焦点物体更新
 		FocusBodySet(*newFocus);
 	}
 
-	if (focusBody.IsOnLead())
+	if (Manager.focusBody.IsOnLead())
 	{
 		switch (focusLeadStyle) {
 		case SOLID_SPECIAL_COLOR:
-			PaintLeadWithStyle(focusBody.p1, 1, COLOR_SPECIAL);
+			PaintLeadWithStyle(Manager.focusBody.p1, 1, COLOR_SPECIAL);
 			break;
 		case SOLID_ORIGINAL_COLOR:
-			PaintLeadWithStyle(focusBody.p1, 1, focusBody.p.color);
+			PaintLeadWithStyle(Manager.focusBody.p1, 1, Manager.focusBody.p.color);
 			break;
 		case DOT_SPECIAL_COLOR:
-			PaintLeadWithStyle(focusBody.p1, 2, COLOR_SPECIAL);
+			PaintLeadWithStyle(Manager.focusBody.p1, 2, COLOR_SPECIAL);
 			break;
 		case DOT_ORIGINAL_COLOR:
-			PaintLeadWithStyle(focusBody.p1, 2, focusBody.p.color);
+			PaintLeadWithStyle(Manager.focusBody.p1, 2, Manager.focusBody.p.color);
 			break;
 		}
 	}
-	else if (focusBody.IsOnCrun())
+	else if (Manager.focusBody.IsOnCrun())
 	{
-		PaintCrunWithStyle(focusBody.p2, PAINT_CRUN_STYLE_FOCUS);
+		PaintCrunWithStyle(Manager.focusBody.p2, PAINT_CRUN_STYLE_FOCUS);
 	}
-	else if (focusBody.IsOnCtrl())
+	else if (Manager.focusBody.IsOnCtrl())
 	{
-		PaintCtrlWithColor(focusBody.p3, focusCtrlColor);
+		PaintCtrlWithColor(Manager.focusBody.p3, focusCtrlColor);
 	}
 
 	return true;
@@ -134,19 +134,19 @@ void Manager.FocusBodyChangeUseTab()
 
 	if (bodyNum == 0) return;	//没有物体
 
-	if (focusBody.IsOnLead())	//当前焦点是导线
+	if (Manager.focusBody.IsOnLead())	//当前焦点是导线
 	{
-		num = (focusBody.p1.num + 1) % Manager.lead.length;
+		num = (Manager.focusBody.p1.num + 1) % Manager.lead.length;
 		newFocus.SetOnLead(lead[num]);
 	}
-	else if (focusBody.IsOnCrun())	//当前焦点是结点
+	else if (Manager.focusBody.IsOnCrun())	//当前焦点是结点
 	{
-		num = (focusBody.p2.num + 1) % Manager.crun.length;
+		num = (Manager.focusBody.p2.num + 1) % Manager.crun.length;
 		newFocus.SetOnCrun(crun[num], true);
 	}
-	else if (focusBody.IsOnCtrl())	//当前焦点是控件
+	else if (Manager.focusBody.IsOnCtrl())	//当前焦点是控件
 	{
-		num = (focusBody.p3.num + 1) % Manager.ctrl.length;
+		num = (Manager.focusBody.p3.num + 1) % Manager.ctrl.length;
 		newFocus.SetOnCtrl(ctrl[num], true);
 	}
 	else	//没有设定焦点
@@ -164,13 +164,13 @@ bool Manager.FocusBodyMove(int dir)
 //用户按上下左右键移动焦点物体
 {
 	Manager.motiCount = 0;
-	if (!focusBody.IsOnBody()) return false;
+	if (!Manager.focusBody.IsOnBody()) return false;
 
 	POINT fromPos, toPos;
 
 	//获得物体坐标
-	if (focusBody.IsOnCrun()) fromPos = focusBody.p2.coord;
-	else fromPos = focusBody.p3.coord;
+	if (Manager.focusBody.IsOnCrun()) fromPos = Manager.focusBody.p2.coord;
+	else fromPos = Manager.focusBody.p3.coord;
 	toPos = fromPos;
 
 	//设置移动后的坐标
@@ -196,6 +196,6 @@ bool Manager.FocusBodyMove(int dir)
 	if (toPos.x < -CTRL_SIZE.cx/2 || toPos.y < -CTRL_SIZE.cy/2) return false;
 
 	//移动对象
-	PosBodyMove(&focusBody, fromPos, toPos);
+	PosBodyMove(&Manager.focusBody, fromPos, toPos);
 	return true;
 }

@@ -15,15 +15,15 @@ Manager.GetCtrlPaintImage = function(c) {
 		return Manager.ctrlImageList[c.style*4 + c.dir];	//默认的画图句柄
 };
 
-//获得名称,str长度应该大于等于NAME_LEN*2
+//获得名称
 Manager.GetBodyDefaultName = function(pointer) {
 	ASSERT(pointer.IsOnAny());
 	if (pointer.IsOnLead()) {
-		return "导线[" + pointer.p.GetInitOrder() + "]";
+		return "导线[" + pointer.p.initOrder + "]";
 	} else if (pointer.IsOnCrun()) {
-		return "结点[编号("+pointer.p.GetInitOrder()+"), 当前名称("+pointer.p.name+")]";
+		return "结点[编号("+pointer.p.initOrder+"), 当前名称("+pointer.p.name+")]";
 	} else { //if (pointer.IsOnCtrl())
-		return "控件[编号("+pointer.p.GetInitOrder()+"), 当前名称("+pointer.p.name+")]";
+		return "控件[编号("+pointer.p.initOrder+"), 当前名称("+pointer.p.name+")]";
 	}
 };
 
@@ -50,17 +50,17 @@ Manager.DeleteNote = function(body) {
 	else
 		note = "要删除 "+name+" 吗 ?";
 
-	PaintWithSpecialColorAndRect(body, false);
+	Manager.PaintWithSpecialColorAndRect(body, false);
 	return IDYES == Manager.canvas.MessageBox(note, "删除物体提示", MB_YESNO|MB_ICONWARNING);
 };
 
 //清除电路状态
 Manager.ClearCircuitState = function() {
-	FocusBodyClear(null);	//焦点
-	ClearPressBody();		//显示电势差
+	Manager.FocusBodyClear(null);	//焦点
+	Manager.ClearPressBody();		//显示电势差
 	Manager.motiCount = 0;			//激活物体数量
-	addState = BODY_NO;		//添加物体类型
-	lastMoveOnBody.Clear();	//鼠标上次移动到的物体
+	Manager.addState = BODY_NO;		//添加物体类型
+	Manager.lastMoveOnBody.Clear();	//鼠标上次移动到的物体
 	Manager.lButtonDownState = 0;	//鼠标左击状态
 };
 
@@ -69,19 +69,13 @@ Manager.GetBodyPointer = function(body) {
 	var pointer;
 
 	if (body.isFocusBody) {
-		pointer = focusBody;
+		pointer = Manager.focusBody;
 	} else {
 		Manager.motiCount = 0;
-		MotivateAll(body.pos);
+		Manager.MotivateAll(body.pos);
 		Manager.motiCount = 0;
 		pointer = Manager.motiBody[0];
 	}
 
 	return pointer;
-};
-
-//保存电路到图片
-Manager.SaveAsPicture = function(path) {
-	PaintAll();	//画电路, bitmapForRefresh保存有位图
-	SaveBitmapToFile(HBITMAP(bitmapForRefresh), path);
 };

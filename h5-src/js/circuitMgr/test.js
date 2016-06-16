@@ -10,11 +10,11 @@ void Manager.SaveCircuitInfoToTextFile()
 	fprintf(fp, "{\ncruns:[\n");
 	for (i=0; i<Manager.crun.length; i++)
 	{
-		fprintf(fp, "{id:%d,x:%d,y:%d,", crun[i].GetInitOrder(), crun[i].coord.x, crun[i].coord.y);
+		fprintf(fp, "{id:%d,x:%d,y:%d,", crun[i].initOrder, crun[i].coord.x, crun[i].coord.y);
 		fprintf(fp, "name:\"%s\",lead:[", crun[i].name);
 		for (int j=0; j<4; j++)
 		{
-			if (crun[i].lead[j]) fprintf(fp, "%d", crun[i].lead[j].GetInitOrder());
+			if (crun[i].lead[j]) fprintf(fp, "%d", crun[i].lead[j].initOrder);
 			else fprintf(fp, "-1");
 			if (j!=4-1) fprintf(fp, ",");
 		}
@@ -27,7 +27,7 @@ void Manager.SaveCircuitInfoToTextFile()
 	fprintf(fp, "leads:[\n");
 	for (i=0; i<Manager.lead.length; ++i)
 	{
-		fprintf(fp, "{id:%d,", (int)lead[i].GetInitOrder());
+		fprintf(fp, "{id:%d,", (int)lead[i].initOrder);
 		lead[i].SaveToTextFile(fp);
 		fprintf(fp, "color:%d,", (int)lead[i].color);
 		fprintf(fp, "conBody[");	lead[i].conBody[0].SaveToTextFile(fp);
@@ -42,11 +42,11 @@ void Manager.SaveCircuitInfoToTextFile()
 	const char * ctrlStyleStr[] = {"source","resistance","bulb","capa","switch"}; 
 	for (i=0; i<Manager.ctrl.length; ++i)
 	{
-		fprintf(fp, "{id:%d,x:%d,y:%d,", ctrl[i].GetInitOrder(), ctrl[i].coord.x, ctrl[i].coord.y);
+		fprintf(fp, "{id:%d,x:%d,y:%d,", ctrl[i].initOrder, ctrl[i].coord.x, ctrl[i].coord.y);
 		fprintf(fp, "name:\"%s\",lead:[", ctrl[i].name);
-		if (ctrl[i].lead[0])fprintf(fp, "%d,", ctrl[i].lead[0].GetInitOrder());
+		if (ctrl[i].lead[0])fprintf(fp, "%d,", ctrl[i].lead[0].initOrder);
 		else fputs("-1,", fp);
-		if (ctrl[i].lead[1])fprintf(fp, "%d],", ctrl[i].lead[1].GetInitOrder());
+		if (ctrl[i].lead[1])fprintf(fp, "%d],", ctrl[i].lead[1].initOrder);
 		else fputs("-1],", fp);
 
 		ctrl[i].SaveToTextFile(fp);

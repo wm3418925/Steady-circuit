@@ -81,21 +81,21 @@
 ],
 
 "ctrls":[
-{"index":0,"x":244,"y":65,"dir":0,"isPaintName":false,"name":"Ctrl1","lead":[7,8],"pressure":10.000000,"resist":6.000000,"style":0}
-,{"index":1,"x":358,"y":106,"dir":3,"isPaintName":false,"name":"Ctrl5","lead":[6,9],"pressure":5.000000,"resist":3.000000,"style":0}
-,{"index":2,"x":222,"y":259,"dir":0,"isPaintName":false,"name":"Ctrl2","lead":[3,14],"pressure":3.000000,"resist":1.000000,"style":0}
-,{"index":3,"x":307,"y":259,"dir":0,"isPaintName":false,"name":"Ctrl3","lead":[14,17],"closed":true,"style":4}
-,{"index":4,"x":406,"y":108,"dir":1,"isPaintName":false,"name":"Ctrl4","lead":[11,10],"rating":1.000000,"resist":1.000000,"style":2}
-,{"index":5,"x":223,"y":154,"dir":0,"isPaintName":false,"name":"Ctrl7","lead":[0,1],"resist":3.000000,"style":1}
-,{"index":6,"x":288,"y":154,"dir":0,"isPaintName":false,"name":"Ctrl8","lead":[1,2],"pressure":6.000000,"resist":4.000000,"style":0}
-,{"index":7,"x":453,"y":108,"dir":1,"isPaintName":false,"name":"Ctrl6","lead":[5,15],"capa":0.000000,"style":3}
-,{"index":8,"x":414,"y":259,"dir":0,"isPaintName":false,"name":"Ctrl9","lead":[18,16],"pressure":3.000000,"resist":1.000000,"style":0}
-,{"index":9,"x":539,"y":249,"dir":0,"isPaintName":false,"name":"Ctrl10","lead":[20,29],"pressure":4.900000,"resist":2.450000,"style":0}
-,{"index":10,"x":546,"y":324,"dir":0,"isPaintName":false,"name":"Ctrl11","lead":[20,28],"resist":2.450000,"style":1}
-,{"index":11,"x":324,"y":368,"dir":1,"isPaintName":false,"name":"Ctrl12","lead":[24,25],"pressure":1.000000,"resist":1.000000,"style":0}
-,{"index":12,"x":534,"y":155,"dir":0,"isPaintName":false,"name":"Ctrl1","lead":[27,30],"resist":0.000000,"style":1}
-,{"index":13,"x":413,"y":413,"dir":0,"isPaintName":false,"name":"Ctrl2","lead":[-1,21],"pressure":0.000000,"resist":0.000000,"style":0}
-,{"index":14,"x":503,"y":369,"dir":0,"isPaintName":false,"name":"Ctrl3","lead":[21,-1],"resist":0.000000,"style":1}
+{"index":0,"x":244,"y":65,"dir":0,"isPaintName":true,"name":"Ctrl1","lead":[7,8],"pressure":10.000000,"resist":6.000000,"style":0}
+,{"index":1,"x":358,"y":106,"dir":3,"isPaintName":true,"name":"Ctrl5","lead":[6,9],"pressure":5.000000,"resist":3.000000,"style":0}
+,{"index":2,"x":222,"y":259,"dir":0,"isPaintName":true,"name":"Ctrl2","lead":[3,14],"pressure":3.000000,"resist":1.000000,"style":0}
+,{"index":3,"x":307,"y":259,"dir":0,"isPaintName":true,"name":"Ctrl3","lead":[14,17],"closed":true,"style":4}
+,{"index":4,"x":406,"y":108,"dir":1,"isPaintName":true,"name":"Ctrl4","lead":[11,10],"rating":1.000000,"resist":1.000000,"style":2}
+,{"index":5,"x":223,"y":154,"dir":0,"isPaintName":true,"name":"Ctrl7","lead":[0,1],"resist":3.000000,"style":1}
+,{"index":6,"x":288,"y":154,"dir":0,"isPaintName":true,"name":"Ctrl8","lead":[1,2],"pressure":6.000000,"resist":4.000000,"style":0}
+,{"index":7,"x":453,"y":108,"dir":1,"isPaintName":true,"name":"Ctrl6","lead":[5,15],"capa":0.000000,"style":3}
+,{"index":8,"x":414,"y":259,"dir":0,"isPaintName":true,"name":"Ctrl9","lead":[18,16],"pressure":3.000000,"resist":1.000000,"style":0}
+,{"index":9,"x":539,"y":249,"dir":0,"isPaintName":true,"name":"Ctrl10","lead":[20,29],"pressure":4.900000,"resist":2.450000,"style":0}
+,{"index":10,"x":546,"y":324,"dir":0,"isPaintName":true,"name":"Ctrl11","lead":[20,28],"resist":2.450000,"style":1}
+,{"index":11,"x":324,"y":368,"dir":1,"isPaintName":true,"name":"Ctrl12","lead":[24,25],"pressure":1.000000,"resist":1.000000,"style":0}
+,{"index":12,"x":534,"y":155,"dir":0,"isPaintName":true,"name":"Ctrl1","lead":[27,30],"resist":0.000000,"style":1}
+,{"index":13,"x":413,"y":413,"dir":0,"isPaintName":true,"name":"Ctrl2","lead":[-1,21],"pressure":0.000000,"resist":0.000000,"style":0}
+,{"index":14,"x":503,"y":369,"dir":0,"isPaintName":true,"name":"Ctrl3","lead":[21,-1],"resist":0.000000,"style":1}
 ]
 
 }

@@ -5,7 +5,7 @@ bool Manager.AddBody(POINT pos)
 	BODY_TYPE temp = addState;
 
 	addState = BODY_NO;	//不再添加物体
-	ctx.DPtoLP(&pos);
+	DPtoLP(pos, Manager.canvas);
 
 	if (BODY_CRUN == temp)
 	{
@@ -47,32 +47,22 @@ void Manager.Property(FOCUS_OR_POS &body, bool isReadOnly)
 	CDC * model = null;
 	Pointer pointer = Manager.GetBodyPointer(body);
 
-	if (pointer.IsOnLead())
-	{
-		GetName(pointer, tempStr);
-		strcat(tempStr, " 的颜色");					//窗口标题
+	if (pointer.IsOnLead()) {
+		tempStr = Manager.GetBodyDefaultName(pointer) + " 的颜色";	//窗口标题
 		pointer.p1.GetDataList(tempStr, &list);	//数据
-	}
-	else if (pointer.IsOnCrun())
-	{
-		GetName(pointer, tempStr);
-		strcat(tempStr, " 的标签");					//窗口标题
+	} else if (pointer.IsOnCrun()) {
+		tempStr = Manager.GetBodyDefaultName(pointer)  + " 的标签";	//窗口标题
 		pointer.p2.GetDataList(&list);				//数据
-		model = &crunImageData;							//示例
-	}
-	else if (pointer.IsOnCtrl())
-	{
-		GetName(pointer, tempStr);
-		strcat(tempStr, " 的标签和电学属性");		//窗口标题
-		pointer.p3.GetDataList(&list);				//数据
-		model = GetCtrlPaintImage(pointer.p3);		//示例
-	}
-	else
-	{
+		model = &crunImageData;						//示例
+	} else if (pointer.IsOnCtrl()) {
+		tempStr = Manager.GetBodyDefaultName(pointer) + " 的标签和电学属性";	//窗口标题
+		pointer.p.GetDataList(&list);				//数据
+		model = Manager.GetCtrlPaintImage(pointer.p);		//示例
+	} else {
 		return;
 	}
 
-	PaintWithSpecialColorAndRect(pointer, false);
+	Manager.PaintWithSpecialColorAndRect(pointer, false);
 	MyPropertyDlg dlg(&list, isReadOnly, model, tempStr, Manager.canvas);
 	dlg.DoModal();
 }
@@ -95,12 +85,11 @@ void Manager.ChangeCtrlStyle(FOCUS_OR_POS &body)
 	list.SetAEnumMember("电学元件的类型", &newStyle, ENUM_CTRL);
 
 	//获得窗口标题
-	GetName(pointer, tempStr);
-	strcat(tempStr, " 的类型");
+	tempStr = Manager.GetBodyDefaultName(pointer) + " 的类型";
 
 	//显示对话框
-	PaintWithSpecialColorAndRect(pointer, false);
-	MyPropertyDlg dlg(&list, false, GetCtrlPaintImage(pointer.p3), tempStr, Manager.canvas);
+	Manager.PaintWithSpecialColorAndRect(pointer, false);
+	MyPropertyDlg dlg(&list, false, Manager.GetCtrlPaintImage(pointer.p3), tempStr, Manager.canvas);
 	dlg.DoModal();
 
 	//改变类型

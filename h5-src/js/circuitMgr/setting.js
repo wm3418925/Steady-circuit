@@ -22,7 +22,7 @@ void Manager.SetLeaveOutDis()
 	char title[NAME_LEN*2];
 
 	list.Init(1);
-	list.SetAMember(DATA_STYLE_UINT, "导线相邻两节合并临界距离", &maxLeaveOutDis, 1, MAX_LEAVE_OUT_DIS);
+	list.SetAMember(DATA_STYLE_UINT, "导线相邻两节合并临界距离", &Manager.maxLeaveOutDis, 1, MAX_LEAVE_OUT_DIS);
 
 	sprintf(title, "临界距离范围 : 1 ~ %d", MAX_LEAVE_OUT_DIS);
 	MyPropertyDlg dlg(&list, false, null, title, Manager.canvas);
@@ -42,7 +42,7 @@ void Manager.SetTextColor()
 
 	if (preColor != textColor)
 	{
-		ctx.SetTextColor(LEADCOLOR[textColor]);
+		Manager.ctx.SetTextColor(LEADCOLOR[textColor]);
 		PaintAll();
 	}
 }
@@ -58,7 +58,7 @@ void Manager.SetFocusLeadStyle()
 	MyPropertyDlg dlg(&list, false, null, "设置选定导线样式", Manager.canvas);
 	dlg.DoModal();
 
-	if (save != focusLeadStyle && focusBody.IsOnLead())
+	if (save != focusLeadStyle && Manager.focusBody.IsOnLead())
 		FocusBodyPaint(null);
 }
 
@@ -73,7 +73,7 @@ void Manager.SetFocusCrunColor()
 	MyPropertyDlg dlg(&list, false, null, "设置选定结点颜色", Manager.canvas);
 	dlg.DoModal();
 
-	if (save != focusCrunColor && focusBody.IsOnCrun())
+	if (save != focusCrunColor && Manager.focusBody.IsOnCrun())
 		FocusBodyPaint(null);
 }
 
@@ -88,6 +88,6 @@ void Manager.SetFocusCtrlColor()
 	MyPropertyDlg dlg(&list, false, null, "设置选定电学元件颜色", Manager.canvas);
 	dlg.DoModal();
 
-	if (save != focusCtrlColor && focusBody.IsOnCtrl())
+	if (save != focusCtrlColor && Manager.focusBody.IsOnCtrl())
 		FocusBodyPaint(null);
 }

@@ -12,8 +12,8 @@ Manager.PaintCtrl = function(c, isPaintName) {
 Manager.PaintCtrlText = function(c) {
 	ASSERT(c != null);
 	if (!c.isPaintName) return;
-	ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);
-	Manager.ctx.strokeText(c.name, c.x, c.y-15);
+	Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);
+	Manager.ctx.strokeText(c.name, c.x, c.y-5);
 };
 
 //画结点
@@ -27,8 +27,8 @@ Manager.PaintCrun = function(c, isPaintName) {
 Manager.PaintCrunText = function(c) {
 	ASSERT(c != null);
 	if (!c.isPaintName) return;
-	ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);
-	Manager.ctx.strokeText(c.name, c.x, c.y-20);
+	Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);
+	Manager.ctx.strokeText(c.name, c.x, c.y-10);
 };
 
 //画导线
@@ -77,7 +77,7 @@ Manager.PaintAll = function() {
 	}*/
 
 	//由dcForRefresh画图
-	//Manager.ctx.DPtoLP(&rect);			//当前rect由设备坐标变换为逻辑坐标
+	//DPtoLP(rect, Manager.canvas)			//当前rect由设备坐标变换为逻辑坐标
 	//Manager.ctx = &dcForRefresh;		//dc暂时替换为dcForRefresh,在内存画图
 
 	//设置字体和视角起点
@@ -101,8 +101,8 @@ Manager.PaintAll = function() {
 	//Manager.FocusBodyPaint(null);
 
 	//重绘显示电势差的物体
-	//Manager.PaintWithSpecialColorAndRect(pressStart, false);
-	//Manager.PaintWithSpecialColorAndRect(pressEnd, true);
+	//Manager.PaintWithSpecialColorAndRect(Manager.pressStartBody, false);
+	//Manager.PaintWithSpecialColorAndRect(Manager.pressEndBody, true);
 
 	//4,还原dc, 一次性画图--------------------------------------------------
 	//Manager.ctx = save;
@@ -192,7 +192,7 @@ Manager.PaintWithSpecialColorAndRect = function(body, isPaintNum) {
 	if (body.IsOnLead()) {
 		if (isPaintNum) {
 			//画导线
-			PaintLeadWithStyle(body.p, 1, color);
+			Manager.PaintLeadWithStyle(body.p, 1, color);
 
 			//在导线起始和结尾处分别显示数字'1'和'2'
 			var startPos = {}, endPos = {};
@@ -200,10 +200,10 @@ Manager.PaintWithSpecialColorAndRect = function(body, isPaintNum) {
 			Manager.ctx.strokeText("1", startPos.x, startPos.y);
 			Manager.ctx.strokeText("2", endPos.x, endPos.y);
 		} else {
-			PaintLeadWithStyle(body.p, 2, color);	//画导线
+			Manager.PaintLeadWithStyle(body.p, 2, color);	//画导线
 		}
 	} else if (body.IsOnCrun()) {
-		PaintCrunWithStyle(body.p, PAINT_CRUN_STYLE_SPECIAL);	//画结点
+		Manager.PaintCrunWithStyle(body.p, PAINT_CRUN_STYLE_SPECIAL);	//画结点
 		PaintCommonFunc.PaintSurrendedRect(Manager.ctx, body.p.x-DD, body.p.y-DD, DD*2, DD*2, 0xF01010);
 		
 		if (isPaintNum) {	//在结点上下左右分别显示1,2,3,4
@@ -214,7 +214,7 @@ Manager.PaintWithSpecialColorAndRect = function(body, isPaintNum) {
 			Manager.ctx.strokeText("4", pos.x+15, pos.y);
 		}
 	} else if (body.IsOnCtrl()) {
-		PaintCtrlWithColor(body.p, color);	//画控件
+		Manager.PaintCtrlWithColor(body.p, color);	//画控件
 		PaintCommonFunc.PaintSurrendedRect(Manager.ctx, body.p.x, body.p.y, CTRL_SIZE.cx, CTRL_SIZE.cy, 0xF01010);
 	}
 };

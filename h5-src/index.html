@@ -53,6 +53,7 @@ Your browser does not support the canvas element.
 
 <script src="js/definition.js" type="text/javascript" charset="UTF-8"></script>
 
+<script src="js/ele/focusOrPos.js" type="text/javascript" charset="UTF-8"></script>
 <script src="js/ele/crun.js" type="text/javascript" charset="UTF-8"></script>
 <script src="js/ele/ctrl.js" type="text/javascript" charset="UTF-8"></script>
 <script src="js/ele/lead.js" type="text/javascript" charset="UTF-8"></script>
@@ -61,11 +62,16 @@ Your browser does not support the canvas element.
 <script src="js/circuitMgr/init.js" type="text/javascript" charset="UTF-8"></script>
 <script src="js/circuitMgr/mess.js" type="text/javascript" charset="UTF-8"></script>
 <script src="js/circuitMgr/file.js" type="text/javascript" charset="UTF-8"></script>
+
 <script src="js/circuitMgr/paintBase.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/circuitMgr/paintEffect.js" type="text/javascript" charset="UTF-8"></script>
+
+<script src="js/circuitMgr/mouse.js" type="text/javascript" charset="UTF-8"></script>
 
 <script src="js/compute/computeObjects.js" type="text/javascript" charset="UTF-8"></script>
 <script src="js/compute/computeMgr.js" type="text/javascript" charset="UTF-8"></script>
 
+<script src="js/dlg/dataList.js" type="text/javascript" charset="UTF-8"></script>
 
 
 <script type="text/javascript">
@@ -88,9 +94,10 @@ function onComputeElec() {
 
 <script type="text/javascript">
 function onLClick() {
-	var pos = GetClientPosOfEvent();alert("x="+pos.x+", y="+pos.y);
 }
 function onDbLClick() {
+	var pos = GetClientPosOfEvent();
+	Manager.ShowBodyElec(FOCUS_OR_POS.CreateNew(false, pos));
 }
 function onMouseUp() {
 }
