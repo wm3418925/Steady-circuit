@@ -95,7 +95,7 @@ void Manager.ChangeCtrlStyle(FOCUS_OR_POS &body)
 	//改变类型
 	if (preStyle != newStyle)
 	{
-		if (IDYES != AfxMessageBox("改变类型会丢失原有电学元件的数据!\n继续吗?", MB_YESNO)) return;
+		if (IDYES != alert("改变类型会丢失原有电学元件的数据!\n继续吗?", MB_YESNO)) return;
 		pointer.p3.ChangeStyle(newStyle);
 	}
 }

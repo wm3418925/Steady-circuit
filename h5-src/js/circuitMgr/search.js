@@ -12,7 +12,7 @@ bool Manager.SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 	bool isSearchCrun = (range == BODY_ALL || range == BODY_CRUN);
 	bool isSearchCtrl = (range == BODY_ALL || range == BODY_ALLCTRL || Pointer.IsCtrl(range));
 	KMP kmp(keyWord, isWholeWord, isMatchCase || searchBy == SEARCH_BY_ID);	//搜索序号时可以区分大小写, 加快速度
-	Pointer newFocus;
+	var newFocus = Pointer.CreateNew();
 
 	for (round=0; round<2; ++round)
 	{
@@ -49,7 +49,7 @@ bool Manager.SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 			else if (isMatch)
 			{
 				newFocus.SetOnLead(lead[j], true);
-				FocusBodyPaint(&newFocus);
+				FocusBodyPaint(newFocus);
 				return true;
 			}
 		}
@@ -162,7 +162,7 @@ bool Manager.SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, bo
 	bool isSearchCrun = (range == BODY_ALL || range == BODY_CRUN);
 	bool isSearchCtrl = (range == BODY_ALL || range == BODY_ALLCTRL || Pointer.IsCtrl(range));
 	KMP kmp(keyWord, isWholeWord, isMatchCase || searchBy == SEARCH_BY_ID);	//搜索序号时可以区分大小写, 加快速度
-	Pointer newFocus;
+	var newFocus = Pointer.CreateNew();
 
 	for (round=0; round<2; ++round)
 	{
@@ -208,7 +208,7 @@ bool Manager.SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, bo
 				else if (isMatch)
 				{
 					newFocus.SetOnCtrl(ctrl[j], true);
-					FocusBodyPaint(&newFocus);
+					FocusBodyPaint(newFocus);
 					return true;
 				}
 			}

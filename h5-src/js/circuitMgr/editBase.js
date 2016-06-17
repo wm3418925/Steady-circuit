@@ -9,9 +9,9 @@ void Manager.AddCtrl(POINT pos, BODY_TYPE style)
 	++ Manager.ctrl.length;
 
 	PaintCtrlText(ctrl[Manager.ctrl.length-1]);
-	Pointer newFocus;
+	var newFocus = Pointer.CreateNew();
 	newFocus.SetOnCtrl(ctrl[Manager.ctrl.length-1], 1);
-	FocusBodyPaint(&newFocus);
+	FocusBodyPaint(newFocus);
 }
 
 void Manager.AddCrun(POINT pos)
@@ -23,9 +23,9 @@ void Manager.AddCrun(POINT pos)
 	++ Manager.crun.length;
 
 	PaintCrunText(crun[Manager.crun.length-1]);
-	Pointer newFocus;
+	var newFocus = Pointer.CreateNew();
 	newFocus.SetOnCrun(crun[Manager.crun.length-1], 1);
-	FocusBodyPaint(&newFocus);
+	FocusBodyPaint(newFocus);
 }
 
 void Manager.AddLead(Pointer a, Pointer b)
@@ -58,7 +58,7 @@ void Manager.DeleteLead(LEAD * l)
 //使用函数: Delete(Pointer), ConnectBodyLead
 {
 	ASSERT(l != null);
-	Pointer * a = l.conBody, * b = l.conBody + 1;
+	var a = l.conBody[0], b = l.conBody[1];
 	int dira = a.GetLeadNum(), dirb = b.GetLeadNum();
 	int num = l.num;
 
@@ -147,12 +147,12 @@ void Manager.Delete(Pointer pointer)
 bool Manager.ConnectBodyLead(POINT posb)
 //连接一个连接点和导线
 {
-	Pointer a;				//先点击物体和连接点
-	Pointer x, y;			//后点击物体(导线)的2个连接物体
-	Pointer newCrun;		//新添加的结点
-	POINT posa;				//先点击物体的坐标
-	char dir1, dir2, dir3;	//结点连接x,y,a的连接点位置
-	LEADSTEP newLeadPosx, newLeadPosy;
+	var a = Pointer.CreateNew();	//先点击物体和连接点
+	var x = Pointer.CreateNew(), y = Pointer.CreateNew();	//后点击物体(导线)的2个连接物体
+	var newCrun = Pointer.CreateNew();	//新添加的结点
+	var posa;	//先点击物体的坐标
+	var dir1, dir2, dir3;	/结点连接x,y,a的连接点位置
+	var newLeadPosx = LEADSTEP.CreateNew(), newLeadPosy = LEADSTEP.CreateNew();
 
 	//1,检查函数运行条件
 	ASSERT(Manager.motiCount == 2 && Manager.motiBody[0].IsOnConnectPos() && Manager.motiBody[1].IsOnLead());

@@ -113,7 +113,7 @@ function readFileCallbackFunc(data) {
 		var focusBody = Pointer.CreateNew();
 		if (data.focusBody) 
 			focusBody.ReadFromStoreJsonObj(data.focusBody, Manager.lead, Manager.crun, Manager.ctrl);
-		//Manager.FocusBodySet(focusBody);				//设置焦点物体
+		//Manager.SetFocusBody(focusBody);				//设置焦点物体
 		Manager.viewOrig = data.viewOrig;				//视角初始坐标
 
 		//Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);	//初始化字体颜色

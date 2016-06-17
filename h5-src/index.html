@@ -67,6 +67,9 @@ Your browser does not support the canvas element.
 <script src="js/circuitMgr/paintEffect.js" type="text/javascript" charset="UTF-8"></script>
 
 <script src="js/circuitMgr/mouse.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/circuitMgr/focus.js" type="text/javascript" charset="UTF-8"></script>
+
+<script src="js/circuitMgr/showPress.js" type="text/javascript" charset="UTF-8"></script>
 
 <script src="js/compute/computeObjects.js" type="text/javascript" charset="UTF-8"></script>
 <script src="js/compute/computeMgr.js" type="text/javascript" charset="UTF-8"></script>
@@ -98,6 +101,7 @@ function onLClick() {
 function onDbLClick() {
 	var pos = GetClientPosOfEvent();
 	Manager.ShowBodyElec(FOCUS_OR_POS.CreateNew(false, pos));
+	Manager.PaintAll();
 }
 function onMouseUp() {
 }
