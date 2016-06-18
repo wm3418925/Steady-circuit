@@ -142,12 +142,9 @@ Manager.FocusBodyMove = function(dir) {
 	Manager.motiCount = 0;
 	if (!Manager.focusBody.IsOnBody()) return false;
 
-	var fromPos, toPos;
-
 	//获得物体坐标
-	if (Manager.focusBody.IsOnCrun()) fromPos = MyDeepCopy(Manager.focusBody.p.coord);
-	else fromPos = MyDeepCopy(Manager.focusBody.p.coord);
-	toPos = MyDeepCopy(fromPos);
+	var fromPos = {x:Manager.focusBody.p.x, y:Manager.focusBody.p.y};
+	var toPos = ClonePosition(fromPos);
 
 	//设置移动后的坐标
 	switch (dir) {

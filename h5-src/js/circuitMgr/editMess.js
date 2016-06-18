@@ -114,15 +114,15 @@ void Manager.PosBodyMove(Pointer * body, POINT firstPos, POINT lastPos)
 	ASSERT(body.IsOnBody());
 	if (body.IsOnCrun())
 	{
-		body.p2.coord.x += inter.x;
-		body.p2.coord.y += inter.y;
+		body.p.x += inter.x;
+		body.p.y += inter.y;
 		for (i=0; i<4; ++i) if (body.p2.lead[i])
 			body.p2.lead[i].RefreshPos();
 	}
 	else //if (body.IsOnCtrl())
 	{
-		body.p3.coord.x += inter.x;
-		body.p3.coord.y += inter.y;
+		body.p.x += inter.x;
+		body.p.y += inter.y;
 		for (i=0; i<2; ++i) if (body.p3.lead[i])
 			body.p3.lead[i].RefreshPos();
 	}
@@ -191,10 +191,9 @@ bool Manager.PosBodyClone(const Pointer * body, POINT firstPos, POINT lastPos)
 	return true;
 }
 
-void Manager.RotateCtrl(FOCUS_OR_POS &body, int rotateAngle)
 //旋转控件
-{
-	Pointer pointer = Manager.GetBodyPointer(body);
+Manager.RotateCtrl = function(body, rotateAngle) {
+	var pointer = Manager.GetBodyPointer(body);
 	if (!pointer.IsOnCtrl()) return;
-	pointer.p3.Rotate(rotateAngle);
-}
+	pointer.p.Rotate(rotateAngle);
+};

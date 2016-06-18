@@ -17,7 +17,7 @@ var LEAD = {
 			initOrder : initOrder,		//初始化序号
 			index : memberIdx,			//在数组中序号
 			
-			color : color,
+			color : color?color:0,
 			elecDir : UNKNOWNELEC,	//电流方向
 			coord : new Array(),
 			conBody : new Array(null, null)

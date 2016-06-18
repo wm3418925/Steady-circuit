@@ -60,7 +60,6 @@ Manager.ShowMoveBody = function(pos, isLButtonDown) {
 	if (Manager.motiCount == 0) return false;
 
 	var body = Manager.motiBody[Manager.motiCount - 1];
-	var bodyPos = {x:0, y:0};
 
 	if (!body.IsOnBody()) return false;
 	if (!isLButtonDown) {	//鼠标没有按下
@@ -70,8 +69,7 @@ Manager.ShowMoveBody = function(pos, isLButtonDown) {
 
 	//获得物体坐标
 	DPtoLP(pos, Manager.canvas);
-	if (body.IsOnCrun()) bodyPos = body.p.coord;
-	else if (body.IsOnCtrl()) bodyPos = body.p.coord;
+	var bodyPos = {x:body.p.x, y:body.p.y};
 
 	//根据坐标差计算画图坐标
 	pos.x += bodyPos.x - Manager.lButtonDownPos.x;
@@ -127,11 +125,11 @@ Manager.PosBodyPaintRect = function(pos) {
 	if (body.IsOnBody()) Manager.ctx.SelectObject(hp + BLUE);
 
 	if (body.IsOnCrun()) {
-		Manager.ctx.Rectangle(body.p.coord.x-DD-2, body.p.coord.y-DD-2, 
-			body.p.coord.x+DD+2, body.p.coord.y+DD+2);
+		Manager.ctx.Rectangle(body.p.x-DD-2, body.p.y-DD-2, 
+			body.p.x+DD+2, body.p.y+DD+2);
 	} else if (body.IsOnCtrl()) {
-		Manager.ctx.Rectangle(body.p.coord.x-2, body.p3.coord.y-2, 
-			body.p.coord.x+CTRL_SIZE.cx+2, body.p.coord.y+CTRL_SIZE.cy+2);
+		Manager.ctx.Rectangle(body.p.x-2, body.p.y-2, 
+			body.p.x+CTRL_SIZE.cx+2, body.p.y+CTRL_SIZE.cy+2);
 	}
 
 	Manager.PaintWithSpecialColorAndRect(body, false);

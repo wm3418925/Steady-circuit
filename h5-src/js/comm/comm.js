@@ -62,6 +62,9 @@ function MyDeepCopy(source) {
 		return result;
 	}
 }
+function ClonePosition(pos) {
+	return {x:pos.x, y:pos.y};
+}
 
 
 function ASSERT(flag) {
