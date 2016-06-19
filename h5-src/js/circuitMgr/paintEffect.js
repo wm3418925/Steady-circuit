@@ -133,7 +133,7 @@ Manager.PosBodyPaintRect = function(pos) {
 	}
 
 	Manager.PaintWithSpecialColorAndRect(body, false);
-	return body.GetStyle();
+	return body.style;
 };
 
 

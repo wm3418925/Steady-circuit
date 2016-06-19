@@ -1,141 +1,112 @@
 
-//9测试函数------------------------------------------------------------------------↓
-void Manager.SaveCircuitInfoToTextFile()
 //保存电路信息到文本文件,测试函数
-{
-	int i;
-	FILE * fp = fopen("D:\\data.txt", "w");
-	if (fp == null) return;
+Manager.SaveCircuitInfoToTextFile = function() {
+	var rj = {};
+	var i;
 
-	fprintf(fp, "{\ncruns:[\n");
-	for (i=0; i<Manager.crun.length; i++)
-	{
-		fprintf(fp, "{id:%d,x:%d,y:%d,", crun[i].initOrder, crun[i].coord.x, crun[i].coord.y);
-		fprintf(fp, "name:\"%s\",lead:[", crun[i].name);
-		for (int j=0; j<4; j++)
-		{
-			if (crun[i].lead[j]) fprintf(fp, "%d", crun[i].lead[j].initOrder);
-			else fprintf(fp, "-1");
-			if (j!=4-1) fprintf(fp, ",");
+	rj += "{\ncruns:[\n";
+	for (i=0; i<Manager.crun.length; i++) {
+		rj += "{id:%d,x:%d,y:%d,", Manager.crun[i].initOrder, Manager.crun[i].coord.x, Manager.crun[i].coord.y;
+		rj += "name:\"%s\",Manager.lead:[", Manager.crun[i].name;
+		for (var j=0; j<4; j++) {
+			if (Manager.crun[i].Manager.lead[j]) rj += "%d", Manager.crun[i].Manager.lead[j].initOrder;
+			else rj += "-1";
+			if (j!=4-1) rj += ",";
 		}
-		fprintf(fp, "]}\n");
+		rj += "]}\n";
 
-		if (i != Manager.crun.length-1) fprintf(fp, ",");
+		if (i != Manager.crun.length-1) rj += ",";
 	}
-	fprintf(fp, "],\n");
+	rj += "],\n";
 
-	fprintf(fp, "leads:[\n");
-	for (i=0; i<Manager.lead.length; ++i)
-	{
-		fprintf(fp, "{id:%d,", (int)lead[i].initOrder);
-		lead[i].SaveToTextFile(fp);
-		fprintf(fp, "color:%d,", (int)lead[i].color);
-		fprintf(fp, "conBody[");	lead[i].conBody[0].SaveToTextFile(fp);
-		fprintf(fp, ",");	lead[i].conBody[1].SaveToTextFile(fp);
-		fprintf(fp, "]}\n");
+	rj += "leads:[\n";
+	for (i=0; i<Manager.lead.length; ++i) {
+		rj += "{id:%d,", (var)Manager.lead[i].initOrder;
+		Manager.lead[i].SaveToTextFile(rj);
+		rj += "color:%d,", (var)Manager.lead[i].color;
+		rj += "conBody[";	Manager.lead[i].conBody[0].SaveToTextFile(rj);
+		rj += ",";	Manager.lead[i].conBody[1].SaveToTextFile(rj);
+		rj += "]}\n";
 
-		if (i != Manager.lead.length-1) fprintf(fp, ",");
+		if (i != Manager.lead.length-1) rj += ",";
 	}
-	fprintf(fp, "],\n");
+	rj += "],\n";
 
-	fprintf(fp, "ctrls:[\n", Manager.ctrl.length);
+	rj += "ctrls:[\n", Manager.ctrl.length;
 	const char * ctrlStyleStr[] = {"source","resistance","bulb","capa","switch"}; 
-	for (i=0; i<Manager.ctrl.length; ++i)
-	{
-		fprintf(fp, "{id:%d,x:%d,y:%d,", ctrl[i].initOrder, ctrl[i].coord.x, ctrl[i].coord.y);
-		fprintf(fp, "name:\"%s\",lead:[", ctrl[i].name);
-		if (ctrl[i].lead[0])fprintf(fp, "%d,", ctrl[i].lead[0].initOrder);
-		else fputs("-1,", fp);
-		if (ctrl[i].lead[1])fprintf(fp, "%d],", ctrl[i].lead[1].initOrder);
-		else fputs("-1],", fp);
+	for (i=0; i<Manager.ctrl.length; ++i) {
+		rj += "{id:%d,x:%d,y:%d,", Manager.ctrl[i].initOrder, Manager.ctrl[i].coord.x, Manager.ctrl[i].coord.y;
+		rj += "name:\"%s\",Manager.lead:[", Manager.ctrl[i].name;
+		if (Manager.ctrl[i].Manager.lead[0])rj += "%d,", Manager.ctrl[i].Manager.lead[0].initOrder;
+		else fputs("-1,", rj);
+		if (Manager.ctrl[i].Manager.lead[1])rj += "%d],", Manager.ctrl[i].Manager.lead[1].initOrder;
+		else fputs("-1],", rj);
 
-		ctrl[i].SaveToTextFile(fp);
+		Manager.ctrl[i].SaveToTextFile(rj);
 
-		fprintf(fp, "style:\"%s\"}", ctrlStyleStr[ctrl[i].GetStyle()]);
+		rj += "style:\"%s\"}", ctrlStyleStr[Manager.ctrl[i].style];
 		
-		if (i != Manager.lead.length-1) fprintf(fp, ",");
+		if (i != Manager.lead.length-1) rj += ",";
 	}
-	fprintf(fp, "]\n}\n");
+	rj += "]\n}\n";
 
-	fclose(fp);
-}
+	console.log(rj);
+};
 
-void Manager.SaveCountInfoToTextFile()
 //保存计算过程到文本文件,测试函数
-{
-	FILE * fp = fopen("D:\\Circuit.txt", "w");
-	int i, j, group, ijPos, tempDir;
-
-	if (fp == null) return;
+Manager.SaveCountInfoToTextFile = function() {
+	var rj = {};
+	var i, j, group, ijPos, tempDir;
 
 	CollectCircuitInfo();
 
-	for (i=0; i<Manager.crun.length; ++i)
-	{
-		fprintf(fp, "crun[%d]:\n", i);
-		fprintf(fp, "\tgroup = %d\n", crun2[i].group);
-		//fprintf(fp, "\tgroup = %f\n", crun2[i].potential);
+	for (i=0; i<Manager.crun.length; ++i) {
+		rj += "Manager.crun[%d]:\n", i;
+		rj += "\tgroup = %d\n", crun2[i].group;
+		//rj += "\tgroup = %f\n", crun2[i].potential;
 		for (j=0;j<4;j++)
 		{
-			if (crun2[i].c[j])fprintf(fp, "\tcircuit[%d] = %d\n", j, crun2[i].c[j].eleNum);
-			else fprintf(fp, "\tcircuit[%d] = null\n", j);
+			if (crun2[i].c[j])rj += "\tcircuit[%d] = %d\n", j, crun2[i].c[j].eleNum;
+			else rj += "\tcircuit[%d] = null\n", j;
 		}
 	}
 
-	fputc('\n', fp);
+	fputc('\n', rj);
 
-	for (i=0; i<circuNum; ++i)
-	{
-		fprintf(fp, "circu[%d]:\n", i);
-		fprintf(fp, "\tnum in group = %d\n", circu[i].numInGroup);
-		fprintf(fp, "\tfromcrun = %d\n", circu[i].from-crun2);
-		fprintf(fp, "\tfromdir = %d\n", circu[i].dirFrom);
-		fprintf(fp, "\ttocrun = %d\n", circu[i].to-crun2);
-		fprintf(fp, "\ttodir = %d\n", circu[i].dirTo);
-		//fprintf(fp, "\telectic = %f\n", circu[i].elec);
-		fprintf(fp, "\tpressure = %f\n", circu[i].pressure);
-		fprintf(fp, "\tresistance = %f\n", circu[i].resistance);
+	for (i=0; i<circuNum; ++i) {
+		rj += "circu[%d]:\n", i;
+		rj += "\tnum in group = %d\n", ComputeMgr.circu[i].numInGroup;
+		rj += "\tfromcrun = %d\n", ComputeMgr.circu[i].from-crun2;
+		rj += "\tfromdir = %d\n", ComputeMgr.circu[i].dirFrom;
+		rj += "\ttocrun = %d\n", ComputeMgr.circu[i].to-crun2;
+		rj += "\ttodir = %d\n", ComputeMgr.circu[i].dirTo;
+		//rj += "\telectic = %f\n", ComputeMgr.circu[i].elec;
+		rj += "\tpressure = %f\n", ComputeMgr.circu[i].pressure;
+		rj += "\tresistance = %f\n", ComputeMgr.circu[i].resistance;
 	}
 
-	fclose(fp);
+	console.log(rj);
 
 	//////////////////////
 	CreateEquation();
-	CRUNMAP * maps = Manager.maps;
-	fp = fopen("D:\\Map.txt", "w");
-	if (fp == null) return;
+	var maps = ComputeMgr.maps;
+	rj = {};
 
-	for (group=0; group<groupNum; ++group) for (i=maps[group].size-2; i>=0; --i) for (j=maps[group].size-1; j>i; --j)
-	{
+	for (group=0; group<groupNum; ++group) for (i=maps[group].size-2; i>=0; --i) for (j=maps[group].size-1; j>i; --j) {
 		ijPos = CONVERT(i, j, maps[group].size);
 		tempDir = maps[group].direct[ijPos];
 	
-		fprintf(fp, "%d Direct Connections ", tempDir);
+		rj += "%d Direct Connections ", tempDir;
 
-		fprintf(fp, " between %3d and %3d \n", maps[group].crunTOorder[i], maps[group].crunTOorder[j]);
+		rj += " between %3d and %3d \n", maps[group].crunTOorder[i], maps[group].crunTOorder[j];
 	}
 
-	delete [] crun2;
-	delete [] circu;
-	circu = null;
-	circuNum = 0;
-	fclose(fp);
+	ComputeMgr.crun2 = null;
+	ComputeMgr.circu = null;
+	console.log(rj);
 
-	fp = fopen("D:\\Equation.txt", "w");
-	if (fp == null) return;
-	for (group=0; group<groupNum; ++group)
-	{
-		fprintf(fp, "\ngroup[%d]------------\n", group);
-		//equation[group].Simple_Equation();
-		equation[group].OutputToFile(fp);
+	for (group=0; group<groupNum; ++group) {
+		console.log("\ngroup[%d]------------\n", group);
+		equation[group].OutputToFile();
 	}
-	fclose(fp);
-
-	for (group=0; group<groupNum; ++group)
-	{
-		maps[group].Uninit();
-		delete equation[group];
-	}
-	delete [] maps;
-	delete [] equation;
-}
+};

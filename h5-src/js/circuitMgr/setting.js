@@ -1,93 +1,84 @@
 
-//12设置函数-----------------------------------------------------------------------
-
-void Manager.SetMoveBodySense()
 //设置按方向键一次移动物体的距离
-{
-	LISTDATA list;
-	char title[NAME_LEN*2];
+Manager.SetMoveBodySense = function() {
+	var list = LISTDATA.CreateNew();
+	list.SetDataParent(Manager);
+	list.SetAMember(DATA_TYPE_uint, "方向键移动物体的距离", "moveBodySense", 1, MAX_MOVE_BODY_DIS);
 
-	list.Init(1);
-	list.SetAMember(DATA_STYLE_UINT, "方向键移动物体的距离", &moveBodySense, 1, MAX_MOVE_BODY_DIS);
-
-	sprintf(title, "灵敏度范围 : 1 ~ %d", MAX_MOVE_BODY_DIS);
-	MyPropertyDlg dlg(&list, false, null, title, Manager.canvas);
+	var title = "灵敏度范围 : 1 ~ " + MAX_MOVE_BODY_DIS;
+	var dlg = MyPropertyDlg.CreateNew(list, false, null, title, Manager.canvas);
 	dlg.DoModal();
-}
+};
 
-void Manager.SetLeaveOutDis()
 //设置最大导线合并距离
-{
-	LISTDATA list;
-	char title[NAME_LEN*2];
+Manager.SetLeaveOutDis = function() {
+	var list = LISTDATA.CreateNew();
+	list.SetDataParent(Manager);
+	list.SetAMember(DATA_TYPE_uint, "导线相邻两节合并临界距离", "maxLeaveOutDis", 1, MAX_LEAVE_OUT_DIS);
 
-	list.Init(1);
-	list.SetAMember(DATA_STYLE_UINT, "导线相邻两节合并临界距离", &Manager.maxLeaveOutDis, 1, MAX_LEAVE_OUT_DIS);
-
-	sprintf(title, "临界距离范围 : 1 ~ %d", MAX_LEAVE_OUT_DIS);
-	MyPropertyDlg dlg(&list, false, null, title, Manager.canvas);
+	var title = "临界距离范围 : 1 ~ " + MAX_LEAVE_OUT_DIS;
+	var dlg = MyPropertyDlg.CreateNew(list, false, null, title, Manager.canvas);
 	dlg.DoModal();
-}
+};
 
-void Manager.SetTextColor()
 //设置字体颜色
-{
-	const enum COLOR preColor = textColor;
-	LISTDATA list;
-	list.Init(1);
-	list.SetAEnumMember("标签颜色", &textColor, ENUM_COLOR);
+Manager.SetTextColor = function() {
+	var preColor = Manager.textColor;
+	
+	var list = LISTDATA.CreateNew();
+	list.SetDataParent(Manager);
+	list.SetAMember(DATA_TYPE_color, "标签颜色", "textColor");
 
-	MyPropertyDlg dlg(&list, false, null, "设置标签颜色", Manager.canvas);
+	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置标签颜色", Manager.canvas);
 	dlg.DoModal();
 
-	if (preColor != textColor)
-	{
+	if (preColor != Manager.textColor) {
 		Manager.ctx.SetTextColor(LEADCOLOR[textColor]);
-		PaintAll();
+		Manager.PaintAll();
 	}
-}
+};
 
-void Manager.SetFocusLeadStyle()
 //设置焦点导线样式
-{
-	const enum LEADSTYLE save = focusLeadStyle;
-	LISTDATA list;
-	list.Init(1);
-	list.SetAEnumMember("选定导线样式", &focusLeadStyle, ENUM_LEADSTYLE);
+Manager.SetFocusLeadStyle = function() {
+	var save = Manager.focusLeadStyle;
+	
+	var list = LISTDATA.CreateNew();
+	list.SetDataParent(Manager);
+	list.SetAEnumMember("选定导线样式", "focusLeadStyle", LEAD_STYLE_ENUM);
 
-	MyPropertyDlg dlg(&list, false, null, "设置选定导线样式", Manager.canvas);
+	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置选定导线样式", Manager.canvas);
 	dlg.DoModal();
 
-	if (save != focusLeadStyle && Manager.focusBody.IsOnLead())
-		FocusBodyPaint(null);
-}
+	if (save != Manager.focusLeadStyle && Manager.focusBody.IsOnLead())
+		Manager.FocusBodyPaint(null);
+};
 
-void Manager.SetFocusCrunColor()
 //设置焦点结点颜色
-{
-	const enum COLOR save = focusCrunColor;
-	LISTDATA list;
-	list.Init(1);
-	list.SetAEnumMember("选定结点颜色", &focusCrunColor, ENUM_COLOR, RED, BLUE);
+Manager.SetFocusCrunColor = function() {
+	var save = Manager.focusCrunColor;
+	
+	var list = LISTDATA.CreateNew();
+	list.SetDataParent(Manager);
+	list.SetAMember(DATA_TYPE_color, "选定结点颜色", "focusCrunColor");
 
-	MyPropertyDlg dlg(&list, false, null, "设置选定结点颜色", Manager.canvas);
+	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置选定结点颜色", Manager.canvas);
 	dlg.DoModal();
 
-	if (save != focusCrunColor && Manager.focusBody.IsOnCrun())
-		FocusBodyPaint(null);
-}
+	if (save != Manager.focusCrunColor && Manager.focusBody.IsOnCrun())
+		Manager.FocusBodyPaint(null);
+};
 
-void Manager.SetFocusCtrlColor()
 //设置焦点控件颜色
-{
-	const enum COLOR save = focusCtrlColor;
-	LISTDATA list;
-	list.Init(1);
-	list.SetAEnumMember("选定电学元件颜色", &focusCtrlColor, ENUM_COLOR, RED, BLUE);
+Manager.SetFocusCtrlColor = function() {
+	var save = Manager.focusCtrlColor;
+	
+	var list = LISTDATA.CreateNew();
+	list.SetDataParent(Manager);
+	list.SetAMember(DATA_TYPE_color, "选定电学元件颜色", "focusCtrlColor");
 
-	MyPropertyDlg dlg(&list, false, null, "设置选定电学元件颜色", Manager.canvas);
+	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置选定电学元件颜色", Manager.canvas);
 	dlg.DoModal();
 
-	if (save != focusCtrlColor && Manager.focusBody.IsOnCtrl())
-		FocusBodyPaint(null);
-}
+	if (save != Manager.focusCtrlColor && Manager.focusBody.IsOnCtrl())
+		Manager.FocusBodyPaint(null);
+};

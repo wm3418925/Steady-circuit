@@ -1,147 +1,101 @@
 
-// 搜索函数
-
-bool Manager.SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, bool isMatchCase, char * keyWord)
 //搜索下一个物体
-{
-	bool isAfterFocus = false;
-	char str[32];
-	bool isMatch;
-	int round, j;
-	bool isSearchLead = (range == BODY_ALL || range == BODY_LEAD) && searchBy == SEARCH_BY_ID;
-	bool isSearchCrun = (range == BODY_ALL || range == BODY_CRUN);
-	bool isSearchCtrl = (range == BODY_ALL || range == BODY_ALLCTRL || Pointer.IsCtrl(range));
-	KMP kmp(keyWord, isWholeWord, isMatchCase || searchBy == SEARCH_BY_ID);	//搜索序号时可以区分大小写, 加快速度
+Manager.SearchNext = function(searchBy, range, isWholeWord, isMatchCase, keyWord) {
+	var isAfterFocus = false;
+	var isMatch;
+	var round, j;
+	var isSearchLead = (range == BODY_ALL || range == BODY_LEAD) && searchBy == SEARCH_BY_ID;
+	var isSearchCrun = (range == BODY_ALL || range == BODY_CRUN);
+	var isSearchCtrl = (range == BODY_ALL || range == BODY_ALLCTRL || Pointer.IsCtrl(range));
+	var kmp = KMP.CreateNew(keyWord, isWholeWord, isMatchCase || searchBy == SEARCH_BY_ID);	//搜索序号时可以区分大小写, 加快速度
 	var newFocus = Pointer.CreateNew();
 
-	for (round=0; round<2; ++round)
-	{
+	for (round=0; round<2; ++round) {
 		//search lead ----------------------------------------------------------
-		if (!isAfterFocus && Manager.focusBody.IsOnLead())
-		{
+		if (!isAfterFocus && Manager.focusBody.IsOnLead()) {
 			isAfterFocus = true;
 			if (isSearchLead)
-				j = Manager.focusBody.p1.num + 1;
+				j = Manager.focusBody.p.index + 1;
 			else
 				j = Manager.lead.length;
-		}
-		else if (isAfterFocus && isSearchLead)
-		{
+		} else if (isAfterFocus && isSearchLead) {
 			j = 0;
-		}
-		else if (isAfterFocus && !isSearchLead && Manager.focusBody.IsOnLead())
-		{
+		} else if (isAfterFocus && !isSearchLead && Manager.focusBody.IsOnLead()) {
 			return false;
-		}
-		else
-		{
+		} else {
 			j = Manager.lead.length;
 		}
 
-		for (; j<Manager.lead.length; ++j)
-		{
-			itoa(lead[j].initOrder, str, 10);
+		for (; j<Manager.lead.length; ++j) {
+			var str = Manager.lead[j].initOrder + "";
 			isMatch = kmp.IsMatch(str);
-			if (Manager.focusBody.IsLeadSame(lead[j]))
-			{
+			if (Manager.focusBody.IsLeadSame(Manager.lead[j])) {
 				return isMatch;
-			}
-			else if (isMatch)
-			{
-				newFocus.SetOnLead(lead[j], true);
-				FocusBodyPaint(newFocus);
+			} else if (isMatch) {
+				newFocus.SetOnLead(Manager.lead[j], true);
+				Manager.FocusBodyPaint(newFocus);
 				return true;
 			}
 		}
 
 		//search crun ----------------------------------------------------------
-		if (!isAfterFocus && Manager.focusBody.IsOnCrun())
-		{
+		if (!isAfterFocus && Manager.focusBody.IsOnCrun()) {
 			isAfterFocus = true;
 			if (isSearchCrun)
-				j = Manager.focusBody.p2.num + 1;
+				j = Manager.focusBody.p.index + 1;
 			else
 				j = Manager.crun.length;
-		}
-		else if (isAfterFocus && isSearchCrun)
-		{
+		} else if (isAfterFocus && isSearchCrun) {
 			j = 0;
-		}
-		else if (isAfterFocus && !isSearchCrun && Manager.focusBody.IsOnCrun())
-		{
+		} else if (isAfterFocus && !isSearchCrun && Manager.focusBody.IsOnCrun()) {
 			return false;
-		}
-		else
-		{
+		} else {
 			j = Manager.crun.length;
 		}
 
-		for (; j<Manager.crun.length; ++j)
-		{
-			if (searchBy == SEARCH_BY_NAME)
-			{
-				isMatch = kmp.IsMatch(crun[j].name);
-			}
-			else
-			{
-				itoa(crun[j].initOrder, str, 10);
+		for (; j<Manager.crun.length; ++j) {
+			if (searchBy == SEARCH_BY_NAME) {
+				isMatch = kmp.IsMatch(Manager.crun[j].name);
+			} else {
+				var str = Manager.crun[j].initOrder + "";
 				isMatch = kmp.IsMatch(str);
 			}
-			if (Manager.focusBody.IsCrunSame(crun[j]))
-			{
+			if (Manager.focusBody.IsCrunSame(Manager.crun[j])) {
 				return isMatch;
-			}
-			else if (isMatch)
-			{
-				newFocus.SetOnCrun(crun[j], true);
-				FocusBodyPaint(&newFocus);
+			} else if (isMatch) {
+				newFocus.SetOnCrun(Manager.crun[j], true);
+				Manager.FocusBodyPaint(newFocus);
 				return true;
 			}
 		}
 
 		//search ctrl ----------------------------------------------------------
-		if (!isAfterFocus && Manager.focusBody.IsOnCtrl())
-		{
+		if (!isAfterFocus && Manager.focusBody.IsOnCtrl()) {
 			isAfterFocus = true;
 			if (isSearchCtrl)
-				j = Manager.focusBody.p3.num + 1;
+				j = Manager.focusBody.p.index + 1;
 			else
 				j = Manager.ctrl.length;
-		}
-		else if (isAfterFocus && isSearchCtrl)
-		{
+		} else if (isAfterFocus && isSearchCtrl) {
 			j = 0;
-		}
-		else if (isAfterFocus && !isSearchCtrl && Manager.focusBody.IsOnCtrl())
-		{
+		} else if (isAfterFocus && !isSearchCtrl && Manager.focusBody.IsOnCtrl()) {
 			return false;
-		}
-		else
-		{
+		} else {
 			j = Manager.ctrl.length;
 		}
 
-		for (; j<Manager.ctrl.length; ++j)
-		{
-			if (range == BODY_ALL || range == BODY_ALLCTRL || ctrl[j].GetStyle() == range)
-			{
-				if (searchBy == SEARCH_BY_NAME)
-				{
-					isMatch = kmp.IsMatch(ctrl[j].name);
-				}
-				else
-				{
-					itoa(ctrl[j].initOrder, str, 10);
+		for (; j<Manager.ctrl.length; ++j) {
+			if (range == BODY_ALL || range == BODY_ALLCTRL || Manager.ctrl[j].style == range) {
+				if (searchBy == SEARCH_BY_NAME) {
+					isMatch = kmp.IsMatch(Manager.ctrl[j].name);
+				} else {
+					var str = Manager.ctrl[j].initOrder + "";
 					isMatch = kmp.IsMatch(str);
-				}
-				if (Manager.focusBody.IsCtrlSame(ctrl[j]))
-				{
+				} if (Manager.focusBody.IsCtrlSame(Manager.ctrl[j])) {
 					return isMatch;
-				}
-				else if (isMatch)
-				{
-					newFocus.SetOnCtrl(ctrl[j], true);
-					FocusBodyPaint(&newFocus);
+				} else if (isMatch) {
+					newFocus.SetOnCtrl(Manager.ctrl[j], true);
+					Manager.FocusBodyPaint(newFocus);
 					return true;
 				}
 			}
@@ -149,154 +103,113 @@ bool Manager.SearchNext(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, b
 	}
 
 	return false;
-}
+};
 
-bool Manager.SearchPre(SEARCH_BY searchBy, BODY_TYPE range, bool isWholeWord, bool isMatchCase, char * keyWord)
 //搜索上一个物体
-{
-	bool isAfterFocus = false;
-	char str[32];
-	bool isMatch;
-	int round, j;
-	bool isSearchLead = (range == BODY_ALL || range == BODY_LEAD) && searchBy == SEARCH_BY_ID;
-	bool isSearchCrun = (range == BODY_ALL || range == BODY_CRUN);
-	bool isSearchCtrl = (range == BODY_ALL || range == BODY_ALLCTRL || Pointer.IsCtrl(range));
-	KMP kmp(keyWord, isWholeWord, isMatchCase || searchBy == SEARCH_BY_ID);	//搜索序号时可以区分大小写, 加快速度
+Manager.SearchPre = function(searchBy, range, isWholeWord, isMatchCase, keyWord) {
+	var isAfterFocus = false;
+	var isMatch;
+	var round, j;
+	var isSearchLead = (range == BODY_ALL || range == BODY_LEAD) && searchBy == SEARCH_BY_ID;
+	var isSearchCrun = (range == BODY_ALL || range == BODY_CRUN);
+	var isSearchCtrl = (range == BODY_ALL || range == BODY_ALLCTRL || Pointer.IsCtrl(range));
+	var kmp = KMP.CreateNew(keyWord, isWholeWord, isMatchCase || searchBy == SEARCH_BY_ID);	//搜索序号时可以区分大小写, 加快速度
 	var newFocus = Pointer.CreateNew();
 
-	for (round=0; round<2; ++round)
-	{
+	for (round=0; round<2; ++round) {
 		//search ctrl ----------------------------------------------------------
-		if (!isAfterFocus && Manager.focusBody.IsOnCtrl())
-		{
+		if (!isAfterFocus && Manager.focusBody.IsOnCtrl()) {
 			isAfterFocus = true;
 			if (isSearchCtrl)
-				j = Manager.focusBody.p3.num - 1;
+				j = Manager.focusBody.p.index - 1;
 			else
 				j = -1;
-		}
-		else if (isAfterFocus && isSearchCtrl)
-		{
+		} else if (isAfterFocus && isSearchCtrl) {
 			j = Manager.ctrl.length-1;
-		}
-		else if (isAfterFocus && !isSearchCtrl && Manager.focusBody.IsOnCtrl())
-		{
+		} else if (isAfterFocus && !isSearchCtrl && Manager.focusBody.IsOnCtrl()) {
 			return false;
-		}
-		else
-		{
+		} else {
 			j = -1;
 		}
 
-		for (; j>=0; --j)
-		{
-			if (range == BODY_ALL || range == BODY_ALLCTRL || ctrl[j].GetStyle() == range)
-			{
-				if (searchBy == SEARCH_BY_NAME)
-				{
-					isMatch = kmp.IsMatch(ctrl[j].name);
-				}
-				else
-				{
-					itoa(ctrl[j].initOrder, str, 10);
+		for (; j>=0; --j) {
+			if (range == BODY_ALL || range == BODY_ALLCTRL || Manager.ctrl[j].style == range) {
+				if (searchBy == SEARCH_BY_NAME) {
+					isMatch = kmp.IsMatch(Manager.ctrl[j].name);
+				} else {
+					var str = Manager.ctrl[j].initOrder + "";
 					isMatch = kmp.IsMatch(str);
 				}
-				if (Manager.focusBody.IsCtrlSame(ctrl[j]))
-				{
+				if (Manager.focusBody.IsCtrlSame(Manager.ctrl[j])) {
 					return isMatch;
-				}
-				else if (isMatch)
-				{
-					newFocus.SetOnCtrl(ctrl[j], true);
-					FocusBodyPaint(newFocus);
+				} else if (isMatch) {
+					newFocus.SetOnCtrl(Manager.ctrl[j], true);
+					Manager.FocusBodyPaint(newFocus);
 					return true;
 				}
 			}
 		}
 
 		//search crun ----------------------------------------------------------
-		if (!isAfterFocus && Manager.focusBody.IsOnCrun())
-		{
+		if (!isAfterFocus && Manager.focusBody.IsOnCrun()) {
 			isAfterFocus = true;
 			if (isSearchCrun)
-				j = Manager.focusBody.p2.num - 1;
+				j = Manager.focusBody.p.index - 1;
 			else
 				j = -1;
-		}
-		else if (isAfterFocus && isSearchCrun)
-		{
+		} else if (isAfterFocus && isSearchCrun) {
 			j = Manager.crun.length - 1;
-		}
-		else if (isAfterFocus && !isSearchCrun && Manager.focusBody.IsOnCrun())
-		{
+		} else if (isAfterFocus && !isSearchCrun && Manager.focusBody.IsOnCrun()) {
 			return false;
-		}
-		else
-		{
+		} else {
 			j = -1;
 		}
 
-		for (; j>=0; --j)
-		{
-			if (searchBy == SEARCH_BY_NAME)
-			{
-				isMatch = kmp.IsMatch(crun[j].name);
-			}
-			else
-			{
-				itoa(crun[j].initOrder, str, 10);
+		for (; j>=0; --j) {
+			if (searchBy == SEARCH_BY_NAME) {
+				isMatch = kmp.IsMatch(Manager.crun[j].name);
+			} else {
+				var str = Manager.crun[j].initOrder + "";
 				isMatch = kmp.IsMatch(str);
 			}
-			if (Manager.focusBody.IsCrunSame(crun[j]))
-			{
+			if (Manager.focusBody.IsCrunSame(Manager.crun[j])) {
 				return isMatch;
-			}
-			else if (isMatch)
-			{
-				newFocus.SetOnCrun(crun[j], true);
-				FocusBodyPaint(&newFocus);
+			} else if (isMatch) {
+				newFocus.SetOnCrun(Manager.crun[j], true);
+				Manager.FocusBodyPaint(newFocus);
 				return true;
 			}
 		}
 
 		//search lead ----------------------------------------------------------
-		if (!isAfterFocus && Manager.focusBody.IsOnLead())
-		{
+		if (!isAfterFocus && Manager.focusBody.IsOnLead()) {
 			isAfterFocus = true;
 			if (isSearchLead)
-				j = Manager.focusBody.p1.num - 1;
+				j = Manager.focusBody.p.index - 1;
 			else
 				j = -1;
-		}
-		else if (isAfterFocus && isSearchLead)
-		{
+		} else if (isAfterFocus && isSearchLead) {
 			j = Manager.lead.length - 1;
 		}
 		else if (isAfterFocus && !isSearchLead && Manager.focusBody.IsOnLead())
 		{
 			return false;
-		}
-		else
-		{
+		} else {
 			j = -1;
 		}
 
-		for (; j>=0; --j)
-		{
-			itoa(lead[j].initOrder, str, 10);
+		for (; j>=0; --j) {
+			var str = Manager.lead[j].initOrder + "";
 			isMatch = kmp.IsMatch(str);
-			if (Manager.focusBody.IsLeadSame(lead[j]))
-			{
+			if (Manager.focusBody.IsLeadSame(Manager.lead[j])) {
 				return isMatch;
-			}
-			else if (isMatch)
-			{
-				newFocus.SetOnLead(lead[j], true);
-				FocusBodyPaint(&newFocus);
+			} else if (isMatch) {
+				newFocus.SetOnLead(Manager.lead[j], true);
+				Manager.FocusBodyPaint(newFocus);
 				return true;
 			}
 		}
 	}
 
 	return false;
-}
+};

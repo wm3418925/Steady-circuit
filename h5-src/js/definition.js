@@ -58,6 +58,7 @@ var DATA_TYPE_uint		= 1;
 var DATA_TYPE_bool		= 2;
 var DATA_TYPE_string	= 3;
 var DATA_TYPE_enum		= 4;
+var DATA_TYPE_color		= 5;
 
 
 
