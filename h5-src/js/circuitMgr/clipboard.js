@@ -52,7 +52,7 @@ Manager.PasteBody = function(pos) {
 		}
 
 		//编辑部分
-		var newElement = Manager.clipBody.p2.Clone(CLONE_FOR_USE);
+		var newElement = Manager.clipBody.p.Clone(CLONE_FOR_USE);
 		newElement.x = pos.x; newElement.y = pos.y;
 		newElement.index = Manager.crun.length;
 		Manager.crun.push(newElement);

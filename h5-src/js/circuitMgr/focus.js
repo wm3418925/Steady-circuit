@@ -3,7 +3,7 @@
 
 //更新编辑菜单状态(MF_ENABLED or MF_GRAYED)
 Manager.UpdateEditMenuState = function() {
-	var cm = Manager.canvas.GetMenu();
+	/*var cm = Manager.canvas.GetMenu();
 	var menuState;
 
 	if (!Manager.focusBody.IsOnAny()) {
@@ -46,7 +46,7 @@ Manager.UpdateEditMenuState = function() {
 		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE2, menuState);
 		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE3, menuState);
 		cm.EnableMenuItem(IDM_FOCUSBODY_SHOWELEC, menuState);
-	}
+	}*/
 };
 
 //判断删除物体是否是当前焦点,如果是则清除鼠标焦点物体
@@ -63,7 +63,7 @@ Manager.FocusBodyClear = function(deleteBody) {
 //函数执行在:FocusBodyPaint,ReadCircuitFromVector,ReadFile
 Manager.SetFocusBody = function(newFocus) {
 	ASSERT(!newFocus.IsOnConnectPos());
-	Manager.focusBody = newFocus.Clone();
+	Manager.focusBody = MyDeepCopy(newFocus);
 	Manager.UpdateEditMenuState();
 };
 

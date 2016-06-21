@@ -102,7 +102,7 @@ Manager.Delete = function(pointer) {
 	if (pointer.IsOnLead()) {
 		Manager.DeleteLead(pointer.p);
 	} else if (pointer.IsOnCrun()) {
-		for (var i=0; i<4; ++i) if (pointer.p2.lead[i] != null)
+		for (var i=0; i<4; ++i) if (pointer.p.lead[i] != null)
 			Manager.DeleteLead(pointer.p.lead[i]);
 		Manager.DeleteSingleBody(pointer);
 	} else { //if (pointer.IsOnCtrl())

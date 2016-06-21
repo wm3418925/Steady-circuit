@@ -63,7 +63,7 @@ function readFileCallbackFunc(data) {
 	//Manager.fileName = newFileName;	//替换原有路径
 
 	// 可能因为文件问题而发生错误
-	try {
+	//try {
 		//2读取物体数量
 		var crunCount = data.cruns.length;
 		var ctrlCount = data.ctrls.length;
@@ -113,14 +113,14 @@ function readFileCallbackFunc(data) {
 		var focusBody = Pointer.CreateNew();
 		if (data.focusBody) 
 			focusBody.ReadFromStoreJsonObj(data.focusBody, Manager.lead, Manager.crun, Manager.ctrl);
-		//Manager.SetFocusBody(focusBody);				//设置焦点物体
+		Manager.SetFocusBody(focusBody);				//设置焦点物体
 		Manager.viewOrig = data.viewOrig;				//视角初始坐标
 
 		//Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);	//初始化字体颜色
-	} catch(e) {
+	/*} catch(e) {
 		alert("文件可能损坏了 ! 读取文件错误");
 		return false;
-	}
+	}*/
 
 	return true;			//正常退出
 }

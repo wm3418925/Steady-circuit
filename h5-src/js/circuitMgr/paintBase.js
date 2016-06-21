@@ -58,8 +58,8 @@ Manager.PaintAll = function() {
 	//1,清除部分状态信息----------------------------------------------------
 	Manager.motiCount = 0;
 	Manager.addState = BODY_NO;
-	//Manager.lastMoveOnPos = {x:-100, y:-100};
-	//Manager.lastMoveOnBody.Clear();
+	Manager.lastMoveOnPos = {x:-100, y:-100};
+	Manager.lastMoveOnBody.Clear();
 
 	//2,画图初始化----------------------------------------------------------
 	//获得窗口尺寸
@@ -98,11 +98,11 @@ Manager.PaintAll = function() {
 	Manager.PaintAllLead();
 
 	//画焦点
-	//Manager.FocusBodyPaint(null);
+	Manager.FocusBodyPaint(null);
 
 	//重绘显示电势差的物体
-	//Manager.PaintWithSpecialColorAndRect(Manager.pressStartBody, false);
-	//Manager.PaintWithSpecialColorAndRect(Manager.pressEndBody, true);
+	Manager.PaintWithSpecialColorAndRect(Manager.pressStartBody, false);
+	Manager.PaintWithSpecialColorAndRect(Manager.pressEndBody, true);
 
 	//4,还原dc, 一次性画图--------------------------------------------------
 	//Manager.ctx = save;
@@ -225,6 +225,6 @@ Manager.PaintInvertBodyAtPos = function(body, pos) {
 	if (body.IsOnCrun()) {
 		PaintCommonFunc.PaintImageDataXor(Manager.ctx, crunImageData, pos.x-DD, pos.y-DD);
 	} else {//if (body.IsOnCtrl())
-		PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.GetCtrlPaintImage(body.p3), pos.x, pos.y);
+		PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.GetCtrlPaintImage(body.p), pos.x, pos.y);
 	}
 };

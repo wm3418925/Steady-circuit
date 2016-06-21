@@ -110,9 +110,11 @@ var Manager = {
 		Manager.motiCount = 0;
 		Manager.addState = BODY_NO;
 		Manager.lButtonDownPos = {x:-100, y:-100};
+		Manager.lastMoveOnBody = Pointer.CreateNew();
 		Manager.lButtonDownState = false;
 		Manager.isUpRecvAfterDown = true;
-		//Manager.FocusBodyClear(null);
+		Manager.focusBody = Pointer.CreateNew();
+		Manager.FocusBodyClear(null);
 
 
 		//画图变量-------------------------------------------------------
@@ -122,6 +124,7 @@ var Manager = {
 		Manager.focusCtrlColor = COLOR_FOCUS;			//默认焦点控件颜色
 		Manager.InitBitmap();							//初始化位图
 
+		
 		//鼠标图标
 		/*HINSTANCE hinst = AfxGetInstanceHandle();
 		Manager.hcSizeNS		= LoadCursor(null,	IDC_SIZENS);
@@ -135,6 +138,12 @@ var Manager = {
 
 		//读取文件-------------------------------------------------------
 		Manager.fileName = "";
+		
+		
+		//显示电压-------------------------------------------------------
+		Manager.pressStartBody = Pointer.CreateNew();
+		Manager.pressEndBody = Pointer.CreateNew();
+		Manager.startEndPressure = 0;
 	}
 
 };

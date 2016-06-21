@@ -30,8 +30,8 @@ Manager.SetStartBody = function(pos) {
 		return false;	//没有点击导线或者节点
 	}
 
-	Manager.pressStartBody = mb.Clone();
-	Manager.pressEndBody = mb.Clone();
+	Manager.pressStartBody = MyDeepCopy(mb);
+	Manager.pressEndBody = MyDeepCopy(mb);
 	Manager.startEndPressure = 0;
 
 	Manager.PaintAll();
@@ -77,11 +77,11 @@ Manager.NextBodyByInputNum = function(nChar) {
 	if (Manager.pressEndBody.IsOnLead()) {	//结尾位置在导线上
 		if (dir < 0 || dir > 1) return false;
 		
-		var temp = Manager.pressEndBody.p.conBody[dir].Clone();
+		var temp = MyDeepCopy(Manager.pressEndBody.p.conBody[dir]);
 		temp.SetAtState(-1);
 
 		if (temp.IsOnCrun()) {
-			Manager.pressEndBody = temp.Clone();
+			Manager.pressEndBody = MyDeepCopy(temp);
 		} else { //if (temp.IsOnCtrl())
 			if (temp.p.resist < 0) {	//断路控件
 				Manager.canvas.MessageBox("这是一个断路电学元件 !", "电流无法流过 !", MB_ICONINFORMATION);
