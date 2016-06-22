@@ -71,6 +71,12 @@ var LISTDATA = {	//数据列表信息类
 	GetListSize: function() {
 		return this.memberNameList.length;
 	},
+	GetRowData: function(row) {
+		if (this.dataTypeList[row] == DATA_TYPE_enum)
+			return this.dataParent[eval(this.memberNameList[row].memeberName)];
+		else
+			return this.dataParent[eval(this.memberNameList[row])];
+	},
 
 	//设置列表的一项, dataType != DATA_TYPE_enum, 当min>max表示没有大小限制
 	SetAMember: function(dataType, note, data, min/*1*/, max/*0*/) {
@@ -88,7 +94,7 @@ var LISTDATA = {	//数据列表信息类
 	},
 
 	//设置style == DATA_TYPE_enum 的一项, this.memberNameList 指向一个 ENUM_DATA_HANLDER
-	SetAEnumMember: function(note, data, enumType, min/*1*/, max/*0*/) {
+	SetAEnumMember: function(enumType, note, data, min/*1*/, max/*0*/) {
 		if (min == undefined || max == undefined) {
 			min = 1;
 			max = 0;

@@ -44,7 +44,7 @@ Manager.SetFocusLeadStyle = function() {
 	
 	var list = LISTDATA.CreateNew();
 	list.SetDataParent(Manager);
-	list.SetAEnumMember("选定导线样式", "focusLeadStyle", LEAD_STYLE_ENUM);
+	list.SetAEnumMember(LEAD_STYLE_ENUM, "选定导线样式", "focusLeadStyle");
 
 	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置选定导线样式", Manager.canvas);
 	dlg.DoModal();

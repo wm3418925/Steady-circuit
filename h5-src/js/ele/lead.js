@@ -80,8 +80,8 @@ var LEAD = {
 
 	//与CProperty交换信息
 	GetDataList: function(list, name) {
-		list.Init(this, 1);
-		list.SetAEnumMember(name, "color");
+		list.SetDataParent(this);
+		list.SetAMember(DATA_TYPE_color, name, "color");
 	},
 
 	//粗糙的初始化导线坐标

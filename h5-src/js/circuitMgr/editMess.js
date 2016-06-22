@@ -56,21 +56,19 @@ Manager.Property = function(body, isReadOnly) {
 
 //改变电学元件类型
 Manager.ChangeCtrlStyle = function(body) {
-	var preStyle, newStyle;
-	var tempStr;
-
 	var pointer = Manager.GetBodyPointer(body);
 	if (!pointer.IsOnCtrl()) return;
 
 	//获得原来类型
-	preStyle = newStyle = pointer.p.style;
+	var preStyle = pointer.p.style;
 
 	//初始化list数据
 	var list = LISTDATA.CreateNew();
-	list.SetAEnumMember("电学元件的类型", newStyle, ENUM_CTRL);
+	list.SetDataParent(pointer.p);
+	list.SetAEnumMember(CTRL_TYPE_ENUM, "电学元件的类型", "style");
 
 	//获得窗口标题
-	tempStr = Manager.GetBodyDefaultName(pointer) + " 的类型";
+	var tempStr = Manager.GetBodyDefaultName(pointer) + " 的类型";
 
 	//显示对话框
 	Manager.PaintWithSpecialColorAndRect(pointer, false);
@@ -78,7 +76,7 @@ Manager.ChangeCtrlStyle = function(body) {
 	dlg.DoModal();
 
 	//改变类型
-	if (preStyle != newStyle) {
+	if (preStyle != pointer.p.style) {
 		if (IDYES != alert("改变类型会丢失原有电学元件的数据!\n继续吗?", MB_YESNO)) return;
 		pointer.p.ChangeStyle(newStyle);
 	}
