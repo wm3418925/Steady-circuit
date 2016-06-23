@@ -72,10 +72,17 @@ var LISTDATA = {	//数据列表信息类
 		return this.memberNameList.length;
 	},
 	GetRowData: function(row) {
+		var value;
 		if (this.dataTypeList[row] == DATA_TYPE_enum)
-			return this.dataParent[eval(this.memberNameList[row].memeberName)];
+			value = this.memberNameList[row].memeberName;
 		else
-			return this.dataParent[eval(this.memberNameList[row])];
+			value = this.memberNameList[row];
+			
+		if (this.dataParent) {
+			return this.dataParent[value];
+		} else {
+			return value;
+		}
 	},
 
 	//设置列表的一项, dataType != DATA_TYPE_enum, 当min>max表示没有大小限制
@@ -154,6 +161,8 @@ var LISTDATA = {	//数据列表信息类
 
 	//将控件用户修改的信息保存到指针指向的物体
 	SaveAMember: function(row, pageElement) {
+		if (!this.dataParent) return;
+			
 		var tmpData;
 
 		switch (this.dataTypeList[row]) {
@@ -163,7 +172,7 @@ var LISTDATA = {	//数据列表信息类
 		case DATA_TYPE_uint:
 			tmpData = parseInt(pageElement.value);
 			break;
-		case DATA_STYLE_bool:
+		case DATA_TYPE_bool:
 			tmpData = pageElement.checked;
 			break;
 		case DATA_TYPE_string:
@@ -175,9 +184,9 @@ var LISTDATA = {	//数据列表信息类
 		}
 		
 		if (this.dataTypeList[row] == DATA_TYPE_enum)
-			this.dataParent[eval(this.memberNameList[row].GetMemeberName())] = tmpData;
+			this.dataParent[this.memberNameList[row].GetMemeberName()] = tmpData;
 		else
-			this.dataParent[eval(this.memberNameList[row])] = tmpData;
+			this.dataParent[this.memberNameList[row]] = tmpData;
 	}
 
 };

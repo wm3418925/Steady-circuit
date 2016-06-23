@@ -7,12 +7,20 @@ Manager.SetAddState = function(type) {
 	Manager.addState = type;
 };
 
-//获得控件画图句柄
+//获得控件位图
 Manager.GetCtrlPaintImage = function(c) {
 	if (c.IsBulbOn() || c.SwitchClosed(false))	//小灯泡达到额定功率, 开关闭合
 		return Manager.ctrlImageList[(CTRL_TYPE_COUNT + c.style)*4 + c.dir];
 	else
 		return Manager.ctrlImageList[c.style*4 + c.dir];	//默认的画图句柄
+};
+// 获取控件图片Id
+Manager.GetCtrlPaintImageId = function(c) {
+	if (c.IsBulbOn() || c.SwitchClosed(false))	//小灯泡达到额定功率, 开关闭合
+		return "S-"+(c.style+1)+"-" + c.dir;
+	else {
+		return "N-"+(c.style+1)+"-" + c.dir;
+	}
 };
 
 //获得名称

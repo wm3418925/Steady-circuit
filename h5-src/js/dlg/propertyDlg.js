@@ -1,98 +1,118 @@
+var globalMPD = null;
 
 var MyPropertyDlg = {
-	labelIdPrefix : "MPDLabelElement",
-	tagIdPrefix : "MPDTagElement",
+	GenerateLabelId : function(index) {return "MPDLabelElement" + index;},
+	GenerateTagId : function(index) {return "MPDTagElement" + index;},
 	
-	CreateNew : function(list, readOnly, model, windowTitle, wndParent) {
+	CreateNew : function(list, readonly, modelId, windowTitle, wndParent) {
 		var inter = {x: 20, y: 15};
 		var firstNotePos = {x: 20, y: 20};
 		var noteTextSize = {cx: 180, cy: 20};
-		var firstCtrlPos = {x: firstNotePos.x + noteTextSize.cx + inter.x, y: firstNotePos.y};	//µÚÒ»¸ö¿Ø¼şÆğÊ¼×ø±ê
-		var tagSize = {cx: 300, cy: noteTextSize.cy};	//¿Ø¼ş´óĞ¡
+		var firstCtrlPos = {x: firstNotePos.x + noteTextSize.cx + inter.x, y: firstNotePos.y};	//ç¬¬ä¸€ä¸ªæ§ä»¶èµ·å§‹åæ ‡
+		var tagSize = {cx: 300, cy: noteTextSize.cy};	//æ§ä»¶å¤§å°
 		var okButtonPos = {x: firstCtrlPos.x, y: firstCtrlPos.y + (tagSize.cy + inter.y) * list.GetListSize()};
-		var cancelButtonPos = {x: okButtonPos.x + 150 + m_inter.x, y: okButtonPos.y};
+		var cancelButtonPos = {x: okButtonPos.x + 150 + inter.x, y: okButtonPos.y};
 		var wndSize = {cx: firstCtrlPos.x + tagSize.cx + inter.x + 10, cy: cancelButtonPos.y + 70};
 		
 		return {
-			m_windowTitle: windowTitle,	//´°¿ÚÃû³Æ
-			m_model: model,				//Ê¾Àı
-			m_readOnly: readOnly,		//ÊÇ·ñÖ»¶Á
-			m_list: list,				//Êı¾İÁĞ±í
+			m_windowTitle: windowTitle,	//çª—å£åç§°
+			m_modelId: modelId,				//ç¤ºä¾‹
+			m_readonly: readonly,		//æ˜¯å¦åªè¯»
+			m_list: list,				//æ•°æ®åˆ—è¡¨
 
-			m_inter: inter,	// x:¿Ø¼ş Óë Êı¾İÌáÊ¾text µÄ¼ä¾à; y:¿Ø¼şÖ®¼ä »òÕß Êı¾İÌáÊ¾text Ö®¼ä µÄ¼ä¾à
+			m_inter: inter,	// x:æ§ä»¶ ä¸ æ•°æ®æç¤ºtext çš„é—´è·; y:æ§ä»¶ä¹‹é—´ æˆ–è€… æ•°æ®æç¤ºtext ä¹‹é—´ çš„é—´è·
 
-			m_firstNotePos: firstNotePos,	//µÚÒ»¸öÊı¾İÌáÊ¾textÆğÊ¼×ø±ê
-			m_noteTextSize: noteTextSize,	//Êı¾İÌáÊ¾text´óĞ¡
+			m_firstNotePos: firstNotePos,	//ç¬¬ä¸€ä¸ªæ•°æ®æç¤ºtextèµ·å§‹åæ ‡
+			m_noteTextSize: noteTextSize,	//æ•°æ®æç¤ºtextå¤§å°
 
-			m_firstCtrlPos: firstCtrlPos,	//µÚÒ»¸ö¿Ø¼şÆğÊ¼×ø±ê
-			m_tagSize: tagSize,			//¿Ø¼ş´óĞ¡
+			m_firstCtrlPos: firstCtrlPos,	//ç¬¬ä¸€ä¸ªæ§ä»¶èµ·å§‹åæ ‡
+			m_tagSize: tagSize,			//æ§ä»¶å¤§å°
 			
-			m_okButtonPos: okButtonPos,	//È·¶¨°´Å¥µÄ×ø±ê
-			m_cancelButtonPos: cancelButtonPos,	//È¡Ïû°´Å¥µÄ×ø±ê
+			m_okButtonPos: okButtonPos,	//ç¡®å®šæŒ‰é’®çš„åæ ‡
+			m_cancelButtonPos: cancelButtonPos,	//å–æ¶ˆæŒ‰é’®çš„åæ ‡
 			
-			m_wndSize: wndSize,	//´°¿Ú´óĞ¡
+			m_wndSize: wndSize,	//çª—å£å¤§å°
 			
 			__proto__: MyPropertyDlg
 		};
 	},
 
 	DoModal : function() {
-		var div = $("<div></div>");
-		if (this.m_model != null) {
-			MyPropertyDlg.CreateLabel(0, "Ê¾Àı").appendTo(div);
-			$("<img src='" + this.m_model + "'></img>").appendTo(div);
+		var table = $("<table style='margin:10px;'></table>");
+		var thead = $("<thead></thead>").appendTo(table);
+		var tbody = $("<tbody></tbody>").appendTo(table);
+		
+		if (this.m_modelId != null) {
+			var tr = $("<tr style='border: 0px;'></tr>");
+			tr.appendTo(table);
+			
+			tr.append($("<td></td>").append($("<img style='margin:10px;' src='" + document.getElementById(this.m_modelId).src + "'></img>")));
+			tr.append($("<td></td>"));
 		}
 
 		for (var i=0; i<this.m_list.GetListSize(); ++i) {
-			MyPropertyDlg.CreateLabel(i+1, this.m_list.noteText[i]).appendTo(div);
+			var tr = $("<tr style='border: 1px solid #e4eaec;'></tr>");
+			tr.appendTo(table);
+			
+			tr.append($("<td style='border: 0px'></td>").append(this.CreateLabel(i+1, this.m_list.noteTextList[i])));
 
+			var valueElement;
 			switch (this.m_list.dataTypeList[i]) {
-			case DATA_STYLE_float:
+			case DATA_TYPE_float:
 			case DATA_TYPE_uint:
 			case DATA_TYPE_string:
-				MyPropertyDlg.CreateInput(i+1, this.m_list.GetRowData(i), this.m_list.dataTypeList[i]).appendTo(div);
+				valueElement = this.CreateInput(i+1, this.m_list.GetRowData(i), this.m_list.dataTypeList[i]);
 				break;
 
-			case DATA_STYLE_bool:
-				MyPropertyDlg.CreateCheck(i+1, this.m_list.GetRowData(i)).appendTo(div);
+			case DATA_TYPE_bool:
+				valueElement = this.CreateCheck(i+1, this.m_list.GetRowData(i));
 				break;
 
-			case DATA_STYLE_enum:
+			case DATA_TYPE_enum:
 				var optionArray = this.m_list.memberNameList[i].noteList;
-				MyPropertyDlg.CreateSelect(i+1, optionArray, this.m_list.GetRowData(i)).appendTo(div);
+				valueElement = this.CreateSelect(i+1, optionArray, this.m_list.GetRowData(i));
 				break;
 				
 			case DATA_TYPE_color:
 				break;
 			}
+			tr.append($("<td style='border: 0px'></td>").append(valueElement));
 		}
 		
-		this.layerIndex = layer.open({
+		var layerParam = {
 			type: 1,
 			scrollbar: false,
+			area: 'auto',
+			maxWidth: 500,
 			
 			title: this.m_windowTitle,
-			content: div,
-			yes: ProperyDlg.OnOK
-		});
+			content: table[0].outerHTML
+		};
+		if (!this.m_readonly) {
+			layerParam.btn = ['ä¿å­˜', 'å–æ¶ˆ'];
+			layerParam.yes = MyPropertyDlg.OnOK;
+			layerParam.no = null;
+		}
+		globalMPD = this;
+		this.layerIndex = layer.open(layerParam);
 	},
 	
-	//´´½¨label¿Ø¼ş
+	//åˆ›å»ºlabelæ§ä»¶
 	CreateLabel : function(id, text) {
-		var element = $("<span id=" + MyPropertyDlg.labelIdPrefix+id + ">" + text + "</span>");
+		var element = $("<p style='margin:0px;' id='" + MyPropertyDlg.GenerateLabelId(id) + "'>" + text + "</p>");
 		element.css({"width": this.m_noteTextSize.cx+"px", "height": this.m_noteTextSize.cy+"px"});
 		if (id & 2)
-			element.css({"border": "1px lightgrey solid"});
+			element.css({"backgroundColor": "#EFEFEF"});
 		
 		return element;
 	},
-	//´´½¨checkbox¿Ø¼ş
+	//åˆ›å»ºcheckboxæ§ä»¶
 	CreateCheck : function(id, checked) {
-		var element = $("<input type='checkbox' id=" + MyPropertyDlg.tagIdPrefix+id + " />");
+		var element = $("<input type='checkbox' id='" + MyPropertyDlg.GenerateTagId(id) + "' />");
 		element.css({"width": this.m_tagSize.cx+"px", "height": this.m_tagSize.cy+"px"});
 		if (id & 2)
-			element.css({"border": "1px lightgrey solid"});
-		if (this.m_readOnly)
+			element.css({"backgroundColor": "#EFEFEF"});
+		if (this.m_readonly)
 			element.attr("disabled", "disabled");
 		
 		if (checked)
@@ -100,13 +120,13 @@ var MyPropertyDlg = {
 		
 		return element;
 	},
-	//´´½¨select¿Ø¼ş
+	//åˆ›å»ºselectæ§ä»¶
 	CreateSelect : function(id, optionNoteArray, selIndex) {
-		var element = $("<select id=" + MyPropertyDlg.tagIdPrefix+id + "></select>");
+		var element = $("<select id='" + MyPropertyDlg.GenerateTagId(id) + "'></select>");
 		element.css({"width": this.m_tagSize.cx+"px", "height": this.m_tagSize.cy+"px"});
 		if (id & 2)
-			element.css({"border": "1px lightgrey solid"});
-		if (this.m_readOnly)
+			element.css({"backgroundColor": "#EFEFEF"});
+		if (this.m_readonly)
 			element.css({"disabled": "disabled"});
 		
 		for (var i=0; i<optionNoteArray.length; ++i) {
@@ -117,17 +137,17 @@ var MyPropertyDlg = {
 		
 		return element;
 	},
-	// ´´½¨input¿Ø¼ş
+	// åˆ›å»ºinputæ§ä»¶
 	CreateInput : function(id, initValue, valueType) {
-		var element = $("<input id=" + MyPropertyDlg.tagIdPrefix+id + " />");
+		var element = $("<input id='" + MyPropertyDlg.GenerateTagId(id) + "' value='" + initValue + "' />");
 		element.css({"width": this.m_tagSize.cx+"px", "height": this.m_tagSize.cy+"px"});
 		if (id & 2)
-			element.css({"border": "1px lightgrey solid"});
-		if (this.m_readOnly)
-			element.attr("disabled", "disabled");
+			element.css({"backgroundColor": "#EFEFEF"});
+		if (this.m_readonly)
+			element.attr("readonly", "true");
 		
 		switch (valueType) {
-		case DATA_STYLE_float:
+		case DATA_TYPE_float:
 			element.attr("type", "text");
 			element.attr("maxLength", 17);
 			break;
@@ -147,65 +167,65 @@ var MyPropertyDlg = {
 	},
 
 
-	//°´È·¶¨°´Å¥
+	//æŒ‰ç¡®å®šæŒ‰é’®
 	OnOK : function(index, layero) {
-		if (this.m_readOnly) {	//Ö»¶Á×´Ì¬²»·µ»ØÓĞĞ§ĞÅÏ¢
-			parent.layer.close(this.layerIndex);
+		if (globalMPD.m_readonly) {	//åªè¯»çŠ¶æ€ä¸è¿”å›æœ‰æ•ˆä¿¡æ¯
+			parent.layer.close(globalMPD.layerIndex);
 			return;
 		}
 
 		var errorType = ERROR_NO;
 		var i;
 
-		//²âÊÔÊı¾İ
-		for (i = this.m_list.GetListSize()-1; i>=0; --i) {
-			errorType = this.m_list.CheckAMember(i, GetDlgItem(CTRLID(i)));
-			if(errorType != ERROR_NO) break;
+		//æµ‹è¯•æ•°æ®
+		for (i = globalMPD.m_list.GetListSize()-1; i>=0; --i) {
+			errorType = globalMPD.m_list.CheckAMember(i, GetDlgItem(CTRLID(i)));
+			if (errorType != ERROR_NO) break;
 		}
 
-		//³ö´íÌáÊ¾
+		//å‡ºé”™æç¤º
 		if (errorType != ERROR_NO) {
 			var showText;
 			var errorText;
 
-			switch (errorType) { //´íÎóÀàĞÍ
+			switch (errorType) { //é”™è¯¯ç±»å‹
 			case ERROR_STRNULL:
-				errorText = "Êı¾İÏî²»ÄÜÎª¿Õ!";
+				errorText = "æ•°æ®é¡¹ä¸èƒ½ä¸ºç©º!";
 				break;
 			case ERROR_FLOATMIX:
-				errorText = "¸¡µãÀàĞÍÊı¾İÖ»ÄÜÓĞÊı×ÖºÍ×î¶àÒ»¸öĞ¡Êıµã!";
+				errorText = "æµ®ç‚¹ç±»å‹æ•°æ®åªèƒ½æœ‰æ•°å­—å’Œæœ€å¤šä¸€ä¸ªå°æ•°ç‚¹!";
 				break;
 			case ERROR_UINTMIX:
-				errorText = "ÕıÕûÊıº¬ÓĞÊı×ÖÒÔÍâµÄÆäËû×Ö·û!";
+				errorText = "æ­£æ•´æ•°å«æœ‰æ•°å­—ä»¥å¤–çš„å…¶ä»–å­—ç¬¦!";
 				break;
 			case ERROR_UINTOVER:
-				errorText = "ÕûÊı²»ÔÚÔÊĞíµÄ·¶Î§ÄÚ!";
+				errorText = "æ•´æ•°ä¸åœ¨å…è®¸çš„èŒƒå›´å†…!";
 				break;
 			case ERROR_ENUMOVER:
-				errorText = "Ã»ÓĞÑ¡ÔñÑ¡ÏîÖĞµÄÄ³Ò»¸ö!";
+				errorText = "æ²¡æœ‰é€‰æ‹©é€‰é¡¹ä¸­çš„æŸä¸€ä¸ª!";
 				break;
 			case ERROR_STRMIX:
-				errorText = "±êÇ©ÖĞ²»ÄÜ°üº¬ [ ] ( ) { }";
+				errorText = "æ ‡ç­¾ä¸­ä¸èƒ½åŒ…å« [ ] ( ) { }";
 				break;
 			case ERROR_ENUMNOTALLOWED:
-				errorText = "Ñ¡¶¨½áµã»òÕßÑ¡¶¨µçÑ§Ôª¼şÑÕÉ«²»ÄÜÎªºÚÉ« !";
+				errorText = "é€‰å®šç»“ç‚¹æˆ–è€…é€‰å®šç”µå­¦å…ƒä»¶é¢œè‰²ä¸èƒ½ä¸ºé»‘è‰² !";
 				break;
 			}
 
-			if (1 == this.m_list.GetListSize()) {
-				showText = errorText + "\nÇëÖØĞÂÊäÈë!";
+			if (1 == globalMPD.m_list.GetListSize()) {
+				showText = errorText + "\nè¯·é‡æ–°è¾“å…¥!";
 			} else {
-				showText = "µÚ"+(i+1)+"¸öÊı¾İÏî:\n\t"+this.m_list.noteTextList[i]+"\n"+errorText+"\nÇëÖØĞÂÊäÈë!";
+				showText = "ç¬¬"+(i+1)+"ä¸ªæ•°æ®é¡¹:\n\t"+globalMPD.m_list.noteTextList[i]+"\n"+errorText+"\nè¯·é‡æ–°è¾“å…¥!";
 			}
 			alert(showText);
-			document.getElementById(tagIdPrefix+(i+1)).focus();	//Êı¾İ²»ºÏ·¨¿Ø¼ş»ñµÃ½¹µã
-			return;
+			document.getElementById(MyPropertyDlg.GenerateTagId(i+1)).focus();	//æ•°æ®ä¸åˆæ³•æ§ä»¶è·å¾—ç„¦ç‚¹
+			return false;
 		}
 
-		//²âÊÔ³É¹¦Ğ´ÈëÊı¾İ
-		for (i = this.m_list.GetListSize()-1; i>=0; --i)
-			this.m_list.SaveAMember(i, GetDlgItem(CTRLID(i)));
+		//æµ‹è¯•æˆåŠŸå†™å…¥æ•°æ®
+		for (i = globalMPD.m_list.GetListSize()-1; i>=0; --i)
+			globalMPD.m_list.SaveAMember(i, GetDlgItem(CTRLID(i)));
 
-		parent.layer.close(this.layerIndex);
+		parent.layer.close(globalMPD.layerIndex);
 	}
 };

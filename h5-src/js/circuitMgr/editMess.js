@@ -44,7 +44,7 @@ Manager.Property = function(body, isReadOnly) {
 	} else if (pointer.IsOnCtrl()) {
 		tempStr = Manager.GetBodyDefaultName(pointer) + " 的标签和电学属性";	//窗口标题
 		pointer.p.GetDataList(list);				//数据
-		model = Manager.GetCtrlPaintImage(pointer.p);		//示例
+		model = Manager.GetCtrlPaintImageId(pointer.p);		//示例
 	} else {
 		return;
 	}
@@ -72,7 +72,7 @@ Manager.ChangeCtrlStyle = function(body) {
 
 	//显示对话框
 	Manager.PaintWithSpecialColorAndRect(pointer, false);
-	var dlg = MyPropertyDlg.CreateNew(list, false, Manager.GetCtrlPaintImage(pointer.p), tempStr, Manager.canvas);
+	var dlg = MyPropertyDlg.CreateNew(list, false, Manager.GetCtrlPaintImageId(pointer.p), tempStr, Manager.canvas);
 	dlg.DoModal();
 
 	//改变类型

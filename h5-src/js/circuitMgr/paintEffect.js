@@ -158,7 +158,7 @@ Manager.ShowBodyElec = function(body) {
 		elec = pointer.p.elec;
 		elecDir = pointer.p.elecDir;
 
-		model = Manager.GetCtrlPaintImage(pointer.p);	//示例
+		model = Manager.GetCtrlPaintImageId(pointer.p);	//示例
 	}
 
 	//2,生成LISTDATA
@@ -222,13 +222,8 @@ Manager.ShowBodyElec = function(body) {
 
 	//4,显示对话框
 	Manager.PaintWithSpecialColorAndRect(pointer, false);
-	//var dlg = MyPropertyDlg.CreateNew(list, true, model, title, Manager.canvas);
-	//dlg.DoModal();
-	var as = "";
-	for (var i=0; i<list.noteTextList.length; ++i) {
-		as += (list.noteTextList[i] + list.memberNameList[i] + "\n");
-	}
-	alert(as);
+	var dlg = MyPropertyDlg.CreateNew(list, true, model, title, Manager.canvas);
+	dlg.DoModal();
 
 	return true;
 };
