@@ -74,6 +74,7 @@ var MyPropertyDlg = {
 				break;
 				
 			case DATA_TYPE_color:
+				valueElement = this.CreateColorPicker(i+1, this.m_list.GetRowData(i));
 				break;
 			}
 			tr.append($("<td style='border: 0px'></td>").append(valueElement));
@@ -164,6 +165,24 @@ var MyPropertyDlg = {
 		}
 		
 		return element;
+	},
+	CreateColorPicker : function(id, initValue) {
+		var initColor = PaintCommonFunc.HexToRGBStr(initValue);
+		
+		var element = $("<input id='" + MyPropertyDlg.GenerateTagId(id) + "' value='" + initColor + "' />");
+		
+		if (this.m_readonly)
+			element.attr("disabled", "disabled");
+		
+		element.css({"backgroundColor": initColor});
+		
+		var parentDiv = $("<div></div>");
+		parentDiv.css({"width": this.m_tagSize.cx+"px", "height": this.m_tagSize.cy+"px"});
+		parentDiv.append(element);
+		
+		element.colorpicker({history: true, color: initColor});
+		$("#body").append(parentDiv);
+		return parentDiv;
 	},
 
 
