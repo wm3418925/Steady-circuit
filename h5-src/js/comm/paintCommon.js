@@ -18,11 +18,26 @@ var PaintCommonFunc = {
 			return (parseInt(rgbStr.charAt(0), 16) << 20) | (parseInt(rgbStr.charAt(1), 16) << 12) | (parseInt(rgbStr.charAt(2), 16) << 4);
 		}
 
-		if (rgbStr.length == 3) {
+		if (rgbStr.length == 6) {
 			return parseInt(rgbStr, 16);
 		}
 		
 		return 0;
+	},
+	CheckRGBStr: function(rgbStr) {
+		if (rgbStr.charAt(0) == '#')
+			rgbStr = rgbStr.substr(1);
+		
+		if (rgbStr.length != 3 && rgbStr.length != 6)
+			return false;
+	
+		for (var i=0; i<rgbStr.length; ++i) {
+			var chc = rgbStr.charCodeAt(i);
+			if (!(chc>=0x30 && chc<=0x39) && !(chc>=0x41 && chc<=0x46) && !(chc>=0x61 && chc<=0x66))
+				return false;
+		}
+		
+		return true;
 	},
 	RGBToHex: function(r, g, b) {
 		return (r << 16) | (g << 8) | b;

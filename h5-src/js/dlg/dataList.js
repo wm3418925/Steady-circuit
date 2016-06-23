@@ -8,6 +8,7 @@ var ERROR_UINTOVER			= 4;	//正整数不在范围
 var ERROR_ENUMOVER			= 5;	//枚举不是选项的某一个
 var ERROR_STRMIX			= 6;	//名称标签含有非法字符 [](){}
 var ERROR_ENUMNOTALLOWED	= 7;	//枚举在一些情况下不允许一些值(如:焦点物体颜色不能为黑色)
+var ERROR_COLORINVALID		= 8;	//颜色字符串格式非法
 
 
 // 处理类型属性
@@ -155,6 +156,13 @@ var LISTDATA = {	//数据列表信息类
 			//chData = pageElement.value;
 			//if (!IsNormalStr(chData)) return ERROR_STRMIX;
 			break;
+			
+		case DATA_TYPE_color:
+			chData = pageElement.value;
+			if (!PaintCommonFunc.CheckRGBStr(chData)) {
+				return ERROR_COLORINVALID;
+			}
+			break;
 		}
 		return ERROR_NO;
 	},
@@ -180,6 +188,9 @@ var LISTDATA = {	//数据列表信息类
 			break;
 		case DATA_TYPE_enum:
 			tmpData = pageElement.selectedIndex;
+			break;
+		case DATA_TYPE_color:
+			tmpData = PaintCommonFunc.RGBStrToHex(pageElement.value);
 			break;
 		}
 		

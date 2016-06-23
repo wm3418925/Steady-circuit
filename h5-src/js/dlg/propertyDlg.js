@@ -54,27 +54,27 @@ var MyPropertyDlg = {
 			var tr = $("<tr style='border: 1px solid #e4eaec;'></tr>");
 			tr.appendTo(table);
 			
-			tr.append($("<td style='border: 0px'></td>").append(this.CreateLabel(i+1, this.m_list.noteTextList[i])));
+			tr.append($("<td style='border: 0px'></td>").append(this.CreateLabel(i, this.m_list.noteTextList[i])));
 
 			var valueElement;
 			switch (this.m_list.dataTypeList[i]) {
 			case DATA_TYPE_float:
 			case DATA_TYPE_uint:
 			case DATA_TYPE_string:
-				valueElement = this.CreateInput(i+1, this.m_list.GetRowData(i), this.m_list.dataTypeList[i]);
+				valueElement = this.CreateInput(i, this.m_list.GetRowData(i), this.m_list.dataTypeList[i]);
 				break;
 
 			case DATA_TYPE_bool:
-				valueElement = this.CreateCheck(i+1, this.m_list.GetRowData(i));
+				valueElement = this.CreateCheck(i, this.m_list.GetRowData(i));
 				break;
 
 			case DATA_TYPE_enum:
 				var optionArray = this.m_list.memberNameList[i].noteList;
-				valueElement = this.CreateSelect(i+1, optionArray, this.m_list.GetRowData(i));
+				valueElement = this.CreateSelect(i, optionArray, this.m_list.GetRowData(i));
 				break;
 				
 			case DATA_TYPE_color:
-				valueElement = this.CreateColorPicker(i+1, this.m_list.GetRowData(i));
+				valueElement = this.CreateColorPicker(i, this.m_list.GetRowData(i));
 				break;
 			}
 			tr.append($("<td style='border: 0px'></td>").append(valueElement));
@@ -198,7 +198,7 @@ var MyPropertyDlg = {
 
 		//测试数据
 		for (i = globalMPD.m_list.GetListSize()-1; i>=0; --i) {
-			errorType = globalMPD.m_list.CheckAMember(i, GetDlgItem(CTRLID(i)));
+			errorType = globalMPD.m_list.CheckAMember(i, document.getElementById(MyPropertyDlg.GenerateTagId(i)));
 			if (errorType != ERROR_NO) break;
 		}
 
@@ -237,13 +237,13 @@ var MyPropertyDlg = {
 				showText = "第"+(i+1)+"个数据项:\n\t"+globalMPD.m_list.noteTextList[i]+"\n"+errorText+"\n请重新输入!";
 			}
 			alert(showText);
-			document.getElementById(MyPropertyDlg.GenerateTagId(i+1)).focus();	//数据不合法控件获得焦点
+			document.getElementById(MyPropertyDlg.GenerateTagId(i)).focus();	//数据不合法控件获得焦点
 			return false;
 		}
 
 		//测试成功写入数据
 		for (i = globalMPD.m_list.GetListSize()-1; i>=0; --i)
-			globalMPD.m_list.SaveAMember(i, GetDlgItem(CTRLID(i)));
+			globalMPD.m_list.SaveAMember(i, document.getElementById(MyPropertyDlg.GenerateTagId(i)));
 
 		parent.layer.close(globalMPD.layerIndex);
 	}
