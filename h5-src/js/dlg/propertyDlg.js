@@ -56,7 +56,7 @@ var MyPropertyDlg = {
 			
 			tr.append($("<td style='border: 0px'></td>").append(this.CreateLabel(i, this.m_list.noteTextList[i])));
 
-			var valueElement;
+			var valueElement = null;
 			switch (this.m_list.dataTypeList[i]) {
 			case DATA_TYPE_float:
 			case DATA_TYPE_uint:
@@ -74,18 +74,21 @@ var MyPropertyDlg = {
 				break;
 				
 			case DATA_TYPE_color:
-				valueElement = this.CreateColorPicker(i, this.m_list.GetRowData(i));
+				var tmpTd = $("<td style='border: 0px'></td>").appendTo(tr);
+				var tmpDiv = $("<div></div>").appendTo(tmpTd);
+				this.CreateColorPicker(i, this.m_list.GetRowData(i), tmpDiv);
 				break;
 			}
-			tr.append($("<td style='border: 0px'></td>").append(valueElement));
+			if (valueElement)
+				tr.append($("<td style='border: 0px'></td>").append(valueElement));
 		}
 		
 		
-		var div = $("#myStoreDlgDiv");
-		if (div && div.length > 0)
-			div.remove();
-		div = $("<div id='myStoreDlgDiv' ></div>").appendTo($("#body"));
-		div.append(table);
+		var dlgDiv = $("#myStoreDlgDiv");
+		if (dlgDiv && dlgDiv.length > 0)
+			dlgDiv.remove();
+		dlgDiv = $("<div id='myStoreDlgDiv' ></div>").appendTo($("#body"));
+		dlgDiv.append(table);
 		
 		var layerParam = {
 			type: 1,
@@ -173,33 +176,22 @@ var MyPropertyDlg = {
 		
 		return element;
 	},
-	CreateColorPicker : function(id, initValue) {
+	CreateColorPicker : function(id, initValue, parentDiv) {
 		var initColor = PaintCommonFunc.HexToRGBStr(initValue);
+		var id = MyPropertyDlg.GenerateTagId(id);
 		
-		var divHtml = 
-			'<div id="wmCustomWidget">' +
-				'<div id="wmColorSelector"><div style="background-color: ' + initColor + '" /></div>' + 
-				'<div id="wmColorpickerHolder" />' +
-			'</div>';
-		var div = $(divHtml).appendTo($("#body"));
+		var input = $('<input id="' + id + '" value="' + initColor + '" />');
+		parentDiv.append(input);
+		input.colorPicker({
+			customBG: initColor,
+			readOnly: true,
+			init: function(elm, colors) { // colors is a different instance (not connected to colorPicker)
+				elm.style.backgroundColor = elm.value;
+				elm.style.color = colors.rgbaMixCustom.luminance > 0.22 ? '#222' : '#ddd';
+			}
+		});
 		
-		$('#wmColorpickerHolder').ColorPicker({flat: false});
-		return div;
-				
-				
-				
-		var element = $("<input id='" + MyPropertyDlg.GenerateTagId(id) + "' value='" + initColor + "' />");
-		element.css({"display": "none"});
-		if (this.m_readonly)
-			element.attr("disabled", "disabled");
-		
-		var parentDiv = $("<div ></div>");
-		parentDiv.css({"width": this.m_tagSize.cx+"px"/*, "height": this.m_tagSize.cy+"px"*/});
-		parentDiv.append(element);
-		
-		element.colorpicker({history: true, color: initColor, displayIndicator: false});
-		$("#body").append(parentDiv);
-		return parentDiv;
+		return null;
 	},
 
 
