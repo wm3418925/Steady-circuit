@@ -80,6 +80,13 @@ var MyPropertyDlg = {
 			tr.append($("<td style='border: 0px'></td>").append(valueElement));
 		}
 		
+		
+		var div = $("#myStoreDlgDiv");
+		if (div && div.length > 0)
+			div.remove();
+		div = $("<div id='myStoreDlgDiv' ></div>").appendTo($("#body"));
+		div.append(table);
+		
 		var layerParam = {
 			type: 1,
 			scrollbar: false,
@@ -87,7 +94,7 @@ var MyPropertyDlg = {
 			maxWidth: 500,
 			
 			title: this.m_windowTitle,
-			content: table[0].outerHTML
+			content: table
 		};
 		if (!this.m_readonly) {
 			layerParam.btn = ['保存', '取消'];
@@ -101,7 +108,7 @@ var MyPropertyDlg = {
 	//创建label控件
 	CreateLabel : function(id, text) {
 		var element = $("<p style='margin:0px;' id='" + MyPropertyDlg.GenerateLabelId(id) + "'>" + text + "</p>");
-		element.css({"width": this.m_noteTextSize.cx+"px", "height": this.m_noteTextSize.cy+"px"});
+		element.css({"width": this.m_noteTextSize.cx+"px"/*, "height": this.m_noteTextSize.cy+"px"*/});
 		if (id & 2)
 			element.css({"backgroundColor": "#EFEFEF"});
 		
@@ -169,18 +176,28 @@ var MyPropertyDlg = {
 	CreateColorPicker : function(id, initValue) {
 		var initColor = PaintCommonFunc.HexToRGBStr(initValue);
 		
-		var element = $("<input id='" + MyPropertyDlg.GenerateTagId(id) + "' value='" + initColor + "' />");
+		var divHtml = 
+			'<div id="wmCustomWidget">' +
+				'<div id="wmColorSelector"><div style="background-color: ' + initColor + '" /></div>' + 
+				'<div id="wmColorpickerHolder" />' +
+			'</div>';
+		var div = $(divHtml).appendTo($("#body"));
 		
+		$('#wmColorpickerHolder').ColorPicker({flat: false});
+		return div;
+				
+				
+				
+		var element = $("<input id='" + MyPropertyDlg.GenerateTagId(id) + "' value='" + initColor + "' />");
+		element.css({"display": "none"});
 		if (this.m_readonly)
 			element.attr("disabled", "disabled");
 		
-		element.css({"backgroundColor": initColor});
-		
-		var parentDiv = $("<div></div>");
-		parentDiv.css({"width": this.m_tagSize.cx+"px", "height": this.m_tagSize.cy+"px"});
+		var parentDiv = $("<div ></div>");
+		parentDiv.css({"width": this.m_tagSize.cx+"px"/*, "height": this.m_tagSize.cy+"px"*/});
 		parentDiv.append(element);
 		
-		element.colorpicker({history: true, color: initColor});
+		element.colorpicker({history: true, color: initColor, displayIndicator: false});
 		$("#body").append(parentDiv);
 		return parentDiv;
 	},

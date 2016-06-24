@@ -63,7 +63,7 @@ function readFileCallbackFunc(data) {
 	//Manager.fileName = newFileName;	//替换原有路径
 
 	// 可能因为文件问题而发生错误
-	//try {
+	try {
 		//2读取物体数量
 		var crunCount = data.cruns.length;
 		var ctrlCount = data.ctrls.length;
@@ -102,25 +102,29 @@ function readFileCallbackFunc(data) {
 			Manager.lead[i].ReadFromStoreJsonObj(data.leads[i], Manager.lead, Manager.crun, Manager.ctrl);
 
 		//7读取其他变量
-		Manager.moveBodySense = data.moveBodySense;		//按方向键一次物体移动的距离
-		Manager.maxLeaveOutDis = data.maxLeaveOutDis;	//导线合并最大距离
-		Manager.textColor = data.textColor;				//字体颜色
-		if (!Manager.textColor) Manager.textColor = COLOR_NORMAL;
-		Manager.focusLeadStyle = data.focusLeadStyle;	//焦点导线样式
-		Manager.focusCrunColor = data.focusCrunColor;	//焦点结点颜色
-		Manager.focusCtrlColor = data.focusCtrlColor;	//焦点控件颜色
+		if (data.hasOwnProperty("moveBodySense"))
+			Manager.moveBodySense = data.moveBodySense;		//按方向键一次物体移动的距离
+		if (data.hasOwnProperty("maxLeaveOutDis"))
+			Manager.maxLeaveOutDis = data.maxLeaveOutDis;	//导线合并最大距离
+		if (data.hasOwnProperty("textColor"))
+			Manager.textColor = data.textColor;				//字体颜色
+		if (data.hasOwnProperty("focusLeadStyle"))
+			Manager.focusLeadStyle = data.focusLeadStyle;	//焦点导线样式
+		if (data.hasOwnProperty("focusCrunColor"))
+			Manager.focusCrunColor = data.focusCrunColor;	//焦点结点颜色
+		if (data.hasOwnProperty("focusCtrlColor"))
+			Manager.focusCtrlColor = data.focusCtrlColor;	//焦点控件颜色
 		//读取焦点物体
-		var focusBody = Pointer.CreateNew();
-		if (data.focusBody) 
-			focusBody.ReadFromStoreJsonObj(data.focusBody, Manager.lead, Manager.crun, Manager.ctrl);
-		Manager.SetFocusBody(focusBody);				//设置焦点物体
-		Manager.viewOrig = data.viewOrig;				//视角初始坐标
+		var tmpFocusBody = Pointer.CreateNew();
+		if (data.hasOwnProperty("focusBody")) 
+			tmpFocusBody.ReadFromStoreJsonObj(data.focusBody, Manager.lead, Manager.crun, Manager.ctrl);
+		Manager.SetFocusBody(tmpFocusBody);				//设置焦点物体
 
-		//Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);	//初始化字体颜色
-	/*} catch(e) {
+		Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);	//初始化字体颜色
+	} catch(e) {
 		alert("文件可能损坏了 ! 读取文件错误");
 		return false;
-	}*/
+	}
 
 	return true;			//正常退出
 }
