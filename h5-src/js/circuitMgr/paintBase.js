@@ -12,8 +12,8 @@ Manager.PaintCtrl = function(c, isPaintName) {
 Manager.PaintCtrlText = function(c) {
 	ASSERT(c != null);
 	if (!c.isPaintName) return;
-	Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);
-	Manager.ctx.strokeText(c.name, c.x, c.y-5);
+	Manager.ctx.fillStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);
+	Manager.ctx.fillText(c.name, c.x, c.y-5);
 };
 
 //画结点
@@ -27,8 +27,8 @@ Manager.PaintCrun = function(c, isPaintName) {
 Manager.PaintCrunText = function(c) {
 	ASSERT(c != null);
 	if (!c.isPaintName) return;
-	Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);
-	Manager.ctx.strokeText(c.name, c.x, c.y-10);
+	Manager.ctx.fillStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);
+	Manager.ctx.fillText(c.name, c.x, c.y-10);
 };
 
 //画导线
