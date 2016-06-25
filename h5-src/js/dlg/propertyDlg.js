@@ -1,5 +1,12 @@
 var globalMPD = null;
 
+// 如果colorpicker失去焦点, 而且是鼠标单击滚动条或移动窗口等. 如果不主动blur, 在即点击就不会弹出colorpicker
+function myColorpickerCallback(e, action) {
+	if (!e && (action == "changeXYValue" || action == "external")) {
+		$("#"+MyPropertyDlg.GenerateTagId(0)).blur();
+	}
+}
+
 var MyPropertyDlg = {
 	GenerateLabelId : function(index) {return "MPDLabelElement" + index;},
 	GenerateTagId : function(index) {return "MPDTagElement" + index;},
@@ -177,7 +184,7 @@ var MyPropertyDlg = {
 		return element;
 	},
 	CreateColorPicker : function(id, initValue, parentDiv) {
-		var initColor = PaintCommonFunc.HexToRGBStr(initValue);
+		var initColor = PaintCommonFunc.HexToRGBStr(initValue).toUpperCase();
 		var id = MyPropertyDlg.GenerateTagId(id);
 		
 		var input = $('<input id="' + id + '" value="' + initColor + '" />');
@@ -185,10 +192,14 @@ var MyPropertyDlg = {
 		input.colorPicker({
 			customBG: initColor,
 			readOnly: true,
+			noAlpha: true,
+			size: 1,
+			noResize: true,
 			init: function(elm, colors) { // colors is a different instance (not connected to colorPicker)
 				elm.style.backgroundColor = elm.value;
-				elm.style.color = colors.rgbaMixCustom.luminance > 0.22 ? '#222' : '#ddd';
-			}
+				elm.style.color = colors.rgbaMixCustom.luminance > 0.22 ? '#222' : '#DDD';
+			},
+			actionCallback: myColorpickerCallback
 		});
 		
 		return null;
