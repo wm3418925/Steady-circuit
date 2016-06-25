@@ -52,6 +52,8 @@ Manager.Property = function(body, isReadOnly) {
 	Manager.PaintWithSpecialColorAndRect(pointer, false);
 	var dlg = MyPropertyDlg.CreateNew(list, isReadOnly, model, tempStr, Manager.canvas);
 	dlg.DoModal();
+	
+	Manager.PaintAll();
 };
 
 //改变电学元件类型

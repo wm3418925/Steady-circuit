@@ -225,5 +225,6 @@ Manager.ShowBodyElec = function(body) {
 	var dlg = MyPropertyDlg.CreateNew(list, true, model, title, Manager.canvas);
 	dlg.DoModal();
 
+	Manager.PaintAll();
 	return true;
 };

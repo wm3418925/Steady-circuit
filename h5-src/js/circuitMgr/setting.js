@@ -33,7 +33,7 @@ Manager.SetTextColor = function() {
 	dlg.DoModal();
 
 	if (preColor != Manager.textColor) {
-		Manager.ctx.SetTextColor(LEADCOLOR[textColor]);
+		//Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);
 		Manager.PaintAll();
 	}
 };

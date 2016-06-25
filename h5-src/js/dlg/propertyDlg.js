@@ -1,12 +1,5 @@
 var globalMPD = null;
 
-// 如果colorpicker失去焦点, 而且是鼠标单击滚动条或移动窗口等. 如果不主动blur, 在即点击就不会弹出colorpicker
-function myColorpickerCallback(e, action) {
-	if (!e && (action == "changeXYValue" || action == "external")) {
-		$("#"+MyPropertyDlg.GenerateTagId(0)).blur();
-	}
-}
-
 var MyPropertyDlg = {
 	GenerateLabelId : function(index) {return "MPDLabelElement" + index;},
 	GenerateTagId : function(index) {return "MPDTagElement" + index;},
@@ -23,7 +16,7 @@ var MyPropertyDlg = {
 		
 		return {
 			m_windowTitle: windowTitle,	//窗口名称
-			m_modelId: modelId,				//示例
+			m_modelId: modelId,			//示例
 			m_readonly: readonly,		//是否只读
 			m_list: list,				//数据列表
 
@@ -33,7 +26,7 @@ var MyPropertyDlg = {
 			m_noteTextSize: noteTextSize,	//数据提示text大小
 
 			m_firstCtrlPos: firstCtrlPos,	//第一个控件起始坐标
-			m_tagSize: tagSize,			//控件大小
+			m_tagSize: tagSize,				//控件大小
 			
 			m_okButtonPos: okButtonPos,	//确定按钮的坐标
 			m_cancelButtonPos: cancelButtonPos,	//取消按钮的坐标
@@ -104,7 +97,14 @@ var MyPropertyDlg = {
 			maxWidth: 500,
 			
 			title: this.m_windowTitle,
-			content: table
+			content: table,
+			
+			moveEnd: function() {
+				// 移动完毕后, 所有子标签失去焦点
+				for (var i=0; i<globalMPD.m_list.GetListSize(); ++i) {
+					$("#"+MyPropertyDlg.GenerateTagId(i)).blur();
+				}
+			}
 		};
 		if (!this.m_readonly) {
 			layerParam.btn = ['保存', '取消'];
@@ -198,8 +198,7 @@ var MyPropertyDlg = {
 			init: function(elm, colors) { // colors is a different instance (not connected to colorPicker)
 				elm.style.backgroundColor = elm.value;
 				elm.style.color = colors.rgbaMixCustom.luminance > 0.22 ? '#222' : '#DDD';
-			},
-			actionCallback: myColorpickerCallback
+			}
 		});
 		
 		return null;
