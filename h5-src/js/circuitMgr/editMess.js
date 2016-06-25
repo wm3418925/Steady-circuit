@@ -50,10 +50,8 @@ Manager.Property = function(body, isReadOnly) {
 	}
 
 	Manager.PaintWithSpecialColorAndRect(pointer, false);
-	var dlg = MyPropertyDlg.CreateNew(list, isReadOnly, model, tempStr, Manager.canvas);
+	var dlg = MyPropertyDlg.CreateNew(list, isReadOnly, model, tempStr, Manager.canvas, null, function(){Manager.PaintAll();});
 	dlg.DoModal();
-	
-	Manager.PaintAll();
 };
 
 //改变电学元件类型
@@ -62,26 +60,30 @@ Manager.ChangeCtrlStyle = function(body) {
 	if (!pointer.IsOnCtrl()) return;
 
 	//获得原来类型
-	var preStyle = pointer.p.style;
+	Manager.tmpEditCtrlPreStyle = pointer.p.style;
+	Manager.tmpEditCtrlNewStyle = pointer.p.style;
+	Manager.tmpEditCtrl = pointer.p;
 
 	//初始化list数据
 	var list = LISTDATA.CreateNew();
-	list.SetDataParent(pointer.p);
-	list.SetAEnumMember(CTRL_TYPE_ENUM, "电学元件的类型", "style");
+	list.SetDataParent(Manager);
+	list.SetAEnumMember(CTRL_TYPE_ENUM, "电学元件的类型", "tmpEditCtrlNewStyle");
 
 	//获得窗口标题
 	var tempStr = Manager.GetBodyDefaultName(pointer) + " 的类型";
 
+	//改变类型回调
+	var changedCallback = function() {
+		if (Manager.tmpEditCtrlPreStyle != Manager.tmpEditCtrlNewStyle) {
+			if (IDYES != alert("改变类型会丢失原有电学元件的数据!\n继续吗?", MB_YESNO)) return;
+			Manager.tmpEditCtrl.ChangeStyle(Manager.tmpEditCtrlNewStyle);
+		}
+	};
+	
 	//显示对话框
 	Manager.PaintWithSpecialColorAndRect(pointer, false);
-	var dlg = MyPropertyDlg.CreateNew(list, false, Manager.GetCtrlPaintImageId(pointer.p), tempStr, Manager.canvas);
+	var dlg = MyPropertyDlg.CreateNew(list, false, Manager.GetCtrlPaintImageId(pointer.p), tempStr, Manager.canvas, changedCallback, null);
 	dlg.DoModal();
-
-	//改变类型
-	if (preStyle != pointer.p.style) {
-		if (IDYES != alert("改变类型会丢失原有电学元件的数据!\n继续吗?", MB_YESNO)) return;
-		pointer.p.ChangeStyle(newStyle);
-	}
 };
 
 //移动物体

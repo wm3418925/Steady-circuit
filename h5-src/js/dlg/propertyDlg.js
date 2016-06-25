@@ -4,7 +4,8 @@ var MyPropertyDlg = {
 	GenerateLabelId : function(index) {return "MPDLabelElement" + index;},
 	GenerateTagId : function(index) {return "MPDTagElement" + index;},
 	
-	CreateNew : function(list, readonly, modelId, windowTitle, wndParent) {
+	// 回调函数 changedCallback, dlgEndCallback 都不携带任何参数
+	CreateNew : function(list, readonly, modelId, windowTitle, wndParent, changedCallback, dlgEndCallback) {
 		var inter = {x: 20, y: 15};
 		var firstNotePos = {x: 20, y: 20};
 		var noteTextSize = {cx: 180, cy: 20};
@@ -32,6 +33,9 @@ var MyPropertyDlg = {
 			m_cancelButtonPos: cancelButtonPos,	//取消按钮的坐标
 			
 			m_wndSize: wndSize,	//窗口大小
+			
+			m_changedCallback: changedCallback,	// 点击确定修改值的回调
+			m_dlgEndCallback: dlgEndCallback,	// 窗口关闭回调
 			
 			__proto__: MyPropertyDlg
 		};
@@ -104,7 +108,8 @@ var MyPropertyDlg = {
 				for (var i=0; i<globalMPD.m_list.GetListSize(); ++i) {
 					$("#"+MyPropertyDlg.GenerateTagId(i)).blur();
 				}
-			}
+			},
+			end: this.m_dlgEndCallback
 		};
 		if (!this.m_readonly) {
 			layerParam.btn = ['保存', '取消'];
@@ -112,13 +117,13 @@ var MyPropertyDlg = {
 			layerParam.no = null;
 		}
 		globalMPD = this;
-		this.layerIndex = layer.open(layerParam);
+		this.m_layerIndex = layer.open(layerParam);
 	},
 	
 	//创建label控件
 	CreateLabel : function(id, text) {
 		var element = $("<p style='margin:0px;' id='" + MyPropertyDlg.GenerateLabelId(id) + "'>" + text + "</p>");
-		element.css({"width": this.m_noteTextSize.cx+"px"/*, "height": this.m_noteTextSize.cy+"px"*/});
+		element.css({"width": this.m_noteTextSize.cx+"px", "height": this.m_noteTextSize.cy+"px"});
 		if (id & 2)
 			element.css({"backgroundColor": "#EFEFEF"});
 		
@@ -208,7 +213,7 @@ var MyPropertyDlg = {
 	//按确定按钮
 	OnOK : function(index, layero) {
 		if (globalMPD.m_readonly) {	//只读状态不返回有效信息
-			parent.layer.close(globalMPD.layerIndex);
+			parent.layer.close(globalMPD.m_layerIndex);
 			return;
 		}
 
@@ -264,6 +269,10 @@ var MyPropertyDlg = {
 		for (i = globalMPD.m_list.GetListSize()-1; i>=0; --i)
 			globalMPD.m_list.SaveAMember(i, document.getElementById(MyPropertyDlg.GenerateTagId(i)));
 
-		parent.layer.close(globalMPD.layerIndex);
+		// 关闭layer
+		parent.layer.close(globalMPD.m_layerIndex);
+		
+		// 写入成功回调
+		globalMPD.m_changedCallback();
 	}
 };

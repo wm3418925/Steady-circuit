@@ -23,62 +23,74 @@ Manager.SetLeaveOutDis = function() {
 
 //设置字体颜色
 Manager.SetTextColor = function() {
-	var preColor = Manager.textColor;
+	Manager.tmpTextPreColor = Manager.textColor;
 	
 	var list = LISTDATA.CreateNew();
 	list.SetDataParent(Manager);
 	list.SetAMember(DATA_TYPE_color, "标签颜色", "textColor");
-
-	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置标签颜色", Manager.canvas);
+	
+	//改变回调
+	var changedCallback = function() {
+		if (Manager.tmpTextPreColor != Manager.textColor) {
+			//Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);
+			Manager.PaintAll();
+		}
+	};
+	
+	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置标签颜色", Manager.canvas, changedCallback, null);
 	dlg.DoModal();
-
-	if (preColor != Manager.textColor) {
-		//Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);
-		Manager.PaintAll();
-	}
 };
 
 //设置焦点导线样式
 Manager.SetFocusLeadStyle = function() {
-	var save = Manager.focusLeadStyle;
+	Manager.tmpFocusLeadPreStyle = Manager.focusLeadStyle;
 	
 	var list = LISTDATA.CreateNew();
 	list.SetDataParent(Manager);
 	list.SetAEnumMember(LEAD_STYLE_ENUM, "选定导线样式", "focusLeadStyle");
-
-	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置选定导线样式", Manager.canvas);
+	
+	//改变回调
+	var changedCallback = function() {
+		if (Manager.tmpFocusLeadPreStyle != Manager.focusLeadStyle && Manager.focusBody.IsOnLead())
+			Manager.FocusBodyPaint(null);
+	};
+	
+	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置选定导线样式", Manager.canvas, changedCallback, null);
 	dlg.DoModal();
-
-	if (save != Manager.focusLeadStyle && Manager.focusBody.IsOnLead())
-		Manager.FocusBodyPaint(null);
 };
 
 //设置焦点结点颜色
 Manager.SetFocusCrunColor = function() {
-	var save = Manager.focusCrunColor;
+	Manager.tmpFocusCrunPreColor = Manager.focusCrunColor;
 	
 	var list = LISTDATA.CreateNew();
 	list.SetDataParent(Manager);
 	list.SetAMember(DATA_TYPE_color, "选定结点颜色", "focusCrunColor");
 
-	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置选定结点颜色", Manager.canvas);
+	//改变回调
+	var changedCallback = function() {
+		if (Manager.tmpFocusCrunPreColor != Manager.focusCrunColor && Manager.focusBody.IsOnCrun())
+			Manager.FocusBodyPaint(null);
+	};
+	
+	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置选定结点颜色", Manager.canvas, changedCallback, null);
 	dlg.DoModal();
-
-	if (save != Manager.focusCrunColor && Manager.focusBody.IsOnCrun())
-		Manager.FocusBodyPaint(null);
 };
 
 //设置焦点控件颜色
 Manager.SetFocusCtrlColor = function() {
-	var save = Manager.focusCtrlColor;
+	Manager.tmpFocusCtrlPreColor = Manager.focusCtrlColor;
 	
 	var list = LISTDATA.CreateNew();
 	list.SetDataParent(Manager);
 	list.SetAMember(DATA_TYPE_color, "选定电学元件颜色", "focusCtrlColor");
 
-	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置选定电学元件颜色", Manager.canvas);
+	//改变回调
+	var changedCallback = function() {
+		if (Manager.tmpFocusCtrlPreColor != Manager.focusCtrlColor && Manager.focusBody.IsOnCtrl())
+			Manager.FocusBodyPaint(null);
+	};
+	
+	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置选定电学元件颜色", Manager.canvas, changedCallback, null);
 	dlg.DoModal();
-
-	if (save != Manager.focusCtrlColor && Manager.focusBody.IsOnCtrl())
-		Manager.FocusBodyPaint(null);
 };

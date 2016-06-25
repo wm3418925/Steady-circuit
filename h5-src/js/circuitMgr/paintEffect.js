@@ -222,9 +222,8 @@ Manager.ShowBodyElec = function(body) {
 
 	//4,显示对话框
 	Manager.PaintWithSpecialColorAndRect(pointer, false);
-	var dlg = MyPropertyDlg.CreateNew(list, true, model, title, Manager.canvas);
+	var dlg = MyPropertyDlg.CreateNew(list, true, model, title, Manager.canvas, null, function(){Manager.PaintAll();});
 	dlg.DoModal();
 
-	Manager.PaintAll();
 	return true;
 };
