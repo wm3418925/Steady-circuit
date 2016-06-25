@@ -62,10 +62,15 @@ function MyDeepCopy(source) {
 		return result;
 	}
 }
+//复制坐标
 function ClonePosition(pos) {
 	return {x:pos.x, y:pos.y};
 }
-
+//复制坐标值
+function SetPosition(leftValue, rightValue) {
+	leftValue.x = rightValue.x;
+	leftValue.y = rightValue.y;
+}
 
 function ASSERT(flag) {
     if (!flag)
@@ -77,13 +82,11 @@ function IsFloatZero(/*double*/x) {   //判断某个浮点数是否近似为0
     return x > -(1e-9) && x < (1e-9);
 }
 
-function IsElecError(/*const ELEC_STATE */e)	//电流是否不正常
-{
+function IsElecError(/*const ELEC_STATE */e) {	//电流是否不正常
 	return e < NORMALELEC || e > OPENELEC;
 }
 
-/*bool*/function IsStrPositiveFloat(/*const char * */str)	//判断字符串是否是正数
-{
+/*bool*/function IsStrPositiveFloat(/*const char * */str) {	//判断字符串是否是正数
 	/*int*/var count = 0;
 
 	//检查是否最多只有一个'.',没有其他数字以外的字符
@@ -104,8 +107,7 @@ function IsElecError(/*const ELEC_STATE */e)	//电流是否不正常
 	return true;
 }
 
-/*bool*/function IsUnsignedInteger(/*const char * */str)	//判断字符串是否是正整数
-{
+/*bool*/function IsUnsignedInteger(/*const char * */str) {	//判断字符串是否是正整数
     for (var i=0; i<str.length; ++i) {
         var c = str.charCodeAt(i);
         if (c < 48 || c > 57)
@@ -113,6 +115,7 @@ function IsElecError(/*const ELEC_STATE */e)	//电流是否不正常
     }
     return true;
 }
+
 
 
 // 获取当前时间中的鼠标坐标(相对client窗口)
@@ -146,10 +149,4 @@ function DPtoLP(posOrRect, client) {
 	if (posOrRect.hasOwnProperty("y")) {
 		posOrRect.y -= t;
 	}
-}
-
-//复制坐标值
-function SetPosition(leftValue, rightValue) {
-	leftValue.x = rightValue.x;
-	leftValue.y = rightValue.y;
 }
