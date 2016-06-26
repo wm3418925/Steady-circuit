@@ -122,14 +122,13 @@ Manager.PosBodyPaintRect = function(pos) {
 
 	if (body.IsOnConnectPos()) body.SetAtState(-1);
 
-	if (body.IsOnBody()) Manager.ctx.SelectObject(hp + BLUE);
+	if (body.IsOnBody()) Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(0x2020F0);
 
 	if (body.IsOnCrun()) {
-		Manager.ctx.Rectangle(body.p.x-DD-2, body.p.y-DD-2, 
-			body.p.x+DD+2, body.p.y+DD+2);
+		var dis = DD+2;
+		Manager.ctx.strokeRect(body.p.x-dis, body.p.y-dis, dis*2, dis*2);
 	} else if (body.IsOnCtrl()) {
-		Manager.ctx.Rectangle(body.p.x-2, body.p.y-2, 
-			body.p.x+CTRL_SIZE.cx+2, body.p.y+CTRL_SIZE.cy+2);
+		Manager.ctx.strokeRect(body.p.x-2, body.p.y-2, CTRL_SIZE.cx+4, CTRL_SIZE.cy+4);
 	}
 
 	Manager.PaintWithSpecialColorAndRect(body, false);

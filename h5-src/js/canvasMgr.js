@@ -640,7 +640,7 @@ CanvasMgr.OnFocusBodyDelete = function() {
 
 	var body = FOCUS_OR_POS.CreateNew(true);
 
-	Manager.Delete(body);
+	Manager.DeleteFocusOrPosBody(body);
 	Manager.PaintAll();
 };
 
@@ -809,7 +809,7 @@ CanvasMgr.OnPosBodyDelete = function() {
 
 	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
 
-	Manager.Delete(body);
+	Manager.DeleteFocusOrPosBody(body);
 	Manager.PaintAll();
 };
 
@@ -825,7 +825,7 @@ CanvasMgr.OnDeleteLead = function() {
 
 	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
 
-	Manager.Delete(body);
+	Manager.DeleteFocusOrPosBody(body);
 	Manager.PaintAll();
 };
 

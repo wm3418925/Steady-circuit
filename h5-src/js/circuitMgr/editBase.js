@@ -96,7 +96,7 @@ Manager.DeleteSingleBody = function(pointer) {
 };
 
 //删除
-Manager.Delete = function(pointer) {
+Manager.DeletePointerBody = function(pointer) {
 	ASSERT(pointer.IsOnAny() && !pointer.IsOnConnectPos());
 
 	if (pointer.IsOnLead()) {
@@ -179,12 +179,12 @@ Manager.ConnectBodyLead = function(posb) {
 };
 
 //删除物体
-Manager.Delete = function(body) {
+Manager.DeleteFocusOrPosBody = function(body) {
 	var pointer = Manager.GetBodyPointer(body);
 	if (!pointer.IsOnAny()) return false;
 
 	if (Manager.DeleteNote(pointer)) {
-		Manager.Delete(pointer);
+		Manager.DeletePointerBody(pointer);
 		return true;
 	} else {
 		return false;

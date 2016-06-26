@@ -33,7 +33,7 @@ Manager.CopyBody = function(body) {
 Manager.CutBody = function(body) {
 	var pointer = CopyBody(body);	//复制物体
 	if (!pointer.IsOnBody()) return;
-	Manager.Delete(pointer);		//删除物体
+	Manager.DeletePointerBody(pointer);		//删除物体
 	Manager.PaintAll();				//重绘电路
 };
 
