@@ -708,7 +708,7 @@ var LEAD = {
 				} else {
 					pre1.x = pos.x;
 					var tmp  = {x: pos.x, y: now.y};
-					this.coord.splice(currentIndex-1, 0, tmp);	//在pre1后面插入元素
+					this.coord.splice(currentIndex, 0, tmp);	//在pre1后面插入元素
 				}
 
 				this.CleanLead(); return true;
@@ -778,9 +778,9 @@ var LEAD = {
 					}
 				} else if (next1 != null) {	//now不是结尾
 					now.y = pos.y;
-					this.coord.splice(currentIndex-1, 0, {x:pre1.x, y:pos.y});	//在pre1后面插入元素
+					this.coord.splice(currentIndex, 0, {x:pre1.x, y:pos.y});	//在pre1后面插入元素
 				} else {	//now是结尾
-					this.coord.splice(currentIndex-1, 0, {x:pre1.x, y:pos.y}, {x:now.x, y:pos.y});	//在pre1后面插入元素
+					this.coord.splice(currentIndex, 0, {x:pre1.x, y:pos.y}, {x:now.x, y:pos.y});	//在pre1后面插入元素
 				}
 
 				this.CleanLead(); return true;
@@ -801,7 +801,7 @@ var LEAD = {
 					}
 				} else {
 					pre1.y = pos.y;
-					this.coord.splice(currentIndex-1, 0, {x:now.x, y:pos.y});	//在pre1后面插入元素
+					this.coord.splice(currentIndex, 0, {x:now.x, y:pos.y});	//在pre1后面插入元素
 				}
 
 				this.CleanLead(); return true;
