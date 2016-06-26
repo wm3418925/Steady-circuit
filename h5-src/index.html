@@ -115,9 +115,11 @@
 	<script src="js/canvasMgr.js" type="text/javascript" charset="UTF-8"></script>
 
 	
-	<script type="text/javascript">
-		CanvasMgr.OnInitDialog(getElementById("myCanvas"));
-	</script>
+<script type="text/javascript">
+function pageOnload() {
+	CanvasMgr.OnInitDialog(document.getElementById("myCanvas"));
+}
+</script>
 	
 </body>
 </html>

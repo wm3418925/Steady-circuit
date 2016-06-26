@@ -78,7 +78,7 @@ function ASSERT(flag) {
     return flag;
 }
 
-function IsFloatZero(/*double*/x) {   //判断某个浮点数是否近似为0
+function IsFloatZero(x) {   //判断某个浮点数是否近似为0
     return x > -(1e-9) && x < (1e-9);
 }
 
@@ -86,7 +86,7 @@ function IsElecError(/*const ELEC_STATE */e) {	//电流是否不正常
 	return e < NORMALELEC || e > OPENELEC;
 }
 
-/*bool*/function IsStrPositiveFloat(/*const char * */str) {	//判断字符串是否是正数
+/*bool*/function IsStrPositiveFloat(str) {	//判断字符串是否是正数
 	/*int*/var count = 0;
 
 	//检查是否最多只有一个'.',没有其他数字以外的字符
@@ -107,7 +107,7 @@ function IsElecError(/*const ELEC_STATE */e) {	//电流是否不正常
 	return true;
 }
 
-/*bool*/function IsUnsignedInteger(/*const char * */str) {	//判断字符串是否是正整数
+function IsUnsignedInteger(str) {	//判断字符串是否是正整数
     for (var i=0; i<str.length; ++i) {
         var c = str.charCodeAt(i);
         if (c < 48 || c > 57)
@@ -125,6 +125,19 @@ function GetClientPosOfEvent(client) {
 	var y = e.clientY;
 	//client.
 	return {"x":x, "y":y};
+}
+// 获取当前时间中的鼠标坐标(相对屏幕窗口)
+function GetScreenPosOfEvent(e) {
+	var tt = e || window.event;
+	return {"x":tt.screenX, "y":tt.screenY};
+}
+// 获取点击的键code
+function GetPressKeyCode(e) {
+	if (window.event) {
+		return e.keyCode;
+	} else if(e.which) {
+		return e.which;
+	}
 }
 // 由设备坐标变换为逻辑坐标
 function DPtoLP(posOrRect, client) {

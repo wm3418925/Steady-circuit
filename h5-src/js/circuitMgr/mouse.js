@@ -99,15 +99,14 @@ Manager.LButtonDown = function(pos) {
 };
 
 //处理鼠标左键按起的消息
-Manager.LButtonUp = function(pos) {
+Manager.LButtonUp = function(pos, e) {
 	Manager.isUpRecvAfterDown = true;						//鼠标按下后收到鼠标按起消息
-	if (!Manager.lButtonDownState || !Manager.motiCount) return false;	//没有点击返回
+	if (!Manager.lButtonDownState || Manager.motiCount<=0) return false;	//没有点击返回
 	DPtoLP(pos, Manager.canvas);
 	var body = Manager.motiBody[Manager.motiCount-1];
 
 	//左键按下和按起的坐标相同,而且点击的不是连接点
-	if (Manager.lButtonDownPos.x == pos.x && Manager.lButtonDownPos.y == pos.y 
-		&& !body.IsOnConnectPos()) {
+	if (Manager.lButtonDownPos.x == pos.x && Manager.lButtonDownPos.y == pos.y && !body.IsOnConnectPos()) {
 		if (body.IsOnCtrl())
 			body.p.SwitchOnOff();	//开关开合情况改变
 		Manager.FocusBodyPaint(null);	//重绘焦点
@@ -121,9 +120,9 @@ Manager.LButtonUp = function(pos) {
 		Manager.motiCount = 0;
 		return true;
 	} else if (body.IsOnBody()) {	//移动物体或复制物体
-		/*if (IsCtrlDown()) 	//左或右Ctrl键按下复制物体
+		if (e.ctrlKey==1) 	//左或右Ctrl键按下复制物体
 			Manager.PosBodyClone(body, Manager.lButtonDownPos, pos);
-		else*/
+		else
 			Manager.PosBodyMove(body, Manager.lButtonDownPos, pos);
 		Manager.motiCount = 0;
 		return true;

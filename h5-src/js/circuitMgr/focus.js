@@ -138,7 +138,7 @@ Manager.FocusBodyChangeUseTab = function() {
 };
 
 //用户按上下左右键移动焦点物体
-Manager.FocusBodyMove = function(dir) {
+Manager.FocusBodyMove = function(keyCode) {
 	Manager.motiCount = 0;
 	if (!Manager.focusBody.IsOnBody()) return false;
 
@@ -147,17 +147,17 @@ Manager.FocusBodyMove = function(dir) {
 	var toPos = ClonePosition(fromPos);
 
 	//设置移动后的坐标
-	switch (dir) {
-	case VK_UP:		//向上移动焦点
+	switch (keyCode) {
+	case 38:		//向上移动焦点
 		toPos.y -= Manager.moveBodySense;
 		break;
-	case VK_DOWN:	//向下移动焦点
+	case 40:	//向下移动焦点
 		toPos.y += Manager.moveBodySense;
 		break;
-	case VK_LEFT:	//向左移动焦点
+	case 37:	//向左移动焦点
 		toPos.x -= Manager.moveBodySense;
 		break;
-	case VK_RIGHT:	//向右移动焦点
+	case 39:	//向右移动焦点
 		toPos.x += Manager.moveBodySense;
 		break;
 	default:

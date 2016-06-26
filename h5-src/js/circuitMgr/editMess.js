@@ -2,8 +2,8 @@
 //添加物体
 Manager.AddBody = function(pos) {
 	var temp = Manager.addState;
-
 	Manager.addState = BODY_NO;	//不再添加物体
+	
 	DPtoLP(pos, Manager.canvas);
 
 	if (BODY_CRUN == temp) {
