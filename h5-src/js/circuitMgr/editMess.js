@@ -40,7 +40,7 @@ Manager.Property = function(body, isReadOnly) {
 	} else if (pointer.IsOnCrun()) {
 		tempStr = Manager.GetBodyDefaultName(pointer)  + " 的标签";	//窗口标题
 		pointer.p.GetDataList(list);				//数据
-		model = crunImageData;						//示例
+		model = "crunImg";					//示例
 	} else if (pointer.IsOnCtrl()) {
 		tempStr = Manager.GetBodyDefaultName(pointer) + " 的标签和电学属性";	//窗口标题
 		pointer.p.GetDataList(list);				//数据

@@ -87,3 +87,6 @@ Manager.GetBodyPointer = function(body) {
 
 	return pointer;
 };
+
+Manager.SetCursor = function(type) {
+};

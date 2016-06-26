@@ -614,13 +614,13 @@ var LEAD = {
 		if (this.conBody[0].IsOnCrun()) {
 			this.FitStart(DD*3);
 		} else { //if (this.conBody[0].IsOnCtrl())
-			this.FitStart(BODYSIZE.cx);
+			this.FitStart(CTRL_SIZE.cx);
 		}
 
 		if (this.conBody[1].IsOnCrun()) {
 			this.FitEnd(DD*3);
 		} else { //if (this.conBody[1].IsOnCtrl())
-			this.FitEnd(BODYSIZE.cx);
+			this.FitEnd(CTRL_SIZE.cx);
 		}
 	},
 

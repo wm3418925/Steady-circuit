@@ -104,14 +104,6 @@ var CLONE_FOR_SAVE		= 1;	//复制为了保存
 var CLONE_FOR_CLIPBOARD	= 2;	//复制为了剪切板使用
 
 
-//焦点物体或者坐标上的物体
-var FOCUS_OR_POS = {
-	CreateNew: function() {
-		return {isFocusBody:false, x:0, y:0};
-	}
-};
-
-
 var MAX_MOVE_BODY_DIS	= 50;					//使用方向键一次移动物体距离范围1~MAX_MOVE_BODY_DIS
 var MAX_LEAVE_OUT_DIS	= 15;					//相邻导线合并距离范围1~MAX_LEAVE_OUT_DIS
 

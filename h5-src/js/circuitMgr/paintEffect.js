@@ -27,14 +27,14 @@ Manager.ShowAddLead = function(pos) {
 Manager.ShowAddBody = function(point) {
 	if (Manager.addState == BODY_CRUN) {
 		if (Manager.lastMoveOnPos.x > -100)
-			PaintCommonFunc.PaintImageDataXor(Manager.ctx, crunImageData[PAINT_CRUN_STYLE_NORMAL], Manager.lastMoveOnPos.x-DD, Manager.lastMoveOnPos.y-DD);
+			PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.crunImageData[PAINT_CRUN_STYLE_NORMAL], Manager.lastMoveOnPos.x-DD, Manager.lastMoveOnPos.y-DD);
 		
 		DPtoLP(point, Manager.canvas);
 		Manager.lastMoveOnPos = point;
 		
-		PaintCommonFunc.PaintImageDataXor(Manager.ctx, crunImageData[PAINT_CRUN_STYLE_NORMAL], Manager.lastMoveOnPos.x-DD, Manager.lastMoveOnPos.y-DD);
+		PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.crunImageData[PAINT_CRUN_STYLE_NORMAL], Manager.lastMoveOnPos.x-DD, Manager.lastMoveOnPos.y-DD);
 
-		SetCursor(hcAddCrun);
+		Manager.SetCursor("hcAddCrun");
 		return true;
 	} else if (Pointer.IsCtrl(Manager.addState)) {
 		var tempImage = Manager.ctrlImageList[Manager.addState*4];
@@ -47,7 +47,7 @@ Manager.ShowAddBody = function(point) {
 		
 		PaintCommonFunc.PaintImageDataXor(Manager.ctx, tempImage, Manager.lastMoveOnPos.x, Manager.lastMoveOnPos.y);
 
-		SetCursor(null);
+		Manager.SetCursor(null);
 		return true;
 	} else {
 		return false;
@@ -77,14 +77,14 @@ Manager.ShowMoveBody = function(pos, isLButtonDown) {
 
 	//清除上次坐标画的物体
 	if (Manager.lastMoveOnPos.x > -100)
-		PaintInvertBodyAtPos(body, Manager.lastMoveOnPos);
+		Manager.PaintInvertBodyAtPos(body, Manager.lastMoveOnPos);
 
 	//在新的坐标物体
 	Manager.lastMoveOnPos = pos;	//获得新的坐标
-	PaintInvertBodyAtPos(body, Manager.lastMoveOnPos);
+	Manager.PaintInvertBodyAtPos(body, Manager.lastMoveOnPos);
 
 	//左或右ctrl键被按下相当于复制
-	//if (IsCtrlDown()) SetCursor(hcAddCrun);
+	//if (IsCtrlDown()) Manager.SetCursor("hcAddCrun");
 
 	return true;
 };
@@ -102,9 +102,9 @@ Manager.ShowMoveLead = function(isLButtonDown) {
 	}
 
 	if (Manager.motiBody[Manager.motiCount-1].IsOnHoriLead())
-		SetCursor(hcMoveHorz);	//在横线,鼠标变成"上下指针"
+		Manager.SetCursor("hcMoveHorz");	//在横线,鼠标变成"上下指针"
 	else 
-		SetCursor(hcMoveVert);	//在竖线,鼠标变成"左右指针"
+		Manager.SetCursor("hcMoveVert");	//在竖线,鼠标变成"左右指针"
 
 	return true;
 };

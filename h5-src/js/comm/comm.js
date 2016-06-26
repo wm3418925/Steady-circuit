@@ -73,8 +73,9 @@ function SetPosition(leftValue, rightValue) {
 }
 
 function ASSERT(flag) {
-    if (!flag)
-        console.log("error");
+    if (!flag) {
+        flag.error();
+	}
     return flag;
 }
 
@@ -119,17 +120,17 @@ function IsUnsignedInteger(str) {	//判断字符串是否是正整数
 
 
 // 获取当前时间中的鼠标坐标(相对client窗口)
-function GetClientPosOfEvent(client) {
-	var e = arguments[0] || window.event;
-	var x = e.clientX;
-	var y = e.clientY;
+function GetClientPosOfEvent(e) {
+	return {"x":e.clientX, "y":e.clientY};
+	
+	//var x = e.clientX;
+	//var y = e.clientY;
 	//client.
-	return {"x":x, "y":y};
+	//return {"x":x, "y":y};
 }
 // 获取当前时间中的鼠标坐标(相对屏幕窗口)
 function GetScreenPosOfEvent(e) {
-	var tt = e || window.event;
-	return {"x":tt.screenX, "y":tt.screenY};
+	return {"x":e.screenX, "y":e.screenY};
 }
 // 获取点击的键code
 function GetPressKeyCode(e) {

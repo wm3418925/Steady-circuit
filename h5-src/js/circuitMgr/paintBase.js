@@ -117,26 +117,26 @@ Manager.PaintMouseMotivate = function(mouseMoti) {
 	if (mm.IsOnLead()) {
 		//选定了连接点,鼠标变成添加结点图形,提示使用ConnectBodyLead函数
 		if (Manager.motiCount && Manager.motiBody[Manager.motiCount-1].IsOnConnectPos()) {
-			SetCursor(hcShowConnect);
+			Manager.SetCursor("hcShowConnect");
 		//没有选定连接点,鼠标变成"指针",提示改变导线坐标
 		} else {
 			if (mm.IsOnHoriLead())
-				SetCursor(hcSizeNS);	//在横线,鼠标变成"上下指针"
+				Manager.SetCursor("hcSizeNS");	//在横线,鼠标变成"上下指针"
 			else 
-				SetCursor(hcSizeWE);	//在竖线,鼠标变成"左右指针"
+				Manager.SetCursor("hcSizeWE");	//在竖线,鼠标变成"左右指针"
 		}
 	} else if (mm.IsOnBody()) {	//在物体上,鼠标变成手的形状,提示移动物体
-		SetCursor(hcHand);
+		Manager.SetCursor("hcHand");
 	}
 
-	if (!lastMoveOnBody.IsAllSame(mm)) {	//lastMoveOnBody与mouse指向的Pointer结构体不一样
+	if (!Manager.lastMoveOnBody.IsAllSame(mm)) {	//lastMoveOnBody与mouse指向的Pointer结构体不一样
 		//还原上一个连接点
-		if (lastMoveOnBody.IsOnConnectPos()) {
-			var tempPos = lastMoveOnBody.GetPosFromBody();	//获得坐标
+		if (Manager.lastMoveOnBody.IsOnConnectPos()) {
+			var tempPos = Manager.lastMoveOnBody.GetPosFromBody();	//获得坐标
 			Manager.ctx.BitBlt(tempPos.x-CR, tempPos.y-CR, CR*2, CR*2, showConnectImageData, 0, 0, SRCINVERT);
 		}
 
-		lastMoveOnBody = mm;	//记录当前鼠标激活物体
+		Manager.lastMoveOnBody = mm;	//记录当前鼠标激活物体
 
 		//画当前的连接点
 		if (mm.IsOnConnectPos()) {
@@ -223,7 +223,7 @@ Manager.PaintWithSpecialColorAndRect = function(body, isPaintNum) {
 Manager.PaintInvertBodyAtPos = function(body, pos) {
 	ASSERT(body.IsOnBody(false));
 	if (body.IsOnCrun()) {
-		PaintCommonFunc.PaintImageDataXor(Manager.ctx, crunImageData, pos.x-DD, pos.y-DD);
+		PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.crunImageData[PAINT_CRUN_STYLE_NORMAL], pos.x-DD, pos.y-DD);
 	} else {//if (body.IsOnCtrl())
 		PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.GetCtrlPaintImage(body.p), pos.x, pos.y);
 	}

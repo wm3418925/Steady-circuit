@@ -60,7 +60,7 @@ Manager.MotivateAll = function(pos) {
 //处理WM_LBUTTONDOWN消息
 Manager.LButtonDown = function(pos) {
 	if (!Manager.isUpRecvAfterDown) Manager.motiCount = 0;		//在上次鼠标左键按下后没有接受到鼠标按起消息
-	Manager.lButtonDownState = MotivateAll(pos);	//记录这次鼠标是否点击了物体
+	Manager.lButtonDownState = Manager.MotivateAll(pos);	//记录这次鼠标是否点击了物体
 	SetPosition(Manager.lButtonDownPos, pos);		//记录鼠标左键按下的坐标
 	Manager.isUpRecvAfterDown = false;				//收到鼠标按起消息会设置为true
 	Manager.lastMoveOnPos.x = -100;					//还原左击物体后,鼠标移动到的坐标
@@ -108,7 +108,7 @@ Manager.LButtonUp = function(pos, e) {
 	//左键按下和按起的坐标相同,而且点击的不是连接点
 	if (Manager.lButtonDownPos.x == pos.x && Manager.lButtonDownPos.y == pos.y && !body.IsOnConnectPos()) {
 		if (body.IsOnCtrl())
-			body.p.SwitchOnOff();	//开关开合情况改变
+			body.p.SwitchClosed(true);	//开关开合情况改变
 		Manager.FocusBodyPaint(null);	//重绘焦点
 
 		Manager.motiCount = 0;

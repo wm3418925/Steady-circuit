@@ -31,6 +31,11 @@ var Pointer = {
 
 		return {"index":index, "atState":this.atState, "style":this.style};
 	},
+	Clone: function(){
+		var newObj = {p: this.p, atState: this.atState, style: this.style};
+		newObj.__proto__ = Pointer;
+		return newObj;
+	},
 	//从json读取信息
 	ReadFromStoreJsonObj: function(jsonObj, leadList, crunList, ctrlList) {
 		this.Clear();
@@ -196,14 +201,14 @@ var Pointer = {
 			pos.x = this.p.x;
 			pos.y = this.p.y;
 			if (0 == (this.p.dir & 1)) {	//横向
-				pos.y += (BODYSIZE.cy>>1);
+				pos.y += (CTRL_SIZE.cy>>1);
 				if ((this.p.dir!=0) ^ (leadIndex!=0)) {	//在右端
-					pos.x += BODYSIZE.cx - 1;	//显示存在坐标差(-1)
+					pos.x += CTRL_SIZE.cx - 1;	//显示存在坐标差(-1)
 				}
 			} else {	//纵向
-				pos.x += (BODYSIZE.cx>>1);
+				pos.x += (CTRL_SIZE.cx>>1);
 				if (((this.p.dir-1)!=0) ^ (leadIndex!=0)) {	//在下端
-					pos.y += BODYSIZE.cy - 1;	//显示存在坐标差(-1)
+					pos.y += CTRL_SIZE.cy - 1;	//显示存在坐标差(-1)
 				}
 			}
 		}

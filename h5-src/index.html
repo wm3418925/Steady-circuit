@@ -16,6 +16,8 @@
 <body id="body" onload="pageOnload()" style="margin:0px; overflow:hidden;">
 
 	<div id="imgDiv" style="display:none">
+		<img id="crunImg" src="res/crun.bmp" />
+		
 		<img id="N-1-0" src="res/ctrl/N-1-0.bmp" />
 		<img id="N-1-1" src="res/ctrl/N-1-1.bmp" />
 		<img id="N-1-2" src="res/ctrl/N-1-2.bmp" />
@@ -45,22 +47,6 @@
 		<img id="S-5-2" src="res/ctrl/S-5-2.bmp" />
 		<img id="S-5-3" src="res/ctrl/S-5-3.bmp" />
 	</div>
-
-	<canvas 
-		id="myCanvas" 
-		width="650" 
-		height="570" 
-		style="margin:0px; border:1px solid #c3c3c3;" 
-		
-		onclick="onLClick()" 
-		ondblclick="onDbLClick()" 
-		onmouseup="onMouseUp()">
-	您的浏览器不能显示, 请升级
-	</canvas>
-	
-	<br>
-	<input type="button" value="从json读取电路图" onclick="onReadFromJson()" />
-	<input type="button" value="计算电流" onclick="onComputeElec()" />
 
 
 	<script src="o-js/jquery.min.js?v=2.1.4" type="text/javascript" charset="UTF-8"></script>
@@ -115,9 +101,38 @@
 	<script src="js/canvasMgr.js" type="text/javascript" charset="UTF-8"></script>
 
 	
+	<canvas 
+		id="myCanvas" 
+		width="650" 
+		height="570" 
+		style="margin:0px; border:1px solid #c3c3c3;" 
+		
+		>
+	您的浏览器不能显示, 请升级
+	</canvas>
+	<br>
+	<input type="button" value="计算电流" onclick="onComputeElec()" />
+
+
 <script type="text/javascript">
+var GlobalCanvas;
 function pageOnload() {
-	CanvasMgr.OnInitDialog(document.getElementById("myCanvas"));
+	GlobalCanvas = document.getElementById("myCanvas");
+	var jc = $(GlobalCanvas);
+	
+	CanvasMgr.OnInitDialog(GlobalCanvas);
+	
+	jc.bind("mousedown", function() {return CanvasMgr.OnMouseDown(GlobalCanvas.event||window.event);});
+	jc.bind("mousedown", function() {return CanvasMgr.OnMouseDown(GlobalCanvas.event||window.event);});
+	jc.bind("mouseup", function() {return CanvasMgr.OnMouseUp(GlobalCanvas.event||window.event);});
+	jc.bind("dblclick", function() {return CanvasMgr.OnLButtonDblClk(GlobalCanvas.event||window.event);});
+	jc.bind("mousemove", function() {return CanvasMgr.OnMouseMove(GlobalCanvas.event||window.event);});
+	
+	jc.bind("focus", function() {return CanvasMgr.OnSetFocus(GlobalCanvas.event||window.event);});
+	jc.bind("blur", function() {return CanvasMgr.OnKillFocus(GlobalCanvas.event||window.event);});
+	
+	jc.bind("keydown", function() {return CanvasMgr.OnKeyDown(GlobalCanvas.event||window.event);});
+	jc.bind("keyup", function() {return CanvasMgr.OnKeyUp(GlobalCanvas.event||window.event);});
 }
 </script>
 	

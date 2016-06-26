@@ -63,7 +63,7 @@ Manager.FocusBodyClear = function(deleteBody) {
 //函数执行在:FocusBodyPaint,ReadCircuitFromVector,ReadFile
 Manager.SetFocusBody = function(newFocus) {
 	ASSERT(!newFocus.IsOnConnectPos());
-	Manager.focusBody = MyDeepCopy(newFocus);
+	Manager.focusBody = newFocus.Clone();
 	Manager.UpdateEditMenuState();
 };
 
@@ -104,7 +104,7 @@ Manager.FocusBodyPaint = function(newFocus) {
 	} else if (Manager.focusBody.IsOnCrun()) {
 		Manager.PaintCrunWithStyle(Manager.focusBody.p, PAINT_CRUN_STYLE_FOCUS);
 	} else if (Manager.focusBody.IsOnCtrl()) {
-		Manager.PaintCtrlWithColor(Manager.focusBody.p, focusCtrlColor);
+		Manager.PaintCtrlWithColor(Manager.focusBody.p, Manager.focusCtrlColor);
 	}
 
 	return true;

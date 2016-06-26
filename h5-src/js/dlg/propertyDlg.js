@@ -273,6 +273,6 @@ var MyPropertyDlg = {
 		parent.layer.close(globalMPD.m_layerIndex);
 		
 		// 写入成功回调
-		globalMPD.m_changedCallback();
+		if (globalMPD.m_changedCallback != null) globalMPD.m_changedCallback();
 	}
 };
