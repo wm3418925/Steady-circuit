@@ -46,17 +46,17 @@ var Pointer = {
 		var index = jsonObj.index;
 		if (this.IsOnLead()) {
 			if (index >= 0 && index < leadList.length)
-				this.SetOnLead(leadList[index]);
+				this.SetOnLead(leadList[index], false);
 			else
 				return false;
 		} else if (this.IsOnCrun()) {
 			if (index >= 0 && index < crunList.length)
-				this.SetOnCrun(crunList[index]);
+				this.SetOnCrun(crunList[index], false);
 			else
 				return false;
 		} else if (this.IsOnCtrl()) {
 			if (index >= 0 && index < ctrlList.length)
-				this.SetOnCtrl(ctrlList[index]);
+				this.SetOnCtrl(ctrlList[index], false);
 			else
 				return false;
 		} else {
