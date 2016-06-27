@@ -52,7 +52,7 @@ Manager.DeleteNote = function(body) {
 		return false;
 
 	//根据连接导线数提示删除信息
-	name = GetBodyDefaultName(body);
+	name = Manager.GetBodyDefaultName(body);
 	if (conCount > 0)
 		note = "要删除 "+name+" 吗 ?\n它连接的 "+conCount+" 段导线也将删除!";
 	else
