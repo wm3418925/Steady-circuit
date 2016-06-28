@@ -132,7 +132,7 @@ Manager.ConnectBodyLead = function(posb) {
 
 	//4,初始化连接新添加结点的方向
 	if (Manager.motiBody[1].IsOnHoriLead()) {	//-3,-5,-7....横线
-		if (Manager.motiBody[1].p1.GetBodyPos() & 2) {
+		if (Manager.motiBody[1].p.GetBodyPos() & 2) {
 			dir1 = 4;
 			dir2 = 3;
 		} else {
@@ -143,7 +143,7 @@ Manager.ConnectBodyLead = function(posb) {
 		if (posa.y > posb.y)dir3 = 2;	//先点击物体在后点击位置的下面
 		else dir3 = 1;	//先点击物体在后点击位置的上面
 	} else {	//-2,-4,-6....竖线
-		if (Manager.motiBody[1].p1.GetBodyPos() & 1) {
+		if (Manager.motiBody[1].p.GetBodyPos() & 1) {
 			dir1 = 2;
 			dir2 = 1;
 		} else {

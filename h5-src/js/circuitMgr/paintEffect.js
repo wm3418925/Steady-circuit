@@ -34,7 +34,7 @@ Manager.ShowAddBody = function(point) {
 		
 		PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.crunImageData[PAINT_CRUN_STYLE_NORMAL], Manager.lastMoveOnPos.x-DD, Manager.lastMoveOnPos.y-DD);
 
-		Manager.SetCursor("hcAddCrun");
+		Manager.SetCursor("none");
 		return true;
 	} else if (Pointer.IsCtrl(Manager.addState)) {
 		var tempImage = Manager.ctrlImageList[Manager.addState*4];
@@ -47,7 +47,7 @@ Manager.ShowAddBody = function(point) {
 		
 		PaintCommonFunc.PaintImageDataXor(Manager.ctx, tempImage, Manager.lastMoveOnPos.x, Manager.lastMoveOnPos.y);
 
-		Manager.SetCursor(null);
+		Manager.SetCursor("none");
 		return true;
 	} else {
 		return false;
@@ -102,9 +102,9 @@ Manager.ShowMoveLead = function(isLButtonDown) {
 	}
 
 	if (Manager.motiBody[Manager.motiCount-1].IsOnHoriLead())
-		Manager.SetCursor("hcMoveHorz");	//在横线,鼠标变成"上下指针"
+		Manager.SetCursor("row-resize");	//在横线,鼠标变成"上下指针"
 	else 
-		Manager.SetCursor("hcMoveVert");	//在竖线,鼠标变成"左右指针"
+		Manager.SetCursor("col-resize");	//在竖线,鼠标变成"左右指针"
 
 	return true;
 };

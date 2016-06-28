@@ -25,8 +25,8 @@ var LEAD = {
 		
 		newObj.__proto__ = LEAD;
 		if (isInit) {
-			newObj.conBody[0] = p1;	//连接物体
-			newObj.conBody[1] = p2;	//连接物体
+			newObj.conBody[0] = p1.Clone();	//连接物体
+			newObj.conBody[1] = p2.Clone();	//连接物体
 			newObj.RefreshPos();	//更新坐标链表
 		}
 

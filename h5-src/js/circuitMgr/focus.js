@@ -74,7 +74,7 @@ Manager.FocusBodyPaint = function(newFocus) {
 		if (Manager.focusBody.IsBodySame(newFocus))
 			return false;
 
-		//原来的焦点用黑色画
+		//原来的焦点用原色画
 		if (Manager.focusBody.IsOnLead())
 			Manager.PaintLead(Manager.focusBody.p);
 		if (Manager.focusBody.IsOnCrun())
@@ -89,16 +89,16 @@ Manager.FocusBodyPaint = function(newFocus) {
 	if (Manager.focusBody.IsOnLead()) {
 		switch (Manager.focusLeadStyle) {
 		case SOLID_SPECIAL_COLOR:
-			Manager.PaintLeadWithStyle(Manager.focusBody.p, 1, COLOR_SPECIAL);
-			break;
-		case SOLID_ORIGINAL_COLOR:
-			Manager.PaintLeadWithStyle(Manager.focusBody.p, 1, Manager.focusBody.p.color);
-			break;
-		case DOT_SPECIAL_COLOR:
 			Manager.PaintLeadWithStyle(Manager.focusBody.p, 2, COLOR_SPECIAL);
 			break;
-		case DOT_ORIGINAL_COLOR:
+		case SOLID_ORIGINAL_COLOR:
 			Manager.PaintLeadWithStyle(Manager.focusBody.p, 2, Manager.focusBody.p.color);
+			break;
+		case DOT_SPECIAL_COLOR:
+			Manager.PaintLeadWithStyle(Manager.focusBody.p, 1, COLOR_SPECIAL);
+			break;
+		case DOT_ORIGINAL_COLOR:
+			Manager.PaintLeadWithStyle(Manager.focusBody.p, 1, Manager.focusBody.p.color);
 			break;
 		}
 	} else if (Manager.focusBody.IsOnCrun()) {
