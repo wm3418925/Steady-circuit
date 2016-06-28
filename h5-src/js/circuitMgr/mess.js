@@ -36,30 +36,49 @@ Manager.GetBodyDefaultName = function(pointer) {
 };
 
 //删除提示,返回值为false用户取消删除
-Manager.DeleteNote = function(body) {
+Manager.DeleteNote = function(pointer, okCallback, returnCallback) {
 	var conCount;	//连接导线数
 	var name;	//物体名称
 	var note;	//提示字符串
 
 	//获得连接导线数
-	if (body.IsOnLead())
+	if (pointer.IsOnLead())
 		conCount = 0;
-	else if (body.IsOnCrun())
-		conCount = body.p.GetConnectCount();
-	else if (body.IsOnCtrl())
-		conCount = body.p.GetConnectCount();
+	else if (pointer.IsOnCrun())
+		conCount = pointer.p.GetConnectCount();
+	else if (pointer.IsOnCtrl())
+		conCount = pointer.p.GetConnectCount();
 	else
 		return false;
 
 	//根据连接导线数提示删除信息
-	name = Manager.GetBodyDefaultName(body);
+	name = Manager.GetBodyDefaultName(pointer);
 	if (conCount > 0)
 		note = "要删除 "+name+" 吗 ?\n它连接的 "+conCount+" 段导线也将删除!";
 	else
 		note = "要删除 "+name+" 吗 ?";
 
-	Manager.PaintWithSpecialColorAndRect(body, false);
-	return IDYES == Manager.canvas.MessageBox(note, "删除物体提示", MB_YESNO|MB_ICONWARNING);
+	Manager.PaintWithSpecialColorAndRect(pointer, false);
+	
+	Manager.tmpRemovePointer = pointer;
+	swal(
+		{
+			title: "删除物体提示",   
+			text: note,   
+			type: "warning",   
+			showCancelButton: true,   
+			confirmButtonColor: "#DD6B55",   
+			confirmButtonText: "确定, 删除它",   
+			closeOnConfirm: false 
+		},
+		function(isConfirm) {
+			if (isConfirm) {
+				okCallback(Manager.tmpRemovePointer);
+				swal({title:"已删除!", type:"success"});
+			}
+			returnCallback(Manager.tmpRemovePointer);
+		}
+	);
 };
 
 //清除电路状态
@@ -77,12 +96,12 @@ Manager.GetBodyPointer = function(body) {
 	var pointer;
 
 	if (body.isFocusBody) {
-		pointer = Manager.focusBody;
+		pointer = Manager.focusBody.Clone();
 	} else {
 		Manager.motiCount = 0;
 		Manager.MotivateAll(body.pos);
 		Manager.motiCount = 0;
-		pointer = Manager.motiBody[0];
+		pointer = Manager.motiBody[0].Clone();
 	}
 
 	return pointer;

@@ -47,7 +47,7 @@ Manager.PasteBody = function(pos) {
 
 	if (Manager.clipBody.IsOnCrun()) {
 		if (Manager.crun.length >= MAX_CRUN_COUNT) {
-			Manager.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
+			swal("结点超过最大数量!", "结点添加失败!", "warning");
 			return false;
 		}
 
@@ -60,7 +60,7 @@ Manager.PasteBody = function(pos) {
 		Manager.PaintCrun(newElement);
 	} else if (Manager.clipBody.IsOnCtrl()) {
 		if (Manager.ctrl.length >= MAX_CTRL_COUNT) {
-			Manager.canvas.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
+			swal("电学元件超过最大数量!", "电学元件添加失败!", "warning");
 			return false;
 		}
 

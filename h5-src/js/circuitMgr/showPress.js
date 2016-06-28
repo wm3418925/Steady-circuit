@@ -17,13 +17,13 @@ Manager.SetStartBody = function(pos) {
 
 	if (mb.IsOnLead()) {
 		if (IsElecError(mb.p.elecDir)) {
-			Manager.canvas.MessageBox("当前选择的电路不正常", "无法计算电势差", MB_ICONWARNING);
+			swal("当前选择的电路不正常 !", "无法计算电势差 !", "warning");
 			return false;
 		}
 	} else if (mb.IsOnCrun() && !mb.IsOnConnectPos()) {
 		var c = mb.p;
 		for (var i=0; i<4; ++i) if (c.lead[i] && IsElecError(c.lead[i].elecDir)) {
-			Manager.canvas.MessageBox("当前选择的电路不正常", "无法计算电势差", MB_ICONWARNING);
+			swal("当前选择的电路不正常 !", "无法计算电势差 !", "warning");
 			return false;
 		}
 	} else {
@@ -41,7 +41,7 @@ Manager.SetStartBody = function(pos) {
 //用户输入数字1,2,3,4来移动电势差结尾位置
 Manager.NextBodyByInputNum = function(nChar) {
 	if (!Manager.pressStartBody.IsOnAny() || !Manager.pressEndBody.IsOnAny()) {
-		alert("请先鼠标点击导线或者连线选择电势差起始位置,\n然后输入数字移动电势差结尾位置.");
+		swal({title: "请先鼠标点击导线或者连线选择电势差起始位置,<br>然后输入数字移动电势差结尾位置.", type: "warning", html: true});
 		return false;
 	}
 
@@ -84,11 +84,11 @@ Manager.NextBodyByInputNum = function(nChar) {
 			Manager.pressEndBody = temp.Clone();
 		} else { //if (temp.IsOnCtrl())
 			if (temp.p.resist < 0) {	//断路控件
-				Manager.canvas.MessageBox("这是一个断路电学元件 !", "电流无法流过 !", MB_ICONINFORMATION);
+				swal("这是一个断路电学元件 !", "电流无法流过 !", "warning");
 				return false;
 			}
 			if (temp.p.GetConnectNum() < 2) {	//控件没有连接2段导线
-				Manager.canvas.MessageBox("电学元件另一端没有连接导线 !", "电流无法流过 !", MB_ICONINFORMATION);
+				swal("电学元件另一端没有连接导线 !", "电流无法流过 !", "warning");
 				return false;
 			}
 			dir = temp.p.lead[0] == Manager.pressEndBody.p;	//下一个导线索引(0或1)
@@ -105,7 +105,7 @@ Manager.NextBodyByInputNum = function(nChar) {
 		if (Manager.pressEndBody.p.lead[dir] != null) {
 			Manager.pressEndBody.SetOnLead(Manager.pressEndBody.p.lead[dir]);
 		} else {
-			Manager.canvas.MessageBox("结点这一端没有连接导线 !", "电流无法流过 !", MB_ICONINFORMATION);
+			swal("结点这一端没有连接导线 !", "电流无法流过 !", "warning");
 			return false;
 		}
 	}
@@ -117,7 +117,7 @@ Manager.NextBodyByInputNum = function(nChar) {
 //显示从起始位置到结尾位置的电势差(U0-U1)
 Manager.ShowPressure = function() {
 	if (!Manager.pressStartBody.IsOnAny() || !Manager.pressEndBody.IsOnAny()) {
-		alert("请选择起始位置再查看电势差!\n起始位置可以用鼠标点击选择!");
+		swal("请选择起始位置再查看电势差", "n起始位置可以用鼠标点击选择", "warning");
 		return false;
 	}
 

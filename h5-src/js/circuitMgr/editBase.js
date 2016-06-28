@@ -36,8 +36,8 @@ Manager.AddLead = function(a, b) {
 	Manager.lead.push(newElement);
 
 	//连接物体指向导线
-	a.p.lead[a.GetConnectCount()] = newElement;
-	b.p.lead[b.GetConnectCount()] = newElement;
+	a.p.lead[a.GetLeadIndex()] = newElement;
+	b.p.lead[b.GetLeadIndex()] = newElement;
 
 	//显示添加的导线
 	Manager.PaintLead(newElement);
@@ -48,7 +48,7 @@ Manager.AddLead = function(a, b) {
 Manager.DeleteLead = function(l) {
 	ASSERT(l != null);
 	var a = l.conBody[0], b = l.conBody[1];
-	var dira = a.GetConnectCount(), dirb = b.GetConnectCount();
+	var dira = a.GetLeadIndex(), dirb = b.GetLeadIndex();
 
 	//如果删除物体是焦点,清除焦点
 	var pointer = Pointer.CreateNew();
@@ -80,16 +80,16 @@ Manager.DeleteSingleBody = function(pointer) {
 		index = pointer.p.index;
 		pointer.p = null;
 		if (index != Manager.crun.length-1) {
-			crun[index] = crun[Manager.crun.length-1];
-			crun[index].index = index;
+			Manager.crun[index] = Manager.crun[Manager.crun.length-1];
+			Manager.crun[index].index = index;
 		}
 		Manager.crun.pop();
 	} else { //if (pointer.IsOnCtrl())
 		index = pointer.p.index;
 		pointer.p = null;
 		if (index != Manager.ctrl.length-1) {
-			ctrl[index] = ctrl[Manager.ctrl.length-1];
-			ctrl[index].index = index;
+			Manager.ctrl[index] = Manager.ctrl[Manager.ctrl.length-1];
+			Manager.ctrl[index].index = index;
 		}
 		Manager.ctrl.pop();
 	}
@@ -120,7 +120,7 @@ Manager.ConnectBodyLead = function(posb) {
 	ASSERT(Manager.motiCount == 2 && Manager.motiBody[0].IsOnConnectPos() && Manager.motiBody[1].IsOnLead());
 	Manager.motiCount = 0;
 	if (Manager.crun.length >= MAX_CRUN_COUNT) {	//只要结点数量够,导线一定够
-		Manager.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
+		swal("电学元件超过最大数量!", "电学元件添加失败!", "warning");
 		return false;
 	}
 
@@ -183,10 +183,11 @@ Manager.DeleteFocusOrPosBody = function(body) {
 	var pointer = Manager.GetBodyPointer(body);
 	if (!pointer.IsOnAny()) return false;
 
-	if (Manager.DeleteNote(pointer)) {
+	var okCallback = function(pointer) {
 		Manager.DeletePointerBody(pointer);
-		return true;
-	} else {
-		return false;
 	}
+	var returnCallback = function(pointer) {
+		Manager.PaintAll();
+	}
+	Manager.DeleteNote(pointer, okCallback, returnCallback);
 };

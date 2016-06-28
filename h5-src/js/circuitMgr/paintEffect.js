@@ -3,7 +3,7 @@
 Manager.ShowAddLead = function(pos) {
 	if (1 != Manager.motiCount) return false;
 
-	var body = Manager.motiBody;
+	var body = Manager.motiBody[0];
 
 	if (!body || !body.IsOnConnectPos()) return false;
 
@@ -11,13 +11,13 @@ Manager.ShowAddLead = function(pos) {
 	Manager.motiCount = 1;	//还原变量
 
 	//设置黑色画笔
-	Manager.ctx.SelectStockObject(BLACK_PEN);
+	Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(COLOR_NORMAL);
 	
 	Manager.ctx.beginPath();
 	DPtoLP(pos, Manager.canvas);
-	Manager.ctx.moveTo(pos);
+	Manager.ctx.moveTo(pos.x, pos.y);
 	var firstPos = body.GetPosFromBody();
-	Manager.ctx.lineTo(firstPos);
+	Manager.ctx.lineTo(firstPos.x, firstPos.y);
 	Manager.ctx.stroke();
 
 	return true;
@@ -112,7 +112,7 @@ Manager.ShowMoveLead = function(isLButtonDown) {
 
 //突出右击物体
 Manager.PosBodyPaintRect = function(pos) {
-	var body = Manager.motiBody[0]
+	var body = Manager.motiBody[0];
 
 	Manager.motiCount = 0;
 	Manager.MotivateAll(pos);

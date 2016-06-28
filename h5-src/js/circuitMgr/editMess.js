@@ -8,7 +8,7 @@ Manager.AddBody = function(pos) {
 
 	if (BODY_CRUN == temp) {
 		if (Manager.crun.length >= MAX_CRUN_COUNT) {
-			Manager.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
+			swal("结点超过最大数量!", "结点添加失败!", "warning");
 			return false;
 		}
 
@@ -16,7 +16,7 @@ Manager.AddBody = function(pos) {
 		return true;
 	} else if (Pointer.IsCtrl(temp)) {
 		if (Manager.ctrl.length >= MAX_CTRL_COUNT) {
-			Manager.canvas.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
+			swal("电学元件超过最大数量!", "电学元件添加失败!", "warning");
 			return false;
 		}
 
@@ -75,8 +75,24 @@ Manager.ChangeCtrlStyle = function(body) {
 	//改变类型回调
 	var changedCallback = function() {
 		if (Manager.tmpEditCtrlPreStyle != Manager.tmpEditCtrlNewStyle) {
-			if (IDYES != alert("改变类型会丢失原有电学元件的数据!\n继续吗?", MB_YESNO)) return;
-			Manager.tmpEditCtrl.ChangeStyle(Manager.tmpEditCtrlNewStyle);
+			swal(
+				{
+					title: "改变类型会丢失原有电学元件的数据!",   
+					text: "继续吗?",   
+					type: "warning",   
+					showCancelButton: true,   
+					confirmButtonColor: "#DD6B55",   
+					confirmButtonText: "确定",
+					closeOnConfirm: false 
+				},
+				function(isConfirm) {
+					if (isConfirm) {
+						Manager.tmpEditCtrl.ChangeStyle(Manager.tmpEditCtrlNewStyle);
+						Manager.PaintAll();
+						swal({title:"已修改", type:"success"});
+					}
+				}
+			);
 		}
 	};
 	
@@ -121,7 +137,7 @@ Manager.PosBodyClone = function(body, firstPos, lastPos) {
 	if (body.IsOnCrun()) {
 		//验证
 		if (Manager.crun.length >= MAX_CRUN_COUNT) {
-			Manager.canvas.MessageBox("结点超过最大数量!", "结点不能添加", MB_ICONWARNING);
+			swal("结点超过最大数量!", "结点添加失败!", "warning");
 			return false;
 		}
 
@@ -137,7 +153,7 @@ Manager.PosBodyClone = function(body, firstPos, lastPos) {
 	} else { //if (body.IsOnCtrl())
 		//验证
 		if (Manager.ctrl.length >= MAX_CTRL_COUNT) {
-			Manager.canvas.MessageBox("电学元件超过最大数量!", "电学元件不能添加", MB_ICONWARNING);
+			swal("电学元件超过最大数量!", "电学元件添加失败!", "warning");
 			return false;
 		}
 

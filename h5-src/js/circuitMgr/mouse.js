@@ -68,7 +68,7 @@ Manager.LButtonDown = function(pos) {
 	//未点击有效部位,点击物体清除,帮助连接导线
 	if (!Manager.lButtonDownState) {
 		if (Manager.motiCount > 0 && Manager.motiBody[Manager.motiCount-1].IsOnConnectPos())
-			PaintAll();	//覆盖ShowAddLead画的导线
+			Manager.PaintAll();	//覆盖ShowAddLead画的导线
 
 		Manager.motiCount = 0;
 		return false;

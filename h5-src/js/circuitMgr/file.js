@@ -50,13 +50,13 @@ function readFileCallbackFunc(data) {
 	var pos1 = {x:0, y:0};
 
 	if (!data || data.length <= 0) {
-		alert("文件不能不存在或不能读取 !");
+		swal("文件不能不存在或不能读取 !", "读取文件错误", "error");
 		return false;
 	}
 
 	//1文件版本
 	if (data.fileVersion != FILE_VERSION) {	//文件版本不同,不予读取
-		alert("文件版本不符 ! 读取文件错误");
+		swal("文件版本不符", "读取文件错误", "error");
 		return false;
 	}
 
@@ -122,7 +122,7 @@ function readFileCallbackFunc(data) {
 
 		Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);	//初始化字体颜色
 	} catch(e) {
-		alert("文件可能损坏了 ! 读取文件错误");
+		swal("文件可能损坏了", "读取文件错误", "error");
 		return false;
 	}
 

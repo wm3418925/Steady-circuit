@@ -133,7 +133,7 @@ Manager.PaintMouseMotivate = function(mouseMoti) {
 		//还原上一个连接点
 		if (Manager.lastMoveOnBody.IsOnConnectPos()) {
 			var tempPos = Manager.lastMoveOnBody.GetPosFromBody();	//获得坐标
-			Manager.ctx.BitBlt(tempPos.x-CR, tempPos.y-CR, CR*2, CR*2, showConnectImageData, 0, 0, SRCINVERT);
+			PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.showConnectImageData, tempPos.x-CR, tempPos.y-CR);
 		}
 
 		Manager.lastMoveOnBody = mm;	//记录当前鼠标激活物体
@@ -141,7 +141,7 @@ Manager.PaintMouseMotivate = function(mouseMoti) {
 		//画当前的连接点
 		if (mm.IsOnConnectPos()) {
 			var tempPos = mm.GetPosFromBody();	//获得坐标
-			Manager.ctx.BitBlt(tempPos.x-CR, tempPos.y-CR, CR*2, CR*2, showConnectImageData, 0, 0, SRCINVERT);
+			PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.showConnectImageData, tempPos.x-CR, tempPos.y-CR);
 		}
 	}
 };
