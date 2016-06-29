@@ -8,7 +8,7 @@ Manager.AddCtrl = function(pos, style) {
 
 	Manager.PaintCtrlText(newElement);
 	var newFocus = Pointer.CreateNew();
-	newFocus.SetOnCtrl(newElement, 1);
+	newFocus.SetOnCtrl(newElement, true);
 	Manager.FocusBodyPaint(newFocus);
 };
 
@@ -21,7 +21,7 @@ Manager.AddCrun = function(pos) {
 
 	Manager.PaintCrunText(newElement);
 	var newFocus = Pointer.CreateNew();
-	newFocus.SetOnCrun(newElement, 1);
+	newFocus.SetOnCrun(newElement, true);
 	Manager.FocusBodyPaint(newFocus);
 };
 
@@ -128,7 +128,7 @@ Manager.ConnectBodyLead = function(posb) {
 	var a = Manager.motiBody[0];
 	var x = Manager.motiBody[1].p.conBody[0];
 	var y = Manager.motiBody[1].p.conBody[1];
-	var posa = {x:a.p.x, y:a.p.y};
+	var posa = {"x":a.p.x, "y":a.p.y};
 
 	//4,初始化连接新添加结点的方向
 	if (Manager.motiBody[1].IsOnHoriLead()) {	//-3,-5,-7....横线
@@ -162,7 +162,7 @@ Manager.ConnectBodyLead = function(posb) {
 	Manager.AddCrun(posb);	//添加结点
 
 	var newCrun = Pointer.CreateNew();
-	newCrun.SetOnCrun(Manager.crun[Manager.crun.length-1]);	//newCrun指向新添加结点
+	newCrun.SetOnCrun(Manager.crun[Manager.crun.length-1], true);	//newCrun指向新添加结点
 
 	newCrun.SetAtState(dir1);
 	Manager.AddLead(x, newCrun);	//x和节点连线,x是起点,新节点是终点

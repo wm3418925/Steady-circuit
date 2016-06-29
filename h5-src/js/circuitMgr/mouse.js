@@ -32,7 +32,7 @@ Manager.MotivateAll = function(pos) {
 	for (i = Manager.crun.length-1; i>=0; --i) {	//搜索所有结点
 		mouseMoti.SetAtState(Manager.crun[i].At(pos.x, pos.y));
 		if (mouseMoti.IsOnAny()) {
-			mouseMoti.SetOnCrun(Manager.crun[i]);
+			mouseMoti.SetOnCrun(Manager.crun[i], false);
 			++Manager.motiCount;
 			return Manager.LeaveOutIllegalMotiBody();
 		}
@@ -48,7 +48,7 @@ Manager.MotivateAll = function(pos) {
 	for (i = Manager.ctrl.length-1; i>=0; --i) {	//搜索所有控件
 		mouseMoti.SetAtState(Manager.ctrl[i].At(pos.x, pos.y));
 		if (mouseMoti.IsOnAny()) {
-			mouseMoti.SetOnCtrl(Manager.ctrl[i]);
+			mouseMoti.SetOnCtrl(Manager.ctrl[i], false);
 			++Manager.motiCount;
 			return Manager.LeaveOutIllegalMotiBody();
 		}
@@ -103,7 +103,7 @@ Manager.LButtonUp = function(pos, e) {
 	Manager.isUpRecvAfterDown = true;						//鼠标按下后收到鼠标按起消息
 	if (!Manager.lButtonDownState || Manager.motiCount<=0) return false;	//没有点击返回
 	DPtoLP(pos, Manager.canvas);
-	var body = Manager.motiBody[Manager.motiCount-1];
+	var body = Manager.motiBody[Manager.motiCount-1].Clone();
 
 	//左键按下和按起的坐标相同,而且点击的不是连接点
 	if (Manager.lButtonDownPos.x == pos.x && Manager.lButtonDownPos.y == pos.y && !body.IsOnConnectPos()) {
@@ -134,12 +134,12 @@ Manager.LButtonUp = function(pos, e) {
 	return false;
 };
 
-//鼠标移动消息处理
-Manager.MouseMove = function(pos, isLButtonDown) {
-	if (Manager.ShowAddBody(pos)) return;					//添加物体过程显示
-	if (Manager.ShowMoveBody(pos, isLButtonDown)) return;	//移动物体过程显示
-	if (Manager.ShowMoveLead(isLButtonDown)) return;		//移动导线过程显示
-	Manager.ShowAddLead(pos);								//连接导线过程显示
+//鼠标移动消息处理e.button==0, e.ctrlKey==1
+Manager.MouseMove = function(pos, e) {
+	if (Manager.ShowAddBody(pos)) return;	//添加物体过程显示
+	if (Manager.ShowMoveBody(pos, e.button==0, e.ctrlKey==1)) return;	//移动物体过程显示
+	if (Manager.ShowMoveLead(e.button==0)) return;	//移动导线过程显示
+	Manager.ShowAddLead(pos);	//连接导线过程显示
 
 	//鼠标激活物体显示
 	if (Manager.MotivateAll(pos)) {	//鼠标激活了物体

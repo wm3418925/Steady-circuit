@@ -108,5 +108,6 @@ Manager.GetBodyPointer = function(body) {
 };
 
 Manager.SetCursor = function(type) {
-	Manager.canvas.style.cursor = type;
+	if (Manager.canvas.style.cursor != type)
+		Manager.canvas.style.cursor = type;
 };

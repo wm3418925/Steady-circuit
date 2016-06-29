@@ -27,12 +27,12 @@ Manager.ShowAddLead = function(pos) {
 Manager.ShowAddBody = function(point) {
 	if (Manager.addState == BODY_CRUN) {
 		if (Manager.lastMoveOnPos.x > -100)
-			PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.crunImageData[PAINT_CRUN_STYLE_NORMAL], Manager.lastMoveOnPos.x-DD, Manager.lastMoveOnPos.y-DD);
+			PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.crunXorImageData, Manager.lastMoveOnPos.x-DD, Manager.lastMoveOnPos.y-DD);
 		
 		DPtoLP(point, Manager.canvas);
 		Manager.lastMoveOnPos = point;
 		
-		PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.crunImageData[PAINT_CRUN_STYLE_NORMAL], Manager.lastMoveOnPos.x-DD, Manager.lastMoveOnPos.y-DD);
+		PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.crunXorImageData, Manager.lastMoveOnPos.x-DD, Manager.lastMoveOnPos.y-DD);
 
 		Manager.SetCursor("none");
 		return true;
@@ -55,7 +55,7 @@ Manager.ShowAddBody = function(point) {
 };
 
 //移动物体过程显示,Manager.lastMoveOnPos.x初始值设为-100,在LButtonDown和PaintAll中设置
-Manager.ShowMoveBody = function(pos, isLButtonDown) {
+Manager.ShowMoveBody = function(pos, isLButtonDown, isCtrlDown) {
 	ASSERT(Manager.motiCount >= 0 && Manager.motiCount <= 2);
 	if (Manager.motiCount == 0) return false;
 
@@ -84,7 +84,10 @@ Manager.ShowMoveBody = function(pos, isLButtonDown) {
 	Manager.PaintInvertBodyAtPos(body, Manager.lastMoveOnPos);
 
 	//左或右ctrl键被按下相当于复制
-	//if (IsCtrlDown()) Manager.SetCursor("hcAddCrun");
+	if (isCtrlDown) 
+		Manager.SetCursor("crosshair");
+	else
+		Manager.SetCursor("pointer");
 
 	return true;
 };
@@ -112,7 +115,7 @@ Manager.ShowMoveLead = function(isLButtonDown) {
 
 //突出右击物体
 Manager.PosBodyPaintRect = function(pos) {
-	var body = Manager.motiBody[0];
+	var body = Manager.motiBody[0].Clone();
 
 	Manager.motiCount = 0;
 	Manager.MotivateAll(pos);

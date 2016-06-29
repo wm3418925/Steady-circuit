@@ -70,14 +70,18 @@ var PaintCommonFunc = {
 	PaintImageDataXor: function(ctx, imageData, x,y) {
 		var orgImgData = ctx.getImageData(x,y, imageData.width,imageData.height);
 		for (var i=0; i<imageData.data.length; ) {
-			orgImgData.data[i] ^= imageData.data[i];
-			++i;
-			orgImgData.data[i] ^= imageData.data[i];
-			++i;
-			orgImgData.data[i] ^= imageData.data[i];
-			++i;
-			orgImgData.data[i] = imageData.data[i];
-			++i;
+			if (imageData.data[i+3] != 0) {
+				orgImgData.data[i] ^= imageData.data[i];
+				++i;
+				orgImgData.data[i] ^= imageData.data[i];
+				++i;
+				orgImgData.data[i] ^= imageData.data[i];
+				++i;
+				orgImgData.data[i] = imageData.data[i];
+				++i;
+			} else {
+				i += 4;
+			}
 		}
 		ctx.putImageData(orgImgData, x,y);
 	},

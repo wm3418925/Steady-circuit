@@ -36,7 +36,7 @@ Manager.Property = function(body, isReadOnly) {
 
 	if (pointer.IsOnLead()) {
 		tempStr = Manager.GetBodyDefaultName(pointer) + " 的颜色";	//窗口标题
-		pointer.p.GetDataList(tempStr, list);	//数据
+		pointer.p.GetDataList(list, tempStr);	//数据
 	} else if (pointer.IsOnCrun()) {
 		tempStr = Manager.GetBodyDefaultName(pointer)  + " 的标签";	//窗口标题
 		pointer.p.GetDataList(list);				//数据

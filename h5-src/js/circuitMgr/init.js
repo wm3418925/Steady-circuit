@@ -1,6 +1,12 @@
 
 var CTRL_BITMAP_COUNT = CTRL_TYPE_COUNT*8;	//控件位图的个数(包括旋转之后的)
 
+function setImageDataWhiteColor(data, startIndex) {
+	data[startIndex] = 255;
+	data[startIndex+1] = 255;
+	data[startIndex+2] = 255;
+}
+
 //1初始化和清理函数------------------------------------------------------------
 var Manager = {
 
@@ -8,45 +14,58 @@ var Manager = {
 	CreateShowConnectImageData: function() {
 		var len = 16*9;
 		var imgData = Manager.ctx.createImageData(6,6);
+		var data = imgData.data;
 		
-		for (var i=8; i<len; i+=4) {
-			imgData.data[i+0]=0;
-			imgData.data[i+1]=0;
-			imgData.data[i+2]=0;
-			imgData.data[i+3]=255;
+		for (var i=0; i<len; ++i) {
+			data[i]=255;
 		}
-		imgData.data[3]=imgData.data[7]=imgData.data[19]=imgData.data[23]=imgData.data[27]=imgData.data[47]=0;
-		imgData.data[len-1]=imgData.data[len-5]=imgData.data[len-17]=imgData.data[len-21]=imgData.data[len-25]=imgData.data[len-45]=0;
+
 		return imgData;
 	},
 	
 	// 以指定颜色初始化一个节点
-	CreateCrunImageWithColor: function(colorHex) {
+	CreateCrunImageDataWithColor: function(colorHex) {
 		var r = PaintCommonFunc.RedOfHexRGB(colorHex);
 		var g = PaintCommonFunc.GreenOfHexRGB(colorHex);
 		var b = PaintCommonFunc.BlueOfHexRGB(colorHex);
 		
 		var len = 16*DD*DD;
 		var imgData = Manager.ctx.createImageData(2*DD,2*DD);
+		var data = imgData.data;
 		
-		for (var i=8; i<len; i+=4) {
-			imgData.data[i+0]=r;
-			imgData.data[i+1]=g;
-			imgData.data[i+2]=b;
-			imgData.data[i+3]=255;
+		for (var i=0; i<len; i+=4) {
+			data[i]=r;
+			data[i+1]=g;
+			data[i+2]=b;
+			data[i+3]=255;
 		}
-		imgData.data[3]=imgData.data[7]=imgData.data[DD*8-5]=imgData.data[DD*8-1]=imgData.data[DD*8+3]=imgData.data[DD*16-1]=0;
-		imgData.data[len-1]=imgData.data[len-5]=imgData.data[len-DD*8+7]=imgData.data[len-DD*8+3]=imgData.data[len-DD*8-1]=imgData.data[len-DD*16+3]=0;
+		data[3]=data[7]=data[DD*8-5]=data[DD*8-1]=data[DD*8+3]=data[DD*16-1]=0;
+		data[len-1]=data[len-5]=data[len-DD*8+7]=data[len-DD*8+3]=data[len-DD*8-1]=data[len-DD*16+3]=0;
+		return imgData;
+	},
+	// 初始化用于异或画图的节点
+	CreateCrunXorImageData: function() {
+		var len = 16*DD*DD;
+		var imgData = Manager.ctx.createImageData(2*DD,2*DD);
+		var data = imgData.data;
+		
+		for (var i=0; i<len; ++i) {
+			data[i]=255;
+		}
+		data[3]=data[7]=data[DD*8-5]=data[DD*8-1]=data[DD*8+3]=data[DD*16-1]=0;
+		data[len-1]=data[len-5]=data[len-DD*8+7]=data[len-DD*8+3]=data[len-DD*8-1]=data[len-DD*16+3]=0;
 		return imgData;
 	},
 	// 初始化所有节点位图
 	CreateAllCrunImageData: function() {
 		var crunImageData = new Array(PAINT_CRUN_STYLE_COUNT);
-		crunImageData[PAINT_CRUN_STYLE_NORMAL] = Manager.CreateCrunImageWithColor(COLOR_NORMAL);
-		crunImageData[PAINT_CRUN_STYLE_FOCUS] = Manager.CreateCrunImageWithColor(COLOR_FOCUS);
-		crunImageData[PAINT_CRUN_STYLE_SPECIAL] = Manager.CreateCrunImageWithColor(COLOR_SPECIAL);
+		crunImageData[PAINT_CRUN_STYLE_NORMAL] = Manager.CreateCrunImageDataWithColor(COLOR_NORMAL);
+		crunImageData[PAINT_CRUN_STYLE_FOCUS] = Manager.CreateCrunImageDataWithColor(COLOR_FOCUS);
+		crunImageData[PAINT_CRUN_STYLE_SPECIAL] = Manager.CreateCrunImageDataWithColor(COLOR_SPECIAL);
 		
 		Manager.crunImageData = crunImageData;
+		
+		Manager.crunXorImageData = Manager.CreateCrunXorImageData();
 	},
 	
 	//初始化位图句柄

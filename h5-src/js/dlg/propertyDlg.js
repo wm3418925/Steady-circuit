@@ -109,7 +109,11 @@ var MyPropertyDlg = {
 					$("#"+MyPropertyDlg.GenerateTagId(i)).blur();
 				}
 			},
-			end: this.m_dlgEndCallback
+			end: function(){
+				if (globalMPD.m_dlgEndCallback)
+					globalMPD.m_dlgEndCallback();
+				CanvasMgr.canvas.focus();
+			}
 		};
 		if (!this.m_readonly) {
 			layerParam.btn = ['保存', '取消'];

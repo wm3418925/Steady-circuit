@@ -347,7 +347,7 @@ CanvasMgr.OnMouseMove = function(e) {
 	if (CanvasMgr.m_inputLock || !CanvasMgr.m_focusFlag) return;
 	
 	var point = GetClientPosOfEvent(e);
-	Manager.MouseMove(point, e.button==0);
+	Manager.MouseMove(point, e);
 	
 	return true;
 };

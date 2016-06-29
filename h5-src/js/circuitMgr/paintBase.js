@@ -111,7 +111,7 @@ Manager.PaintAll = function() {
 
 //画激活的连接点部位,改变鼠标形状
 Manager.PaintMouseMotivate = function(mouseMoti) {
-	var mm = mouseMoti;
+	var mm = mouseMoti.Clone();
 	var CR = 3; //连接点画图半径
 
 	if (mm.IsOnLead()) {
@@ -138,7 +138,7 @@ Manager.PaintMouseMotivate = function(mouseMoti) {
 			PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.showConnectImageData, tempPos.x-CR, tempPos.y-CR);
 		}
 
-		Manager.lastMoveOnBody = mm.Clone();	//记录当前鼠标激活物体
+		Manager.lastMoveOnBody = mm;	//记录当前鼠标激活物体
 
 		//画当前的连接点
 		if (mm.IsOnConnectPos()) {
@@ -227,7 +227,7 @@ Manager.PaintWithSpecialColorAndRect = function(body, isPaintNum) {
 Manager.PaintInvertBodyAtPos = function(body, pos) {
 	ASSERT(body.IsOnBody(false));
 	if (body.IsOnCrun()) {
-		PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.crunImageData[PAINT_CRUN_STYLE_NORMAL], pos.x-DD, pos.y-DD);
+		PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.crunXorImageData, pos.x-DD, pos.y-DD);
 	} else {//if (body.IsOnCtrl())
 		PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.GetCtrlPaintImage(body.p), pos.x, pos.y);
 	}

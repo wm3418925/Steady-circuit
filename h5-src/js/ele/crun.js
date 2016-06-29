@@ -70,26 +70,25 @@ var CRUN = {
 
 		dis = (xPos-this.x)*(xPos-this.x)+(yPos-this.y+DD)*(yPos-this.y+DD);
 		if (dis <= DD) {	//在上连接点
-			if (this.lead[0] != null) return -1;
+			if (this.lead[0]) return -1;
 			else return 1;
 		}
 
 		dis = (xPos-this.x)*(xPos-this.x)+(yPos-this.y-DD)*(yPos-this.y-DD);
 		if (dis <= DD) {	//在下连接点
-			if (this.lead[1] != null) return -1;
+			if (this.lead[1]) return -1;
 			else return 2;
 		}
 
 		dis = (xPos-this.x+DD)*(xPos-this.x+DD)+(yPos-this.y)*(yPos-this.y);
 		if (dis <= DD) {	//在左连接点
-			if (this.lead[2] != null) return -1;
+			if (this.lead[2]) return -1;
 			else return 3;
 		}
 
 		dis = (xPos-this.x-DD)*(xPos-this.x-DD)+(yPos-this.y)*(yPos-this.y);
-		if (dis <= DD)	//在右连接点
-		{
-			if (this.lead[3] != null) return -1;
+		if (dis <= DD) {	//在右连接点
+			if (this.lead[3]) return -1;
 			else return 4;
 		}
 
