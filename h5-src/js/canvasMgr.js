@@ -718,7 +718,7 @@ CanvasMgr.OnFocusBodyShowElec = function() {
 		else
 			isMatch = Manager.SearchNext(searchBy, searchRange, isWholeWord, isMatchCase, keyWord);	//搜索下一个
 
-		if (!isMatch) swal("搜索结果", "未找到匹配 !");
+		if (!isMatch) swal({title:"搜索结果", "未找到匹配 !"}, Manager.CanvasSetFocus);
 	}
 };*/
 

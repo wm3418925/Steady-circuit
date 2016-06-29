@@ -8,7 +8,7 @@ Manager.Help = function(pos) {
 	Manager.motiCount = 0;
 
 	if (!Manager.motiBody[0].IsOnAny()) {
-		swal("鼠标没有移动到物体上", "提示信息", "warning");
+		swal({content:"鼠标没有移动到物体上", title:"提示信息", type:"warning"}, Manager.CanvasSetFocus);
 		return;
 	}
 
@@ -25,6 +25,6 @@ Manager.Help = function(pos) {
 	}
 
 	Manager.PaintWithSpecialColorAndRect(Manager.motiBody[0], false);
-	swal(note);
+	swal({title:note}, Manager.CanvasSetFocus);
 	Manager.PaintAll();
 };
