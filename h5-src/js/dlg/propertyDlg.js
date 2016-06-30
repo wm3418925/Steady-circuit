@@ -53,12 +53,19 @@ var MyPropertyDlg = {
 			tr.append($("<td></td>").append($("<img style='margin:10px;' src='" + document.getElementById(this.m_modelId).src + "'></img>")));
 			tr.append($("<td></td>"));
 		}
+		
+		var tdStrArray = ["<td style='border:1px solid #aaa;'></td>", "<td style='background-color:#F3F3F3;border:1px solid #aaa;'></td>"];
 
 		for (var i=0; i<this.m_list.GetListSize(); ++i) {
-			var tr = $("<tr style='border: 1px solid #e4eaec;'></tr>");
-			tr.appendTo(table);
+			var tr = $("<tr></tr>");
+			table.append(tr);
 			
-			tr.append($("<td style='border: 0px'></td>").append(this.CreateLabel(i, this.m_list.noteTextList[i])));
+			var labelTd = $(tdStrArray[i&1])
+			tr.append(labelTd);
+			labelTd.append(this.CreateLabel(i, this.m_list.noteTextList[i]));
+			
+			var valueTd = $(tdStrArray[i&1]);
+			tr.append(valueTd);
 
 			var valueElement = null;
 			switch (this.m_list.dataTypeList[i]) {
@@ -78,13 +85,13 @@ var MyPropertyDlg = {
 				break;
 				
 			case DATA_TYPE_color:
-				var tmpTd = $("<td style='border: 0px'></td>").appendTo(tr);
-				var tmpDiv = $("<div></div>").appendTo(tmpTd);
+				var tmpDiv = $("<div></div>");
+				valueTd.append(tmpDiv);
 				this.CreateColorPicker(i, this.m_list.GetRowData(i), tmpDiv);
 				break;
 			}
 			if (valueElement)
-				tr.append($("<td style='border: 0px'></td>").append(valueElement));
+				valueTd.append(valueElement);
 		}
 		
 		
@@ -128,17 +135,12 @@ var MyPropertyDlg = {
 	CreateLabel : function(id, text) {
 		var element = $("<p style='margin:0px;' id='" + MyPropertyDlg.GenerateLabelId(id) + "'>" + text + "</p>");
 		element.css({"width": this.m_noteTextSize.cx+"px", "height": this.m_noteTextSize.cy+"px"});
-		if (id & 2)
-			element.css({"backgroundColor": "#EFEFEF"});
-		
 		return element;
 	},
 	//创建checkbox控件
 	CreateCheck : function(id, checked) {
 		var element = $("<input type='checkbox' id='" + MyPropertyDlg.GenerateTagId(id) + "' />");
-		element.css({"width": this.m_tagSize.cx+"px", "height": this.m_tagSize.cy+"px"});
-		if (id & 2)
-			element.css({"backgroundColor": "#EFEFEF"});
+		element.css({"width": "25px", "height": (this.m_tagSize.cy-5)+"px", "margin":"0px", "verticalAlign":"middle"});
 		if (this.m_readonly)
 			element.attr("disabled", "disabled");
 		
@@ -151,8 +153,6 @@ var MyPropertyDlg = {
 	CreateSelect : function(id, optionNoteArray, selIndex) {
 		var element = $("<select id='" + MyPropertyDlg.GenerateTagId(id) + "'></select>");
 		element.css({"width": this.m_tagSize.cx+"px", "height": this.m_tagSize.cy+"px"});
-		if (id & 2)
-			element.css({"backgroundColor": "#EFEFEF"});
 		if (this.m_readonly)
 			element.css({"disabled": "disabled"});
 		
@@ -167,9 +167,7 @@ var MyPropertyDlg = {
 	// 创建input控件
 	CreateInput : function(id, initValue, valueType) {
 		var element = $("<input id='" + MyPropertyDlg.GenerateTagId(id) + "' value='" + initValue + "' />");
-		element.css({"width": this.m_tagSize.cx+"px", "height": this.m_tagSize.cy+"px"});
-		if (id & 2)
-			element.css({"backgroundColor": "#EFEFEF"});
+		element.css({"width": this.m_tagSize.cx+"px", "height": this.m_tagSize.cy+"px", "border": "0px", "backgroundColor":"transparent"});
 		if (this.m_readonly)
 			element.attr("readonly", "true");
 		
