@@ -700,27 +700,24 @@ CanvasMgr.OnFocusBodyShowElec = function() {
 };
 
 // 搜索物体
-/*CanvasMgr.OnSearch = function() {
+CanvasMgr.OnSearch = function() {
 	if (CanvasMgr.m_inputLock) return;
+	
+	if (!CanvasMgr.searchParam)
+		CanvasMgr.searchParam = SearchParam.CreateNew();
 
-	static SEARCH_BY searchBy = SEARCH_BY_NAME;
-	static BODY_TYPE searchRange = BODY_ALL;
-	static bool isWholeWord = false;
-	static bool isMatchCase = false;
-	static var keyWord = "";
-	static bool isSearchPre = false;
-	bool isMatch;
+	var isMatch;
 
-	var dlg = MySearchDlg.CreateNew(searchBy, searchRange, isWholeWord, isMatchCase, keyWord, isSearchPre, CanvasMgr.canvas);
-	if (1 == dlg.DoModal()) {	//获得用户信息
-		if (isSearchPre)
-			isMatch = Manager.SearchPre(searchBy, searchRange, isWholeWord, isMatchCase, keyWord);		//搜索上一个
+	var dlg = MySearchDlg.CreateNew(CanvasMgr.searchParam, CanvasMgr.canvas);
+	if (1 == dlg.DoModal()) {	//获得选项
+		if (CanvasMgr.searchParam.isSearchPre)
+			isMatch = Manager.SearchPre(CanvasMgr.searchParam);		//搜索上一个
 		else
-			isMatch = Manager.SearchNext(searchBy, searchRange, isWholeWord, isMatchCase, keyWord);	//搜索下一个
+			isMatch = Manager.SearchNext(CanvasMgr.searchParam);	//搜索下一个
 
-		if (!isMatch) swal({title:"搜索结果", "未找到匹配 !"}, Manager.CanvasSetFocus);
+		if (!isMatch) swal({title:"搜索结果", contnet:"未找到匹配 !"}, Manager.CanvasSetFocus);
 	}
-};*/
+};
 
 
 // 设置函数----------------------------------------------------------------↓
