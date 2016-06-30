@@ -8,7 +8,7 @@ Manager.AddBody = function(pos) {
 
 	if (BODY_CRUN == temp) {
 		if (Manager.crun.length >= MAX_CRUN_COUNT) {
-			swal({content:"结点超过最大数量!", title:"结点添加失败!", type:"warning"}, Manager.CanvasSetFocus);
+			swal({content:"结点超过最大数量!", title:"结点添加失败!", type:"warning"});
 			return false;
 		}
 
@@ -16,7 +16,7 @@ Manager.AddBody = function(pos) {
 		return true;
 	} else if (Pointer.IsCtrl(temp)) {
 		if (Manager.ctrl.length >= MAX_CTRL_COUNT) {
-			swal({content:"电学元件超过最大数量!", title:"电学元件添加失败!", type:"warning"}, Manager.CanvasSetFocus);
+			swal({content:"电学元件超过最大数量!", title:"电学元件添加失败!", type:"warning"});
 			return false;
 		}
 
@@ -89,9 +89,8 @@ Manager.ChangeCtrlStyle = function(body) {
 					if (isConfirm) {
 						Manager.tmpEditCtrl.ChangeStyle(Manager.tmpEditCtrlNewStyle);
 						Manager.PaintAll();
-						swal({title:"已修改", type:"success"}, Manager.CanvasSetFocus);	//!!! 不能获取焦点
+						swal({title:"已修改", type:"success"});	//!!! 不能获取焦点
 					}
-					Manager.CanvasSetFocus();
 				}
 			);
 		}
@@ -138,7 +137,7 @@ Manager.PosBodyClone = function(body, firstPos, lastPos) {
 	if (body.IsOnCrun()) {
 		//验证
 		if (Manager.crun.length >= MAX_CRUN_COUNT) {
-			swal({content:"结点超过最大数量!", title:"结点添加失败!", type:"warning"}, Manager.CanvasSetFocus);
+			swal({content:"结点超过最大数量!", title:"结点添加失败!", type:"warning"});
 			return false;
 		}
 
@@ -154,7 +153,7 @@ Manager.PosBodyClone = function(body, firstPos, lastPos) {
 	} else { //if (body.IsOnCtrl())
 		//验证
 		if (Manager.ctrl.length >= MAX_CTRL_COUNT) {
-			swal({conent:"电学元件超过最大数量!", title:"电学元件添加失败!", type:"warning"}, Manager.CanvasSetFocus);
+			swal({conent:"电学元件超过最大数量!", title:"电学元件添加失败!", type:"warning"});
 			return false;
 		}
 

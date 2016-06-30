@@ -74,10 +74,9 @@ Manager.DeleteNote = function(pointer, okCallback, returnCallback) {
 		function(isConfirm) {
 			if (isConfirm) {
 				okCallback(Manager.tmpRemovePointer);
-				swal({title:"已删除!", type:"success"}, Manager.CanvasSetFocus);	// !!! 不能获取焦点
+				swal({title:"已删除!", type:"success"});
 			}
 			returnCallback(Manager.tmpRemovePointer);
-			Manager.CanvasSetFocus();
 		}
 	);
 };
@@ -111,8 +110,4 @@ Manager.GetBodyPointer = function(body) {
 Manager.SetCursor = function(type) {
 	if (Manager.canvas.style.cursor != type)
 		Manager.canvas.style.cursor = type;
-};
-
-Manager.CanvasSetFocus = function() {
-	Manager.canvas.focus();
 };

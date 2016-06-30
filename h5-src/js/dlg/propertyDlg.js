@@ -119,7 +119,6 @@ var MyPropertyDlg = {
 			end: function(){
 				if (globalMPD.m_dlgEndCallback)
 					globalMPD.m_dlgEndCallback();
-				Manager.CanvasSetFocus();
 			}
 		};
 		if (!this.m_readonly) {

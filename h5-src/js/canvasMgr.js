@@ -180,7 +180,6 @@ CanvasMgr.SaveFileBeforeClose = function(caption, hasCancelButton, yesnoCallback
 // 初始化
 CanvasMgr.OnInitDialog = function(canvas) {
 	//成员变量赋值
-	CanvasMgr.m_focusFlag = true;	//窗口获得焦点标志
 	CanvasMgr.m_inputLock = false;	//初始输入不上锁
 	CanvasMgr.m_mousePos = {x:0, y:0};
 	//CanvasMgr.m_hm = GetMenu();		//获取主菜单句柄
@@ -344,7 +343,7 @@ CanvasMgr.OnRButtonUp = function(e) {
 
 // 鼠标移动,失去焦点不判断
 CanvasMgr.OnMouseMove = function(e) {
-	if (CanvasMgr.m_inputLock || !CanvasMgr.m_focusFlag) return;
+	if (CanvasMgr.m_inputLock) return;
 	
 	var point = GetClientPosOfEvent(e);
 	Manager.MouseMove(point, e);
@@ -354,12 +353,10 @@ CanvasMgr.OnMouseMove = function(e) {
 
 // 窗口失去焦点
 CanvasMgr.OnKillFocus = function(e) {
-	CanvasMgr.m_focusFlag = false;
 	return true;
 };
 // 窗口获得焦点
 CanvasMgr.OnSetFocus = function(e) {
-	CanvasMgr.m_focusFlag = true;
 	return true;
 };
 
@@ -715,7 +712,7 @@ CanvasMgr.OnSearch = function() {
 		else
 			isMatch = Manager.SearchNext(CanvasMgr.searchParam);	//搜索下一个
 
-		if (!isMatch) swal({title:"搜索结果", contnet:"未找到匹配 !"}, Manager.CanvasSetFocus);
+		if (!isMatch) swal({title:"搜索结果", contnet:"未找到匹配 !"});
 	}
 };
 
