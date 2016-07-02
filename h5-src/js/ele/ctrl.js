@@ -134,22 +134,22 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 	// @根据类型, 初始化默认数据
 	InitDefaultData: function(ctrlStyle) {
 		switch (ctrlStyle) {
-		case SOURCE:
+		case BODY_SOURCE:
 			this.pressure = 10;
 			this.resist = 0;
 			break;
-		case RESIST:
+		case BODY_RESIST:
 			this.resist = 10;
 			break;
-		case BULB:
+		case BODY_BULB:
 			this.rating = 10;
 			this.resist = 5;
 			break;
-		case CAPA:
+		case BODY_CAPA:
 			this.capa = 10;
 			this.resist = -1;
 			break;
-		case SWITCH:
+		case BODY_SWITCH:
 			this.closed = false;
 			break;
 		}
@@ -157,21 +157,21 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 	// @复制控件数据
 	CloneCtrlData: function(toCtrl, fromCtrl) {
 		switch (fromCtrl.style) {
-		case SOURCE:
+		case BODY_SOURCE:
 			toCtrl.pressure = fromCtrl.pressure;
 			toCtrl.resist = fromCtrl.resist;
 			break;
-		case RESIST:
+		case BODY_RESIST:
 			toCtrl.resist = fromCtrl.resist;
 			break;
-		case BULB:
+		case BODY_BULB:
 			toCtrl.rating = fromCtrl.rating;
 			toCtrl.resist = fromCtrl.resist;
 			break;
-		case CAPA:
+		case BODY_CAPA:
 			toCtrl.capa = fromCtrl.capa;
 			break;
-		case SWITCH:
+		case BODY_SWITCH:
 			toCtrl.closed = fromCtrl.closed;
 			break;
 		}
@@ -180,15 +180,15 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 	// @获得控件的特征数据
 	GetSpecialData: function() {
 		switch (this.style) {
-		case SOURCE:
+		case BODY_SOURCE:
 			return this.pressure;
-		case RESIST:
+		case BODY_RESIST:
 			return this.resist;
-		case BULB:
+		case BODY_BULB:
 			return this.rating;
-		case CAPA:
+		case BODY_CAPA:
 			return this.capa;
-		case SWITCH:
+		case BODY_SWITCH:
 			return this.closed;
 		}
 
@@ -196,7 +196,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 	},
 	// 获得控件的电压
 	GetPressure: function(direction) {
-		if (SOURCE == this.style) {
+		if (BODY_SOURCE == this.style) {
 			if (direction != 0)
 				return - this.pressure;
 			else
@@ -300,7 +300,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 	IsBulbOn: function() {
 		var sData = this.GetSpecialData();
 
-		if (BULB != this.style)
+		if (BODY_BULB != this.style)
 			return false;	//不是小灯泡
 		if (this.elecDir != LEFTELEC && this.elecDir != RIGHTELEC)
 			return false;	//电流没有计算或者不符合条件
@@ -312,7 +312,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 
 	//@开关闭合或者断开
 	SwitchClosed: function(isSwitch) {
-		if (SWITCH != this.style) return false;	//不是开关
+		if (BODY_SWITCH != this.style) return false;	//不是开关
 		if (isSwitch) {
 			this.closed = !this.closed;
 		}
@@ -327,25 +327,25 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 		list.SetAMember(DATA_TYPE_bool, TITLESHOW_NOTE, "isPaintName");
 
 		switch (this.style) {
-		case SOURCE:
+		case BODY_SOURCE:
 			list.SetAMember(DATA_TYPE_float, DATA_NOTE[DATA_NOTE_PRESS], "pressure");
 			list.SetAMember(DATA_TYPE_float, DATA_NOTE[DATA_NOTE_RESIST], "resist");
 			break;
 
-		case RESIST:
+		case BODY_RESIST:
 			list.SetAMember(DATA_TYPE_float, DATA_NOTE[DATA_NOTE_RESIST], "resist");
 			break;
 
-		case BULB:
+		case BODY_BULB:
 			list.SetAMember(DATA_TYPE_float, DATA_NOTE[DATA_NOTE_RATING], "rating");
 			list.SetAMember(DATA_TYPE_float, DATA_NOTE[DATA_NOTE_RESIST], "resist");
 			break;
 
-		case CAPA:
+		case BODY_CAPA:
 			list.SetAMember(DATA_TYPE_float, DATA_NOTE[DATA_NOTE_CAPA], "capa");
 			break;
 
-		case SWITCH:
+		case BODY_SWITCH:
 			list.SetAMember(DATA_TYPE_bool, DATA_NOTE[DATA_NOTE_SWITCHONOFF], "closed");
 			// 当修改完毕需要立即更新resist
 			break;
@@ -354,7 +354,7 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 	//@在计算之前, 根据控件信息准备电压电阻等信息
 	PrepareForComputing: function() {
 		switch (this.style) {
-		case SWITCH:
+		case BODY_SWITCH:
 			this.RefreshSwitchResist();
 			break;
 		}

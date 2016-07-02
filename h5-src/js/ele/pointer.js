@@ -172,7 +172,7 @@ var Pointer = {
 	},
 	// static函数
 	IsCtrl: function(type) {
-		return (type >= SOURCE) && (type <= SWITCH);
+		return (type >= BODY_SOURCE) && (type <= BODY_SWITCH);
 	},
 
 	//从物体和连接点位置获得导线端点坐标

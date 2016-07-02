@@ -63,7 +63,7 @@ function readFileCallbackFunc(data) {
 	//Manager.fileName = newFileName;	//替换原有路径
 
 	// 可能因为文件问题而发生错误
-	try {
+	//try {
 		//2读取物体数量
 		var crunCount = data.cruns.length;
 		var ctrlCount = data.ctrls.length;
@@ -121,10 +121,10 @@ function readFileCallbackFunc(data) {
 		Manager.SetFocusBody(tmpFocusBody);				//设置焦点物体
 
 		Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);	//初始化字体颜色
-	} catch(e) {
+	/*} catch(e) {
 		swal({content:"文件可能损坏了", title:"读取文件错误", type:"error"});
 		return false;
-	}
+	}*/
 
 	return true;			//正常退出
 }

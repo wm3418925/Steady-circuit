@@ -144,17 +144,10 @@ var Manager = {
 		Manager.InitBitmap();							//初始化位图
 
 		
-		//鼠标图标
-		/*HINSTANCE hinst = AfxGetInstanceHandle();
-		Manager.hcSizeNS		= LoadCursor(null,	IDC_SIZENS);
-		Manager.hcSizeWE		= LoadCursor(null,	IDC_SIZEWE);
-		Manager.hcShowConnect	= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_SHOWCONNECT));
-		Manager.hcHand			= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_HAND));
-		Manager.hcMoveHorz		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_HORZ_LEAD));
-		Manager.hcMoveVert		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_VERT_LEAD));
-		Manager.hcAddCrun		= LoadCursor(hinst,	MAKEINTRESOURCE(IDC_CURSOR_ADDCRUN));*/
+		// 剪切板
+		Manager.clipBody = Pointer.CreateNew();
 
-
+		
 		//读取文件-------------------------------------------------------
 		Manager.fileName = "";
 		

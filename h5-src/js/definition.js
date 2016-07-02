@@ -16,11 +16,11 @@ var BODY_ALLCTRL	= -4;
 var BODY_LEAD		= -3;
 var BODY_NO			= -2;
 var BODY_CRUN		= -1;
-var SOURCE			= 0;
-var RESIST			= 1;
-var BULB			= 2;
-var CAPA			= 3;
-var SWITCH			= 4;
+var BODY_SOURCE		= 0;
+var BODY_RESIST		= 1;
+var BODY_BULB		= 2;
+var BODY_CAPA		= 3;
+var BODY_SWITCH		= 4;
 
 
 // 正常, 选中, 右击 颜色

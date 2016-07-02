@@ -63,7 +63,7 @@ var CanvasMgr = {};
 	ON_COMMAND(IDM_COUNTI, OnCountElec)
 	ON_COMMAND(IDM_SHOWPRESSURE, OnShowPressure)
 	ON_COMMAND(IDM_POSBODY_SHOWELEC, OnPosBodyShowElec)
-	ON_COMMAND(IDM_RELEASE, OnUnLock)
+	ON_COMMAND(IDM_RELEASE, OnUnlock)
 
 
 	ON_COMMAND(IDM_POSBODY_COPY, OnPosBodyCopy)
@@ -85,16 +85,16 @@ CanvasMgr.LockInput = function() {
 	CanvasMgr.m_inputLock = true;
 
 	//需要屏蔽的菜单
-	CanvasMgr.m_hm.EnableMenuItem(0			, MF_GRAYED|MF_BYPOSITION);	//文件函数
-	CanvasMgr.m_hm.EnableMenuItem(1			, MF_GRAYED|MF_BYPOSITION);	//编辑函数
-	CanvasMgr.m_hm.EnableMenuItem(3			, MF_GRAYED|MF_BYPOSITION);	//测试函数
-	CanvasMgr.m_hm.EnableMenuItem(IDM_COUNTI, MF_GRAYED);
+	//CanvasMgr.m_hm.EnableMenuItem(0			, MF_GRAYED|MF_BYPOSITION);	//文件函数
+	//CanvasMgr.m_hm.EnableMenuItem(1			, MF_GRAYED|MF_BYPOSITION);	//编辑函数
+	//CanvasMgr.m_hm.EnableMenuItem(3			, MF_GRAYED|MF_BYPOSITION);	//测试函数
+	//CanvasMgr.m_hm.EnableMenuItem(IDM_COUNTI, MF_GRAYED);
 
 	//需要激活的菜单
-	CanvasMgr.m_hm.EnableMenuItem(IDM_RELEASE		, MF_ENABLED);
-	CanvasMgr.m_hm.EnableMenuItem(IDM_SHOWPRESSURE	, MF_ENABLED);
+	//CanvasMgr.m_hm.EnableMenuItem(IDM_RELEASE		, MF_ENABLED);
+	//CanvasMgr.m_hm.EnableMenuItem(IDM_SHOWPRESSURE	, MF_ENABLED);
 
-	CanvasMgr.DrawMenuBar();	//重绘菜单栏
+	//CanvasMgr.DrawMenuBar();	//重绘菜单栏
 };
 
 // 获得当前屏幕大小的一页
@@ -228,8 +228,6 @@ CanvasMgr.OnMouseDown = function(e) {
 CanvasMgr.OnMouseUp = function(e) {
 	if (0 == e.button)
 		return CanvasMgr.OnLButtonUp(e);
-	else if (2 == e.button)
-		return CanvasMgr.OnRButtonUp(e);
 	else
 		return true;
 };
@@ -273,74 +271,7 @@ CanvasMgr.OnLButtonDblClk = function(e) {
 	
 	return true;
 };
-// 鼠标右键按起消息处理
-CanvasMgr.OnRButtonUp = function(e) {
-	var point = GetClientPosOfEvent(e);
-	var screenPoint = GetScreenPosOfEvent(e);
-	var hm;
-	var type;
-	CanvasMgr.m_mousePos = point;	//保存当前鼠标坐标
-
-	Manager.PaintAll();	//刷新
-	type = Manager.PosBodyPaintRect(point);	//突出右击物体
-
-	if (CanvasMgr.m_inputLock) {		//输入上锁
-		hm = CreatePopupMenu();
-
-		if (BODY_LEAD == type) {				//右击导线
-			AppendMenu(hm, 0, IDM_POSBODY_SHOWELEC, "查看电流(&L)\tCtrl+L");
-		} else if (BODY_CRUN == type) {			//右击结点
-			AppendMenu(hm, 0, IDM_POSBODY_PROPERTY, "查看属性(&P)\tCtrl+P");
-		} else if (Pointer.IsCtrl(type)) {		//右击控件
-			AppendMenu(hm, 0, IDM_POSBODY_SHOWELEC, "查看电流(&L)\tCtrl+L");
-			AppendMenu(hm, 0, IDM_POSBODY_PROPERTY, "查看属性(&P)\tCtrl+P");
-		}
-
-		AppendMenu(hm, 0, IDM_RELEASE, "解除输入限制(&R)\tCtrl+R");
-		AppendMenu(hm, 0, IDM_SHOWPRESSURE, "显示电势差(&U)\tCtrl+U");
-
-		TrackPopupMenu(hm, TPM_LEFTALIGN, screenPoint.x, screenPoint.y, 0, CanvasMgr.m_hWnd, null);
-		DestroyMenu(hm);
-	} else if (BODY_NO == type) {	//右击空白处
-		hm = LoadMenu(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME));
-		var temp_hm = GetSubMenu(hm, 1);
-		var subhm = GetSubMenu(temp_hm, 3);
-		AppendMenu(subhm, 0, IDM_PASTE, "粘贴(&P)\tCtrl+V");
-		if (!Manager.GetClipboardState())	//剪切板没有物体
-			EnableMenuItem(subhm, IDM_PASTE, MF_GRAYED);
-
-		TrackPopupMenu(subhm, TPM_LEFTALIGN, screenPoint.x, screenPoint.y, 0, CanvasMgr.m_hWnd, null);
-		DestroyMenu(hm);
-		DestroyMenu(temp_hm);
-		DestroyMenu(subhm);
-	} else {
-		var subhm;
-		if (BODY_LEAD == type)	//导线
-			hm = LoadMenu(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_LEADPRO));
-		else
-			hm = LoadMenu(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_BODYPRO));
-		subhm = GetSubMenu(hm, 0);
-
-		if (Pointer.IsCtrl(type)) {
-			InsertMenu(subhm, IDM_POSBODY_PROPERTY, 0, IDM_POSBODY_ROTATE1, "顺时针旋转90°(&1)\tCtrl+1");
-			InsertMenu(subhm, IDM_POSBODY_PROPERTY, 0, IDM_POSBODY_ROTATE2, "旋转180°(&2)\tCtrl+2");
-			InsertMenu(subhm, IDM_POSBODY_PROPERTY, 0, IDM_POSBODY_ROTATE3, "逆时针旋转90°(&3)\tCtrl+3");
-
-			InsertMenu(subhm, IDM_POSBODY_PROPERTY, 0, IDM_POSBODY_CHANGECTRLSTYLE, "电学元件类型(&T)\tCtrl+T");
-		}
-
-		if (BODY_LEAD == type || Pointer.IsCtrl(type))	//导线或控件上
-			AppendMenu(subhm, 0, IDM_POSBODY_SHOWELEC, "查看电流(&L)\tCtrl+L");
-
-		TrackPopupMenu(subhm, TPM_LEFTALIGN, screenPoint.x, screenPoint.y, 0, CanvasMgr.m_hWnd, null);
-		DestroyMenu(hm);
-		DestroyMenu(subhm);
-	}
-
-	Manager.PaintAll();	//刷新
-	return true;
-};
-
+		
 // 鼠标移动,失去焦点不判断
 CanvasMgr.OnMouseMove = function(e) {
 	if (CanvasMgr.m_inputLock) return;
@@ -413,7 +344,7 @@ CanvasMgr.OnKeyDown = function(e) {
 		case '1':
 		case '2':
 		case '3':	//旋转电学元件
-			CanvasMgr.OnFocusBodyRotateCtrl(nChar - '1' + IDM_FOCUSBODY_ROTATE1);
+			CanvasMgr.OnFocusBodyRotateCtrl(nChar - '0');
 			return false;
 
 		case 'F':
@@ -434,7 +365,7 @@ CanvasMgr.OnKeyDown = function(e) {
 			return false;
 
 		case 'R':	//解除输入限制
-			CanvasMgr.OnUnLock();
+			CanvasMgr.OnUnlock();
 			return false;
 
 		default:
@@ -513,6 +444,71 @@ CanvasMgr.OnKeyUp = function(e) {
 	return true;
 };
 
+
+// 菜单函数----------------------------------------------------------------↓
+// 弹出右击菜单消息处理
+CanvasMgr.BeforePopupMenu = function(e, ui) {
+	var point = GetClientPosOfEvent(e);
+	
+	CanvasMgr.m_mousePos = point;	//保存当前鼠标坐标
+	Manager.PaintAll();	//刷新
+	var type = Manager.PosBodyPaintRect(point);	//突出右击物体
+	
+	var menuArray = new Array();
+
+	if (CanvasMgr.m_inputLock) {		//输入上锁
+		if (BODY_LEAD == type) {				//右击导线
+			menuArray.push({title: "查看电流 <kbd>Ctrl+L</kbd>", uiIcon: "res/menu-icon/show-elec", action:CanvasMgr.OnPosBodyShowElec});
+		} else if (BODY_CRUN == type) {			//右击结点
+			menuArray.push({title: "查看属性 <kbd>Ctrl+P</kbd>", uiIcon: "res/menu-icon/show-property", action:CanvasMgr.OnPosBodyProperty});
+		} else if (Pointer.IsCtrl(type)) {		//右击控件
+			menuArray.push({title: "查看电流 <kbd>Ctrl+L</kbd>", uiIcon: "res/menu-icon/show-elec", action:CanvasMgr.OnPosBodyShowElec});
+			menuArray.push({title: "查看属性 <kbd>Ctrl+P</kbd>", uiIcon: "res/menu-icon/show-property", action:CanvasMgr.OnPosBodyProperty});
+		}
+		menuArray.push({title: "解除输入限制 <kbd>Ctrl+R</kbd>", uiIcon: "res/menu-icon/unlock", action:CanvasMgr.OnUnlock});
+		menuArray.push({title: "显示电势差 <kbd>Ctrl+U</kbd>", uiIcon: "res/menu-icon/show-pressure", action:CanvasMgr.OnShowPressure});
+	} else if (BODY_NO == type) {	//右击空白处
+		menuArray.push({title: "添加结点", uiIcon: "res/menu-icon/add-crun", action:CanvasMgr.OnSetAddState, cmd:"add-crun"});
+		menuArray.push({title: "添加电源", uiIcon: "res/menu-icon/add-source", action:CanvasMgr.OnSetAddState, cmd:"add-source"});
+		menuArray.push({title: "添加电阻", uiIcon: "res/menu-icon/add-resist", action:CanvasMgr.OnSetAddState, cmd:"add-resist"});
+		menuArray.push({title: "添加灯泡", uiIcon: "res/menu-icon/add-bulb", action:CanvasMgr.OnSetAddState, cmd:"add-bulb"});
+		menuArray.push({title: "添加电容器", uiIcon: "res/menu-icon/add-capa", action:CanvasMgr.OnSetAddState, cmd:"add-capa"});
+		menuArray.push({title: "添加开关", uiIcon: "res/menu-icon/add-switch", action:CanvasMgr.OnSetAddState, cmd:"add-switch"});
+		menuArray.push({title: "------------", disabled: true});
+		
+		var pasteMenuItem = {title: "粘贴 <kbd>Ctrl+V</kbd>", uiIcon: "res/menu-icon/paste", action:CanvasMgr.Paste};
+		if (!Manager.GetClipboardState())
+			pasteMenuItem.disabled = true;
+		menuArray.push(pasteMenuItem);
+	} else {
+		if (BODY_LEAD == type) {	//导线
+			menuArray.push({title: "删除导线 <kbd>Delete</kbd>", uiIcon: "res/menu-icon/delete", action:CanvasMgr.OnDeleteLead});
+		} else {
+			menuArray.push({title: "剪切 <kbd>Ctrl+X</kbd>", uiIcon: "res/menu-icon/cut", action:CanvasMgr.OnPosBodyCut});
+			menuArray.push({title: "复制 <kbd>Ctrl+C</kbd>", uiIcon: "res/menu-icon/copy", action:CanvasMgr.OnPosBodyCopy});
+			menuArray.push({title: "删除 <kbd>Ctrl+V</kbd>", uiIcon: "res/menu-icon/delete", action:CanvasMgr.OnPosBodyDelete});
+		}
+
+		if (Pointer.IsCtrl(type)) {
+			menuArray.push({title: "顺时针旋转90° <kbd>Ctrl+1</kbd>", uiIcon: "res/menu-icon/rotate90", action:CanvasMgr.OnPosBodyRotateCtrl, cmd:"rotate90"});
+			menuArray.push({title: "旋转180° <kbd>Ctrl+2</kbd>", uiIcon: "res/menu-icon/rotate180", action:CanvasMgr.OnPosBodyRotateCtrl, cmd:"rotate180"});
+			menuArray.push({title: "逆时针旋转90° <kbd>Ctrl+3</kbd>", uiIcon: "res/menu-icon/rotate270", action:CanvasMgr.OnPosBodyRotateCtrl, cmd:"rotate270"});
+			menuArray.push({title: "------------", disabled: true});
+			menuArray.push({title: "电学元件类型 <kbd>Ctrl+T</kbd>", uiIcon: "res/menu-icon/ctrl-type", action:CanvasMgr.OnPosBodyChangeCtrlStyle});
+		}
+
+		if (BODY_LEAD == type || Pointer.IsCtrl(type))	//导线或控件上
+			menuArray.push({title: "查看电流 <kbd>Ctrl+L</kbd>", uiIcon: "res/menu-icon/show-elec", action:CanvasMgr.OnPosBodyShowElec});
+		
+		menuArray.push({title: "------------", disabled: true});
+		menuArray.push({title: "属性 <kbd>Ctrl+P</kbd>", uiIcon: "res/menu-icon/property", action:CanvasMgr.OnPosBodyProperty});
+	}
+
+	$(document).contextmenu("replaceMenu", menuArray);
+	return true;
+};
+
+		
 
 // 文件函数----------------------------------------------------------------↓
 // 新建文件
@@ -657,10 +653,36 @@ CanvasMgr.OnFocusBodyDelete = function() {
 };
 
 // 设置添加何种物体,具体添加位置由鼠标点击位置确定
-CanvasMgr.OnSetAddState = function(nID) {
+CanvasMgr.OnSetAddState = function(e, ui) {
 	if (CanvasMgr.m_inputLock) return;
+
+	var addState = BODY_NO;
+	switch (ui.cmd) {
+	case "add-crun":
+		addState = BODY_CRUN;
+		break;
+	case "add-source":
+		addState = BODY_SOURCE;
+		break;
+	case "add-resist":
+		addState = BODY_RESIST;
+		break;
+	case "add-bulb":
+		addState = BODY_BULB;
+		break;
+	case "add-capa":
+		addState = BODY_CAPA;
+		break;
+	case "add-switch":
+		addState = BODY_SWITCH;
+		break;
+
+	default:
+		return false;
+	}
+
 	Manager.PaintAll();
-	Manager.SetAddState(nID);
+	Manager.SetAddState(addState);
 };
 
 // 焦点属性
@@ -773,21 +795,21 @@ CanvasMgr.OnPosBodyShowElec = function() {
 };
 
 // 解除输入锁
-CanvasMgr.OnUnLock = function() {
+CanvasMgr.OnUnlock = function() {
 	if (!CanvasMgr.m_inputLock) return;
 	CanvasMgr.m_inputLock = false;	//解除输入锁
 
 	//需要激活的菜单
-	CanvasMgr.m_hm.EnableMenuItem(0			, MF_ENABLED|MF_BYPOSITION);	//文件函数
-	CanvasMgr.m_hm.EnableMenuItem(1			, MF_ENABLED|MF_BYPOSITION);	//编辑函数
-	CanvasMgr.m_hm.EnableMenuItem(3			, MF_ENABLED|MF_BYPOSITION);	//测试函数
-	CanvasMgr.m_hm.EnableMenuItem(IDM_COUNTI, MF_ENABLED);
+	//CanvasMgr.m_hm.EnableMenuItem(0			, MF_ENABLED|MF_BYPOSITION);	//文件函数
+	//CanvasMgr.m_hm.EnableMenuItem(1			, MF_ENABLED|MF_BYPOSITION);	//编辑函数
+	//CanvasMgr.m_hm.EnableMenuItem(3			, MF_ENABLED|MF_BYPOSITION);	//测试函数
+	//CanvasMgr.m_hm.EnableMenuItem(IDM_COUNTI, MF_ENABLED);
 
 	//需要屏蔽的菜单
-	CanvasMgr.m_hm.EnableMenuItem(IDM_RELEASE		, MF_GRAYED);
-	CanvasMgr.m_hm.EnableMenuItem(IDM_SHOWPRESSURE	, MF_GRAYED);
+	//CanvasMgr.m_hm.EnableMenuItem(IDM_RELEASE		, MF_GRAYED);
+	//CanvasMgr.m_hm.EnableMenuItem(IDM_SHOWPRESSURE	, MF_GRAYED);
 
-	CanvasMgr.DrawMenuBar();			//重绘菜单栏
+	//CanvasMgr.DrawMenuBar();			//重绘菜单栏
 	Manager.ClearPressBody();	//清空显示电势差的成员变量
 	Manager.PaintAll();		//刷新
 };
@@ -837,12 +859,27 @@ CanvasMgr.OnDeleteLead = function() {
 };
 
 // 旋转右击电学元件
-CanvasMgr.OnPosBodyRotateCtrl = function(nID) {
+CanvasMgr.OnPosBodyRotateCtrl = function(e, ui) {
 	if (CanvasMgr.m_inputLock) return;
+	
+	var angle90 = 0;
+	switch (ui.cmd) {
+	case "rotate90":
+		angle90 = 1;
+		break;
+	case "rotate180":
+		angle90 = 2;
+		break;
+	case "rotate270":
+		angle90 = 3;
+		break;
+	default:
+		return false;
+	}
 
 	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
 
-	Manager.RotateCtrl(body, nID);
+	Manager.RotateCtrl(body, angle90);
 	Manager.PaintAll();
 };
 
