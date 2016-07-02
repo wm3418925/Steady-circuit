@@ -104,10 +104,11 @@ Manager.ShowMoveLead = function(isLButtonDown) {
 		return true;
 	}
 
-	if (Manager.motiBody[Manager.motiCount-1].IsOnHoriLead())
+	if (Manager.motiBody[Manager.motiCount-1].IsOnHoriLead()) {
 		Manager.SetCursor("row-resize");	//在横线,鼠标变成"上下指针"
-	else 
+	} else  {
 		Manager.SetCursor("col-resize");	//在竖线,鼠标变成"左右指针"
+	}
 
 	return true;
 };

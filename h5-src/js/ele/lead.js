@@ -792,7 +792,7 @@ var LEAD = {
 				if (inter < 0) inter = -inter;
 
 				if (inter <= dis) {
-					if (pre2 != this.coord) {	//pre2不是头
+					if (pre2 != this.coord[0]) {	//pre2不是头
 						pre2.x = now.x;
 						this.coord.splice(currentIndex-1, 1);	// 删除pre1
 					} else {	//pre2是头

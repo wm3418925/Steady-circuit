@@ -3,7 +3,7 @@
 
 //设置添加何种物体
 Manager.SetAddState = function(type) {
-	ASSERT(type>=BODY_NO && type<CTRL_TYPE_NUM);
+	ASSERT(type>=BODY_NO && type<CTRL_TYPE_COUNT);
 	Manager.addState = type;
 };
 
@@ -110,4 +110,12 @@ Manager.GetBodyPointer = function(body) {
 Manager.SetCursor = function(type) {
 	if (Manager.canvas.style.cursor != type)
 		Manager.canvas.style.cursor = type;
+};
+
+Manager.GetPosBodyType = function(pos) {
+	Manager.motiCount = 0;
+	Manager.MotivateAll(pos);
+	Manager.motiCount = 0;
+	
+	return Manager.motiBody[0].style;
 };

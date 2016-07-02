@@ -10,7 +10,7 @@
     <link href="o-css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
     <link href="o-css/animate.min.css" rel="stylesheet">
     <link href="o-css/style.min.css?v=4.0.0" rel="stylesheet">
-	<style>.cp-app{z-index:19990720}</style>
+	<style>.cp-app{z-index:19990720}.myCanvasMenuClass{background-color:white;}</style>
 </head>
 
 <body id="body" onload="pageOnload()" style="margin:0px; overflow:hidden;">
@@ -52,7 +52,6 @@
 <script src="o-js/jquery.min.js" type="text/javascript" charset="UTF-8"></script>
 <script src="o-js/jquery-ui.min.js" type="text/javascript" charset="UTF-8"></script>
 <script src="o-js/jquery-ui.custom.min.js" type="text/javascript" charset="UTF-8"></script>
-<script src="o-js/jquery-taphold.js" type="text/javascript" charset="UTF-8"></script>
 <script src="o-js/jquery.ui-contextmenu.js" type="text/javascript" charset="UTF-8"></script>
 
 <script src="o-js/bootstrap.min.js?v=3.3.5" type="text/javascript" charset="UTF-8"></script>
@@ -140,12 +139,15 @@ function pageOnload() {
 	
 	
 	$(document).contextmenu({
+		addClass: "myCanvasMenuClass",
 		delegate: ".canvas-menu",
+		hide: { effect: "fadeOut", duration: "fast" },
 		autoFocus: true,
 		preventContextMenuForPopup: true,
 		preventSelect: true,
-		taphold: true,
-		menu: [],
+		show: { effect: "slideDown", duration: "fast" },
+		taphold: false,
+		menu: null,
 		select: function(event, ui) {return true;},
 		beforeOpen: CanvasMgr.BeforePopupMenu
 	});

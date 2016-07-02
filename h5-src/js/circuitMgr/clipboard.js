@@ -1,6 +1,11 @@
 
 //清空剪切板
 Manager.ClearClipboard = function() {
+	if (Manager.clipBody.IsOnCrun())
+		Manager.clipBody.p = null;
+	else if(Manager.clipBody.IsOnCtrl())
+		Manager.clipBody.p = null;
+	
 	Manager.clipBody.Clear();
 };
 
@@ -31,7 +36,7 @@ Manager.CopyBody = function(body) {
 
 //剪切物体到剪切板
 Manager.CutBody = function(body) {
-	var pointer = CopyBody(body);	//复制物体
+	var pointer = Manager.CopyBody(body);	//复制物体
 	if (!pointer.IsOnBody()) return;
 	Manager.DeletePointerBody(pointer);		//删除物体
 	Manager.PaintAll();				//重绘电路
@@ -40,7 +45,6 @@ Manager.CutBody = function(body) {
 //粘贴物体
 Manager.PasteBody = function(pos) {
 	if (!Manager.clipBody.IsOnBody()) {
-		MessageBeep(0);
 		return false;
 	}
 	DPtoLP(pos, Manager.canvas);

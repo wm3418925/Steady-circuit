@@ -111,13 +111,13 @@ CanvasMgr.GetPageSize = function(nBar) {
 };
 
 // 使用快捷键粘贴
-CanvasMgr.PasteByHotKey = function() {
+CanvasMgr.PasteByHotKey = function(e) {
 	if (CanvasMgr.m_inputLock) return;
 
+	var mousePos = GetClientPosOfEvent(e);
+	
 	var maxX = CanvasMgr.canvas.clientWidth - CTRL_SIZE.cx;
 	var maxY = CanvasMgr.canvas.clientHeight - CTRL_SIZE.cy;
-	
-	var mousePos = ClonePosition(CanvasMgr.m_mousePos);
 	
 	if (mousePos.x < 0) mousePos.x = 0;
 	if (mousePos.y < 0) mousePos.y = 0;
@@ -322,7 +322,7 @@ CanvasMgr.OnKeyDown = function(e) {
 			return false;
 
 		case 'V':	//使用快捷键粘贴
-			CanvasMgr.PasteByHotKey();
+			//CanvasMgr.PasteByHotKey(e);//由于不能获取鼠标坐标, 只能废弃
 			return false;
 
 		case 'Z':	//撤销
@@ -452,7 +452,7 @@ CanvasMgr.BeforePopupMenu = function(e, ui) {
 	
 	CanvasMgr.m_mousePos = point;	//保存当前鼠标坐标
 	Manager.PaintAll();	//刷新
-	var type = Manager.PosBodyPaintRect(point);	//突出右击物体
+	var type = Manager.GetPosBodyType(point);	//获取右击类型
 	
 	var menuArray = new Array();
 
@@ -476,7 +476,7 @@ CanvasMgr.BeforePopupMenu = function(e, ui) {
 		menuArray.push({title: "添加开关", uiIcon: "res/menu-icon/add-switch", action:CanvasMgr.OnSetAddState, cmd:"add-switch"});
 		menuArray.push({title: "------------", disabled: true});
 		
-		var pasteMenuItem = {title: "粘贴 <kbd>Ctrl+V</kbd>", uiIcon: "res/menu-icon/paste", action:CanvasMgr.Paste};
+		var pasteMenuItem = {title: "粘贴", uiIcon: "res/menu-icon/paste", action:CanvasMgr.OnPaste};//"粘贴 <kbd>Ctrl+V</kbd>"
 		if (!Manager.GetClipboardState())
 			pasteMenuItem.disabled = true;
 		menuArray.push(pasteMenuItem);
