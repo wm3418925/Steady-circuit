@@ -47,7 +47,7 @@ Manager.SetFocusLeadStyle = function() {
 	
 	var list = LISTDATA.CreateNew();
 	list.SetDataParent(Manager);
-	list.SetAEnumMember(LEAD_STYLE_ENUM, "选定导线样式", "focusLeadStyle");
+	list.SetAEnumMember(LEAD_STYLE_ENUM, "焦点导线样式", "focusLeadStyle");
 	
 	//改变回调
 	var changedCallback = function() {
@@ -55,7 +55,7 @@ Manager.SetFocusLeadStyle = function() {
 			Manager.FocusBodyPaint(null);
 	};
 	
-	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置选定导线样式", Manager.canvas, changedCallback, null);
+	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置焦点导线样式", Manager.canvas, changedCallback, null);
 	dlg.DoModal();
 };
 
@@ -65,7 +65,7 @@ Manager.SetFocusCrunColor = function() {
 	
 	var list = LISTDATA.CreateNew();
 	list.SetDataParent(Manager);
-	list.SetAMember(DATA_TYPE_color, "选定结点颜色", "focusCrunColor");
+	list.SetAMember(DATA_TYPE_color, "焦点结点颜色", "focusCrunColor");
 
 	//改变回调
 	var changedCallback = function() {
@@ -73,7 +73,7 @@ Manager.SetFocusCrunColor = function() {
 			Manager.FocusBodyPaint(null);
 	};
 	
-	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置选定结点颜色", Manager.canvas, changedCallback, null);
+	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置焦点结点颜色", Manager.canvas, changedCallback, null);
 	dlg.DoModal();
 };
 
@@ -83,7 +83,7 @@ Manager.SetFocusCtrlColor = function() {
 	
 	var list = LISTDATA.CreateNew();
 	list.SetDataParent(Manager);
-	list.SetAMember(DATA_TYPE_color, "选定电学元件颜色", "focusCtrlColor");
+	list.SetAMember(DATA_TYPE_color, "焦点电学元件颜色", "focusCtrlColor");
 
 	//改变回调
 	var changedCallback = function() {
@@ -91,6 +91,6 @@ Manager.SetFocusCtrlColor = function() {
 			Manager.FocusBodyPaint(null);
 	};
 	
-	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置选定电学元件颜色", Manager.canvas, changedCallback, null);
+	var dlg = MyPropertyDlg.CreateNew(list, false, null, "设置焦点电学元件颜色", Manager.canvas, changedCallback, null);
 	dlg.DoModal();
 };

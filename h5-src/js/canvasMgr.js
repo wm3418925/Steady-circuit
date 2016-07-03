@@ -6,20 +6,8 @@ var CanvasMgr = {};
 	ON_COMMAND(IDM_FILE_SAVE, OnFileSave)
 	ON_COMMAND(IDM_FILE_SAVE_AS, OnFileSaveAs)
 	ON_COMMAND(IDM_SAVEASPIC, OnSaveAsPicture)
-	ON_COMMAND(IDM_EXIT, OnExit)
-
-	ON_COMMAND(IDM_COUNTI, OnCountElec)
-	ON_COMMAND(IDM_SHOWPRESSURE, OnShowPressure)
-	ON_COMMAND(IDM_RELEASE, OnUnlock)
-
-	ON_COMMAND(IDM_SETMOVEBODYSENSE, OnSetMoveBodySense)
-	ON_COMMAND(IDM_SETLEAVEOUTDIS, OnSetLeaveOutDis)
-	ON_COMMAND(IDM_SETTEXTCOLOR, OnSetTextColor)
-	ON_COMMAND(IDM_SETFOCUSLEADSTYLE, OnSetFocusLeadStyle)
-	ON_COMMAND(IDM_SETFOCUSCRUNCOLOR, OnSetFocusCrunColor)
-	ON_COMMAND(IDM_SETFOCUSCTRLCOLOR, OnSetFocusCtrlColor)
 	
-	ON_COMMAND(IDM_SEARCH, OnSearch)
+	ON_COMMAND(IDM_EXIT, OnExit)
 */
 // ///////////////////////////////////////////////////////////////////////////
 //  private function
@@ -708,7 +696,7 @@ CanvasMgr.OnCountElec = function() {
 	if (CanvasMgr.m_inputLock) return;
 
 	CanvasMgr.LockInput();		//上锁
-	Manager.CountElec();	//计算电流
+	ComputeMgr.ComputeElec(Manager.lead, Manager.crun, Manager.ctrl);	//计算电流
 	Manager.PaintAll();	//计算后可能有特殊效果需要刷新
 };
 

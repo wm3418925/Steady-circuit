@@ -129,28 +129,34 @@
 </td><td style="vertical-align:top;">
 
 	<ul id="nav">
-		<li><a href="#"><img src="images/t1.png" /> Home</a></li>
-		<li><a href="#" class="sub" tabindex="1"><img src="images/t2.png" />HTML/CSS</a><img src="o-css/menu-images/up.gif" alt="" />
+		<li><a href="#" class="sub" tabindex="1"><img src="images/t.png" />添加</a><img src="o-css/menu-images/up.gif" alt="" />
 			<ul>
-				<li><a href="#"><img src="images/empty.gif" />Link 1</a></li>
-				<li><a href="#"><img src="images/empty.gif" />Link 2</a></li>
-				<li><a href="#"><img src="images/empty.gif" />Link 3</a></li>
-				<li><a href="#"><img src="images/empty.gif" />Link 4</a></li>
-				<li><a href="#"><img src="images/empty.gif" />Link 5</a></li>
+				<li><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-crun'});return false;"><img src="images/t.gif" />结点</a></li>
+				<li><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-source'});return false;"><img src="images/t.gif" />电源</a></li>
+				<li><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-resist'});return false;"><img src="images/t.gif" />电阻</a></li>
+				<li><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-bulb'});return false;"><img src="images/t.gif" />灯泡</a></li>
+				<li><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-capa'});return false;"><img src="images/t.gif" />电容器</a></li>
+				<li><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-switch'});return false;"><img src="images/t.gif" />开关</a></li>
 			</ul>
 		</li>
-		<li><a href="#" class="sub" tabindex="1"><img src="images/t3.png" />jQuery/JS</a><img src="o-css/menu-images/up.gif" alt="" />
+		<li><a href="#" class="sub" tabindex="1"><img src="images/t.png" />计算相关</a><img src="o-css/menu-images/up.gif" alt="" />
 			<ul>
-				<li><a href="#"><img src="images/empty.gif" />Link 6</a></li>
-				<li><a href="#"><img src="images/empty.gif" />Link 7</a></li>
-				<li><a href="#"><img src="images/empty.gif" />Link 8</a></li>
-				<li><a href="#"><img src="images/empty.gif" />Link 9</a></li>
-				<li><a href="#"><img src="images/empty.gif" />Link 10</a></li>
+				<li><a href="#" onclick="CanvasMgr.OnCountElec();return false;"><img src="images/t.gif" />计算电流</a></li>
+				<li><a href="#" onclick="CanvasMgr.OnShowPressure();return false;"><img src="images/t.gif" />显示电势差</a></li>
+				<li><a href="#" onclick="CanvasMgr.OnUnlock();return false;"><img src="images/t.gif" />解除编辑限制</a></li>
 			</ul>
 		</li>
-		<li><a href="#"><img src="images/t2.png" />PHP</a></li>
-		<li><a href="#"><img src="images/t2.png" />MySQL</a></li>
-		<li><a href="#"><img src="images/t2.png" />XSLT</a></li>
+		<li><a href="#" class="sub" tabindex="1"><img src="images/t.png" />设置</a><img src="o-css/menu-images/up.gif" alt="" />
+			<ul>
+				<li><a href="#" onclick="CanvasMgr.OnSetMoveBodySense();return false;"><img src="images/t.gif" />移动物体距离</a></li>
+				<li><a href="#" onclick="CanvasMgr.OnSetLeaveOutDis();return false;"><img src="images/t.gif" />导线合并最小距离</a></li>
+				<li><a href="#" onclick="CanvasMgr.OnSetTextColor();return false;"><img src="images/t.gif" />标签颜色</a></li>
+				<li><a href="#" onclick="CanvasMgr.OnSetFocusLeadStyle();return false;"><img src="images/t.gif" />焦点导线样式</a></li>
+				<li><a href="#" onclick="CanvasMgr.OnSetFocusCrunColor();return false;"><img src="images/t.gif" />焦点结点颜色</a></li>
+				<li><a href="#" onclick="CanvasMgr.OnSetFocusCtrlColor();return false;"><img src="images/t.gif" />焦点电学元件颜色</a></li>
+			</ul>
+		</li>
+		<li><a href="#" onclick="CanvasMgr.OnSearch();return false;" ><img src="images/t.png" />搜索</a></li>
 	</ul>
 
 </td></tr>

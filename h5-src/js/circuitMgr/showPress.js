@@ -87,7 +87,7 @@ Manager.NextBodyByInputNum = function(nChar) {
 				swal({content:"这是一个断路电学元件 !", title:"电流无法流过 !", type:"warning"});
 				return false;
 			}
-			if (temp.p.GetConnectNum() < 2) {	//控件没有连接2段导线
+			if (temp.p.GetConnectCount() < 2) {	//控件没有连接2段导线
 				swal({content:"电学元件另一端没有连接导线 !", title:"电流无法流过 !", type:"warning"}, Manager.CanvasSetFocus);
 				return false;
 			}
@@ -97,7 +97,7 @@ Manager.NextBodyByInputNum = function(nChar) {
 				Manager.startEndPressure -= temp.p.resist * temp.p.elec;
 			else
 				Manager.startEndPressure += temp.p.resist * temp.p.elec;
-			Manager.startEndPressure += temp.p.GetPress(dir);
+			Manager.startEndPressure += temp.p.GetPressure(dir);
 			Manager.pressEndBody.SetOnLead(temp.p.lead[dir]);
 		}
 	} else {	//结尾位置在结点上
@@ -117,7 +117,7 @@ Manager.NextBodyByInputNum = function(nChar) {
 //显示从起始位置到结尾位置的电势差(U0-U1)
 Manager.ShowPressure = function() {
 	if (!Manager.pressStartBody.IsOnAny() || !Manager.pressEndBody.IsOnAny()) {
-		swal({content:"请选择起始位置再查看电势差", title:"n起始位置可以用鼠标点击选择", type:"warning"});
+		swal({content:"请选择起始位置再查看电势差", title:"起始位置可以用鼠标点击选择", type:"warning"});
 		return false;
 	}
 
