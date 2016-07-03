@@ -63,13 +63,14 @@ Manager.DeleteNote = function(pointer, okCallback, returnCallback) {
 	Manager.tmpRemovePointer = pointer;
 	swal(
 		{
-			title: "删除物体提示",   
-			text: note,   
-			type: "warning",   
-			showCancelButton: true,   
-			confirmButtonColor: "#DD6B55",   
-			confirmButtonText: "确定, 删除它",   
-			closeOnConfirm: false 
+			title: "删除物体提示",
+			text: note,
+			type: "warning",
+			showCancelButton: true,
+			cancelButtonText: "取消",
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "确定, 删除它",
+			closeOnConfirm: false
 		},
 		function(isConfirm) {
 			if (isConfirm) {

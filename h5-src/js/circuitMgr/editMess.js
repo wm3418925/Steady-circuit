@@ -77,18 +77,19 @@ Manager.ChangeCtrlStyle = function(body) {
 		if (Manager.tmpEditCtrlPreStyle != Manager.tmpEditCtrlNewStyle) {
 			swal(
 				{
-					title: "改变类型会丢失原有电学元件的数据!",   
-					text: "继续吗?",   
-					type: "warning",   
-					showCancelButton: true,   
-					confirmButtonColor: "#DD6B55",   
+					title: "改变类型会丢失原有电学元件的数据!",
+					text: "继续吗?",
+					type: "warning",
+					showCancelButton: true,
+					cancelButtonText: "取消",
+					confirmButtonColor: "#DD6B55",
 					confirmButtonText: "确定",
-					closeOnConfirm: false 
+					closeOnConfirm: false
 				},
 				function(isConfirm) {
 					if (isConfirm) {
 						Manager.tmpEditCtrl.ChangeStyle(Manager.tmpEditCtrlNewStyle);
-						swal({title:"已修改", type:"success"});	//!!! 不能获取焦点
+						swal({title:"已修改", type:"success"});
 					}
 				}
 			);
