@@ -1,32 +1,7 @@
 var CanvasMgr = {};
 
 /*BEGIN_MESSAGE_MAP(CMyDlg, CDialog)
-	ON_COMMAND_RANGE(IDM_ADD_CRUNODE, IDM_ADD_SWITCH, OnSetAddState)
-	ON_COMMAND_RANGE(IDM_POSBODY_ROTATE1, IDM_POSBODY_ROTATE3, OnPosBodyRotateCtrl)
 	ON_COMMAND_RANGE(IDM_FOCUSBODY_ROTATE1, IDM_FOCUSBODY_ROTATE3, OnFocusBodyRotateCtrl)
-	//{{AFX_MSG_MAP(CMyDlg)
-	ON_WM_CLOSE()
-	ON_WM_DESTROY()
-	ON_WM_SYSCOMMAND()
-	ON_WM_PAINT()
-	ON_WM_HELPINFO()
-	ON_WM_QUERYDRAGICON()
-	ON_COMMAND(IDM_ABOUT, OnAbout)
-
-
-	ON_WM_LBUTTONDOWN()
-	ON_WM_MOUSEMOVE()
-	ON_WM_LBUTTONUP()
-	ON_WM_LBUTTONDBLCLK()
-	ON_WM_RBUTTONUP()
-	ON_WM_KILLFOCUS()
-	ON_WM_SETFOCUS()
-	ON_WM_VSCROLL()
-	ON_WM_HSCROLL()
-	ON_WM_MOUSEWHEEL()
-	ON_WM_KEYDOWN()
-	ON_WM_KEYUP()
-
 
 	ON_COMMAND(IDM_FILE_NEW, OnFileNew)
 	ON_COMMAND(IDM_FILE_OPEN, OnFileOpen)
@@ -34,14 +9,11 @@ var CanvasMgr = {};
 	ON_COMMAND(IDM_FILE_SAVE_AS, OnFileSaveAs)
 	ON_COMMAND(IDM_SAVEASPIC, OnSaveAsPicture)
 	ON_COMMAND(IDM_EXIT, OnExit)
-	ON_WM_DROPFILES()
 
 
 	ON_COMMAND(IDM_FOCUSBODY_CUT, OnFocusBodyCut)
 	ON_COMMAND(IDM_FOCUSBODY_COPY, OnFocusBodyCopy)
 	ON_COMMAND(IDM_FOCUSBODY_DELETE, OnFocusBodyDelete)
-	ON_COMMAND(IDM_UNDO, OnUnDo)
-	ON_COMMAND(IDM_REDO, OnReDo)
 	ON_COMMAND(IDM_FOCUSBODY_PROPERTY, OnFocusBodyProperty)
 	ON_COMMAND(IDM_FOCUSBODY_CHANGECTRLSTYLE, OnFocusBodyChangeCtrlStyle)
 	ON_COMMAND(IDM_FOCUSBODY_SHOWELEC, OnFocusBodyShowElec)
@@ -56,25 +28,13 @@ var CanvasMgr = {};
 	ON_COMMAND(IDM_SETFOCUSCTRLCOLOR, OnSetFocusCtrlColor)
 
 
-	ON_COMMAND(IDM_SAVETOTEXTFILE, OnSaveTextFile)
-	ON_COMMAND(IDM_MAKEMAP, OnMakeMap)
-
-
 	ON_COMMAND(IDM_COUNTI, OnCountElec)
 	ON_COMMAND(IDM_SHOWPRESSURE, OnShowPressure)
 	ON_COMMAND(IDM_POSBODY_SHOWELEC, OnPosBodyShowElec)
 	ON_COMMAND(IDM_RELEASE, OnUnlock)
 
-
-	ON_COMMAND(IDM_POSBODY_COPY, OnPosBodyCopy)
-	ON_COMMAND(IDM_POSBODY_CUT, OnPosBodyCut)
-	ON_COMMAND(IDM_POSBODY_DELETE, OnPosBodyDelete)
-	ON_COMMAND(IDM_PASTE, OnPaste)
-	ON_COMMAND(IDM_DELETELEAD, OnDeleteLead)
-	ON_COMMAND(IDM_POSBODY_PROPERTY, OnPosBodyProperty)
 	ON_COMMAND(IDM_POSBODY_CHANGECTRLSTYLE, OnPosBodyChangeCtrlStyle)
 
-	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 */
 // ///////////////////////////////////////////////////////////////////////////
@@ -97,24 +57,11 @@ CanvasMgr.LockInput = function() {
 	//CanvasMgr.DrawMenuBar();	//重绘菜单栏
 };
 
-// 获得当前屏幕大小的一页
-CanvasMgr.GetPageSize = function(nBar) {
-	if (SB_HORZ == nBar) {
-		range = CanvasMgr.canvas.clientWidth;
-		range -= 5 + 20;
-	} else {	//if (SB_VERT == nBar)
-		range = CanvasMgr.canvas.clientHeight;
-		range -= 48 + 20;
-	}
-
-	return range/32;
-};
-
 // 使用快捷键粘贴
 CanvasMgr.PasteByHotKey = function(e) {
 	if (CanvasMgr.m_inputLock) return;
 
-	var mousePos = GetClientPosOfEvent(e);
+	var mousePos = GetClientPosOfEvent(e, CanvasMgr.canvas);
 	
 	var maxX = CanvasMgr.canvas.clientWidth - CTRL_SIZE.cx;
 	var maxY = CanvasMgr.canvas.clientHeight - CTRL_SIZE.cy;
@@ -236,7 +183,7 @@ CanvasMgr.OnMouseUp = function(e) {
 CanvasMgr.OnLButtonDown = function(e) {
 	if (CanvasMgr.m_inputLock) return;
 	
-	var point = GetClientPosOfEvent(e);
+	var point = GetClientPosOfEvent(e, CanvasMgr.canvas);
 	Manager.AddBody(point);
 	if (Manager.LButtonDown(point)) Manager.PaintAll();
 	
@@ -244,7 +191,7 @@ CanvasMgr.OnLButtonDown = function(e) {
 };
 // 鼠标左键按起消息处理
 CanvasMgr.OnLButtonUp = function(e) {
-	var point = GetClientPosOfEvent(e);
+	var point = GetClientPosOfEvent(e, CanvasMgr.canvas);
 	if (CanvasMgr.m_inputLock)
 		Manager.SetStartBody(point);
 	else if (Manager.LButtonUp(point, e)) 
@@ -256,7 +203,7 @@ CanvasMgr.OnLButtonUp = function(e) {
 CanvasMgr.OnLButtonDblClk = function(e) {
 	if (!e) e = window.event;
 	
-	var point = GetClientPosOfEvent(e);
+	var point = GetClientPosOfEvent(e, CanvasMgr.canvas);
 	var body = FOCUS_OR_POS.CreateNew(false, point);
 
 	if (CanvasMgr.m_inputLock) {	//显示电流或电势差
@@ -275,7 +222,7 @@ CanvasMgr.OnLButtonDblClk = function(e) {
 CanvasMgr.OnMouseMove = function(e) {
 	if (CanvasMgr.m_inputLock) return;
 	
-	var point = GetClientPosOfEvent(e);
+	var point = GetClientPosOfEvent(e, CanvasMgr.canvas);
 	Manager.MouseMove(point, e);
 	
 	return true;
@@ -447,7 +394,7 @@ CanvasMgr.OnKeyUp = function(e) {
 // 菜单函数----------------------------------------------------------------↓
 // 弹出右击菜单消息处理
 CanvasMgr.BeforePopupMenu = function(e, ui) {
-	var point = GetClientPosOfEvent(e);
+	var point = GetClientPosOfEvent(e, CanvasMgr.canvas);
 	
 	CanvasMgr.m_mousePos = point;	//保存当前鼠标坐标
 	Manager.PaintAll();	//刷新

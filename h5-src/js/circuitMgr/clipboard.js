@@ -47,7 +47,6 @@ Manager.PasteBody = function(pos) {
 	if (!Manager.clipBody.IsOnBody()) {
 		return false;
 	}
-	DPtoLP(pos, Manager.canvas);
 
 	if (Manager.clipBody.IsOnCrun()) {
 		if (Manager.crun.length >= MAX_CRUN_COUNT) {

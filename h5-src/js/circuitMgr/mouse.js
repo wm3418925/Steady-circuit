@@ -25,7 +25,6 @@ Manager.MotivateAll = function(pos) {
 
 	//1,初始化-------------------------------------------
 	ASSERT(Manager.motiCount >= 0 && Manager.motiCount < 2);
-	DPtoLP(pos, Manager.canvas);
 	mouseMoti.Clear();
 
 	//2,搜索在什么物体上---------------------------------
@@ -102,7 +101,6 @@ Manager.LButtonDown = function(pos) {
 Manager.LButtonUp = function(pos, e) {
 	Manager.isUpRecvAfterDown = true;						//鼠标按下后收到鼠标按起消息
 	if (!Manager.lButtonDownState || Manager.motiCount<=0) return false;	//没有点击返回
-	DPtoLP(pos, Manager.canvas);
 	var body = Manager.motiBody[Manager.motiCount-1].Clone();
 
 	//左键按下和按起的坐标相同,而且点击的不是连接点

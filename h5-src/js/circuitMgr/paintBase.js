@@ -77,7 +77,6 @@ Manager.PaintAll = function() {
 	}*/
 
 	//由dcForRefresh画图
-	//DPtoLP(rect, Manager.canvas)			//当前rect由设备坐标变换为逻辑坐标
 	//Manager.ctx = &dcForRefresh;		//dc暂时替换为dcForRefresh,在内存画图
 
 	//设置字体和视角起点

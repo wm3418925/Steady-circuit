@@ -120,13 +120,10 @@ function IsUnsignedInteger(str) {	//判断字符串是否是正整数
 
 
 // 获取当前时间中的鼠标坐标(相对client窗口)
-function GetClientPosOfEvent(e) {
-	return {"x":e.clientX, "y":e.clientY};
-	
-	//var x = e.clientX;
-	//var y = e.clientY;
-	//client.
-	//return {"x":x, "y":y};
+function GetClientPosOfEvent(e, client) {
+	var l = document.body.scrollLeft - client.offsetLeft;
+	var t = document.body.scrollTop - client.offsetTop;
+	return {"x":e.clientX+l, "y":e.clientY+t};
 }
 // 获取当前时间中的鼠标坐标(相对屏幕窗口)
 function GetScreenPosOfEvent(e) {
@@ -138,30 +135,6 @@ function GetPressKeyCode(e) {
 		return e.keyCode;
 	} else if(e.which) {
 		return e.which;
-	}
-}
-// 由设备坐标变换为逻辑坐标
-function DPtoLP(posOrRect, client) {
-	var l = document.body.scrollLeft + client.offsetLeft;
-	var t = document.body.scrollTop + client.offsetTop;
-	
-	if (posOrRect.hasOwnProperty("left")) {
-		posOrRect.left -= l;
-	}
-	if (posOrRect.hasOwnProperty("right")) {
-		posOrRect.right -= l;
-	}
-	if (posOrRect.hasOwnProperty("top")) {
-		posOrRect.top -= t;
-	}
-	if (posOrRect.hasOwnProperty("bottom")) {
-		posOrRect.bottom -= t;
-	}
-	if (posOrRect.hasOwnProperty("x")) {
-		posOrRect.x -= l;
-	}
-	if (posOrRect.hasOwnProperty("y")) {
-		posOrRect.y -= t;
 	}
 }
 

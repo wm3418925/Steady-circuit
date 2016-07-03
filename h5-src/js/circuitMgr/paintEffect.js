@@ -14,7 +14,6 @@ Manager.ShowAddLead = function(pos) {
 	Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(COLOR_NORMAL);
 	
 	Manager.ctx.beginPath();
-	DPtoLP(pos, Manager.canvas);
 	Manager.ctx.moveTo(pos.x, pos.y);
 	var firstPos = body.GetPosFromBody();
 	Manager.ctx.lineTo(firstPos.x, firstPos.y);
@@ -29,7 +28,6 @@ Manager.ShowAddBody = function(point) {
 		if (Manager.lastMoveOnPos.x > -100)
 			PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.crunXorImageData, Manager.lastMoveOnPos.x-DD, Manager.lastMoveOnPos.y-DD);
 		
-		DPtoLP(point, Manager.canvas);
 		Manager.lastMoveOnPos = point;
 		
 		PaintCommonFunc.PaintImageDataXor(Manager.ctx, Manager.crunXorImageData, Manager.lastMoveOnPos.x-DD, Manager.lastMoveOnPos.y-DD);
@@ -42,7 +40,6 @@ Manager.ShowAddBody = function(point) {
 		if (Manager.lastMoveOnPos.x > -100)
 			PaintCommonFunc.PaintImageDataXor(Manager.ctx, tempImage, Manager.lastMoveOnPos.x, Manager.lastMoveOnPos.y);
 		
-		DPtoLP(point, Manager.canvas);
 		Manager.lastMoveOnPos = point;
 		
 		PaintCommonFunc.PaintImageDataXor(Manager.ctx, tempImage, Manager.lastMoveOnPos.x, Manager.lastMoveOnPos.y);
@@ -68,7 +65,6 @@ Manager.ShowMoveBody = function(pos, isLButtonDown, isCtrlDown) {
 	}
 
 	//获得物体坐标
-	DPtoLP(pos, Manager.canvas);
 	var bodyPos = {x:body.p.x, y:body.p.y};
 
 	//根据坐标差计算画图坐标
