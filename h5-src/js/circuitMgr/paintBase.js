@@ -163,8 +163,15 @@ Manager.PaintCrunWithStyle = function(c, style) {
 	ASSERT(c != null);
 	ASSERT(style >= 0 && style < PAINT_CRUN_STYLE_COUNT);
 
-	Manager.ctx.fillRect(c.x-DD, c.y-DD, 2*DD, 2*DD);
-	Manager.ctx.putImageData(Manager.crunImageData[style], c.x-DD, c.y-DD);
+	if (style != PAINT_CRUN_STYLE_FOCUS) {
+		Manager.ctx.fillStyle = "#FFFFFF";
+		Manager.ctx.fillRect(c.x-DD, c.y-DD, 2*DD, 2*DD);
+		Manager.ctx.putImageData(Manager.crunImageData[style], c.x-DD, c.y-DD);
+	} else {
+		Manager.ctx.fillStyle = PaintCommonFunc.HexToRGBStr(Manager.focusCrunColor);
+		Manager.ctx.fillRect(c.x-DD, c.y-DD, 2*DD, 2*DD);
+		PaintCommonFunc.PaintImageDataOr(Manager.ctx, Manager.crunImageData[PAINT_CRUN_STYLE_NORMAL], c.x-DD, c.y-DD);
+	}
 };
 
 //用指定颜色画指定控件

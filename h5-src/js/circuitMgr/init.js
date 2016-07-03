@@ -39,8 +39,22 @@ var Manager = {
 			data[i+2]=b;
 			data[i+3]=255;
 		}
-		data[3]=data[7]=data[DD*8-5]=data[DD*8-1]=data[DD*8+3]=data[DD*16-1]=0;
-		data[len-1]=data[len-5]=data[len-DD*8+7]=data[len-DD*8+3]=data[len-DD*8-1]=data[len-DD*16+3]=0;
+		//data[3]=data[7]=data[DD*8-5]=data[DD*8-1]=data[DD*8+3]=data[DD*16-1]=0;
+		//data[len-1]=data[len-5]=data[len-DD*8+7]=data[len-DD*8+3]=data[len-DD*8-1]=data[len-DD*16+3]=0;
+		
+		setImageDataWhiteColor(data, 0);
+		setImageDataWhiteColor(data, 4);
+		setImageDataWhiteColor(data, DD*8-8);
+		setImageDataWhiteColor(data, DD*8-4);
+		setImageDataWhiteColor(data, DD*8);
+		setImageDataWhiteColor(data, DD*16-4);
+		
+		setImageDataWhiteColor(data, len-4);
+		setImageDataWhiteColor(data, len-8);
+		setImageDataWhiteColor(data, len-DD*8+4);
+		setImageDataWhiteColor(data, len-DD*8);
+		setImageDataWhiteColor(data, len-DD*8-4);
+		setImageDataWhiteColor(data, len-DD*16);
 		return imgData;
 	},
 	// 初始化用于异或画图的节点

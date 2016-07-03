@@ -91,7 +91,7 @@ Manager.NextBodyByInputNum = function(nChar) {
 				swal({content:"电学元件另一端没有连接导线 !", title:"电流无法流过 !", type:"warning"}, Manager.CanvasSetFocus);
 				return false;
 			}
-			dir = temp.p.lead[0] == Manager.pressEndBody.p;	//下一个导线索引(0或1)
+			dir = True1_False0(temp.p.lead[0] == Manager.pressEndBody.p);	//下一个导线索引(0或1)
 			if (temp.p.lead[dir] == Manager.pressEndBody.p) return false;	//电路是一个控件2端都连接同一段导线
 			if (temp.p.elecDir == dir)
 				Manager.startEndPressure -= temp.p.resist * temp.p.elec;
@@ -128,9 +128,9 @@ Manager.ShowPressure = function() {
 	var list = LISTDATA.CreateNew();
 
 	if (IsFloatZero(Manager.startEndPressure)) Manager.startEndPressure = 0;
-	list.SetAMember(DATA_STYLE_float, note, Manager.startEndPressure);
-	list.SetAMember(DATA_STYLE_string, "起始位置", name1);
-	list.SetAMember(DATA_STYLE_string, "结束位置", name2);
+	list.SetAMember(DATA_TYPE_float, note, Manager.startEndPressure);
+	list.SetAMember(DATA_TYPE_string, "起始位置", name1);
+	list.SetAMember(DATA_TYPE_string, "结束位置", name2);
 
 	var dlg = MyPropertyDlg.CreateNew(list, true, null, note, Manager.canvas);
 	dlg.DoModal();
