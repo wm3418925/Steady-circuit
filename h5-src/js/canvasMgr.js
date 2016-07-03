@@ -467,12 +467,12 @@ CanvasMgr.BeforePopupMenu = function(e, ui) {
 		menuArray.push({title: "解除输入限制 <kbd>Ctrl+R</kbd>", uiIcon: "ui-icon-key", action:CanvasMgr.OnUnlock});
 		menuArray.push({title: "显示电势差 <kbd>Ctrl+U</kbd>", uiIcon: "ui-icon-pause", action:CanvasMgr.OnShowPressure});
 	} else if (BODY_NO == type) {	//右击空白处
-		menuArray.push({title: "添加结点", uiIcon: "ui-icon-circle-plus", action:CanvasMgr.OnSetAddState, cmd:"add-crun"});
-		menuArray.push({title: "添加电源", uiIcon: "ui-icon-circle-plus", action:CanvasMgr.OnSetAddState, cmd:"add-source"});
-		menuArray.push({title: "添加电阻", uiIcon: "ui-icon-circle-plus", action:CanvasMgr.OnSetAddState, cmd:"add-resist"});
-		menuArray.push({title: "添加灯泡", uiIcon: "ui-icon-lightbulb", action:CanvasMgr.OnSetAddState, cmd:"add-bulb"});
-		menuArray.push({title: "添加电容器", uiIcon: "ui-icon-circle-plus", action:CanvasMgr.OnSetAddState, cmd:"add-capa"});
-		menuArray.push({title: "添加开关", uiIcon: "ui-icon-circle-plus", action:CanvasMgr.OnSetAddState, cmd:"add-switch"});
+		menuArray.push({title: "添加结点", uiIcon: "ui-icon-add-crun", action:CanvasMgr.OnSetAddState, cmd:"add-crun"});
+		menuArray.push({title: "添加电源", uiIcon: "ui-icon-add-source", action:CanvasMgr.OnSetAddState, cmd:"add-source"});
+		menuArray.push({title: "添加电阻", uiIcon: "ui-icon-add-resist", action:CanvasMgr.OnSetAddState, cmd:"add-resist"});
+		menuArray.push({title: "添加灯泡", uiIcon: "ui-icon-add-bulb", action:CanvasMgr.OnSetAddState, cmd:"add-bulb"});
+		menuArray.push({title: "添加电容器", uiIcon: "ui-icon-add-capa", action:CanvasMgr.OnSetAddState, cmd:"add-capa"});
+		menuArray.push({title: "添加开关", uiIcon: "ui-icon-add-switch", action:CanvasMgr.OnSetAddState, cmd:"add-switch"});
 		menuArray.push({title: "------------", disabled: true});
 		
 		var pasteMenuItem = {title: "粘贴", uiIcon: "ui-icon-clipboard", action:CanvasMgr.OnPaste};//"粘贴 <kbd>Ctrl+V</kbd>"

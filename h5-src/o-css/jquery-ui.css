@@ -1266,6 +1266,12 @@ a.ui-button:active,
 .ui-icon-gripsmall-diagonal-se { background-position: -64px -224px; }
 .ui-icon-grip-diagonal-se { background-position: -80px -224px; }
 
+.ui-icon-add-crun { background-position: 0 -240px; }
+.ui-icon-add-source { background-position: -16px -240px; }
+.ui-icon-add-resist { background-position: -32px -240px; }
+.ui-icon-add-bulb { background-position: -48px -240px; }
+.ui-icon-add-capa { background-position: -64px -240px; }
+.ui-icon-add-switch { background-position: -80px -240px; }
 
 /* Misc visuals
 ----------------------------------*/
