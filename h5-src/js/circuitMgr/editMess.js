@@ -87,6 +87,7 @@ Manager.ChangeCtrlStyle = function(body) {
 				function(isConfirm) {
 					if (isConfirm) {
 						Manager.tmpEditCtrl.ChangeStyle(Manager.tmpEditCtrlNewStyle);
+						Manager.PaintAll();
 						swal({title:"已修改", type:"success"});
 					}
 				}

@@ -11,6 +11,7 @@
     <link href="o-css/animate.min.css" rel="stylesheet">
     <link href="o-css/style.min.css?v=4.0.0" rel="stylesheet">
 	<link href="o-css/jquery-ui.css" rel="stylesheet">
+	<link href="o-css/menu.css" rel="stylesheet">
 	<style>
 	.cp-app{z-index:19990720}
 	.myCanvasMenuClass{background-color:white;}
@@ -111,16 +112,50 @@
 <script src="js/canvasMgr.js" type="text/javascript" charset="UTF-8"></script>
 
 
-<canvas 
-	tabindex="0"
-	class="canvas-menu"
-	id="myCanvas" 
-	width="650" 
-	height="570" 
-	style="margin:0px; border:1px solid #c3c3c3;">
-您的浏览器不能显示, 请升级
-</canvas>
-<br>
+<table>
+<thead></thead>
+<tbody><tr><td>
+
+	<canvas 
+		tabindex="0"
+		class="canvas-menu"
+		id="myCanvas" 
+		width="650" 
+		height="570" 
+		style="margin:0px; border:1px solid #c3c3c3;">
+	您的浏览器不能显示, 请升级
+	</canvas>
+
+</td><td style="vertical-align:top;">
+
+	<ul id="nav">
+		<li><a href="#"><img src="images/t1.png" /> Home</a></li>
+		<li><a href="#" class="sub" tabindex="1"><img src="images/t2.png" />HTML/CSS</a><img src="o-css/menu-images/up.gif" alt="" />
+			<ul>
+				<li><a href="#"><img src="images/empty.gif" />Link 1</a></li>
+				<li><a href="#"><img src="images/empty.gif" />Link 2</a></li>
+				<li><a href="#"><img src="images/empty.gif" />Link 3</a></li>
+				<li><a href="#"><img src="images/empty.gif" />Link 4</a></li>
+				<li><a href="#"><img src="images/empty.gif" />Link 5</a></li>
+			</ul>
+		</li>
+		<li><a href="#" class="sub" tabindex="1"><img src="images/t3.png" />jQuery/JS</a><img src="o-css/menu-images/up.gif" alt="" />
+			<ul>
+				<li><a href="#"><img src="images/empty.gif" />Link 6</a></li>
+				<li><a href="#"><img src="images/empty.gif" />Link 7</a></li>
+				<li><a href="#"><img src="images/empty.gif" />Link 8</a></li>
+				<li><a href="#"><img src="images/empty.gif" />Link 9</a></li>
+				<li><a href="#"><img src="images/empty.gif" />Link 10</a></li>
+			</ul>
+		</li>
+		<li><a href="#"><img src="images/t2.png" />PHP</a></li>
+		<li><a href="#"><img src="images/t2.png" />MySQL</a></li>
+		<li><a href="#"><img src="images/t2.png" />XSLT</a></li>
+	</ul>
+
+</td></tr>
+</tbody>
+</table>
 
 
 <script type="text/javascript">

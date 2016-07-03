@@ -1,8 +1,6 @@
 var CanvasMgr = {};
 
-/*BEGIN_MESSAGE_MAP(CMyDlg, CDialog)
-	ON_COMMAND_RANGE(IDM_FOCUSBODY_ROTATE1, IDM_FOCUSBODY_ROTATE3, OnFocusBodyRotateCtrl)
-
+/*
 	ON_COMMAND(IDM_FILE_NEW, OnFileNew)
 	ON_COMMAND(IDM_FILE_OPEN, OnFileOpen)
 	ON_COMMAND(IDM_FILE_SAVE, OnFileSave)
@@ -10,15 +8,9 @@ var CanvasMgr = {};
 	ON_COMMAND(IDM_SAVEASPIC, OnSaveAsPicture)
 	ON_COMMAND(IDM_EXIT, OnExit)
 
-
-	ON_COMMAND(IDM_FOCUSBODY_CUT, OnFocusBodyCut)
-	ON_COMMAND(IDM_FOCUSBODY_COPY, OnFocusBodyCopy)
-	ON_COMMAND(IDM_FOCUSBODY_DELETE, OnFocusBodyDelete)
-	ON_COMMAND(IDM_FOCUSBODY_PROPERTY, OnFocusBodyProperty)
-	ON_COMMAND(IDM_FOCUSBODY_CHANGECTRLSTYLE, OnFocusBodyChangeCtrlStyle)
-	ON_COMMAND(IDM_FOCUSBODY_SHOWELEC, OnFocusBodyShowElec)
-	ON_COMMAND(IDM_SEARCH, OnSearch)
-
+	ON_COMMAND(IDM_COUNTI, OnCountElec)
+	ON_COMMAND(IDM_SHOWPRESSURE, OnShowPressure)
+	ON_COMMAND(IDM_RELEASE, OnUnlock)
 
 	ON_COMMAND(IDM_SETMOVEBODYSENSE, OnSetMoveBodySense)
 	ON_COMMAND(IDM_SETLEAVEOUTDIS, OnSetLeaveOutDis)
@@ -26,16 +18,8 @@ var CanvasMgr = {};
 	ON_COMMAND(IDM_SETFOCUSLEADSTYLE, OnSetFocusLeadStyle)
 	ON_COMMAND(IDM_SETFOCUSCRUNCOLOR, OnSetFocusCrunColor)
 	ON_COMMAND(IDM_SETFOCUSCTRLCOLOR, OnSetFocusCtrlColor)
-
-
-	ON_COMMAND(IDM_COUNTI, OnCountElec)
-	ON_COMMAND(IDM_SHOWPRESSURE, OnShowPressure)
-	ON_COMMAND(IDM_POSBODY_SHOWELEC, OnPosBodyShowElec)
-	ON_COMMAND(IDM_RELEASE, OnUnlock)
-
-	ON_COMMAND(IDM_POSBODY_CHANGECTRLSTYLE, OnPosBodyChangeCtrlStyle)
-
-END_MESSAGE_MAP()
+	
+	ON_COMMAND(IDM_SEARCH, OnSearch)
 */
 // ///////////////////////////////////////////////////////////////////////////
 //  private function
@@ -441,7 +425,7 @@ CanvasMgr.BeforePopupMenu = function(e, ui) {
 			menuArray.push({title: "旋转180° <kbd>Ctrl+2</kbd>", uiIcon: "ui-icon-refresh", action:CanvasMgr.OnPosBodyRotateCtrl, cmd:"rotate180"});
 			menuArray.push({title: "逆时针旋转90° <kbd>Ctrl+3</kbd>", uiIcon: "ui-icon-arrowreturnthick-1-w", action:CanvasMgr.OnPosBodyRotateCtrl, cmd:"rotate270"});
 			menuArray.push({title: "------------", disabled: true});
-			menuArray.push({title: "电学元件类型 <kbd>Ctrl+T</kbd>", uiIcon: "ui-icon-flag", action:CanvasMgr.OnPosBodyChangeCtrlStyle});
+			menuArray.push({title: "电学元件类型", uiIcon: "ui-icon-flag", action:CanvasMgr.OnPosBodyChangeCtrlStyle});
 		}
 
 		if (BODY_LEAD == type || Pointer.IsCtrl(type))	//导线或控件上
