@@ -88,7 +88,6 @@ Manager.ChangeCtrlStyle = function(body) {
 				function(isConfirm) {
 					if (isConfirm) {
 						Manager.tmpEditCtrl.ChangeStyle(Manager.tmpEditCtrlNewStyle);
-						Manager.PaintAll();
 						swal({title:"已修改", type:"success"});	//!!! 不能获取焦点
 					}
 				}
@@ -98,7 +97,7 @@ Manager.ChangeCtrlStyle = function(body) {
 	
 	//显示对话框
 	Manager.PaintWithSpecialColorAndRect(pointer, false);
-	var dlg = MyPropertyDlg.CreateNew(list, false, Manager.GetCtrlPaintImageId(pointer.p), tempStr, Manager.canvas, changedCallback, null);
+	var dlg = MyPropertyDlg.CreateNew(list, false, Manager.GetCtrlPaintImageId(pointer.p), tempStr, Manager.canvas, changedCallback, function(){Manager.PaintAll();});
 	dlg.DoModal();
 };
 

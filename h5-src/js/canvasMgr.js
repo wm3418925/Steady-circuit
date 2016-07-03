@@ -266,7 +266,6 @@ CanvasMgr.OnLButtonDblClk = function(e) {
 			Manager.ShowPressure();
 	} else {			//显示物体属性
 		Manager.Property(body, false);
-		Manager.PaintAll();
 	}
 	
 	return true;
@@ -458,50 +457,51 @@ CanvasMgr.BeforePopupMenu = function(e, ui) {
 
 	if (CanvasMgr.m_inputLock) {		//输入上锁
 		if (BODY_LEAD == type) {				//右击导线
-			menuArray.push({title: "查看电流 <kbd>Ctrl+L</kbd>", uiIcon: "res/menu-icon/show-elec", action:CanvasMgr.OnPosBodyShowElec});
+			menuArray.push({title: "查看电流 <kbd>Ctrl+L</kbd>", uiIcon: "ui-icon-arrowthick-1-e", action:CanvasMgr.OnPosBodyShowElec});
 		} else if (BODY_CRUN == type) {			//右击结点
-			menuArray.push({title: "查看属性 <kbd>Ctrl+P</kbd>", uiIcon: "res/menu-icon/show-property", action:CanvasMgr.OnPosBodyProperty});
+			menuArray.push({title: "查看属性 <kbd>Ctrl+P</kbd>", uiIcon: "ui-icon-info", action:CanvasMgr.OnPosBodyProperty});
 		} else if (Pointer.IsCtrl(type)) {		//右击控件
-			menuArray.push({title: "查看电流 <kbd>Ctrl+L</kbd>", uiIcon: "res/menu-icon/show-elec", action:CanvasMgr.OnPosBodyShowElec});
-			menuArray.push({title: "查看属性 <kbd>Ctrl+P</kbd>", uiIcon: "res/menu-icon/show-property", action:CanvasMgr.OnPosBodyProperty});
+			menuArray.push({title: "查看电流 <kbd>Ctrl+L</kbd>", uiIcon: "ui-icon-arrowthick-1-e", action:CanvasMgr.OnPosBodyShowElec});
+			menuArray.push({title: "查看属性 <kbd>Ctrl+P</kbd>", uiIcon: "ui-icon-info", action:CanvasMgr.OnPosBodyProperty});
 		}
-		menuArray.push({title: "解除输入限制 <kbd>Ctrl+R</kbd>", uiIcon: "res/menu-icon/unlock", action:CanvasMgr.OnUnlock});
-		menuArray.push({title: "显示电势差 <kbd>Ctrl+U</kbd>", uiIcon: "res/menu-icon/show-pressure", action:CanvasMgr.OnShowPressure});
+		menuArray.push({title: "解除输入限制 <kbd>Ctrl+R</kbd>", uiIcon: "ui-icon-key", action:CanvasMgr.OnUnlock});
+		menuArray.push({title: "显示电势差 <kbd>Ctrl+U</kbd>", uiIcon: "ui-icon-pause", action:CanvasMgr.OnShowPressure});
 	} else if (BODY_NO == type) {	//右击空白处
-		menuArray.push({title: "添加结点", uiIcon: "res/menu-icon/add-crun", action:CanvasMgr.OnSetAddState, cmd:"add-crun"});
-		menuArray.push({title: "添加电源", uiIcon: "res/menu-icon/add-source", action:CanvasMgr.OnSetAddState, cmd:"add-source"});
-		menuArray.push({title: "添加电阻", uiIcon: "res/menu-icon/add-resist", action:CanvasMgr.OnSetAddState, cmd:"add-resist"});
-		menuArray.push({title: "添加灯泡", uiIcon: "res/menu-icon/add-bulb", action:CanvasMgr.OnSetAddState, cmd:"add-bulb"});
-		menuArray.push({title: "添加电容器", uiIcon: "res/menu-icon/add-capa", action:CanvasMgr.OnSetAddState, cmd:"add-capa"});
-		menuArray.push({title: "添加开关", uiIcon: "res/menu-icon/add-switch", action:CanvasMgr.OnSetAddState, cmd:"add-switch"});
+		menuArray.push({title: "添加结点", uiIcon: "ui-icon-circle-plus", action:CanvasMgr.OnSetAddState, cmd:"add-crun"});
+		menuArray.push({title: "添加电源", uiIcon: "ui-icon-circle-plus", action:CanvasMgr.OnSetAddState, cmd:"add-source"});
+		menuArray.push({title: "添加电阻", uiIcon: "ui-icon-circle-plus", action:CanvasMgr.OnSetAddState, cmd:"add-resist"});
+		menuArray.push({title: "添加灯泡", uiIcon: "ui-icon-lightbulb", action:CanvasMgr.OnSetAddState, cmd:"add-bulb"});
+		menuArray.push({title: "添加电容器", uiIcon: "ui-icon-circle-plus", action:CanvasMgr.OnSetAddState, cmd:"add-capa"});
+		menuArray.push({title: "添加开关", uiIcon: "ui-icon-circle-plus", action:CanvasMgr.OnSetAddState, cmd:"add-switch"});
 		menuArray.push({title: "------------", disabled: true});
 		
-		var pasteMenuItem = {title: "粘贴", uiIcon: "res/menu-icon/paste", action:CanvasMgr.OnPaste};//"粘贴 <kbd>Ctrl+V</kbd>"
+		var pasteMenuItem = {title: "粘贴", uiIcon: "ui-icon-clipboard", action:CanvasMgr.OnPaste};//"粘贴 <kbd>Ctrl+V</kbd>"
 		if (!Manager.GetClipboardState())
 			pasteMenuItem.disabled = true;
 		menuArray.push(pasteMenuItem);
 	} else {
 		if (BODY_LEAD == type) {	//导线
-			menuArray.push({title: "删除导线 <kbd>Delete</kbd>", uiIcon: "res/menu-icon/delete", action:CanvasMgr.OnDeleteLead});
+			menuArray.push({title: "删除导线 <kbd>Delete</kbd>", uiIcon: "ui-icon-trash", action:CanvasMgr.OnDeleteLead});
 		} else {
-			menuArray.push({title: "剪切 <kbd>Ctrl+X</kbd>", uiIcon: "res/menu-icon/cut", action:CanvasMgr.OnPosBodyCut});
-			menuArray.push({title: "复制 <kbd>Ctrl+C</kbd>", uiIcon: "res/menu-icon/copy", action:CanvasMgr.OnPosBodyCopy});
-			menuArray.push({title: "删除 <kbd>Ctrl+V</kbd>", uiIcon: "res/menu-icon/delete", action:CanvasMgr.OnPosBodyDelete});
+			menuArray.push({title: "剪切 <kbd>Ctrl+X</kbd>", uiIcon: "ui-icon-scissors", action:CanvasMgr.OnPosBodyCut});
+			menuArray.push({title: "复制 <kbd>Ctrl+C</kbd>", uiIcon: "ui-icon-copy", action:CanvasMgr.OnPosBodyCopy});
+			menuArray.push({title: "删除 <kbd>Delete</kbd>", uiIcon: "ui-icon-trash", action:CanvasMgr.OnPosBodyDelete});
 		}
 
 		if (Pointer.IsCtrl(type)) {
-			menuArray.push({title: "顺时针旋转90° <kbd>Ctrl+1</kbd>", uiIcon: "res/menu-icon/rotate90", action:CanvasMgr.OnPosBodyRotateCtrl, cmd:"rotate90"});
-			menuArray.push({title: "旋转180° <kbd>Ctrl+2</kbd>", uiIcon: "res/menu-icon/rotate180", action:CanvasMgr.OnPosBodyRotateCtrl, cmd:"rotate180"});
-			menuArray.push({title: "逆时针旋转90° <kbd>Ctrl+3</kbd>", uiIcon: "res/menu-icon/rotate270", action:CanvasMgr.OnPosBodyRotateCtrl, cmd:"rotate270"});
 			menuArray.push({title: "------------", disabled: true});
-			menuArray.push({title: "电学元件类型 <kbd>Ctrl+T</kbd>", uiIcon: "res/menu-icon/ctrl-type", action:CanvasMgr.OnPosBodyChangeCtrlStyle});
+			menuArray.push({title: "顺时针旋转90° <kbd>Ctrl+1</kbd>", uiIcon: "ui-icon-arrowrefresh-1-s", action:CanvasMgr.OnPosBodyRotateCtrl, cmd:"rotate90"});
+			menuArray.push({title: "旋转180° <kbd>Ctrl+2</kbd>", uiIcon: "ui-icon-refresh", action:CanvasMgr.OnPosBodyRotateCtrl, cmd:"rotate180"});
+			menuArray.push({title: "逆时针旋转90° <kbd>Ctrl+3</kbd>", uiIcon: "ui-icon-arrowreturnthick-1-w", action:CanvasMgr.OnPosBodyRotateCtrl, cmd:"rotate270"});
+			menuArray.push({title: "------------", disabled: true});
+			menuArray.push({title: "电学元件类型 <kbd>Ctrl+T</kbd>", uiIcon: "ui-icon-flag", action:CanvasMgr.OnPosBodyChangeCtrlStyle});
 		}
 
 		if (BODY_LEAD == type || Pointer.IsCtrl(type))	//导线或控件上
-			menuArray.push({title: "查看电流 <kbd>Ctrl+L</kbd>", uiIcon: "res/menu-icon/show-elec", action:CanvasMgr.OnPosBodyShowElec});
+			menuArray.push({title: "查看电流 <kbd>Ctrl+L</kbd>", uiIcon: "ui-icon-arrowthick-1-e", action:CanvasMgr.OnPosBodyShowElec});
 		
 		menuArray.push({title: "------------", disabled: true});
-		menuArray.push({title: "属性 <kbd>Ctrl+P</kbd>", uiIcon: "res/menu-icon/property", action:CanvasMgr.OnPosBodyProperty});
+		menuArray.push({title: "属性 <kbd>Ctrl+P</kbd>", uiIcon: "ui-icon-info", action:CanvasMgr.OnPosBodyProperty});
 	}
 
 	$(document).contextmenu("replaceMenu", menuArray);
@@ -888,7 +888,6 @@ CanvasMgr.OnPosBodyProperty = function() {
 	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
 
 	Manager.Property(body, CanvasMgr.m_inputLock);
-	Manager.PaintAll();
 };
 
 // 改变右击电学元件类型
