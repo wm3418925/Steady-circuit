@@ -693,6 +693,7 @@ CanvasMgr.OnComputeElec = function() {
 	if (CanvasMgr.m_inputLock) return;
 
 	CanvasMgr.LockInput();		//上锁
+	Manager.FocusBodyClear(null);
 	ComputeMgr.ComputeElec(Manager.lead, Manager.crun, Manager.ctrl);	//计算电流
 	Manager.PaintAll();	//计算后可能有特殊效果需要刷新
 };

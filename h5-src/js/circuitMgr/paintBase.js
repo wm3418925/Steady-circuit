@@ -195,20 +195,13 @@ Manager.PaintCtrlWithColor = function(c, color) {
 			Manager.PaintLead(c.lead[i]);
 };
 
+
 //在结点上下左右分别显示方向键
 Manager.PaintCrunDir = function(c) {
-	var pos = {x:c.x-5, y:c.y+2};
-
-	Manager.ctx.fillStyle = "#0FF";
-	Manager.ctx.fillRect(pos.x, pos.y-30, 12, 24);
-	Manager.ctx.fillRect(pos.x, pos.y+2, 12, 24);
-	Manager.ctx.fillRect(pos.x-23, pos.y-9, 24, 12);
-	Manager.ctx.fillRect(pos.x+9, pos.y-9, 24, 12);
-	Manager.ctx.fillStyle = "#F00";
-	Manager.ctx.fillText("↑", pos.x-2, pos.y-11);
-	Manager.ctx.fillText("↓", pos.x-2, pos.y+19);
-	Manager.ctx.fillText("←", pos.x-19, pos.y+4);
-	Manager.ctx.fillText("→", pos.x+13, pos.y+4);
+	Manager.ctx.putImageData(Manager.moveDirImageList[0], c.x-6, c.y-28);
+	Manager.ctx.putImageData(Manager.moveDirImageList[1], c.x-6, c.y+4);
+	Manager.ctx.putImageData(Manager.moveDirImageList[2], c.x-28, c.y-7);
+	Manager.ctx.putImageData(Manager.moveDirImageList[3], c.x+4, c.y-7);
 };
 // 根据导线起始点和结束点相对位置, 画方向键
 Manager.PaintLeadDir = function(l) {
@@ -222,35 +215,19 @@ Manager.PaintLeadDir = function(l) {
 	
 	if (disX > disY) {
 		if (startPos.x < endPos.x) {
-			Manager.ctx.fillStyle = "#0FF";
-			Manager.ctx.fillRect(startPos.x-20, startPos.y-6, 24, 12);
-			Manager.ctx.fillRect(endPos.x-2, endPos.y-6, 24, 12);
-			Manager.ctx.fillStyle = "#F00";
-			Manager.ctx.fillText("←", startPos.x-16, startPos.y+7);
-			Manager.ctx.fillText("→", endPos.x+1, endPos.y+6);
+			Manager.ctx.putImageData(Manager.moveDirImageList[2], startPos.x-20, startPos.y-6);
+			Manager.ctx.putImageData(Manager.moveDirImageList[3], endPos.x-2, endPos.y-6);
 		} else {
-			Manager.ctx.fillStyle = "#0FF";
-			Manager.ctx.fillRect(endPos.x-20, endPos.y-6, 24, 12);
-			Manager.ctx.fillRect(startPos.x-2, startPos.y-6, 24, 12);
-			Manager.ctx.fillStyle = "#F00";
-			Manager.ctx.fillText("←", endPos.x-16, endPos.y+7);
-			Manager.ctx.fillText("→", startPos.x+1, startPos.y+6);
+			Manager.ctx.putImageData(Manager.moveDirImageList[2], endPos.x-20, endPos.y-6);
+			Manager.ctx.putImageData(Manager.moveDirImageList[3], startPos.x-2, startPos.y-6);
 		}
 	} else if (disY > 0) {
 		if (startPos.y < endPos.y) {
-			Manager.ctx.fillStyle = "#0FF";
-			Manager.ctx.fillRect(startPos.x-6, startPos.y-22, 12, 24);
-			Manager.ctx.fillRect(endPos.x-6, endPos.y-2, 12, 24);
-			Manager.ctx.fillStyle = "#F00";
-			Manager.ctx.fillText("↑", startPos.x-8, startPos.y-5);
-			Manager.ctx.fillText("↓", endPos.x-8, endPos.y+15);
+			Manager.ctx.putImageData(Manager.moveDirImageList[0], startPos.x-6, startPos.y-22);
+			Manager.ctx.putImageData(Manager.moveDirImageList[1], endPos.x-6, endPos.y-2);
 		} else {
-			Manager.ctx.fillStyle = "#0FF";
-			Manager.ctx.fillRect(endPos.x-6, endPos.y-22, 12, 24);
-			Manager.ctx.fillRect(startPos.x-6, startPos.y-2, 12, 24);
-			Manager.ctx.fillStyle = "#F00";
-			Manager.ctx.fillText("↑", endPos.x-8, endPos.y-5);
-			Manager.ctx.fillText("↓", startPos.x-8, startPos.y+15);
+			Manager.ctx.putImageData(Manager.moveDirImageList[0], endPos.x-6, endPos.y-22);
+			Manager.ctx.putImageData(Manager.moveDirImageList[1], startPos.x-6, startPos.y-2);
 		}
 	}
 };

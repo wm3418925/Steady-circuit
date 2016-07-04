@@ -112,8 +112,17 @@ var Manager = {
 				Manager.ctrlImageList[i] = Manager.ctx.getImageData(0,0, CTRL_SIZE.cx,CTRL_SIZE.cy);
 			}
 		}
-		Manager.ctx.fillStyle = "#FFFFFF";
-		Manager.ctx.fillRect(0,0, CTRL_SIZE.cx,CTRL_SIZE.cy);
+		
+		// 显示电压 , 移动方向图
+		Manager.moveDirImageList = new Array(4);
+		for (var i=0; i<4; ++i) {
+			var img = document.getElementById("img-move-dir-"+i);
+			var width = parseInt(img.style.width);
+			var height = parseInt(img.style.height);
+			
+			Manager.ctx.drawImage(img, 0,0);
+			Manager.moveDirImageList[i] = Manager.ctx.getImageData(0,0, width,height);
+		}
 	},
 	
 	Init: function(canvas) {
