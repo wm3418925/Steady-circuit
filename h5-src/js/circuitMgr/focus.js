@@ -1,61 +1,12 @@
 
 // 鼠标焦点物体函数---------------------------------------------------------------
 
-//更新编辑菜单状态(MF_ENABLED or MF_GRAYED)
-Manager.UpdateEditMenuState = function() {
-	/*var cm = Manager.canvas.GetMenu();
-	var menuState;
-
-	if (!Manager.focusBody.IsOnAny()) {
-		cm.EnableMenuItem(IDM_FOCUSBODY_COPY, MF_GRAYED);
-		cm.EnableMenuItem(IDM_FOCUSBODY_CUT, MF_GRAYED);
-		cm.EnableMenuItem(IDM_FOCUSBODY_DELETE, MF_GRAYED);
-		cm.EnableMenuItem(IDM_FOCUSBODY_PROPERTY, MF_GRAYED);
-
-		cm.EnableMenuItem(IDM_FOCUSBODY_CHANGECTRLSTYLE, MF_GRAYED);
-		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE1, MF_GRAYED);
-		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE2, MF_GRAYED);
-		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE3, MF_GRAYED);
-
-		cm.EnableMenuItem(IDM_FOCUSBODY_SHOWELEC, MF_GRAYED);
-	} else if (Manager.focusBody.IsOnLead()) {
-		cm.EnableMenuItem(IDM_FOCUSBODY_COPY, MF_GRAYED);
-		cm.EnableMenuItem(IDM_FOCUSBODY_CUT, MF_GRAYED);
-		cm.EnableMenuItem(IDM_FOCUSBODY_DELETE, MF_ENABLED);
-		cm.EnableMenuItem(IDM_FOCUSBODY_PROPERTY, MF_ENABLED);
-
-		cm.EnableMenuItem(IDM_FOCUSBODY_CHANGECTRLSTYLE, MF_GRAYED);
-		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE1, MF_GRAYED);
-		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE2, MF_GRAYED);
-		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE3, MF_GRAYED);
-
-		cm.EnableMenuItem(IDM_FOCUSBODY_SHOWELEC, MF_ENABLED);
-	} else {
-		cm.EnableMenuItem(IDM_FOCUSBODY_COPY, MF_ENABLED);
-		cm.EnableMenuItem(IDM_FOCUSBODY_CUT, MF_ENABLED);
-		cm.EnableMenuItem(IDM_FOCUSBODY_DELETE, MF_ENABLED);
-		cm.EnableMenuItem(IDM_FOCUSBODY_PROPERTY, MF_ENABLED);
-
-		if (Manager.focusBody.IsOnCtrl())
-			menuState = MF_ENABLED;
-		else
-			menuState = MF_GRAYED;
-
-		cm.EnableMenuItem(IDM_FOCUSBODY_CHANGECTRLSTYLE, menuState);
-		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE1, menuState);
-		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE2, menuState);
-		cm.EnableMenuItem(IDM_FOCUSBODY_ROTATE3, menuState);
-		cm.EnableMenuItem(IDM_FOCUSBODY_SHOWELEC, menuState);
-	}*/
-};
-
 //判断删除物体是否是当前焦点,如果是则清除鼠标焦点物体
 //如果deleteBody==null,直接删除焦点
 //函数执行在:Manager,DeleteSingleBody,ClearCircuitState
 Manager.FocusBodyClear = function(deleteBody) {
 	if (deleteBody == null || Manager.focusBody.IsBodySame(deleteBody)) {
 		Manager.focusBody.Clear();
-		Manager.UpdateEditMenuState();
 	}
 };
 
@@ -64,7 +15,6 @@ Manager.FocusBodyClear = function(deleteBody) {
 Manager.SetFocusBody = function(newFocus) {
 	ASSERT(!newFocus.IsOnConnectPos());
 	Manager.focusBody = newFocus.Clone();
-	Manager.UpdateEditMenuState();
 };
 
 //画获得鼠标焦点的物体,并覆盖原来的焦点

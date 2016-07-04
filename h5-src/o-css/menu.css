@@ -24,11 +24,11 @@
 #nav ul li {
     margin-top:-23px;
 
-    -moz-transition:  0.4s linear 0.4s;
-    -ms-transition: 0.4s linear 0.4s;
-    -o-transition: 0.4s linear 0.4s;
-    -webkit-transition: 0.4s linear 0.4s;
-    transition: 0.4s linear 0.4s;
+    -moz-transition:  0.1s linear 0.1s;
+    -ms-transition: 0.1s linear 0.1s;
+    -o-transition: 0.1s linear 0.1s;
+    -webkit-transition: 0.1s linear 0.1s;
+    transition: 0.1s linear 0.1s;
 }
 #nav li a {
     background-color:#d4d5d8;
@@ -94,11 +94,11 @@
 #nav a:focus ~ ul li {
     margin-top:0;
 
-    -moz-transition:  0.4s linear;
-    -ms-transition: 0.4s linear;
-    -o-transition: 0.4s linears;
-    -webkit-transition: 0.4s linears;
-    transition: 0.4s linear;
+    -moz-transition:  0.1s linear;
+    -ms-transition: 0.1s linear;
+    -o-transition: 0.1s linears;
+    -webkit-transition: 0.1s linears;
+    transition: 0.1s linear;
 }
 #nav a:focus + img, #nav a:active + img {
     display:block;

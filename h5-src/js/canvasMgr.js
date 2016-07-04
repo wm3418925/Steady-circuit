@@ -17,16 +17,14 @@ CanvasMgr.LockInput = function() {
 	CanvasMgr.m_inputLock = true;
 
 	//需要屏蔽的菜单
-	//CanvasMgr.m_hm.EnableMenuItem(0			, MF_GRAYED|MF_BYPOSITION);	//文件函数
-	//CanvasMgr.m_hm.EnableMenuItem(1			, MF_GRAYED|MF_BYPOSITION);	//编辑函数
-	//CanvasMgr.m_hm.EnableMenuItem(3			, MF_GRAYED|MF_BYPOSITION);	//测试函数
-	//CanvasMgr.m_hm.EnableMenuItem(IDM_COUNTI, MF_GRAYED);
+	//CanvasMgr.m_hm.EnableMenuItem(0, MF_GRAYED|MF_BYPOSITION);	//文件函数
+	disableMenuItem("menu_group_add");	//编辑函数
+	disableMenuItem("menu_compute_elec");
+	disableMenuItem("menu_search");
 
 	//需要激活的菜单
-	//CanvasMgr.m_hm.EnableMenuItem(IDM_RELEASE		, MF_ENABLED);
-	//CanvasMgr.m_hm.EnableMenuItem(IDM_SHOWPRESSURE	, MF_ENABLED);
-
-	//CanvasMgr.DrawMenuBar();	//重绘菜单栏
+	enableMenuItem("menu_show_pressure");
+	enableMenuItem("menu_unlock");
 };
 
 // 使用快捷键粘贴
@@ -101,7 +99,6 @@ CanvasMgr.OnInitDialog = function(canvas) {
 	//成员变量赋值
 	CanvasMgr.m_inputLock = false;	//初始输入不上锁
 	CanvasMgr.m_mousePos = {x:0, y:0};
-	//CanvasMgr.m_hm = GetMenu();		//获取主菜单句柄
 
 	//设置滚动条范围
 	//SetScrollRange(SB_HORZ, 0, 50);	//水平
@@ -271,7 +268,7 @@ CanvasMgr.OnKeyDown = function(e) {
 
 		//计算功能快捷键
 		case 'I':	//计算电流
-			CanvasMgr.OnCountElec();
+			CanvasMgr.OnComputeElec();
 			return false;
 
 		case 'L':	//显示焦点电流
@@ -692,7 +689,7 @@ CanvasMgr.OnSetFocusCtrlColor = function() {
 
 // 计算函数----------------------------------------------------------------↓
 // 计算电流
-CanvasMgr.OnCountElec = function() {
+CanvasMgr.OnComputeElec = function() {
 	if (CanvasMgr.m_inputLock) return;
 
 	CanvasMgr.LockInput();		//上锁
@@ -717,18 +714,18 @@ CanvasMgr.OnPosBodyShowElec = function() {
 CanvasMgr.OnUnlock = function() {
 	if (!CanvasMgr.m_inputLock) return;
 	CanvasMgr.m_inputLock = false;	//解除输入锁
-
+	
+	
 	//需要激活的菜单
-	//CanvasMgr.m_hm.EnableMenuItem(0			, MF_ENABLED|MF_BYPOSITION);	//文件函数
-	//CanvasMgr.m_hm.EnableMenuItem(1			, MF_ENABLED|MF_BYPOSITION);	//编辑函数
-	//CanvasMgr.m_hm.EnableMenuItem(3			, MF_ENABLED|MF_BYPOSITION);	//测试函数
-	//CanvasMgr.m_hm.EnableMenuItem(IDM_COUNTI, MF_ENABLED);
+	//CanvasMgr.m_hm.EnableMenuItem(0, MF_ENABLED|MF_BYPOSITION);	//文件函数
+	enableMenuItem("menu_group_add");	//编辑函数
+	enableMenuItem("menu_compute_elec");
+	enableMenuItem("menu_search");
 
 	//需要屏蔽的菜单
-	//CanvasMgr.m_hm.EnableMenuItem(IDM_RELEASE		, MF_GRAYED);
-	//CanvasMgr.m_hm.EnableMenuItem(IDM_SHOWPRESSURE	, MF_GRAYED);
+	disableMenuItem("menu_show_pressure");
+	disableMenuItem("menu_unlock");
 
-	//CanvasMgr.DrawMenuBar();			//重绘菜单栏
 	Manager.ClearPressBody();	//清空显示电势差的成员变量
 	Manager.PaintAll();		//刷新
 };

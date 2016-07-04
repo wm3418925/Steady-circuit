@@ -129,34 +129,30 @@
 </td><td style="vertical-align:top;">
 
 	<ul id="nav">
-		<li><a href="#" class="sub" tabindex="1"><img src="images/t.png" />添加</a><img src="o-css/menu-images/up.gif" alt="" />
+		<li id="menu_group_add"><a href="#" class="sub" tabindex="1"><img src="images/t.png" />添加</a><img src="o-css/menu-images/up.gif" alt="" />
 			<ul>
-				<li><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-crun'});return false;"><img src="res/crun.bmp" />结点</a></li>
-				<li><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-source'});return false;"><img src="res/ctrl/N-1-0.bmp" />电源</a></li>
-				<li><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-resist'});return false;"><img src="res/ctrl/N-2-0.bmp" />电阻</a></li>
-				<li><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-bulb'});return false;"><img src="res/ctrl/N-3-0.bmp" />灯泡</a></li>
-				<li><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-capa'});return false;"><img src="res/ctrl/N-4-0.bmp" />电容器</a></li>
-				<li><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-switch'});return false;"><img src="res/ctrl/N-5-0.bmp" />开关</a></li>
+				<li id="menu_add_crun"><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-crun'});return false;"><img src="res/crun.bmp" />结点</a></li>
+				<li id="menu_add_source"><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-source'});return false;"><img src="res/ctrl/N-1-0.bmp" />电源</a></li>
+				<li id="menu_add_resist"><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-resist'});return false;"><img src="res/ctrl/N-2-0.bmp" />电阻</a></li>
+				<li id="menu_add_bulb"><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-bulb'});return false;"><img src="res/ctrl/N-3-0.bmp" />灯泡</a></li>
+				<li id="menu_add_capa"><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-capa'});return false;"><img src="res/ctrl/N-4-0.bmp" />电容器</a></li>
+				<li id="menu_add_switch"><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-switch'});return false;"><img src="res/ctrl/N-5-0.bmp" />开关</a></li>
 			</ul>
 		</li>
-		<li><a href="#" class="sub" tabindex="1"><img src="images/t.png" />计算相关</a><img src="o-css/menu-images/up.gif" alt="" />
+		<li id="menu_compute_elec"><a href="#" onclick="CanvasMgr.OnComputeElec();return false;"><img src="images/t.png" />计算电流</a></li>
+		<li id="menu_show_pressure" style="display:none;"><a href="#" onclick="CanvasMgr.OnShowPressure();return false;"><img src="images/t.png" />显示电势差</a></li>
+		<li id="menu_unlock" style="display:none;"><a href="#" onclick="CanvasMgr.OnUnlock();return false;"><img src="images/t.png" />解除编辑限制</a></li>
+		<li id="menu_group_setting"><a href="#" class="sub" tabindex="1"><img src="images/t.png" />设置</a><img src="o-css/menu-images/up.gif" alt="" />
 			<ul>
-				<li><a href="#" onclick="CanvasMgr.OnCountElec();return false;"><img src="images/t.png" />计算电流</a></li>
-				<li><a href="#" onclick="CanvasMgr.OnShowPressure();return false;"><img src="images/t.png" />显示电势差</a></li>
-				<li><a href="#" onclick="CanvasMgr.OnUnlock();return false;"><img src="images/t.png" />解除编辑限制</a></li>
+				<li id="menu_set_move_body_sense"><a href="#" onclick="CanvasMgr.OnSetMoveBodySense();return false;"><img src="images/t.png" />移动物体距离</a></li>
+				<li id="menu_set_leave_out_dis"><a href="#" onclick="CanvasMgr.OnSetLeaveOutDis();return false;"><img src="images/t.png" />导线合并最小距离</a></li>
+				<li id="menu_set_text_color"><a href="#" onclick="CanvasMgr.OnSetTextColor();return false;"><img src="images/t.png" />标签颜色</a></li>
+				<li id="menu_set_focus_lead_style"><a href="#" onclick="CanvasMgr.OnSetFocusLeadStyle();return false;"><img src="images/t.png" />焦点导线样式</a></li>
+				<li id="menu_add_set_focus_crun_color"><a href="#" onclick="CanvasMgr.OnSetFocusCrunColor();return false;"><img src="images/t.png" />焦点结点颜色</a></li>
+				<li id="menu_add_set_focus_ctrl_color"><a href="#" onclick="CanvasMgr.OnSetFocusCtrlColor();return false;"><img src="images/t.png" />焦点电学元件颜色</a></li>
 			</ul>
 		</li>
-		<li><a href="#" class="sub" tabindex="1"><img src="images/t.png" />设置</a><img src="o-css/menu-images/up.gif" alt="" />
-			<ul>
-				<li><a href="#" onclick="CanvasMgr.OnSetMoveBodySense();return false;"><img src="images/t.png" />移动物体距离</a></li>
-				<li><a href="#" onclick="CanvasMgr.OnSetLeaveOutDis();return false;"><img src="images/t.png" />导线合并最小距离</a></li>
-				<li><a href="#" onclick="CanvasMgr.OnSetTextColor();return false;"><img src="images/t.png" />标签颜色</a></li>
-				<li><a href="#" onclick="CanvasMgr.OnSetFocusLeadStyle();return false;"><img src="images/t.png" />焦点导线样式</a></li>
-				<li><a href="#" onclick="CanvasMgr.OnSetFocusCrunColor();return false;"><img src="images/t.png" />焦点结点颜色</a></li>
-				<li><a href="#" onclick="CanvasMgr.OnSetFocusCtrlColor();return false;"><img src="images/t.png" />焦点电学元件颜色</a></li>
-			</ul>
-		</li>
-		<li><a href="#" onclick="CanvasMgr.OnSearch();return false;" ><img src="images/t.png" />搜索</a></li>
+		<li id="menu_search"><a href="#" onclick="CanvasMgr.OnSearch();return false;" ><img src="images/t.png" />搜索</a></li>
 	</ul>
 
 </td></tr>
@@ -197,6 +193,17 @@ function pageOnload() {
 		select: function(event, ui) {return true;},
 		beforeOpen: CanvasMgr.BeforePopupMenu
 	});
+}
+</script>
+
+<script type="text/javascript">
+function disableMenuItem(menuItemId) {
+	var menuItem = document.getElementById(menuItemId);
+	menuItem.style.display = "none";
+}
+function enableMenuItem(menuItemId) {
+	var menuItem = document.getElementById(menuItemId);
+	menuItem.style.display = "";
 }
 </script>
 	
