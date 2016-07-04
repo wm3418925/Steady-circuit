@@ -380,8 +380,8 @@ CanvasMgr.BeforePopupMenu = function(e, ui) {
 			menuArray.push({title: "查看电流 <kbd>Ctrl+L</kbd>", uiIcon: "ui-icon-arrowthick-1-e", action:CanvasMgr.OnPosBodyShowElec});
 			menuArray.push({title: "查看属性 <kbd>Ctrl+P</kbd>", uiIcon: "ui-icon-info", action:CanvasMgr.OnPosBodyProperty});
 		}
-		menuArray.push({title: "解除输入限制 <kbd>Ctrl+R</kbd>", uiIcon: "ui-icon-key", action:CanvasMgr.OnUnlock});
-		menuArray.push({title: "显示电势差 <kbd>Ctrl+U</kbd>", uiIcon: "ui-icon-pause", action:CanvasMgr.OnShowPressure});
+		menuArray.push({title: "解除输入限制 <kbd>Ctrl+R</kbd>", uiIcon: "ui-icon-unlocked", action:CanvasMgr.OnUnlock});
+		menuArray.push({title: "显示电势差 <kbd>Ctrl+U</kbd>", uiIcon: "ui-icon-link", action:CanvasMgr.OnShowPressure});
 	} else if (BODY_NO == type) {	//右击空白处
 		menuArray.push({title: "添加结点", uiIcon: "ui-icon-add-crun", action:CanvasMgr.OnSetAddState, cmd:"add-crun"});
 		menuArray.push({title: "添加电源", uiIcon: "ui-icon-add-source", action:CanvasMgr.OnSetAddState, cmd:"add-source"});
