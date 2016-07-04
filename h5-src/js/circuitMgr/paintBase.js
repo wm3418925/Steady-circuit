@@ -80,7 +80,7 @@ Manager.PaintAll = function() {
 	//Manager.ctx = &dcForRefresh;		//dc暂时替换为dcForRefresh,在内存画图
 
 	//设置字体和视角起点
-	Manager.ctx.font = "15px Georgia";
+	//Manager.ctx.font = "15px Georgia";
 
 	//3,内存画图------------------------------------------------------------
 	//用白色矩形覆盖整个客户区
@@ -195,34 +195,78 @@ Manager.PaintCtrlWithColor = function(c, color) {
 			Manager.PaintLead(c.lead[i]);
 };
 
+//在结点上下左右分别显示方向键
+Manager.PaintCrunDir = function(c) {
+	var pos = {x:c.x-5, y:c.y+2};
+
+	Manager.ctx.fillStyle = "#0FF";
+	Manager.ctx.fillRect(pos.x, pos.y-30, 12, 24);
+	Manager.ctx.fillRect(pos.x, pos.y+2, 12, 24);
+	Manager.ctx.fillRect(pos.x-23, pos.y-9, 24, 12);
+	Manager.ctx.fillRect(pos.x+9, pos.y-9, 24, 12);
+	Manager.ctx.fillStyle = "#F00";
+	Manager.ctx.fillText("↑", pos.x-2, pos.y-11);
+	Manager.ctx.fillText("↓", pos.x-2, pos.y+19);
+	Manager.ctx.fillText("←", pos.x-19, pos.y+4);
+	Manager.ctx.fillText("→", pos.x+13, pos.y+4);
+};
+// 根据导线起始点和结束点相对位置, 画方向键
+Manager.PaintLeadDir = function(l) {
+	var startPos = {}, endPos = {};
+	l.GetStartEndPos(startPos, endPos);
+	
+	var disX = startPos.x - endPos.x;
+	if (disX < 0) disX = -disX;
+	var disY = startPos.y - endPos.y;
+	if (disY < 0) disY = -disY;
+	
+	if (disX > disY) {
+		if (startPos.x < endPos.x) {
+			Manager.ctx.fillStyle = "#0FF";
+			Manager.ctx.fillRect(startPos.x-20, startPos.y-6, 24, 12);
+			Manager.ctx.fillRect(endPos.x-2, endPos.y-6, 24, 12);
+			Manager.ctx.fillStyle = "#F00";
+			Manager.ctx.fillText("←", startPos.x-16, startPos.y+7);
+			Manager.ctx.fillText("→", endPos.x+1, endPos.y+6);
+		} else {
+			Manager.ctx.fillStyle = "#0FF";
+			Manager.ctx.fillRect(endPos.x-20, endPos.y-6, 24, 12);
+			Manager.ctx.fillRect(startPos.x-2, startPos.y-6, 24, 12);
+			Manager.ctx.fillStyle = "#F00";
+			Manager.ctx.fillText("←", endPos.x-16, endPos.y+7);
+			Manager.ctx.fillText("→", startPos.x+1, startPos.y+6);
+		}
+	} else if (disY > 0) {
+		if (startPos.y < endPos.y) {
+			Manager.ctx.fillStyle = "#0FF";
+			Manager.ctx.fillRect(startPos.x-6, startPos.y-22, 12, 24);
+			Manager.ctx.fillRect(endPos.x-6, endPos.y-2, 12, 24);
+			Manager.ctx.fillStyle = "#F00";
+			Manager.ctx.fillText("↑", startPos.x-8, startPos.y-5);
+			Manager.ctx.fillText("↓", endPos.x-8, endPos.y+15);
+		} else {
+			Manager.ctx.fillStyle = "#0FF";
+			Manager.ctx.fillRect(endPos.x-6, endPos.y-22, 12, 24);
+			Manager.ctx.fillRect(startPos.x-6, startPos.y-2, 12, 24);
+			Manager.ctx.fillStyle = "#F00";
+			Manager.ctx.fillText("↑", endPos.x-8, endPos.y-5);
+			Manager.ctx.fillText("↓", startPos.x-8, startPos.y+15);
+		}
+	}
+};
 //用保留颜色(紫色)显示物体, 并且在外部用矩形包围
-Manager.PaintWithSpecialColorAndRect = function(body, isPaintNum) {
+Manager.PaintWithSpecialColorAndRect = function(body, isPaintDir) {
 	var color = COLOR_SPECIAL;	//选用保留颜色(紫色)
 
 	if (body.IsOnLead()) {
-		if (isPaintNum) {
-			//画导线
-			Manager.PaintLeadWithStyle(body.p, 1, color);
-
-			//在导线起始和结尾处分别显示数字'1'和'2'
-			var startPos = {}, endPos = {};
-			body.p.GetStartEndPos(startPos, endPos);
-			Manager.ctx.strokeText("1", startPos.x, startPos.y);
-			Manager.ctx.strokeText("2", endPos.x, endPos.y);
-		} else {
-			Manager.PaintLeadWithStyle(body.p, 2, color);	//画导线
-		}
+		Manager.PaintLeadWithStyle(body.p, 2, color);	//画导线
+		
+		if (isPaintDir) Manager.PaintLeadDir(body.p);
 	} else if (body.IsOnCrun()) {
 		Manager.PaintCrunWithStyle(body.p, PAINT_CRUN_STYLE_SPECIAL);	//画结点
 		PaintCommonFunc.PaintSurrendedRect(Manager.ctx, body.p.x-DD, body.p.y-DD, DD*2, DD*2, 0xF01010);
 		
-		if (isPaintNum) {	//在结点上下左右分别显示1,2,3,4
-			var pos = {x:body.p.x-5, y:body.p.y-8};
-			Manager.ctx.strokeText("1", pos.x, pos.y-15);
-			Manager.ctx.strokeText("2", pos.x, pos.y+15);
-			Manager.ctx.strokeText("3", pos.x-15, pos.y);
-			Manager.ctx.strokeText("4", pos.x+15, pos.y);
-		}
+		if (isPaintDir) Manager.PaintCrunDir(body.p);
 	} else if (body.IsOnCtrl()) {
 		Manager.PaintCtrlWithColor(body.p, color);	//画控件
 		PaintCommonFunc.PaintSurrendedRect(Manager.ctx, body.p.x, body.p.y, CTRL_SIZE.cx, CTRL_SIZE.cy, 0xF01010);

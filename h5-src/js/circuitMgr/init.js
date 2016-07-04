@@ -151,6 +151,7 @@ var Manager = {
 
 
 		//画图变量-------------------------------------------------------
+		Manager.ctx.font = "15px Georgia";
 		Manager.textColor = COLOR_NORMAL;				//默认字体颜色
 		Manager.focusLeadStyle = SOLID_SPECIAL_COLOR;	//默认焦点导线样式
 		Manager.focusCrunColor = COLOR_FOCUS;			//默认焦点结点颜色

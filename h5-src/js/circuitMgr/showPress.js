@@ -38,41 +38,67 @@ Manager.SetStartBody = function(pos) {
 	return true;
 };
 
+//用户输入数字或者其他键, 获取电势差流动方向
+Manager.NextBodyDirByChar = function(code, nChar) {
+	if (Manager.pressEndBody.IsOnCrun()) {
+		if ('W' == nChar || 38 == code)
+			return 0;
+		if ('S' == nChar || 40 == code)
+			return 1;
+		if ('A' == nChar || 37 == code)
+			return 2;
+		if ('D' == nChar || 39 == code)
+			return 3;
+		
+		if (nChar >= '1' && nChar <= '4')
+			return nChar - '1';
+		
+		return -1;
+	} else {
+		if (nChar >= '1' && nChar <= '2')
+			return nChar - '1';
+		
+		var startPos = {}, endPos = {};
+		Manager.pressEndBody.p.GetStartEndPos(startPos, endPos);
+		
+		if (('W' == nChar || 38 == code) && startPos.y != endPos.y) {
+			if (startPos.y < endPos.y)
+				return 0;
+			else
+				return 1;
+		}
+		if (('S' == nChar || 40 == code) && startPos.y != endPos.y) {
+			if (startPos.y > endPos.y)
+				return 0;
+			else
+				return 1;
+		}
+		if (('A' == nChar || 37 == code) && startPos.x != endPos.x) {
+			if (startPos.x < endPos.x)
+				return 0;
+			else
+				return 1;
+		}
+		if (('D' == nChar || 39 == code) && startPos.x != endPos.x) {
+			if (startPos.x > endPos.x)
+				return 0;
+			else
+				return 1;
+		}
+		
+		return -1;
+	}
+};
 //用户输入数字1,2,3,4来移动电势差结尾位置
-Manager.NextBodyByInputNum = function(nChar) {
+Manager.NextBodyByPressKey = function(code, nChar) {
 	if (!Manager.pressStartBody.IsOnAny() || !Manager.pressEndBody.IsOnAny()) {
 		swal({title: "请先鼠标点击导线或者连线选择电势差起始位置,<br>然后输入数字移动电势差结尾位置.", type: "warning", html: true});
 		return false;
 	}
 
-	var dir;
-	switch (nChar) {
-	case '#':
-	case 'a':
-		dir = 0; //小键盘'1'键
-		break;
-
-	case '(':
-	case 'b':
-		dir = 1; //小键盘'2'键
-		break;
-
-	case 34:
-	case 'c':
-		dir = 2; //小键盘'3'键
-		break;
-
-	case '%':
-	case 'd':
-		dir = 3; //小键盘'4'键
-		break;
-
-	default:
-		if (nChar >= '1' && nChar <= '4')
-			dir = nChar - '1';
-		else
-			return false;
-	}
+	var dir = Manager.NextBodyDirByChar(code, nChar);
+	if (dir < 0 || dir > 3)
+		return false;	
 
 	if (Manager.pressEndBody.IsOnLead()) {	//结尾位置在导线上
 		if (dir < 0 || dir > 1) return false;
@@ -101,11 +127,10 @@ Manager.NextBodyByInputNum = function(nChar) {
 			Manager.pressEndBody.SetOnLead(temp.p.lead[dir]);
 		}
 	} else {	//结尾位置在结点上
-		if (dir < 0 || dir > 3) return false;
 		if (Manager.pressEndBody.p.lead[dir] != null) {
 			Manager.pressEndBody.SetOnLead(Manager.pressEndBody.p.lead[dir]);
 		} else {
-			swal({content:"结点这一端没有连接导线 !", title:"电流无法流过 !", type:"warning"});
+			swal({title:"结点这一端没有连接导线 !", type:"warning"});
 			return false;
 		}
 	}
@@ -117,7 +142,7 @@ Manager.NextBodyByInputNum = function(nChar) {
 //显示从起始位置到结尾位置的电势差(U0-U1)
 Manager.ShowPressure = function() {
 	if (!Manager.pressStartBody.IsOnAny() || !Manager.pressEndBody.IsOnAny()) {
-		swal({content:"请选择起始位置再查看电势差", title:"起始位置可以用鼠标点击选择", type:"warning"});
+		swal({title:"请鼠标点击选择起始位置", type:"info"});
 		return false;
 	}
 

@@ -210,7 +210,7 @@ CanvasMgr.OnSetFocus = function(e) {
 CanvasMgr.OnKeyDown = function(e) {
 	var code = GetPressKeyCode(e);
 	var nChar = String.fromCharCode(code).toUpperCase();
-	
+
 	//ctrl键被按下
 	if (e.ctrlKey==1) {
 		switch (nChar) {
@@ -307,7 +307,7 @@ CanvasMgr.OnKeyDown = function(e) {
 	}*/
 
 	if (CanvasMgr.m_inputLock)	//计算过了电流,根据数字键选择下一个位置
-		Manager.NextBodyByInputNum(nChar);
+		Manager.NextBodyByPressKey(code, nChar);
 
 	return true;
 };
