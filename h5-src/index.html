@@ -173,16 +173,16 @@ function pageOnload() {
 	
 	CanvasMgr.OnInitDialog(GlobalCanvas);
 	
-	jc.bind("mousedown", function() {return CanvasMgr.OnMouseDown(GlobalCanvas.event||window.event);});
-	jc.bind("mouseup", function() {return CanvasMgr.OnMouseUp(GlobalCanvas.event||window.event);});
-	jc.bind("dblclick", function() {return CanvasMgr.OnLButtonDblClk(GlobalCanvas.event||window.event);});
-	jc.bind("mousemove", function() {return CanvasMgr.OnMouseMove(GlobalCanvas.event||window.event);});
+	jc.bind("mousedown", function() {return CanvasMgr.OnMouseDown(arguments[0]||window.event);});
+	jc.bind("mouseup", function() {return CanvasMgr.OnMouseUp(arguments[0]||window.event);});
+	jc.bind("dblclick", function() {return CanvasMgr.OnLButtonDblClk(arguments[0]||window.event);});
+	jc.bind("mousemove", function() {return CanvasMgr.OnMouseMove(arguments[0]||window.event);});
 	
-	jc.bind("focus", function() {return CanvasMgr.OnSetFocus(GlobalCanvas.event||window.event);});
-	jc.bind("blur", function() {return CanvasMgr.OnKillFocus(GlobalCanvas.event||window.event);});
+	jc.bind("focus", function() {return CanvasMgr.OnSetFocus(arguments[0]||window.event);});
+	jc.bind("blur", function() {return CanvasMgr.OnKillFocus(arguments[0]||window.event);});
 	
-	jc.bind("keydown", function() {return CanvasMgr.OnKeyDown(GlobalCanvas.event||window.event);});
-	jc.bind("keyup", function() {return CanvasMgr.OnKeyUp(GlobalCanvas.event||window.event);});
+	jc.bind("keydown", function() {return CanvasMgr.OnKeyDown(arguments[0]||window.event);});
+	jc.bind("keyup", function() {return CanvasMgr.OnKeyUp(arguments[0]||window.event);});
 	
 	
 	$(document).contextmenu({
