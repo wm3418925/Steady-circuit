@@ -81,7 +81,7 @@ Manager.ShowMoveBody = function(pos, isLButtonDown, isCtrlDown) {
 
 	//左或右ctrl键被按下相当于复制
 	if (isCtrlDown) 
-		Manager.SetCursor("crosshair");
+		Manager.SetCursor("url(/res/cursor/addBody.cur),auto");
 	else
 		Manager.SetCursor("pointer");
 
