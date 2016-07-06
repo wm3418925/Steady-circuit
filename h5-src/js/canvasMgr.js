@@ -637,21 +637,9 @@ CanvasMgr.OnFocusBodyShowElec = function() {
 // 搜索物体
 CanvasMgr.OnSearch = function() {
 	if (CanvasMgr.m_inputLock) return;
-	
-	if (!CanvasMgr.searchParam)
-		CanvasMgr.searchParam = SearchParam.CreateNew();
 
-	var isMatch;
-
-	var dlg = MySearchDlg.CreateNew(CanvasMgr.searchParam, CanvasMgr.canvas);
-	if (1 == dlg.DoModal()) {	//获得选项
-		if (CanvasMgr.searchParam.isSearchPre)
-			isMatch = Manager.SearchPre(CanvasMgr.searchParam);		//搜索上一个
-		else
-			isMatch = Manager.SearchNext(CanvasMgr.searchParam);	//搜索下一个
-
-		if (!isMatch) swal({title:"未找到匹配 !"});
-	}
+	var dlg = MySearchDlg.CreateNew(CanvasMgr.canvas);
+	dlg.DoModal();
 };
 
 

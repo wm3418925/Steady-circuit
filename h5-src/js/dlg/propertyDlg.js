@@ -95,10 +95,10 @@ var MyPropertyDlg = {
 		}
 		
 		
-		var dlgDiv = $("#myStoreDlgDiv");
+		var dlgDiv = $("#myPStoreDlgDiv");
 		if (dlgDiv && dlgDiv.length > 0)
 			dlgDiv.remove();
-		dlgDiv = $("<div id='myStoreDlgDiv' ></div>").appendTo($("#body"));
+		dlgDiv = $("<div id='myPStoreDlgDiv' ></div>").appendTo($("#body"));
 		dlgDiv.append(table);
 		
 		var layerParam = {
