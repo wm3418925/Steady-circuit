@@ -116,7 +116,7 @@ Manager.PaintMouseMotivate = function(mouseMoti) {
 	if (mm.IsOnLead()) {
 		//选定了连接点,鼠标变成添加结点图形,提示使用ConnectBodyLead函数
 		if (Manager.motiCount > 0 && Manager.motiBody[Manager.motiCount-1].IsOnConnectPos()) {
-			Manager.SetCursor("crosshair");
+			Manager.SetCursor("url(/res/cursor/showConnect.cur),auto");
 		//没有选定连接点,鼠标变成"指针",提示改变导线坐标
 		} else {
 			if (mm.IsOnHoriLead())
@@ -125,8 +125,8 @@ Manager.PaintMouseMotivate = function(mouseMoti) {
 				Manager.SetCursor("w-resize");	//在竖线,鼠标变成"左右指针"
 		}
 	} else if (mm.IsOnBody()) {	//在物体上,鼠标变成手的形状,提示移动物体
-		Manager.SetCursor("pointer");
-	} else if (!mm.IsOnAny()) {
+		Manager.SetCursor("move");
+	} else if (!mm.IsOnAny() || mm.IsOnConnectPos()) {
 		Manager.SetCursor("default");
 	}
 

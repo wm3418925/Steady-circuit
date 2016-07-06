@@ -100,11 +100,10 @@ Manager.ShowMoveLead = function(isLButtonDown) {
 		return true;
 	}
 
-	if (Manager.motiBody[Manager.motiCount-1].IsOnHoriLead()) {
-		Manager.SetCursor("row-resize");	//在横线,鼠标变成"上下指针"
-	} else  {
-		Manager.SetCursor("col-resize");	//在竖线,鼠标变成"左右指针"
-	}
+	if (Manager.motiBody[Manager.motiCount-1].IsOnHoriLead())
+		Manager.SetCursor("url(/res/cursor/horzLead.cur),auto");	//在横线,鼠标变成"上下指针"
+	else
+		Manager.SetCursor("url(/res/cursor/vertLead.cur),auto");	//在竖线,鼠标变成"左右指针"
 
 	return true;
 };
