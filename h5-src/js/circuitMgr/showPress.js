@@ -17,13 +17,13 @@ Manager.SetStartBody = function(pos) {
 
 	if (mb.IsOnLead()) {
 		if (IsElecError(mb.p.elecDir)) {
-			swal({content:"当前选择的电路不正常 !", title:"无法计算电势差 !", type:"warning"});
+			swal({text:"当前选择的电路不正常 !", title:"无法计算电势差 !", type:"warning"});
 			return false;
 		}
 	} else if (mb.IsOnCrun() && !mb.IsOnConnectPos()) {
 		var c = mb.p;
 		for (var i=0; i<4; ++i) if (c.lead[i] && IsElecError(c.lead[i].elecDir)) {
-			swal({content:"当前选择的电路不正常 !", title:"无法计算电势差 !", type:"warning"});
+			swal({text:"当前选择的电路不正常 !", title:"无法计算电势差 !", type:"warning"});
 			return false;
 		}
 	} else {
@@ -110,11 +110,11 @@ Manager.NextBodyByPressKey = function(code, nChar) {
 			Manager.pressEndBody = temp.Clone();
 		} else { //if (temp.IsOnCtrl())
 			if (temp.p.resist < 0) {	//断路控件
-				swal({content:"这是一个断路电学元件 !", title:"电流无法流过 !", type:"warning"});
+				swal({text:"这是一个断路电学元件 !", title:"电流无法流过 !", type:"warning"});
 				return false;
 			}
 			if (temp.p.GetConnectCount() < 2) {	//控件没有连接2段导线
-				swal({content:"电学元件另一端没有连接导线 !", title:"电流无法流过 !", type:"warning"}, Manager.CanvasSetFocus);
+				swal({text:"电学元件另一端没有连接导线 !", title:"电流无法流过 !", type:"warning"}, Manager.CanvasSetFocus);
 				return false;
 			}
 			dir = True1_False0(temp.p.lead[0] == Manager.pressEndBody.p);	//下一个导线索引(0或1)

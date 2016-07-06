@@ -220,9 +220,10 @@ var MyPropertyDlg = {
 
 		var errorType = ERROR_NO;
 		var i;
+		var listSize = globalMPD.m_list.GetListSize();
 
 		//测试数据
-		for (i = globalMPD.m_list.GetListSize()-1; i>=0; --i) {
+		for (i=0; i<listSize; ++i) {
 			errorType = globalMPD.m_list.CheckAMember(i, document.getElementById(MyPropertyDlg.GenerateTagId(i)));
 			if (errorType != ERROR_NO) break;
 		}
@@ -256,18 +257,23 @@ var MyPropertyDlg = {
 				break;
 			}
 
-			if (1 == globalMPD.m_list.GetListSize()) {
-				showText = errorText + "\n请重新输入!";
+			if (1 == listSize) {
+				showText = errorText + "<br>请重新输入!";
 			} else {
-				showText = "第"+(i+1)+"个数据项:\n\t"+globalMPD.m_list.noteTextList[i]+"\n"+errorText+"\n请重新输入!";
+				showText = "第<span style='color:#30E030'>"+(i+1)+"</span>个数据项 ["
+						+ "<span style='color:#30E030'>"+globalMPD.m_list.noteTextList[i]+"</span>] 错误<br>"
+						+ "<span style='color:#E03030'>" + errorText + "</span>";
 			}
-			alert(showText);
-			document.getElementById(MyPropertyDlg.GenerateTagId(i)).focus();	//数据不合法控件获得焦点
+			swal({title: "请重新输入!", text: showText, type: "warning", html: true},
+				function() {
+					document.getElementById(MyPropertyDlg.GenerateTagId(i)).focus();	//数据不合法控件获得焦点
+				}
+			);
 			return false;
 		}
 
 		//测试成功写入数据
-		for (i = globalMPD.m_list.GetListSize()-1; i>=0; --i)
+		for (i=0; i<listSize; ++i)
 			globalMPD.m_list.SaveAMember(i, document.getElementById(MyPropertyDlg.GenerateTagId(i)));
 
 		// 关闭layer

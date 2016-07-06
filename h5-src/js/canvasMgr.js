@@ -650,7 +650,7 @@ CanvasMgr.OnSearch = function() {
 		else
 			isMatch = Manager.SearchNext(CanvasMgr.searchParam);	//搜索下一个
 
-		if (!isMatch) swal({title:"搜索结果", contnet:"未找到匹配 !"});
+		if (!isMatch) swal({title:"未找到匹配 !"});
 	}
 };
 

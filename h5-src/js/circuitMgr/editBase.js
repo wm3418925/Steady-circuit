@@ -120,7 +120,7 @@ Manager.ConnectBodyLead = function(posb) {
 	ASSERT(Manager.motiCount == 2 && Manager.motiBody[0].IsOnConnectPos() && Manager.motiBody[1].IsOnLead());
 	Manager.motiCount = 0;
 	if (Manager.crun.length >= MAX_CRUN_COUNT) {	//只要结点数量够,导线一定够
-		swal({content:"电学元件超过最大数量!", title:"电学元件添加失败!", type:"warning"});
+		swal({text:"电学元件超过最大数量!", title:"电学元件添加失败!", type:"warning"});
 		return false;
 	}
 
