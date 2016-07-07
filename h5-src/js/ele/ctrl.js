@@ -43,19 +43,19 @@ var CTRL = {//!函数后面加了@的函数共有8个,在有新控件类型定�
 		
 		var initOrder = CTRL.globalInitOrder++;
 		var newObj = {
-			initOrder : initOrder,		//初始化序号
-			index : memberIdx,			//在控件数组中序号
+			initOrder: initOrder,		//初始化序号
+			index: memberIdx,			//在控件数组中序号
 			
-			isPaintName : true,			//默认显示结点标签
-			name : "Ctrl" + initOrder,	//默认名称
-			x : x, y : y,				//坐标
-			lead : new Array(null,null),	//结点连接导线的位置,0↑,1↓,2←,3→*/
+			isPaintName: true,			//默认显示结点标签
+			name: "Ctrl" + initOrder,	//默认名称
+			x: x, y: y,					//坐标
+			lead: new Array(null,null),	//结点连接导线的位置,0↑,1↓,2←,3→*/
 			
-			dir : 0,					//控件默认方向
-			style : ctrlStyle,
+			dir: 0,						//控件默认方向
+			style: ctrlStyle,
 			
-			elec : 0,					//流过控件的电流的 大小(在方向定义下的大小)
-			elecDir : UNKNOWNELEC		//电流方向
+			elec: 0,					//流过控件的电流的 大小(在方向定义下的大小)
+			elecDir: UNKNOWNELEC		//电流方向
 		};
 		
 		newObj.__proto__ = CTRL;

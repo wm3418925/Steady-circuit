@@ -10,9 +10,28 @@ var MySearchDlg = {
 
 	DoModal : function() {
 		var dlgDiv = $("#mySStoreDlgDiv");
-		if (!dlgDiv || dlgDiv.length <= 0) {
-			var outDiv = $("<div id='searchDlgOutDiv' ></div>").appendTo($("#body"));
-			dlgDiv = $("<div id='mySStoreDlgDiv' ></div>").appendTo(outDiv);
+		var scts = $("#searchCtrlTypeSelect");
+		if (scts.children().length <= 0) {
+			var searchOkFunc = function() {
+				globalSearchParam.searchRange = $("#searchRangeSelect").val();
+				if (0 == globalSearchParam.searchRange)
+					globalSearchParam.searchRange = $("#searchCtrlTypeSelect").val();
+				globalSearchParam.searchBy = parseInt($("#searchBySelect").val());
+				globalSearchParam.keyWord = $("#searchKeywordInput").val();
+				globalSearchParam.isWholeWord = $("#searchIsWholeWordInput").prop("checked");
+				globalSearchParam.isMatchCase = $("#searchIsMatchCaseInput").prop("checked");
+				globalSearchParam.isSearchPre = $("input[name='searchIsPreName']:checked").val() == "true";
+				globalMSD.OnSearch();
+			};
+			$("#searchOkButton").bind("click", searchOkFunc);
+			
+			var searchCancelFunc = function() {
+				parent.layer.close(globalMSD.m_layerIndex);
+			};
+			$("#searchCancelButton").bind("click", searchCancelFunc);
+			
+			for (var i=0; i<CTRL_TYPE_NAMES.length; ++i)
+				$("<option value='"+i+"'>"+CTRL_TYPE_NAMES[i]+"</option>").appendTo(scts);
 		}
 		
 		var layerParam = {
@@ -20,12 +39,8 @@ var MySearchDlg = {
 			title: '搜索',
 			shadeClose: true,
 			shade: false,
-			area: ['245px', '314px'],
-			content: dlgDiv,
-			
-			btn: ['保存', '取消'],
-			yes: MySearchDlg.OnOK,
-			no: null
+			area: ['300px', '320px'],
+			content: dlgDiv
 		};
 
 		globalMSD = this;
@@ -34,10 +49,10 @@ var MySearchDlg = {
 	
 	OnSearch: function() {
 		var isMatch;
-		if (CanvasMgr.searchParam.isSearchPre)
-			isMatch = Manager.SearchPre(CanvasMgr.searchParam);		//搜索上一个
+		if (globalSearchParam.isSearchPre)
+			isMatch = Manager.SearchPre(globalSearchParam);		//搜索上一个
 		else
-			isMatch = Manager.SearchNext(CanvasMgr.searchParam);	//搜索下一个
+			isMatch = Manager.SearchNext(globalSearchParam);	//搜索下一个
 
 		if (!isMatch) swal({title:"未找到匹配 !"});
 	}

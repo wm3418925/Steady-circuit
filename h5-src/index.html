@@ -165,6 +165,61 @@
 </tbody>
 </table>
 
+<div class="col-md-12" style="display:none;" id="mySStoreDlgDiv">
+<table>
+<thead></thead>
+<tbody>
+    <tr style="padding-top:10px;">
+        <td>查找范围：</td>
+        <td>
+            <select id="searchRangeSelect" onchange="var d='none';if(this.selectedIndex==4)d='';document.getElementById('searchCtrlTypeTr').style.display=d;">
+				<option value="-5">所有物体</option>
+				<option value="-3">导线</option>
+				<option value="-1">结点</option>
+				<option value="-4">所有电学元件</option>
+				<option value="0">某种电学元件</option>
+			</select>
+        </td>
+    </tr>
+    <tr style="padding-top:10px;display:none;" id="searchCtrlTypeTr">
+        <td>电学元件类型：</td>
+        <td><select id="searchCtrlTypeSelect"></select></td>
+    </tr>
+    <tr style="padding-top:10px;">
+        <td>查找依据：</td>
+        <td>
+            <select id="searchBySelect">
+				<option value="0">名称(标签)</option>
+				<option value="1">序号</option>
+			</select>
+        </td>
+    </tr>
+    <tr style="padding-top:10px;">
+        <td>关键字：</td>
+        <td><input type="text" id="searchKeywordInput" placeholder="可为空" /></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+			<input type="checkbox" id="searchIsWholeWordInput" style="align:left;" />全词匹配
+			<input type="checkbox" id="searchIsMatchCaseInput" style="align:left;" />区分大小写
+		</td>
+    </tr>
+    <tr>
+        <td colspan="2">
+			方向：
+            <input type="radio" value="true" name="searchIsPreName" />上一个
+            <input type="radio" value="false" name="searchIsPreName" checked="" />下一个
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+			<input type="button" value="查找" style="width:120px;margin-left:10px;" id="searchOkButton" />
+			<input type="button" value="取消" style="width:70px;margin-left:10px;" id="searchCancelButton" />
+		</td>
+    </tr>
+</tbody></table>
+</div>
+
 
 <script type="text/javascript">
 var GlobalCanvas;

@@ -27,8 +27,7 @@ Manager.SearchNext = function(searchParam) {
 		}
 
 		for (; j<Manager.lead.length; ++j) {
-			var str = Manager.lead[j].initOrder + "";
-			isMatch = kmp.IsMatch(str);
+			isMatch = kmp.IsMatch(Manager.lead[j].initOrder + "");
 			if (Manager.focusBody.IsLeadSame(Manager.lead[j])) {
 				return isMatch;
 			} else if (isMatch) {
@@ -54,12 +53,10 @@ Manager.SearchNext = function(searchParam) {
 		}
 
 		for (; j<Manager.crun.length; ++j) {
-			if (searchParam.searchBy == SEARCH_BY_NAME) {
+			if (searchParam.searchBy == SEARCH_BY_NAME)
 				isMatch = kmp.IsMatch(Manager.crun[j].name);
-			} else {
-				var str = Manager.crun[j].initOrder + "";
-				isMatch = kmp.IsMatch(str);
-			}
+			else
+				isMatch = kmp.IsMatch(Manager.crun[j].initOrder + "");
 			if (Manager.focusBody.IsCrunSame(Manager.crun[j])) {
 				return isMatch;
 			} else if (isMatch) {
@@ -86,12 +83,10 @@ Manager.SearchNext = function(searchParam) {
 
 		for (; j<Manager.ctrl.length; ++j) {
 			if (searchParam.range == BODY_ALL || searchParam.range == BODY_ALLCTRL || Manager.ctrl[j].style == searchParam.range) {
-				if (searchParam.searchBy == SEARCH_BY_NAME) {
+				if (searchParam.searchBy == SEARCH_BY_NAME)
 					isMatch = kmp.IsMatch(Manager.ctrl[j].name);
-				} else {
-					var str = Manager.ctrl[j].initOrder + "";
-					isMatch = kmp.IsMatch(str);
-				}
+				else
+					isMatch = kmp.IsMatch(Manager.ctrl[j].initOrder + "");
 				if (Manager.focusBody.IsCtrlSame(Manager.ctrl[j])) {
 					return isMatch;
 				} else if (isMatch) {
@@ -135,12 +130,10 @@ Manager.SearchPre = function(searchParam) {
 
 		for (; j>=0; --j) {
 			if (searchParam.range == BODY_ALL || searchParam.range == BODY_ALLCTRL || Manager.ctrl[j].style == searchParam.range) {
-				if (searchParam.searchBy == SEARCH_BY_NAME) {
+				if (searchParam.searchBy == SEARCH_BY_NAME)
 					isMatch = kmp.IsMatch(Manager.ctrl[j].name);
-				} else {
-					var str = Manager.ctrl[j].initOrder + "";
-					isMatch = kmp.IsMatch(str);
-				}
+				else
+					isMatch = kmp.IsMatch(Manager.ctrl[j].initOrder + "");
 				if (Manager.focusBody.IsCtrlSame(Manager.ctrl[j])) {
 					return isMatch;
 				} else if (isMatch) {
@@ -167,12 +160,10 @@ Manager.SearchPre = function(searchParam) {
 		}
 
 		for (; j>=0; --j) {
-			if (searchParam.searchBy == SEARCH_BY_NAME) {
+			if (searchParam.searchBy == SEARCH_BY_NAME)
 				isMatch = kmp.IsMatch(Manager.crun[j].name);
-			} else {
-				var str = Manager.crun[j].initOrder + "";
-				isMatch = kmp.IsMatch(str);
-			}
+			else
+				isMatch = kmp.IsMatch(Manager.crun[j].initOrder + "");
 			if (Manager.focusBody.IsCrunSame(Manager.crun[j])) {
 				return isMatch;
 			} else if (isMatch) {
@@ -198,8 +189,7 @@ Manager.SearchPre = function(searchParam) {
 		}
 
 		for (; j>=0; --j) {
-			var str = Manager.lead[j].initOrder + "";
-			isMatch = kmp.IsMatch(str);
+			isMatch = kmp.IsMatch(Manager.lead[j].initOrder + "");
 			if (Manager.focusBody.IsLeadSame(Manager.lead[j])) {
 				return isMatch;
 			} else if (isMatch) {
