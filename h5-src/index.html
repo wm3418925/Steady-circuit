@@ -172,7 +172,7 @@
     <tr style="padding-top:10px;">
         <td>查找范围：</td>
         <td>
-            <select id="searchRangeSelect" onchange="var d='none';if(this.selectedIndex==4)d='';document.getElementById('searchCtrlTypeTr').style.display=d;">
+            <select id="searchRangeSelect" onchange="onSearchRangeChanged()">
 				<option value="-5">所有物体</option>
 				<option value="-3">导线</option>
 				<option value="-1">结点</option>
@@ -219,6 +219,26 @@
     </tr>
 </tbody></table>
 </div>
+
+<script type="text/javascript">
+function onSearchRangeChanged() {
+	var sr = $("#searchRangeSelect");
+	
+	// 选择电学元件类型
+	var sctDisplay = "none";
+	if (sr.get(0).selectedIndex==4)
+		sctDisplay = "";
+	$("#searchCtrlTypeTr").css({"display":sctDisplay});
+	
+	// 导线不能使用名称查询
+	if (sr.get(0).selectedIndex==1)  {
+		$("#searchBySelect").get(0).selectedIndex = 1;
+		$("#searchBySelect").attr("disabled", "true");
+	} else {
+		$("#searchBySelect").removeAttr("disabled");
+	}
+}
+</script>
 
 
 <script type="text/javascript">

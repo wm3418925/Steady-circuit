@@ -13,9 +13,9 @@ var MySearchDlg = {
 		var scts = $("#searchCtrlTypeSelect");
 		if (scts.children().length <= 0) {
 			var searchOkFunc = function() {
-				globalSearchParam.searchRange = $("#searchRangeSelect").val();
-				if (0 == globalSearchParam.searchRange)
-					globalSearchParam.searchRange = $("#searchCtrlTypeSelect").val();
+				globalSearchParam.range = $("#searchRangeSelect").val();
+				if (0 == globalSearchParam.range)
+					globalSearchParam.range = $("#searchCtrlTypeSelect").val();
 				globalSearchParam.searchBy = parseInt($("#searchBySelect").val());
 				globalSearchParam.keyWord = $("#searchKeywordInput").val();
 				globalSearchParam.isWholeWord = $("#searchIsWholeWordInput").prop("checked");
@@ -54,6 +54,10 @@ var MySearchDlg = {
 		else
 			isMatch = Manager.SearchNext(globalSearchParam);	//搜索下一个
 
-		if (!isMatch) swal({title:"未找到匹配 !"});
+		if (!isMatch) {
+			$(".layui-layer-title").html("搜索 - <span style='color:#E03030'>未找到匹配</span>");
+		} else {
+			$(".layui-layer-title").html("搜索");
+		}
 	}
 };

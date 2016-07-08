@@ -6,12 +6,12 @@ var KMP = {
 	},
 	IsMatch: function(str) {
 		var tmpKey = this.keyWord;
-		if (!isMatchCase) {
+		if (!this.isMatchCase) {
 			str = str.toUpperCase();
 			tmpKey = tmpKey.toUpperCase();
 		}
 		
-		if (isWholeWord) {
+		if (this.isWholeWord) {
 			return str == tmpKey;
 		} else {
 			return str.match(tmpKey) != null;
