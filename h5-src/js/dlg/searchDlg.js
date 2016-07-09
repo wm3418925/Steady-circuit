@@ -12,6 +12,9 @@ var MySearchDlg = {
 		var dlgDiv = $("#mySStoreDlgDiv");
 		var scts = $("#searchCtrlTypeSelect");
 		if (scts.children().length <= 0) {
+			for (var i=0; i<CTRL_TYPE_NAMES.length; ++i)
+				$("<option value='"+i+"'>"+CTRL_TYPE_NAMES[i]+"</option>").appendTo(scts);
+			
 			var searchOkFunc = function() {
 				globalSearchParam.range = $("#searchRangeSelect").val();
 				if (0 == globalSearchParam.range)
@@ -29,9 +32,6 @@ var MySearchDlg = {
 				parent.layer.close(globalMSD.m_layerIndex);
 			};
 			$("#searchCancelButton").bind("click", searchCancelFunc);
-			
-			for (var i=0; i<CTRL_TYPE_NAMES.length; ++i)
-				$("<option value='"+i+"'>"+CTRL_TYPE_NAMES[i]+"</option>").appendTo(scts);
 		}
 		
 		var layerParam = {
@@ -39,7 +39,7 @@ var MySearchDlg = {
 			title: '搜索',
 			shadeClose: true,
 			shade: false,
-			area: ['300px', '320px'],
+			area: ['270px', '260px'],
 			content: dlgDiv
 		};
 
