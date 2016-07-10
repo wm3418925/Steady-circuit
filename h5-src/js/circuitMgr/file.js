@@ -60,10 +60,8 @@ function readFileCallbackFunc(data) {
 		return false;
 	}
 
-	//Manager.fileName = newFileName;	//替换原有路径
-
 	// 可能因为文件问题而发生错误
-	//try {
+	try {
 		//2读取物体数量
 		var crunCount = data.cruns.length;
 		var ctrlCount = data.ctrls.length;
@@ -121,10 +119,10 @@ function readFileCallbackFunc(data) {
 		Manager.SetFocusBody(tmpFocusBody);				//设置焦点物体
 
 		Manager.ctx.strokeStyle = PaintCommonFunc.HexToRGBStr(Manager.textColor);	//初始化字体颜色
-	/*} catch(e) {
+	} catch(e) {
 		swal({text:"文件可能损坏了", title:"读取文件错误", type:"error"});
 		return false;
-	}*/
+	}
 
 	return true;			//正常退出
 }
@@ -133,7 +131,8 @@ function readFileComplete(xhr, textStatus) {
 //读取电路
 Manager.ReadFile = function(newFileName) {
 	ASSERT(newFileName && newFileName.length > 0);
-	$.ajax({ url: "/testData.json", async:false, success: readFileCallbackFunc, complete:readFileComplete});
+	Manager.fileName = newFileName;
+	$.ajax({url:"/"+Manager.fileName, async:false, success:readFileCallbackFunc, complete:readFileComplete});
 	return true;
 };
 

@@ -107,7 +107,7 @@ CanvasMgr.OnInitDialog = function(canvas) {
 	//初始化电路 Manager
 	CanvasMgr.canvas = canvas;
 	Manager.Init(canvas);
-	Manager.ReadFile("testData.json");
+	Manager.ReadFile("t1.json");
 	Manager.PaintAll();
 	
 	CanvasMgr.SetWindowText();
