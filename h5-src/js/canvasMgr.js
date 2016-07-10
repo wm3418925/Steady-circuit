@@ -45,10 +45,9 @@ CanvasMgr.PasteByHotKey = function(e) {
 };
 
 // 设置窗口标题
-CanvasMgr.SetWindowText = function() {
+CanvasMgr.SetWindowText = function(filePath) {
 	var title;
 	
-	var filePath = Manager.GetFilePath();
 	if (null == filePath || 0 == filePath.length) {
 		title = "新电路文件" + FILE_EXTENT_DOT;
 	} else {
@@ -61,15 +60,6 @@ CanvasMgr.SetWindowText = function() {
 
 // 关闭文件前用户选择保存当前文件
 CanvasMgr.SaveFileBeforeClose = function(caption, hasCancelButton, yesnoCallback) {
-	var filePath = Manager.GetFilePath();
-	var note;
-
-	if (null == filePath || 0 == filePath.length) {
-		note = "保存文件吗 ?";
-	} else {
-		note = "电路保存到文件 :\n\t" + filePath + "\n吗 ?";
-	}
-
 	var layerParam = {
 		type: 1,
 		scrollbar: false,
@@ -77,7 +67,7 @@ CanvasMgr.SaveFileBeforeClose = function(caption, hasCancelButton, yesnoCallback
 		maxWidth: 500,
 		
 		title: caption,
-		content: note
+		content: "保存文件吗 ?"
 	};
 	if (hasCancelButton) {
 		layerParam.btn = ['保存', '继续编辑', '不保存'];
@@ -99,10 +89,6 @@ CanvasMgr.OnInitDialog = function(canvas) {
 	//成员变量赋值
 	CanvasMgr.m_inputLock = false;	//初始输入不上锁
 	CanvasMgr.m_mousePos = {x:0, y:0};
-
-	//设置滚动条范围
-	//SetScrollRange(SB_HORZ, 0, 50);	//水平
-	//SetScrollRange(SB_VERT, 0, 30);	//竖直
 
 	//初始化电路 Manager
 	CanvasMgr.canvas = canvas;
@@ -424,119 +410,6 @@ CanvasMgr.BeforePopupMenu = function(e, ui) {
 	return true;
 };
 
-		
-
-// 文件函数----------------------------------------------------------------↓
-// 新建文件
-CanvasMgr.OnFileNew = function() {
-	if (CanvasMgr.m_inputLock) return;
-
-	var yesnoCallback = function() {
-		//建立新文件
-		Manager.CreateFile();
-		Manager.PaintAll();
-		CanvasMgr.SetWindowText();
-	};
-	
-	//关闭文件前用户选择保存当前文件
-	CanvasMgr.SaveFileBeforeClose("新建文件前", true, yesnoCallback);
-};
-
-// 从磁盘读取指定文件
-CanvasMgr.OnFileOpen = function() {
-	if (CanvasMgr.m_inputLock) return;
-
-	var yesnoCallback = function() {
-		//获得读取文件路径
-		var lpszOpenFile = new CFileDialog(	//生成对话框
-										true, 
-										FILE_EXTENT, 
-										DEFAULT_FILE_NAME, 
-										OFN_FILEMUSTEXIST,
-										FILE_LIST);
-
-		var szGetName;
-		if (lpszOpenFile.DoModal() == IDOK) {	//点击对话框确定按钮
-			szGetName = lpszOpenFile.GetPathName();	//得到文件的路径
-			lpszOpenFile = null;	//释放对话框资源
-		} else {
-			lpszOpenFile = null;	//释放对话框资源
-			return;
-		}
-
-		//读取文件
-		if (Manager.ReadFile(szGetName)) {
-			CanvasMgr.SetWindowText();	//更新窗口标题
-			Manager.PaintAll();		//读取文件后刷新
-		}
-	};
-	
-	//关闭文件前用户选择保存当前文件
-	CanvasMgr.SaveFileBeforeClose("打开文件前", true, yesnoCallback);
-};
-
-// 保存到文件
-CanvasMgr.OnFileSave = function() {
-	if (CanvasMgr.m_inputLock) return;
-
-	var path = Manager.GetFilePath();
-
-	if (path.length == 0) {	//路径为空
-		CanvasMgr.OnFileSaveAs();
-	} else {
-		Manager.SaveFile(path);
-	}
-};
-
-// 另存为文件
-CanvasMgr.OnFileSaveAs = function() {
-	if (CanvasMgr.m_inputLock) return;
-
-	//获得另存路径
-	var lpszOpenFile = new CFileDialog(	//生成对话框
-									false, 
-									FILE_EXTENT, 
-									DEFAULT_FILE_NAME, 
-									OFN_OVERWRITEPROMPT, 
-									FILE_LIST);
-
-	var szGetName;
-	if (lpszOpenFile.DoModal() == IDOK) {	//点击对话框确定按钮
-		szGetName = lpszOpenFile.GetPathName();	//得到文件的路径
-		lpszOpenFile = null;	//释放对话框资源
-	} else {
-		lpszOpenFile = null;	//释放对话框资源
-		return;
-	}
-
-	//另存文件
-	Manager.SaveFile(szGetName);	//保存文件
-	CanvasMgr.SetWindowText();		//更新窗口标题
-};
-
-// 保存电路到图片
-CanvasMgr.OnSaveAsPicture = function() {
-	//获得图片保存路径
-	var lpszOpenFile = new CFileDialog(	//生成对话框
-									false, 
-									"bmp", 
-									"shot.bmp", 
-									OFN_OVERWRITEPROMPT, 
-									"位图文件(*.bmp)|*.bmp||");
-	lpszOpenFile.m_ofn.lpstrTitle = "选择图片路径";
-
-	var szGetName;
-	if (lpszOpenFile.DoModal() == IDOK) {	//点击对话框确定按钮
-		szGetName = lpszOpenFile.GetPathName();	//得到文件的路径
-		lpszOpenFile = null;	//释放对话框资源
-	} else {
-		lpszOpenFile = null;	//释放对话框资源
-		return;
-	}
-
-	//保存图片
-	Manager.SaveAsPicture(szGetName);
-};
 
 
 
