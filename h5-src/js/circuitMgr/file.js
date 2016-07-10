@@ -1,6 +1,5 @@
 
 //7文件函数--------------------------------------------------------------------↓
-var globalCookieName = "circuit";
 
 //保存电路
 Manager.SaveFile = function() {
@@ -116,22 +115,6 @@ Manager.ReadFile = function(newFileName) {
 
 	$.ajax({url:"/"+newFileName, async:false, success:readFileCallbackFunc, complete:readFileComplete});
 	return true;
-};
-
-//从cookie中读取电路
-Manager.ReadCircuitFromCookie = function() {
-	try {
-		var dataStr = $.cookie(globalCookieName);
-		if (dataStr && dataStr.length > 0) {
-			var jsonData = JSON.parse(dataStr);
-			return readFileCallbackFunc(jsonData);
-		} else {
-			return false;
-		}
-	} catch (e) {
-		Manager.ClearCircuit();
-		return false;
-	}
 };
 
 //清空电路
