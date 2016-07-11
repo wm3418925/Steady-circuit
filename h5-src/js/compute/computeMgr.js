@@ -788,18 +788,15 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 	{
 		if (!IsFloatZero(resist))	//正常--电阻不是0
 		{
-			elec = press/resist;
-			return NORMALELEC;
+			return {"elec": press/resist, "dir": NORMALELEC};
 		}
 		else if (IsFloatZero(press))	//正常--电阻电压都是0
 		{
-			elec = 0;
-			return NORMALELEC;
+			return {"elec": 0, "dir": NORMALELEC};
 		}
 		else	//短路
 		{
-			elec = 0;
-			return SHORTELEC;
+			return {"elec": 0, "dir": SHORTELEC};
 		}
 	}
 
@@ -813,7 +810,6 @@ ComputeMgr.DistributeAnswer = function()
 	/*int*/var dir;		//下一个物体在当前物体的方向
 	/*Pointer*/var now;	//当前访问的线路控件
 	/*CRUN **/var end;		//线路的终点
-	/*double*/var elec;
 
 	//1,初始化每个导线和电学元件的elecDir,当做标记使用
 	for (i=ComputeMgr.lead.length-1; i>=0; --i) ComputeMgr.lead[i].elecDir = UNKNOWNELEC;
@@ -904,24 +900,25 @@ ComputeMgr.DistributeAnswer = function()
 		now = ComputeMgr.ctrl[i];
 
 		//2,从左边遍历,获得电阻和电压
-		dir = ComputeMgr.TravelCircuitGetOrSetInfo(now, 0, elec, UNKNOWNELEC);
+		var elecInfo = ComputeMgr.TravelCircuitGetOrSetInfo(now, 0, null, UNKNOWNELEC);
 
 		//3,把结果放入物体
-		if (ERRORELEC == dir)
+		if (ERRORELEC == elecInfo.dir)
 		{
 			throw "计算电流出现错误!!!";
 		}
 		else
 		{
-			if (NORMALELEC == dir && elec < 0)
+			if (NORMALELEC == elecInfo.dir && elecInfo.elec < 0)
 			{
 				//电流改为正数,调转遍历方向
-				elec = -elec;
-				ComputeMgr.TravelCircuitGetOrSetInfo(now, 1, elec, dir);
+				elecInfo.elec = -elecInfo.elec;
+				elecInfo.dir = 1-elecInfo.dir;
+				ComputeMgr.TravelCircuitGetOrSetInfo(now, 1, elecInfo.elec, NORMALELEC);
 			}
 			else 
 			{
-				ComputeMgr.TravelCircuitGetOrSetInfo(now, 0, elec, dir);
+				ComputeMgr.TravelCircuitGetOrSetInfo(now, 0, elecInfo.elec, NORMALELEC);
 			}
 		}
 	}
