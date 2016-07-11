@@ -1,15 +1,5 @@
 var CanvasMgr = {};
 
-/*
-	ON_COMMAND(IDM_FILE_NEW, OnFileNew)
-	ON_COMMAND(IDM_FILE_OPEN, OnFileOpen)
-	ON_COMMAND(IDM_FILE_SAVE, OnFileSave)
-	ON_COMMAND(IDM_FILE_SAVE_AS, OnFileSaveAs)
-	ON_COMMAND(IDM_SAVEASPIC, OnSaveAsPicture)
-	
-	ON_COMMAND(IDM_EXIT, OnExit)
-*/
-// ///////////////////////////////////////////////////////////////////////////
 //  private function
 
 // 输入上锁
@@ -93,11 +83,16 @@ CanvasMgr.OnInitDialog = function(canvas) {
 	//初始化电路 Manager
 	CanvasMgr.canvas = canvas;
 	Manager.Init(canvas);
-	Manager.ReadFile("t1.json");
-	Manager.PaintAll();
 	
-	CanvasMgr.SetWindowText();
+	Manager.PaintAll();
+	CanvasMgr.SetWindowText(null);
 
+	return true;
+};
+CanvasMgr.ReadTempleteFile = function(readFileName) {
+	Manager.ReadFile(readFileName);
+	Manager.PaintAll();
+	CanvasMgr.SetWindowText(readFileName);
 	return true;
 };
 

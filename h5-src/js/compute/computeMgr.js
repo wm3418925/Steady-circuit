@@ -719,7 +719,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 {
 	/*double*/var press = 0;
 	/*double*/var resist = 0;
-	/*const Pointer*/var self = now;	//记录下起点
+	/*const Pointer*/var selfStart = now;	//记录下起点
 	/*Pointer*/var pre;
 	if (IsBodyCrun(now)) return ERRORELEC;	//指定物体不能是线路中包含的结点
 
@@ -782,7 +782,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 			}
 		}
 	}//do
-	while (now!=self);	//遍历到终点
+	while (now!=selfStart);	//遍历到终点
 
 	if (UNKNOWNELEC == flag)	//获得电压电阻
 	{

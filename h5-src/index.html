@@ -130,11 +130,12 @@
 		height="570" 
 		style="margin:0px; border:1px solid #c3c3c3;">
 	您的浏览器不能显示, 请升级
-	</canvas>
+	</canvas><input type="button" value="生成" onclick="Manager.SaveFile()"/>
 
 </td><td style="vertical-align:top;">
 
 	<ul id="nav">
+		<li id="menu_search"><a href="#" onclick="onSelectFile();return false;" ><span class="ui-icon ui-icon-image"></span>电路模板</a></li>
 		<li id="menu_group_add"><a href="#" class="sub" tabindex="1"><span class="ui-icon ui-icon-plus"></span>添加</a><img src="o-css/menu-images/up.gif" alt="" />
 			<ul>
 				<li id="menu_add_crun"><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-crun'});return false;"><span class="ui-icon ui-icon-add-crun"></span>结点</a></li>
@@ -164,6 +165,30 @@
 </td></tr>
 </tbody>
 </table>
+
+
+<div class="ibox-content" style="display:none;" id="selectFileDiv">
+	<div class="carousel slide" id="carousel1">
+		<div class="carousel-inner">
+			<div class="item active">
+				<a href="#" onclick="CanvasMgr.ReadTempleteFile('t1');layer.close(selectFileLayerIndex);"><img alt="image" class="img-responsive" src="file-templete/t1.jpg" /></a>
+			</div>
+			<div class="item">
+				<a href="#" onclick="CanvasMgr.ReadTempleteFile('t2');layer.close(selectFileLayerIndex);"><img alt="image" class="img-responsive" src="file-templete/t2.jpg" /></a>
+			</div>
+			<div class="item ">
+				<a href="#" onclick="CanvasMgr.ReadTempleteFile('t3');layer.close(selectFileLayerIndex);"><img alt="image" class="img-responsive" src="file-templete/t3.jpg" /></a>
+			</div>
+		</div>
+		<a data-slide="prev" href="carousel.html#carousel1" class="left carousel-control">
+			<span class="icon-prev"></span>
+		</a>
+		<a data-slide="next" href="carousel.html#carousel1" class="right carousel-control">
+			<span class="icon-next"></span>
+		</a>
+	</div>
+</div>
+
 
 <div style="display:none;" id="mySStoreDlgDiv">
 <table style="margin:15px;">
@@ -232,6 +257,19 @@ function onSearchRangeChanged() {
 	} else {
 		$("#searchBySelect").removeAttr("disabled");
 	}
+}
+</script>
+
+<script type="text/javascript">
+var selectFileLayerIndex=0;
+function onSelectFile() {
+	var layerParam = {
+		type: 1,
+		title: '搜索',
+		area: ['571px', '500px'],
+		content: $("#selectFileDiv")
+	};
+	selectFileLayerIndex = layer.open(layerParam);
 }
 </script>
 

@@ -7,15 +7,15 @@ Manager.SaveFile = function() {
 
 	// 结点
 	data.cruns = new Array();
-	for (var i = Manager.crun.length-1; i >= 0; --i)
+	for (var i=0; i<Manager.crun.length; ++i)
 		data.cruns.push(Manager.crun[i].GenerateStoreJsonObj());
 	// 控件
 	data.ctrls = new Array();
-	for (var i = Manager.ctrl.length-1; i >= 0; --i)
+	for (var i=0; i<Manager.ctrl.length; ++i)
 		data.ctrls.push(Manager.ctrl[i].GenerateStoreJsonObj());
 	// 导线
 	data.leads = new Array();
-	for (var i = Manager.lead.length-1; i >= 0; --i)
+	for (var i=0; i<Manager.lead.length; ++i)
 		data.leads.push(Manager.lead[i].GenerateStoreJsonObj());
 
 	// 其他变量
@@ -26,10 +26,10 @@ Manager.SaveFile = function() {
 	data.focusCrunColor = Manager.focusCrunColor;	//焦点结点颜色
 	data.focusCtrlColor = Manager.focusCtrlColor;	//焦点控件颜色
 	data.focusBody = Manager.focusBody.GenerateStoreJsonObj();	//焦点物体
-	
+	console.log(JSON.stringify(data));
 	// 发送请求
-	var callbackFunc = function(response) {};
-	$.post("/saveCircuit", {"data":data}, callbackFunc);
+	//var callbackFunc = function(response) {};
+	//$.post("/saveCircuit", {"data":data}, callbackFunc);
 	return true;
 };
 
@@ -113,7 +113,7 @@ function readFileComplete(xhr, textStatus) {
 Manager.ReadFile = function(newFileName) {
 	ASSERT(newFileName && newFileName.length > 0);
 
-	$.ajax({url:"/"+newFileName, async:false, success:readFileCallbackFunc, complete:readFileComplete});
+	$.ajax({url:"/file-templete/"+newFileName+".json", async:false, success:readFileCallbackFunc, complete:readFileComplete});
 	return true;
 };
 
