@@ -171,13 +171,19 @@
 	<div class="carousel slide" id="carousel1">
 		<div class="carousel-inner">
 			<div class="item active">
-				<a href="#" onclick="CanvasMgr.ReadTempleteFile('t1');layer.close(selectFileLayerIndex);"><img alt="image" class="img-responsive" src="file-templete/t1.jpg" /></a>
+				<a href="#" onclick="CanvasMgr.ReadTempleteFile('t1');layer.close(selectFileLayerIndex);">
+					<img alt="image" class="img-responsive" style="width:496px;height:422px;" src="file-templete/t1.jpg" />
+				</a>
 			</div>
 			<div class="item">
-				<a href="#" onclick="CanvasMgr.ReadTempleteFile('t2');layer.close(selectFileLayerIndex);"><img alt="image" class="img-responsive" src="file-templete/t2.jpg" /></a>
+				<a href="#" onclick="CanvasMgr.ReadTempleteFile('t2');layer.close(selectFileLayerIndex);">
+					<img alt="image" class="img-responsive" style="width:496px;height:422px;" src="file-templete/t2.jpg" />
+				</a>
 			</div>
 			<div class="item ">
-				<a href="#" onclick="CanvasMgr.ReadTempleteFile('t3');layer.close(selectFileLayerIndex);"><img alt="image" class="img-responsive" src="file-templete/t3.jpg" /></a>
+				<a href="#" onclick="CanvasMgr.ReadTempleteFile('t3');layer.close(selectFileLayerIndex);">
+					<img alt="image" class="img-responsive" style="width:496px;height:422px;" src="file-templete/t3.jpg" />
+				</a>
 			</div>
 		</div>
 		<a data-slide="prev" href="carousel.html#carousel1" class="left carousel-control">
@@ -265,7 +271,7 @@ var selectFileLayerIndex=0;
 function onSelectFile() {
 	var layerParam = {
 		type: 1,
-		title: '搜索',
+		title: '选择电路模板',
 		area: ['571px', '500px'],
 		content: $("#selectFileDiv")
 	};
