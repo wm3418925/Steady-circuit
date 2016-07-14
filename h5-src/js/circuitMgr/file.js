@@ -26,10 +26,11 @@ Manager.SaveFile = function() {
 	data.focusCrunColor = Manager.focusCrunColor;	//焦点结点颜色
 	data.focusCtrlColor = Manager.focusCtrlColor;	//焦点控件颜色
 	data.focusBody = Manager.focusBody.GenerateStoreJsonObj();	//焦点物体
-	console.log(JSON.stringify(data));
+	
 	// 发送请求
-	//var callbackFunc = function(response) {};
-	//$.post("/saveCircuit", {"data":data}, callbackFunc);
+	//console.log(JSON.stringify(data));
+	var callbackFunc = function(response) {};
+	$.post("/saveCircuit", {"data":data}, callbackFunc);
 	return true;
 };
 
