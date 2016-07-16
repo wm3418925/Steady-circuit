@@ -53,20 +53,20 @@ function readFileCallbackFunc(data) {
 			throw new Error(10, "电路元件太多");
 		
 		// 新建物体数据
-		CRUN.ResetGlobalInitOrder();
+		CRUN_GlobalResetInitOrder();
 		Manager.crun = new Array(crunCount);
 		for (var i = crunCount-1; i >= 0; --i)
-			Manager.crun[i] = CRUN.CreateNew(i, 0,0);
+			Manager.crun[i] = new CRUN(i, 0,0);
 		
-		CTRL.ResetGlobalInitOrder();
+		CTRL_GlobalResetInitOrder();
 		Manager.ctrl = new Array(ctrlCount);
 		for (var i = ctrlCount-1; i >= 0; --i)
-			Manager.ctrl[i] = CTRL.CreateNew(i, 0,0, data.ctrls[i].style);
+			Manager.ctrl[i] = new CTRL(i, 0,0, data.ctrls[i].style);
 		
-		LEAD.ResetGlobalInitOrder();
+		LEAD_GlobalResetInitOrder();
 		Manager.lead = new Array(leadCount);
 		for (var i = leadCount-1; i >= 0; --i)
-			Manager.lead[i] = LEAD.CreateNew(i, 0, null,null, false);
+			Manager.lead[i] = new LEAD(i, 0, null,null, false);
 		
 		// 读取结点
 		for (var i = crunCount-1; i >= 0; --i)
@@ -94,7 +94,7 @@ function readFileCallbackFunc(data) {
 		if (data.hasOwnProperty("focusCtrlColor"))
 			Manager.focusCtrlColor = data.focusCtrlColor;	//焦点控件颜色
 		//读取焦点物体
-		var tmpFocusBody = Pointer.CreateNew();
+		var tmpFocusBody = new Pointer();
 		if (data.hasOwnProperty("focusBody")) 
 			tmpFocusBody.ReadFromStoreJsonObj(data.focusBody, Manager.lead, Manager.crun, Manager.ctrl);
 		Manager.SetFocusBody(tmpFocusBody);				//设置焦点物体

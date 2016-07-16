@@ -1,11 +1,8 @@
-var globalMSD = null;
-var globalSearchParam = SearchParam.CreateNew();
+var globalSearchParam = new SearchParam();
 
 var MySearchDlg = {
-	CreateNew : function(wndParent) {
-		return {
-			__proto__: MySearchDlg
-		};
+	Init : function(wndParent) {
+		return MySearchDlg;
 	},
 
 	DoModal : function() {
@@ -24,12 +21,12 @@ var MySearchDlg = {
 				globalSearchParam.isWholeWord = $("#searchIsWholeWordInput").prop("checked");
 				globalSearchParam.isMatchCase = $("#searchIsMatchCaseInput").prop("checked");
 				globalSearchParam.isSearchPre = $("input[name='searchIsPreName']:checked").val() == "true";
-				globalMSD.OnSearch();
+				MySearchDlg.OnSearch();
 			};
 			$("#searchOkButton").bind("click", searchOkFunc);
 			
 			var searchCancelFunc = function() {
-				parent.layer.close(globalMSD.m_layerIndex);
+				parent.layer.close(MySearchDlg.m_layerIndex);
 			};
 			$("#searchCancelButton").bind("click", searchCancelFunc);
 		}
@@ -43,8 +40,7 @@ var MySearchDlg = {
 			content: dlgDiv
 		};
 
-		globalMSD = this;
-		this.m_layerIndex = layer.open(layerParam);
+		MySearchDlg.m_layerIndex = layer.open(layerParam);
 	},
 	
 	OnSearch: function() {

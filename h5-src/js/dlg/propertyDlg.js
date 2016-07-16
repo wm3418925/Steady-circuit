@@ -1,11 +1,9 @@
-var globalMPD = null;
-
 var MyPropertyDlg = {
 	GenerateLabelId : function(index) {return "MPDLabelElement" + index;},
 	GenerateTagId : function(index) {return "MPDTagElement" + index;},
 	
 	// 回调函数 changedCallback, dlgEndCallback 都不携带任何参数
-	CreateNew : function(list, readonly, modelId, windowTitle, wndParent, changedCallback, dlgEndCallback) {
+	Init : function(list, readonly, modelId, windowTitle, wndParent, changedCallback, dlgEndCallback) {
 		var inter = {x: 20, y: 15};
 		var firstNotePos = {x: 20, y: 20};
 		var noteTextSize = {cx: 180, cy: 20};
@@ -15,30 +13,29 @@ var MyPropertyDlg = {
 		var cancelButtonPos = {x: okButtonPos.x + 150 + inter.x, y: okButtonPos.y};
 		var wndSize = {cx: firstCtrlPos.x + tagSize.cx + inter.x + 10, cy: cancelButtonPos.y + 70};
 		
-		return {
-			m_windowTitle: windowTitle,	//窗口名称
-			m_modelId: modelId,			//示例
-			m_readonly: readonly,		//是否只读
-			m_list: list,				//数据列表
+		
+		MyPropertyDlg.m_windowTitle = windowTitle;	//窗口名称
+		MyPropertyDlg.m_modelId = modelId;			//示例
+		MyPropertyDlg.m_readonly = readonly;		//是否只读
+		MyPropertyDlg.m_list = list;				//数据列表
 
-			m_inter: inter,	// x:控件 与 数据提示text 的间距; y:控件之间 或者 数据提示text 之间 的间距
+		MyPropertyDlg.m_inter = inter;	// x=控件 与 数据提示text 的间距; y=控件之间 或者 数据提示text 之间 的间距
 
-			m_firstNotePos: firstNotePos,	//第一个数据提示text起始坐标
-			m_noteTextSize: noteTextSize,	//数据提示text大小
+		MyPropertyDlg.m_firstNotePos = firstNotePos;	//第一个数据提示text起始坐标
+		MyPropertyDlg.m_noteTextSize = noteTextSize;	//数据提示text大小
 
-			m_firstCtrlPos: firstCtrlPos,	//第一个控件起始坐标
-			m_tagSize: tagSize,				//控件大小
+		MyPropertyDlg.m_firstCtrlPos = firstCtrlPos;	//第一个控件起始坐标
+		MyPropertyDlg.m_tagSize = tagSize;				//控件大小
 			
-			m_okButtonPos: okButtonPos,	//确定按钮的坐标
-			m_cancelButtonPos: cancelButtonPos,	//取消按钮的坐标
+		MyPropertyDlg.m_okButtonPos = okButtonPos;	//确定按钮的坐标
+		MyPropertyDlg.m_cancelButtonPos = cancelButtonPos;	//取消按钮的坐标
 			
-			m_wndSize: wndSize,	//窗口大小
+		MyPropertyDlg.m_wndSize = wndSize;	//窗口大小
 			
-			m_changedCallback: changedCallback,	// 点击确定修改值的回调
-			m_dlgEndCallback: dlgEndCallback,	// 窗口关闭回调
-			
-			__proto__: MyPropertyDlg
-		};
+		MyPropertyDlg.m_changedCallback = changedCallback;	// 点击确定修改值的回调
+		MyPropertyDlg.m_dlgEndCallback = dlgEndCallback;	// 窗口关闭回调
+		
+		return MyPropertyDlg;
 	},
 
 	DoModal : function() {
@@ -46,48 +43,48 @@ var MyPropertyDlg = {
 		var thead = $("<thead></thead>").appendTo(table);
 		var tbody = $("<tbody></tbody>").appendTo(table);
 		
-		if (this.m_modelId != null) {
+		if (MyPropertyDlg.m_modelId != null) {
 			var tr = $("<tr style='border: 0px;'></tr>");
 			tr.appendTo(table);
 			
-			tr.append($("<td></td>").append($("<img style='margin:10px;' src='" + document.getElementById(this.m_modelId).src + "'></img>")));
+			tr.append($("<td></td>").append($("<img style='margin:10px;' src='" + document.getElementById(MyPropertyDlg.m_modelId).src + "'></img>")));
 			tr.append($("<td></td>"));
 		}
 		
 		var tdStrArray = ["<td style='border:1px solid #aaa;'></td>", "<td style='background-color:#F3F3F3;border:1px solid #aaa;'></td>"];
 
-		for (var i=0; i<this.m_list.GetListSize(); ++i) {
+		for (var i=0; i<MyPropertyDlg.m_list.GetListSize(); ++i) {
 			var tr = $("<tr></tr>");
 			table.append(tr);
 			
 			var labelTd = $(tdStrArray[i&1])
 			tr.append(labelTd);
-			labelTd.append(this.CreateLabel(i, this.m_list.noteTextList[i]));
+			labelTd.append(MyPropertyDlg.CreateLabel(i, MyPropertyDlg.m_list.noteTextList[i]));
 			
 			var valueTd = $(tdStrArray[i&1]);
 			tr.append(valueTd);
 
 			var valueElement = null;
-			switch (this.m_list.dataTypeList[i]) {
+			switch (MyPropertyDlg.m_list.dataTypeList[i]) {
 			case DATA_TYPE_float:
 			case DATA_TYPE_uint:
 			case DATA_TYPE_string:
-				valueElement = this.CreateInput(i, this.m_list.GetRowData(i), this.m_list.dataTypeList[i]);
+				valueElement = MyPropertyDlg.CreateInput(i, MyPropertyDlg.m_list.GetRowData(i), MyPropertyDlg.m_list.dataTypeList[i]);
 				break;
 
 			case DATA_TYPE_bool:
-				valueElement = this.CreateCheck(i, this.m_list.GetRowData(i));
+				valueElement = MyPropertyDlg.CreateCheck(i, MyPropertyDlg.m_list.GetRowData(i));
 				break;
 
 			case DATA_TYPE_enum:
-				var optionArray = this.m_list.memberNameList[i].noteList;
-				valueElement = this.CreateSelect(i, optionArray, this.m_list.GetRowData(i));
+				var optionArray = MyPropertyDlg.m_list.memberNameList[i].noteList;
+				valueElement = MyPropertyDlg.CreateSelect(i, optionArray, MyPropertyDlg.m_list.GetRowData(i));
 				break;
 				
 			case DATA_TYPE_color:
 				var tmpDiv = $("<div></div>");
 				valueTd.append(tmpDiv);
-				this.CreateColorPicker(i, this.m_list.GetRowData(i), tmpDiv);
+				MyPropertyDlg.CreateColorPicker(i, MyPropertyDlg.m_list.GetRowData(i), tmpDiv);
 				break;
 			}
 			if (valueElement)
@@ -107,40 +104,40 @@ var MyPropertyDlg = {
 			area: 'auto',
 			maxWidth: 500,
 			
-			title: this.m_windowTitle,
+			title: MyPropertyDlg.m_windowTitle,
 			content: table,
 			
 			moveEnd: function() {
 				// 移动完毕后, 所有子标签失去焦点
-				for (var i=0; i<globalMPD.m_list.GetListSize(); ++i) {
+				for (var i=0; i<MyPropertyDlg.m_list.GetListSize(); ++i) {
 					$("#"+MyPropertyDlg.GenerateTagId(i)).blur();
 				}
 			},
 			end: function(){
-				if (globalMPD.m_dlgEndCallback)
-					globalMPD.m_dlgEndCallback();
+				if (MyPropertyDlg.m_dlgEndCallback)
+					MyPropertyDlg.m_dlgEndCallback();
 			}
 		};
-		if (!this.m_readonly) {
+		if (!MyPropertyDlg.m_readonly) {
 			layerParam.btn = ['保存', '取消'];
 			layerParam.yes = MyPropertyDlg.OnOK;
 			layerParam.no = null;
 		}
-		globalMPD = this;
-		this.m_layerIndex = layer.open(layerParam);
+		
+		MyPropertyDlg.m_layerIndex = layer.open(layerParam);
 	},
 	
 	//创建label控件
 	CreateLabel : function(id, text) {
 		var element = $("<p style='margin:0px;' id='" + MyPropertyDlg.GenerateLabelId(id) + "'>" + text + "</p>");
-		element.css({"width": this.m_noteTextSize.cx+"px", "height": this.m_noteTextSize.cy+"px"});
+		element.css({"width": MyPropertyDlg.m_noteTextSize.cx+"px", "height": MyPropertyDlg.m_noteTextSize.cy+"px"});
 		return element;
 	},
 	//创建checkbox控件
 	CreateCheck : function(id, checked) {
 		var element = $("<input type='checkbox' id='" + MyPropertyDlg.GenerateTagId(id) + "' />");
-		element.css({"width": "25px", "height": (this.m_tagSize.cy-5)+"px", "margin":"0px", "verticalAlign":"middle"});
-		if (this.m_readonly)
+		element.css({"width": "25px", "height": (MyPropertyDlg.m_tagSize.cy-5)+"px", "margin":"0px", "verticalAlign":"middle"});
+		if (MyPropertyDlg.m_readonly)
 			element.attr("disabled", "disabled");
 		
 		if (checked)
@@ -151,8 +148,8 @@ var MyPropertyDlg = {
 	//创建select控件
 	CreateSelect : function(id, optionNoteArray, selIndex) {
 		var element = $("<select id='" + MyPropertyDlg.GenerateTagId(id) + "'></select>");
-		element.css({"width": this.m_tagSize.cx+"px", "height": this.m_tagSize.cy+"px"});
-		if (this.m_readonly)
+		element.css({"width": MyPropertyDlg.m_tagSize.cx+"px", "height": MyPropertyDlg.m_tagSize.cy+"px"});
+		if (MyPropertyDlg.m_readonly)
 			element.css({"disabled": "disabled"});
 		
 		for (var i=0; i<optionNoteArray.length; ++i) {
@@ -166,8 +163,8 @@ var MyPropertyDlg = {
 	// 创建input控件
 	CreateInput : function(id, initValue, valueType) {
 		var element = $("<input id='" + MyPropertyDlg.GenerateTagId(id) + "' value='" + initValue + "' />");
-		element.css({"width": this.m_tagSize.cx+"px", "height": this.m_tagSize.cy+"px", "border": "0px", "backgroundColor":"transparent"});
-		if (this.m_readonly)
+		element.css({"width": MyPropertyDlg.m_tagSize.cx+"px", "height": MyPropertyDlg.m_tagSize.cy+"px", "border": "0px", "backgroundColor":"transparent"});
+		if (MyPropertyDlg.m_readonly)
 			element.attr("readonly", "true");
 		
 		switch (valueType) {
@@ -213,18 +210,18 @@ var MyPropertyDlg = {
 
 	//按确定按钮
 	OnOK : function(index, layero) {
-		if (globalMPD.m_readonly) {	//只读状态不返回有效信息
-			parent.layer.close(globalMPD.m_layerIndex);
+		if (MyPropertyDlg.m_readonly) {	//只读状态不返回有效信息
+			parent.layer.close(MyPropertyDlg.m_layerIndex);
 			return;
 		}
 
 		var errorType = ERROR_NO;
 		var i;
-		var listSize = globalMPD.m_list.GetListSize();
+		var listSize = MyPropertyDlg.m_list.GetListSize();
 
 		//测试数据
 		for (i=0; i<listSize; ++i) {
-			errorType = globalMPD.m_list.CheckAMember(i, document.getElementById(MyPropertyDlg.GenerateTagId(i)));
+			errorType = MyPropertyDlg.m_list.CheckAMember(i, document.getElementById(MyPropertyDlg.GenerateTagId(i)));
 			if (errorType != ERROR_NO) break;
 		}
 
@@ -261,7 +258,7 @@ var MyPropertyDlg = {
 				showText = errorText + "<br>请重新输入!";
 			} else {
 				showText = "第<span style='color:#30E030'>"+(i+1)+"</span>个数据项 ["
-						+ "<span style='color:#30E030'>"+globalMPD.m_list.noteTextList[i]+"</span>] 错误<br>"
+						+ "<span style='color:#30E030'>"+MyPropertyDlg.m_list.noteTextList[i]+"</span>] 错误<br>"
 						+ "<span style='color:#E03030'>" + errorText + "</span>";
 			}
 			swal({title: "请重新输入!", text: showText, type: "warning", html: true},
@@ -274,12 +271,12 @@ var MyPropertyDlg = {
 
 		//测试成功写入数据
 		for (i=0; i<listSize; ++i)
-			globalMPD.m_list.SaveAMember(i, document.getElementById(MyPropertyDlg.GenerateTagId(i)));
+			MyPropertyDlg.m_list.SaveAMember(i, document.getElementById(MyPropertyDlg.GenerateTagId(i)));
 
 		// 关闭layer
-		parent.layer.close(globalMPD.m_layerIndex);
+		parent.layer.close(MyPropertyDlg.m_layerIndex);
 		
 		// 写入成功回调
-		if (globalMPD.m_changedCallback != null) globalMPD.m_changedCallback();
+		if (MyPropertyDlg.m_changedCallback != null) MyPropertyDlg.m_changedCallback();
 	}
 };

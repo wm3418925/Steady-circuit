@@ -1,13 +1,9 @@
 
-var SearchParam = {
-	CreateNew : function () {
-		return {
-			"searchBy" : SEARCH_BY_NAME,
-			"range" : BODY_ALL,
-			"isWholeWord" : false,
-			"isMatchCase" : false,
-			"keyWord" : "",
-			"isSearchPre" : false
-		};
-	}
-};
+function SearchParam() {
+	this.searchBy = SEARCH_BY_NAME;
+	this.range = BODY_ALL;
+	this.isWholeWord = false;
+	this.isMatchCase = false;
+	this.keyWord = "";
+	this.isSearchPre = false;
+}

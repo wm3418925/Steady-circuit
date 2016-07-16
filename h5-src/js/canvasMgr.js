@@ -154,7 +154,7 @@ CanvasMgr.OnLButtonDblClk = function(e) {
 	if (!e) e = window.event;
 	
 	var point = GetClientPosOfEvent(e, CanvasMgr.canvas);
-	var body = FOCUS_OR_POS.CreateNew(false, point);
+	var body = new FOCUS_OR_POS(false, point);
 
 	if (CanvasMgr.m_inputLock) {	//显示电流或电势差
 		if (Manager.ShowBodyElec(body))
@@ -357,7 +357,7 @@ CanvasMgr.BeforePopupMenu = function(e, ui) {
 			menuArray.push({title: "查看电流 <kbd>Ctrl+L</kbd>", uiIcon: "ui-icon-arrowthick-1-e", action:CanvasMgr.OnPosBodyShowElec});
 		} else if (BODY_CRUN == type) {			//右击结点
 			menuArray.push({title: "查看属性 <kbd>Ctrl+P</kbd>", uiIcon: "ui-icon-info", action:CanvasMgr.OnPosBodyProperty});
-		} else if (Pointer.IsCtrl(type)) {		//右击控件
+		} else if (IsBodyTypeCtrl(type)) {		//右击控件
 			menuArray.push({title: "查看电流 <kbd>Ctrl+L</kbd>", uiIcon: "ui-icon-arrowthick-1-e", action:CanvasMgr.OnPosBodyShowElec});
 			menuArray.push({title: "查看属性 <kbd>Ctrl+P</kbd>", uiIcon: "ui-icon-info", action:CanvasMgr.OnPosBodyProperty});
 		}
@@ -385,7 +385,7 @@ CanvasMgr.BeforePopupMenu = function(e, ui) {
 			menuArray.push({title: "删除 <kbd>Delete</kbd>", uiIcon: "ui-icon-trash", action:CanvasMgr.OnPosBodyDelete});
 		}
 
-		if (Pointer.IsCtrl(type)) {
+		if (IsBodyTypeCtrl(type)) {
 			menuArray.push({title: "------------", disabled: true});
 			menuArray.push({title: "顺时针旋转90° <kbd>Ctrl+1</kbd>", uiIcon: "ui-icon-arrowrefresh-1-s", action:CanvasMgr.OnPosBodyRotateCtrl, cmd:"rotate90"});
 			menuArray.push({title: "旋转180° <kbd>Ctrl+2</kbd>", uiIcon: "ui-icon-refresh", action:CanvasMgr.OnPosBodyRotateCtrl, cmd:"rotate180"});
@@ -394,7 +394,7 @@ CanvasMgr.BeforePopupMenu = function(e, ui) {
 			menuArray.push({title: "电学元件类型", uiIcon: "ui-icon-flag", action:CanvasMgr.OnPosBodyChangeCtrlStyle});
 		}
 
-		if (BODY_LEAD == type || Pointer.IsCtrl(type))	//导线或控件上
+		if (BODY_LEAD == type || IsBodyTypeCtrl(type))	//导线或控件上
 			menuArray.push({title: "查看电流 <kbd>Ctrl+L</kbd>", uiIcon: "ui-icon-arrowthick-1-e", action:CanvasMgr.OnPosBodyShowElec});
 		
 		menuArray.push({title: "------------", disabled: true});
@@ -413,7 +413,7 @@ CanvasMgr.BeforePopupMenu = function(e, ui) {
 CanvasMgr.OnFocusBodyCut = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(true);
+	var body = new FOCUS_OR_POS(true);
 
 	Manager.CutBody(body);
 };
@@ -422,7 +422,7 @@ CanvasMgr.OnFocusBodyCut = function() {
 CanvasMgr.OnFocusBodyCopy = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(true);
+	var body = new FOCUS_OR_POS(true);
 
 	Manager.CopyBody(body);
 };
@@ -431,7 +431,7 @@ CanvasMgr.OnFocusBodyCopy = function() {
 CanvasMgr.OnFocusBodyDelete = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(true);
+	var body = new FOCUS_OR_POS(true);
 
 	Manager.DeleteFocusOrPosBody(body);
 };
@@ -471,7 +471,7 @@ CanvasMgr.OnSetAddState = function(e, ui) {
 
 // 焦点属性
 CanvasMgr.OnFocusBodyProperty = function() {
-	var body = FOCUS_OR_POS.CreateNew(true);
+	var body = new FOCUS_OR_POS(true);
 
 	Manager.Property(body, CanvasMgr.m_inputLock);
 };
@@ -480,7 +480,7 @@ CanvasMgr.OnFocusBodyProperty = function() {
 CanvasMgr.OnFocusBodyChangeCtrlStyle = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(true);
+	var body = new FOCUS_OR_POS(true);
 
 	Manager.ChangeCtrlStyle(body);
 };
@@ -489,7 +489,7 @@ CanvasMgr.OnFocusBodyChangeCtrlStyle = function() {
 CanvasMgr.OnFocusBodyRotateCtrl = function(nID) {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(true);
+	var body = new FOCUS_OR_POS(true);
 
 	Manager.RotateCtrl(body, nID);
 	Manager.PaintAll();
@@ -497,7 +497,7 @@ CanvasMgr.OnFocusBodyRotateCtrl = function(nID) {
 
 // 显示流过焦点的电流
 CanvasMgr.OnFocusBodyShowElec = function() {
-	var body = FOCUS_OR_POS.CreateNew(true);
+	var body = new FOCUS_OR_POS(true);
 
 	Manager.ShowBodyElec(body);
 };
@@ -506,7 +506,7 @@ CanvasMgr.OnFocusBodyShowElec = function() {
 CanvasMgr.OnSearch = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var dlg = MySearchDlg.CreateNew(CanvasMgr.canvas);
+	var dlg = MySearchDlg.Init(CanvasMgr.canvas);
 	dlg.DoModal();
 };
 
@@ -562,7 +562,7 @@ CanvasMgr.OnShowPressure = function() {
 
 // 显示流过右击物体的电流
 CanvasMgr.OnPosBodyShowElec = function() {
-	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
+	var body = new FOCUS_OR_POS(false, CanvasMgr.m_mousePos);
 
 	Manager.ShowBodyElec(body);
 };
@@ -593,7 +593,7 @@ CanvasMgr.OnUnlock = function() {
 CanvasMgr.OnPosBodyCopy = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
+	var body = new FOCUS_OR_POS(false, CanvasMgr.m_mousePos);
 
 	Manager.CopyBody(body);
 };
@@ -602,7 +602,7 @@ CanvasMgr.OnPosBodyCopy = function() {
 CanvasMgr.OnPosBodyCut = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
+	var body = new FOCUS_OR_POS(false, CanvasMgr.m_mousePos);
 
 	Manager.CutBody(body);
 };
@@ -611,7 +611,7 @@ CanvasMgr.OnPosBodyCut = function() {
 CanvasMgr.OnPosBodyDelete = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
+	var body = new FOCUS_OR_POS(false, CanvasMgr.m_mousePos);
 
 	Manager.DeleteFocusOrPosBody(body);
 };
@@ -626,7 +626,7 @@ CanvasMgr.OnPaste = function() {
 CanvasMgr.OnDeleteLead = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
+	var body = new FOCUS_OR_POS(false, CanvasMgr.m_mousePos);
 
 	Manager.DeleteFocusOrPosBody(body);
 };
@@ -650,7 +650,7 @@ CanvasMgr.OnPosBodyRotateCtrl = function(e, ui) {
 		return false;
 	}
 
-	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
+	var body = new FOCUS_OR_POS(false, CanvasMgr.m_mousePos);
 
 	Manager.RotateCtrl(body, angle90);
 	Manager.PaintAll();
@@ -658,7 +658,7 @@ CanvasMgr.OnPosBodyRotateCtrl = function(e, ui) {
 
 // 右击物体属性
 CanvasMgr.OnPosBodyProperty = function() {
-	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
+	var body = new FOCUS_OR_POS(false, CanvasMgr.m_mousePos);
 
 	Manager.Property(body, CanvasMgr.m_inputLock);
 };
@@ -667,7 +667,7 @@ CanvasMgr.OnPosBodyProperty = function() {
 CanvasMgr.OnPosBodyChangeCtrlStyle = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
+	var body = new FOCUS_OR_POS(false, CanvasMgr.m_mousePos);
 
 	Manager.ChangeCtrlStyle(body);
 };

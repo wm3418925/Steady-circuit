@@ -150,14 +150,14 @@ Manager.ShowPressure = function() {
 	var name1 = Manager.GetBodyDefaultName(Manager.pressStartBody);
 	var name2 = Manager.GetBodyDefaultName(Manager.pressEndBody);
 
-	var list = LISTDATA.CreateNew();
+	var list = new LISTDATA();
 
 	if (IsFloatZero(Manager.startEndPressure)) Manager.startEndPressure = 0;
 	list.SetAMember(DATA_TYPE_float, note, Manager.startEndPressure);
 	list.SetAMember(DATA_TYPE_string, "起始位置", name1);
 	list.SetAMember(DATA_TYPE_string, "结束位置", name2);
 
-	var dlg = MyPropertyDlg.CreateNew(list, true, null, note, Manager.canvas);
+	var dlg = MyPropertyDlg.Init(list, true, null, note, Manager.canvas);
 	dlg.DoModal();
 
 	return true;

@@ -63,7 +63,7 @@ Manager.FocusBodyPaint = function(newFocus) {
 //用户按Tab键切换焦点处理
 Manager.FocusBodyChangeUseTab = function() {
 	var bodyCount = Manager.crun.length + Manager.ctrl.length;
-	var newFocus = Pointer.CreateNew();
+	var newFocus = new Pointer();
 	var num;
 
 	if (bodyCount == 0) return;	//没有物体

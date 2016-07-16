@@ -123,8 +123,10 @@ ComputeMgr.CollectCircuitInfo = function()
 	ComputeMgr.groupCount = 0;	//组数,同一组的在一个连通图中,分组建立方程
 	ComputeMgr.circuitCount = 0;	//线路数
 	group = new Array(ComputeMgr.crun.length);		//组数不会超过ComputeMgr.crunCount
-	ComputeMgr.crun2 = GenrateArrayWithElementInitFunc(CRUN2.CreateNew, ComputeMgr.crun.length);	//用于计算的结点
-	ComputeMgr.circu = GenrateArrayWithElementInitFunc(CIRCU.CreateNew, ComputeMgr.crun.length*2);	//线路数不会超过ComputeMgr.crunCount*2
+	ComputeMgr.crun2 = new Array();
+	for (i=ComputeMgr.crun.length-1;i>=0;--i) ComputeMgr.crun2.push(new CRUN2());	//用于计算的结点
+	ComputeMgr.circu = new Array();
+	for (i=ComputeMgr.crun.length*2-1;i>=0;--i) ComputeMgr.circu.push(new CIRCU());	//线路数不会超过 ComputeMgr.crun.length*2
 	for (i=ComputeMgr.crun.length-1; i>=0; --i) group[i] = i;
 
 	//2，检索电路,以结点为头和尾-----------------------------------
@@ -298,7 +300,7 @@ ComputeMgr.CollectCircuitInfo = function()
 			{
 				state = true;	//改变了
 				interFlag[next] = true;
-				ROAD.Clone(roads[next], roads[i]);
+				ROAD_Copy(roads[next], roads[i]);
 				roads[next].InsertPointAtTail(i);
 			}
 
@@ -310,7 +312,7 @@ ComputeMgr.CollectCircuitInfo = function()
 				{
 					state = true;	//改变了
 					interFlag[next] = true;
-					ROAD.Clone(roads[next], roads[i]);
+					ROAD_Copy(roads[next], roads[i]);
 					roads[next].InsertPointAtTail(i);
 				}
 			}
@@ -344,7 +346,7 @@ ComputeMgr.CreateEquation = function()
 	ComputeMgr.maps = maps = new Array(ComputeMgr.groupCount);
 	for (i=ComputeMgr.groupCount-1; i>=0; --i)
 	{
-		maps[i] = CRUNMAP.CreateNew(mapsSizeArray[i]);
+		maps[i] = new CRUNMAP(mapsSizeArray[i]);
 		maps[i].size = 0;
 	}
 	for (i=ComputeMgr.crun.length-1; i>=0; --i) if (ComputeMgr.crun2[i].group >= 0)
@@ -408,7 +410,7 @@ ComputeMgr.CreateEquation = function()
 		size = nowMap.size;
 
 		outPutBuf = new Array(nowMap.circuitCount+1);	//初始化输出到方程的数组
-		ComputeMgr.equation[group] = Equation.CreateNew(size, nowMap.circuitCount);	//初始化方程类
+		ComputeMgr.equation[group] = new Equation(size, nowMap.circuitCount);	//初始化方程类
 
 		for (j=size-2; j>=0; --j) for (k=size-1; k>j; --k)
 		{
@@ -522,7 +524,8 @@ ComputeMgr.CreateEquation = function()
 			i = ComputeMgr.CONVERT(j, k, size);
 			if (nowMap.direct[i] <= 0) continue;
 			
-			roads = GenrateArrayWithElementInitFunc(ROAD.CreateNew, size);
+			roads = new Array();
+			for (var tmpi=size-1; tmpi>=0;--tmpi)roads.push(new ROAD());
 			ZeroArray(outPutBuf);	//缓存清零
 
 			//获得路径,建立方程

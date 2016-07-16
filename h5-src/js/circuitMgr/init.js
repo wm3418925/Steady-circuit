@@ -148,14 +148,14 @@ var Manager = {
 
 
 		//鼠标点击信息记录-----------------------------------------------
-		Manager.motiBody = GenrateArrayWithElementInitFunc(Pointer.CreateNew, 2);
+		Manager.motiBody = [new Pointer(), new Pointer()];
 		Manager.motiCount = 0;
 		Manager.addState = BODY_NO;
 		Manager.lButtonDownPos = {x:-100, y:-100};
-		Manager.lastMoveOnBody = Pointer.CreateNew();
+		Manager.lastMoveOnBody = new Pointer();
 		Manager.lButtonDownState = false;
 		Manager.isUpRecvAfterDown = true;
-		Manager.focusBody = Pointer.CreateNew();
+		Manager.focusBody = new Pointer();
 		Manager.FocusBodyClear(null);
 
 
@@ -169,12 +169,12 @@ var Manager = {
 
 		
 		// 剪切板
-		Manager.clipBody = Pointer.CreateNew();
+		Manager.clipBody = new Pointer();
 		
 		
 		//显示电压-------------------------------------------------------
-		Manager.pressStartBody = Pointer.CreateNew();
-		Manager.pressEndBody = Pointer.CreateNew();
+		Manager.pressStartBody = new Pointer();
+		Manager.pressEndBody = new Pointer();
 		Manager.startEndPressure = 0;
 	}
 
