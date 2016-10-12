@@ -1,0 +1,115 @@
+#nav {
+    border:3px solid #3e4547;
+
+    box-shadow:2px 2px 8px #000000;
+    border-radius:3px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+	
+	margin-top: 100px;
+}
+#nav, #nav ul {
+    list-style:none;
+    padding:0;
+    width:200px;
+}
+#nav ul {
+    position:relative;
+    z-index:-1;
+}
+#nav li {
+    position:relative;
+    z-index:100;
+}
+#nav ul li {
+    margin-top:-23px;
+
+    -moz-transition:  0.1s linear 0.1s;
+    -ms-transition: 0.1s linear 0.1s;
+    -o-transition: 0.1s linear 0.1s;
+    -webkit-transition: 0.1s linear 0.1s;
+    transition: 0.1s linear 0.1s;
+}
+#nav li a {
+    background-color:#d4d5d8;
+    color:#000;
+    display:block;
+    font-size:12px;
+    font-weight:bold;
+    line-height:28px;
+    outline:0;
+    padding-left:15px;
+    text-decoration:none;
+}
+#nav li a.sub {
+    background:#d4d5d8 url("menu-images/down.gif") no-repeat;
+}
+#nav li a + img {
+    cursor:pointer;
+    display:none;
+    height:28px;
+    left:0;
+    position:absolute;
+    top:0;
+    width:200px;
+}
+#nav li a img {
+    border-width:0px;
+    height:24px;
+    line-height:28px;
+    margin-right:8px;
+    vertical-align:middle;
+    width:24px;
+}
+#nav li a:hover {
+    background-color:#bcbdc1;
+}
+#nav ul li a {
+    background-color:#eee;
+    border-bottom:1px solid #ccc;
+    color:#000;
+    font-size:11px;
+    line-height:22px;
+}
+#nav ul li a:hover {
+    background-color:#ddd;
+    color:#444;
+}
+#nav ul li a img {
+    background: url("../images/bulb.png") no-repeat;
+    border-width:0px;
+    height:16px;
+    line-height:22px;
+    margin-right:5px;
+    vertical-align:middle;
+    width:16px;
+}
+#nav ul li:nth-child(odd) a img {
+    background:url("../images/bulb2.png") no-repeat;
+}
+#nav a.sub:focus {
+    background:#bcbdc1;
+    outline:0;
+}
+#nav a:focus ~ ul li {
+    margin-top:0;
+
+    -moz-transition:  0.1s linear;
+    -ms-transition: 0.1s linear;
+    -o-transition: 0.1s linears;
+    -webkit-transition: 0.1s linears;
+    transition: 0.1s linear;
+}
+#nav a:focus + img, #nav a:active + img {
+    display:block;
+}
+#nav a.sub:active {
+    background:#bcbdc1;
+    outline:0;
+}
+#nav a:active ~ ul li {
+    margin-top:0;
+}
+#nav ul:hover li {
+    margin-top:0;
+}

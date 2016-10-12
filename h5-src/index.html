@@ -1,0 +1,287 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>稳恒电路</title>
+	<link rel="shortcut icon" href="res/idr_main.ico">
+	
+	<link href="o-css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+    <link href="o-css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="o-css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="o-css/animate.min.css" rel="stylesheet">
+    <link href="o-css/style.min.css?v=4.0.0" rel="stylesheet">
+	<link href="o-css/jquery-ui.css" rel="stylesheet">
+	<link href="o-css/menu.css" rel="stylesheet">
+	<style>
+	.cp-app{z-index:9999}
+	.myCanvasMenuClass{background-color:white;}
+	.ui-menu kbd {padding-left: 1em;float: right; color: #333;background-color: #fff; box-shadow: inset 0 0 0 rgba(0,0,0,.25);padding: 0px 8px 0px 10px;}
+	</style>
+</head>
+
+<body id="body" onload="pageOnload()" style="margin:0px;">
+
+<div id="imgDiv" style="display:none;">
+	<img id="crunImg" src="res/crun.bmp" />
+	
+	<img id="N-1-0" src="res/ctrl/N-1-0.bmp" />
+	<img id="N-1-1" src="res/ctrl/N-1-1.bmp" />
+	<img id="N-1-2" src="res/ctrl/N-1-2.bmp" />
+	<img id="N-1-3" src="res/ctrl/N-1-3.bmp" />
+	<img id="N-2-0" src="res/ctrl/N-2-0.bmp" />
+	<img id="N-2-1" src="res/ctrl/N-2-1.bmp" />
+	<img id="N-2-2" src="res/ctrl/N-2-2.bmp" />
+	<img id="N-2-3" src="res/ctrl/N-2-3.bmp" />
+	<img id="N-3-0" src="res/ctrl/N-3-0.bmp" />
+	<img id="N-3-1" src="res/ctrl/N-3-1.bmp" />
+	<img id="N-3-2" src="res/ctrl/N-3-2.bmp" />
+	<img id="N-3-3" src="res/ctrl/N-3-3.bmp" />
+	<img id="N-4-0" src="res/ctrl/N-4-0.bmp" />
+	<img id="N-4-1" src="res/ctrl/N-4-1.bmp" />
+	<img id="N-4-2" src="res/ctrl/N-4-2.bmp" />
+	<img id="N-4-3" src="res/ctrl/N-4-3.bmp" />
+	<img id="N-5-0" src="res/ctrl/N-5-0.bmp" />
+	<img id="N-5-1" src="res/ctrl/N-5-1.bmp" />
+	<img id="N-5-2" src="res/ctrl/N-5-2.bmp" />
+	<img id="N-5-3" src="res/ctrl/N-5-3.bmp" />
+	<img id="S-3-0" src="res/ctrl/S-3-0.bmp" />
+	<img id="S-3-1" src="res/ctrl/S-3-1.bmp" />
+	<img id="S-3-2" src="res/ctrl/S-3-2.bmp" />
+	<img id="S-3-3" src="res/ctrl/S-3-3.bmp" />
+	<img id="S-5-0" src="res/ctrl/S-5-0.bmp" />
+	<img id="S-5-1" src="res/ctrl/S-5-1.bmp" />
+	<img id="S-5-2" src="res/ctrl/S-5-2.bmp" />
+	<img id="S-5-3" src="res/ctrl/S-5-3.bmp" />
+	
+	<img id="img-move-dir-0" src="res/move/up.png" style="width:12px;height:24px;" />
+	<img id="img-move-dir-1" src="res/move/down.png" style="width:12px;height:24px;" />
+	<img id="img-move-dir-2" src="res/move/left.png" style="width:24px;height:12px;" />
+	<img id="img-move-dir-3" src="res/move/right.png" style="width:24px;height:12px;" />
+</div>
+
+
+<script src="o-js/jquery.min.js" type="text/javascript" charset="UTF-8"></script>
+<script src="o-js/jquery-ui.min.js" type="text/javascript" charset="UTF-8"></script>
+<script src="o-js/jquery-ui.custom.min.js" type="text/javascript" charset="UTF-8"></script>
+<script src="o-js/jquery.ui-contextmenu.js" type="text/javascript" charset="UTF-8"></script>
+
+<script src="o-js/bootstrap.min.js?v=3.3.5" type="text/javascript" charset="UTF-8"></script>
+<script src="o-js/plugins/layer/layer.js" type="text/javascript" charset="UTF-8"></script>
+<script src="o-js/content.min.js?v=1.0.0" type="text/javascript" charset="UTF-8"></script>
+<script src="o-js/plugins/sweetalert/sweetalert.min.js" type="text/javascript" charset="UTF-8"></script>
+
+<script src="o-js/plugins/colorpicker/colors.js" type="text/javascript" charset="UTF-8"></script>
+<script src="o-js/plugins/colorpicker/colorPicker.data.js" type="text/javascript" charset="UTF-8"></script>
+<script src="o-js/plugins/colorpicker/colorPicker.js" type="text/javascript" charset="UTF-8"></script>
+<script src="o-js/plugins/colorpicker/jqColor.js" type="text/javascript" charset="UTF-8"></script>
+
+
+<script src="js/comm/comm.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/comm/paintCommon.js" type="text/javascript" charset="UTF-8"></script>
+
+<script src="js/definition.js" type="text/javascript" charset="UTF-8"></script>
+
+<script src="js/ele/focusOrPos.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/ele/crun.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/ele/ctrl.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/ele/lead.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/ele/pointer.js" type="text/javascript" charset="UTF-8"></script>
+
+<script src="js/circuitMgr/init.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/circuitMgr/mess.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/circuitMgr/file.js" type="text/javascript" charset="UTF-8"></script>
+
+<script src="js/circuitMgr/paintBase.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/circuitMgr/paintEffect.js" type="text/javascript" charset="UTF-8"></script>
+
+<script src="js/circuitMgr/mouse.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/circuitMgr/focus.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/circuitMgr/editBase.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/circuitMgr/editMess.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/circuitMgr/clipboard.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/circuitMgr/setting.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/circuitMgr/search.js" type="text/javascript" charset="UTF-8"></script>
+
+<script src="js/circuitMgr/showPress.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/circuitMgr/help.js" type="text/javascript" charset="UTF-8"></script>
+
+<script src="js/compute/computeObjects.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/compute/computeMgr.js" type="text/javascript" charset="UTF-8"></script>
+
+<script src="js/dlg/dataList.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/dlg/propertyDlg.js" type="text/javascript" charset="UTF-8"></script>
+
+<script src="js/dlg/searchParam.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/dlg/kmp.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/dlg/searchDlg.js" type="text/javascript" charset="UTF-8"></script>
+
+<script src="js/canvasMgr.js" type="text/javascript" charset="UTF-8"></script>
+
+
+<table>
+<thead></thead>
+<tbody><tr><td>
+
+	<canvas 
+		tabindex="0"
+		class="canvas-menu"
+		id="myCanvas" 
+		width="650" 
+		height="570" 
+		style="margin:0px; border:1px solid #c3c3c3;">
+	您的浏览器不能显示, 请升级
+	</canvas>
+
+</td><td style="vertical-align:top;">
+
+	<ul id="nav">
+		<li id="menu_group_add"><a href="#" class="sub" tabindex="1"><span class="ui-icon ui-icon-plus"></span>添加</a><img src="o-css/menu-images/up.gif" alt="" />
+			<ul>
+				<li id="menu_add_crun"><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-crun'});return false;"><span class="ui-icon ui-icon-add-crun"></span>结点</a></li>
+				<li id="menu_add_source"><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-source'});return false;"><span class="ui-icon ui-icon-add-source"></span>电源</a></li>
+				<li id="menu_add_resist"><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-resist'});return false;"><span class="ui-icon ui-icon-add-resist"></span>电阻</a></li>
+				<li id="menu_add_bulb"><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-bulb'});return false;"><span class="ui-icon ui-icon-add-bulb"></span>灯泡</a></li>
+				<li id="menu_add_capa"><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-capa'});return false;"><span class="ui-icon ui-icon-add-capa"></span>电容器</a></li>
+				<li id="menu_add_switch"><a href="#" onclick="CanvasMgr.OnSetAddState(null,{cmd:'add-switch'});return false;"><span class="ui-icon ui-icon-add-switch"></span>开关</a></li>
+			</ul>
+		</li>
+		<li id="menu_compute_elec"><a href="#" onclick="CanvasMgr.OnComputeElec();return false;"><span class="ui-icon ui-icon-check"></span>计算电流</a></li>
+		<li id="menu_show_pressure" style="display:none;"><a href="#" onclick="CanvasMgr.OnShowPressure();return false;"><span class="ui-icon ui-icon-link"></span>显示电势差</a></li>
+		<li id="menu_unlock" style="display:none;"><a href="#" onclick="CanvasMgr.OnUnlock();return false;"><span class="ui-icon ui-icon-unlocked"></span>解除编辑限制</a></li>
+		<li id="menu_group_setting"><a href="#" class="sub" tabindex="1"><span class="ui-icon ui-icon-gear"></span>设置</a><img src="o-css/menu-images/up.gif" alt="" />
+			<ul>
+				<li id="menu_set_move_body_sense"><a href="#" onclick="CanvasMgr.OnSetMoveBodySense();return false;"><span class="ui-icon ui-icon-arrow-4"></span>移动物体距离</a></li>
+				<li id="menu_set_leave_out_dis"><a href="#" onclick="CanvasMgr.OnSetLeaveOutDis();return false;"><span class="ui-icon ui-icon-grip-dotted-horizontal"></span>导线合并最小距离</a></li>
+				<li id="menu_set_text_color"><a href="#" onclick="CanvasMgr.OnSetTextColor();return false;"><span class="ui-icon ui-icon-tag"></span>标签颜色</a></li>
+				<li id="menu_set_focus_lead_style"><a href="#" onclick="CanvasMgr.OnSetFocusLeadStyle();return false;"><span class="ui-icon ui-icon-minus"></span>焦点导线样式</a></li>
+				<li id="menu_add_set_focus_crun_color"><a href="#" onclick="CanvasMgr.OnSetFocusCrunColor();return false;"><span class="ui-icon ui-icon-add-crun"></span>焦点结点颜色</a></li>
+				<li id="menu_add_set_focus_ctrl_color"><a href="#" onclick="CanvasMgr.OnSetFocusCtrlColor();return false;"><span class="ui-icon ui-icon-battery-1"></span>焦点电学元件颜色</a></li>
+			</ul>
+		</li>
+		<li id="menu_search"><a href="#" onclick="CanvasMgr.OnSearch();return false;" ><span class="ui-icon ui-icon-search"></span>搜索</a></li>
+	</ul>
+
+</td></tr>
+</tbody>
+</table>
+
+<div style="display:none;" id="mySStoreDlgDiv">
+<table style="margin:15px;">
+    <tr style="height:30px;">
+        <td style="weight:70px;">查找范围：</td>
+        <td>
+            <select style="height:20px;" id="searchRangeSelect" onchange="onSearchRangeChanged()">
+				<option value="-5">所有物体</option>
+				<option value="-3">导线</option>
+				<option value="-1">结点</option>
+				<option value="-4">所有电学元件</option>
+				<option value="0">某种电学元件</option>
+			</select>
+			<select style="height:20px;display:none;" id="searchCtrlTypeSelect"></select>
+        </td>
+    </tr>
+    <tr style="height:30px;">
+        <td style="weight:70px;">查找依据：</td>
+        <td>
+            <select style="height:20px;" id="searchBySelect">
+				<option value="0">名称(标签)</option>
+				<option value="1">序号</option>
+			</select>
+        </td>
+    </tr>
+    <tr style="height:30px;">
+        <td style="weight:70px;">关键字：</td>
+        <td><input style="height:20px;" type="text" id="searchKeywordInput" placeholder="可为空" /></td>
+    </tr>
+    <tr style="height:30px;">
+        <td colspan="2">
+			<input type="checkbox" id="searchIsWholeWordInput" style="align:left;" />全词匹配
+			<input type="checkbox" id="searchIsMatchCaseInput" style="align:left;margin-left:15px;" />区分大小写
+		</td>
+    </tr>
+    <tr style="height:30px;">
+        <td colspan="2">
+			方向：
+            <input type="radio" value="true" name="searchIsPreName" />上一个
+            <input type="radio" value="false" name="searchIsPreName" checked="" />下一个
+        </td>
+    </tr>
+    <tr style="height:30px;">
+        <td colspan="2">
+			<input type="button" value="查找" style="width:130px;" id="searchOkButton" />
+			<input type="button" value="取消" style="width:82px;margin-left:15px;" id="searchCancelButton" />
+		</td>
+    </tr>
+</table>
+</div>
+
+<script type="text/javascript">
+function onSearchRangeChanged() {
+	var sr = $("#searchRangeSelect");
+	
+	// 选择电学元件类型
+	var sctDisplay = "none";
+	if (sr.get(0).selectedIndex==4)
+		sctDisplay = "";
+	$("#searchCtrlTypeSelect").css({"display":sctDisplay});
+	
+	// 导线不能使用名称查询
+	if (sr.get(0).selectedIndex==1)  {
+		$("#searchBySelect").get(0).selectedIndex = 1;
+		$("#searchBySelect").attr("disabled", "true");
+	} else {
+		$("#searchBySelect").removeAttr("disabled");
+	}
+}
+</script>
+
+
+<script type="text/javascript">
+var GlobalCanvas;
+function pageOnload() {
+	GlobalCanvas = document.getElementById("myCanvas");
+	var jc = $(GlobalCanvas);
+	
+	CanvasMgr.OnInitDialog(GlobalCanvas);
+	
+	jc.bind("mousedown", function() {return CanvasMgr.OnMouseDown(arguments[0]||window.event);});
+	jc.bind("mouseup", function() {return CanvasMgr.OnMouseUp(arguments[0]||window.event);});
+	jc.bind("dblclick", function() {return CanvasMgr.OnLButtonDblClk(arguments[0]||window.event);});
+	jc.bind("mousemove", function() {return CanvasMgr.OnMouseMove(arguments[0]||window.event);});
+	
+	jc.bind("focus", function() {return CanvasMgr.OnSetFocus(arguments[0]||window.event);});
+	jc.bind("blur", function() {return CanvasMgr.OnKillFocus(arguments[0]||window.event);});
+	
+	jc.bind("keydown", function() {return CanvasMgr.OnKeyDown(arguments[0]||window.event);});
+	jc.bind("keyup", function() {return CanvasMgr.OnKeyUp(arguments[0]||window.event);});
+	
+	
+	$(document).contextmenu({
+		addClass: "myCanvasMenuClass",
+		delegate: ".canvas-menu",
+		hide: { effect: "fadeOut", duration: "fast" },
+		autoFocus: true,
+		preventContextMenuForPopup: true,
+		preventSelect: true,
+		show: { effect: "slideDown", duration: "fast" },
+		taphold: false,
+		menu: null,
+		select: function(event, ui) {return true;},
+		beforeOpen: CanvasMgr.BeforePopupMenu
+	});
+}
+</script>
+
+<script type="text/javascript">
+function disableMenuItem(menuItemId) {
+	var menuItem = document.getElementById(menuItemId);
+	menuItem.style.display = "none";
+}
+function enableMenuItem(menuItemId) {
+	var menuItem = document.getElementById(menuItemId);
+	menuItem.style.display = "";
+}
+</script>
+	
+</body>
+</html>
