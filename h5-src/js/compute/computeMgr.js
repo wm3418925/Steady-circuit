@@ -123,8 +123,10 @@ ComputeMgr.CollectCircuitInfo = function()
 	ComputeMgr.groupCount = 0;	//组数,同一组的在一个连通图中,分组建立方程
 	ComputeMgr.circuitCount = 0;	//线路数
 	group = new Array(ComputeMgr.crun.length);		//组数不会超过ComputeMgr.crunCount
-	ComputeMgr.crun2 = GenrateArrayWithElementInitFunc(CRUN2.CreateNew, ComputeMgr.crun.length);	//用于计算的结点
-	ComputeMgr.circu = GenrateArrayWithElementInitFunc(CIRCU.CreateNew, ComputeMgr.crun.length*2);	//线路数不会超过ComputeMgr.crunCount*2
+	ComputeMgr.crun2 = new Array();
+	for (i=ComputeMgr.crun.length-1;i>=0;--i) ComputeMgr.crun2.push(new CRUN2());	//用于计算的结点
+	ComputeMgr.circu = new Array();
+	for (i=ComputeMgr.crun.length*2-1;i>=0;--i) ComputeMgr.circu.push(new CIRCU());	//线路数不会超过 ComputeMgr.crun.length*2
 	for (i=ComputeMgr.crun.length-1; i>=0; --i) group[i] = i;
 
 	//2，检索电路,以结点为头和尾-----------------------------------
@@ -298,7 +300,7 @@ ComputeMgr.CollectCircuitInfo = function()
 			{
 				state = true;	//改变了
 				interFlag[next] = true;
-				ROAD.Clone(roads[next], roads[i]);
+				ROAD_Copy(roads[next], roads[i]);
 				roads[next].InsertPointAtTail(i);
 			}
 
@@ -310,7 +312,7 @@ ComputeMgr.CollectCircuitInfo = function()
 				{
 					state = true;	//改变了
 					interFlag[next] = true;
-					ROAD.Clone(roads[next], roads[i]);
+					ROAD_Copy(roads[next], roads[i]);
 					roads[next].InsertPointAtTail(i);
 				}
 			}
@@ -344,7 +346,7 @@ ComputeMgr.CreateEquation = function()
 	ComputeMgr.maps = maps = new Array(ComputeMgr.groupCount);
 	for (i=ComputeMgr.groupCount-1; i>=0; --i)
 	{
-		maps[i] = CRUNMAP.CreateNew(mapsSizeArray[i]);
+		maps[i] = new CRUNMAP(mapsSizeArray[i]);
 		maps[i].size = 0;
 	}
 	for (i=ComputeMgr.crun.length-1; i>=0; --i) if (ComputeMgr.crun2[i].group >= 0)
@@ -408,7 +410,7 @@ ComputeMgr.CreateEquation = function()
 		size = nowMap.size;
 
 		outPutBuf = new Array(nowMap.circuitCount+1);	//初始化输出到方程的数组
-		ComputeMgr.equation[group] = Equation.CreateNew(size, nowMap.circuitCount);	//初始化方程类
+		ComputeMgr.equation[group] = new Equation(size, nowMap.circuitCount);	//初始化方程类
 
 		for (j=size-2; j>=0; --j) for (k=size-1; k>j; --k)
 		{
@@ -522,7 +524,8 @@ ComputeMgr.CreateEquation = function()
 			i = ComputeMgr.CONVERT(j, k, size);
 			if (nowMap.direct[i] <= 0) continue;
 			
-			roads = GenrateArrayWithElementInitFunc(ROAD.CreateNew, size);
+			roads = new Array();
+			for (var tmpi=size-1; tmpi>=0;--tmpi)roads.push(new ROAD());
 			ZeroArray(outPutBuf);	//缓存清零
 
 			//获得路径,建立方程
@@ -719,7 +722,7 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 {
 	/*double*/var press = 0;
 	/*double*/var resist = 0;
-	/*const Pointer*/var self = now;	//记录下起点
+	/*const Pointer*/var selfStart = now;	//记录下起点
 	/*Pointer*/var pre;
 	if (IsBodyCrun(now)) return ERRORELEC;	//指定物体不能是线路中包含的结点
 
@@ -782,24 +785,21 @@ ComputeMgr.TravelCircuitFindOpenBody = function(/*Pointer */now, /*int */dir)
 			}
 		}
 	}//do
-	while (now!=self);	//遍历到终点
+	while (now!=selfStart);	//遍历到终点
 
 	if (UNKNOWNELEC == flag)	//获得电压电阻
 	{
 		if (!IsFloatZero(resist))	//正常--电阻不是0
 		{
-			elec = press/resist;
-			return NORMALELEC;
+			return {"elec": press/resist, "dir": NORMALELEC};
 		}
 		else if (IsFloatZero(press))	//正常--电阻电压都是0
 		{
-			elec = 0;
-			return NORMALELEC;
+			return {"elec": 0, "dir": NORMALELEC};
 		}
 		else	//短路
 		{
-			elec = 0;
-			return SHORTELEC;
+			return {"elec": 0, "dir": SHORTELEC};
 		}
 	}
 
@@ -813,7 +813,6 @@ ComputeMgr.DistributeAnswer = function()
 	/*int*/var dir;		//下一个物体在当前物体的方向
 	/*Pointer*/var now;	//当前访问的线路控件
 	/*CRUN **/var end;		//线路的终点
-	/*double*/var elec;
 
 	//1,初始化每个导线和电学元件的elecDir,当做标记使用
 	for (i=ComputeMgr.lead.length-1; i>=0; --i) ComputeMgr.lead[i].elecDir = UNKNOWNELEC;
@@ -904,24 +903,25 @@ ComputeMgr.DistributeAnswer = function()
 		now = ComputeMgr.ctrl[i];
 
 		//2,从左边遍历,获得电阻和电压
-		dir = ComputeMgr.TravelCircuitGetOrSetInfo(now, 0, elec, UNKNOWNELEC);
+		var elecInfo = ComputeMgr.TravelCircuitGetOrSetInfo(now, 0, null, UNKNOWNELEC);
 
 		//3,把结果放入物体
-		if (ERRORELEC == dir)
+		if (ERRORELEC == elecInfo.dir)
 		{
 			throw "计算电流出现错误!!!";
 		}
 		else
 		{
-			if (NORMALELEC == dir && elec < 0)
+			if (NORMALELEC == elecInfo.dir && elecInfo.elec < 0)
 			{
 				//电流改为正数,调转遍历方向
-				elec = -elec;
-				ComputeMgr.TravelCircuitGetOrSetInfo(now, 1, elec, dir);
+				elecInfo.elec = -elecInfo.elec;
+				elecInfo.dir = 1-elecInfo.dir;
+				ComputeMgr.TravelCircuitGetOrSetInfo(now, 1, elecInfo.elec, NORMALELEC);
 			}
 			else 
 			{
-				ComputeMgr.TravelCircuitGetOrSetInfo(now, 0, elec, dir);
+				ComputeMgr.TravelCircuitGetOrSetInfo(now, 0, elecInfo.elec, NORMALELEC);
 			}
 		}
 	}

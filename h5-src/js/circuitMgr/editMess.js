@@ -12,7 +12,7 @@ Manager.AddBody = function(pos) {
 
 		Manager.AddCrun(pos);				//编辑函数
 		return true;
-	} else if (Pointer.IsCtrl(temp)) {
+	} else if (IsBodyTypeCtrl(temp)) {
 		if (Manager.ctrl.length >= MAX_CTRL_COUNT) {
 			swal({text:"电学元件超过最大数量!", title:"电学元件添加失败!", type:"warning"});
 			return false;
@@ -28,7 +28,7 @@ Manager.AddBody = function(pos) {
 //显示和改变物体属性
 Manager.Property = function(body, isReadOnly) {
 	var tempStr;
-	var list = LISTDATA.CreateNew();
+	var list = new LISTDATA();
 	var model = null;
 	var pointer = Manager.GetBodyPointer(body);
 
@@ -48,7 +48,7 @@ Manager.Property = function(body, isReadOnly) {
 	}
 
 	Manager.PaintWithSpecialColorAndRect(pointer, false);
-	var dlg = MyPropertyDlg.CreateNew(list, isReadOnly, model, tempStr, Manager.canvas, null, function(){Manager.PaintAll();});
+	var dlg = MyPropertyDlg.Init(list, isReadOnly, model, tempStr, Manager.canvas, null, function(){Manager.PaintAll();});
 	dlg.DoModal();
 };
 
@@ -63,7 +63,7 @@ Manager.ChangeCtrlStyle = function(body) {
 	Manager.tmpEditCtrl = pointer.p;
 
 	//初始化list数据
-	var list = LISTDATA.CreateNew();
+	var list = new LISTDATA();
 	list.SetDataParent(Manager);
 	list.SetAEnumMember(CTRL_TYPE_ENUM, "电学元件的类型", "tmpEditCtrlNewStyle");
 
@@ -97,7 +97,7 @@ Manager.ChangeCtrlStyle = function(body) {
 	
 	//显示对话框
 	Manager.PaintWithSpecialColorAndRect(pointer, false);
-	var dlg = MyPropertyDlg.CreateNew(list, false, Manager.GetCtrlPaintImageId(pointer.p), tempStr, Manager.canvas, changedCallback, function(){Manager.PaintAll();});
+	var dlg = MyPropertyDlg.Init(list, false, Manager.GetCtrlPaintImageId(pointer.p), tempStr, Manager.canvas, changedCallback, function(){Manager.PaintAll();});
 	dlg.DoModal();
 };
 

@@ -34,7 +34,7 @@ Manager.ShowAddBody = function(point) {
 
 		Manager.SetCursor("none");
 		return true;
-	} else if (Pointer.IsCtrl(Manager.addState)) {
+	} else if (IsBodyTypeCtrl(Manager.addState)) {
 		var tempImage = Manager.ctrlImageList[Manager.addState*4];
 		
 		if (Manager.lastMoveOnPos.x > -100)
@@ -146,7 +146,7 @@ Manager.ShowBodyElec = function(body) {
 	var elec;		//电流大小
 	var elecDir;	//电流方向
 	var model = null;	//property显示物体的示例
-	var list = LISTDATA.CreateNew();	//property显示的数据
+	var list = new LISTDATA();	//property显示的数据
 
 	//1,获得电流信息
 	if (pointer.IsOnLead()) {
@@ -220,7 +220,7 @@ Manager.ShowBodyElec = function(body) {
 
 	//4,显示对话框
 	Manager.PaintWithSpecialColorAndRect(pointer, false);
-	var dlg = MyPropertyDlg.CreateNew(list, true, model, title, Manager.canvas, null, function(){Manager.PaintAll();});
+	var dlg = MyPropertyDlg.Init(list, true, model, title, Manager.canvas, null, function(){Manager.PaintAll();});
 	dlg.DoModal();
 
 	return true;

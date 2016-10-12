@@ -1,6 +1,11 @@
+// static函数
+function IsBodyTypeCtrl(type) {
+	return (type >= BODY_SOURCE) && (type <= BODY_SWITCH);
+};
 
+	
 //指向3个基本物体的结构
-var Pointer = {
+function Pointer(p, atState, style) {
 
 	/*
 	// 指向基本物体
@@ -18,26 +23,24 @@ var Pointer = {
 	BODY_TYPE style;
 	*/
 
-	CreateNew: function() {
-		var newObj = {p: null, atState: 0, style: BODY_NO};
-		newObj.__proto__ = Pointer;
-		return newObj;
-	},
+	this.p = ((p!=undefined) ? p : null);
+	this.atState = ((atState!=undefined) ? atState : 0);
+	this.style = ((style!=undefined) ? style : BODY_NO);
+}
+
 	//保存信息到json
-	GenerateStoreJsonObj: function() {
+Pointer.prototype.GenerateStoreJsonObj = function() {
 		var index = 0;
 		if (this.p != null)
 			index = this.p.index;
 
 		return {"index":index, "atState":this.atState, "style":this.style};
-	},
-	Clone: function(){
-		var newObj = {p: this.p, atState: this.atState, style: this.style};
-		newObj.__proto__ = Pointer;
-		return newObj;
-	},
+	};
+Pointer.prototype.Clone = function(){
+		return new Pointer(this.p, this.atState, this.style);
+	};
 	//从json读取信息
-	ReadFromStoreJsonObj: function(jsonObj, leadList, crunList, ctrlList) {
+Pointer.prototype.ReadFromStoreJsonObj= function(jsonObj, leadList, crunList, ctrlList) {
 		this.Clear();
 		
 		this.atState = jsonObj.atState;
@@ -64,119 +67,115 @@ var Pointer = {
 		}
 
 		return true;
-	},
+	};
 	
 	//清空指针
-	Clear: function() {
+Pointer.prototype.Clear = function() {
 		this.p = null;
 		this.atState = 0;
 		this.style = BODY_NO;
-	},
+	};
 
 	//设置addState
-	SetAtState: function(newState) {
+Pointer.prototype.SetAtState= function(newState) {
 		this.atState = newState;
-	},
+	};
 	//获得addState
-	GetAtState: function() {
+Pointer.prototype.GetAtState = function() {
 		return this.atState;
-	},
+	};
 	//获得style
-	GetStyle: function() {
+Pointer.prototype.GetStyle = function() {
 		return this.style;
-	},
+	};
 	//判断结构体是否指向物体
-	IsOnAny: function() {
+Pointer.prototype.IsOnAny = function() {
 		return this.atState != 0 && this.atState <= 4;
-	},
+	};
 	//判断是否在导线上
-	IsOnLead: function() {
+Pointer.prototype.IsOnLead = function() {
 		return BODY_LEAD == this.style || this.atState <= -2;
-	},
+	};
 	//判断是否在水平线上
-	IsOnHoriLead: function() {
+Pointer.prototype.IsOnHoriLead = function() {
 		return this.atState <= -2 && (-this.atState)&1;
-	},
+	};
 	//判断是否在竖直线上
-	IsOnVertLead: function() {
+Pointer.prototype.IsOnVertLead = function() {
 		return this.atState <= -2 && !( (-this.atState)&1 );
-	},
+	};
 	//判断是否在物体(结点或控件)上
-	IsOnBody: function(isNotIncludeConnPoint/*true*/) {
+Pointer.prototype.IsOnBody= function(isNotIncludeConnPoint/*true*/) {
 		if (isNotIncludeConnPoint == undefined) isNotIncludeConnPoint = true;
 		
 		if (isNotIncludeConnPoint)	//判断是否在物体上,不包括连接点
-			return -1 == this.atState && (BODY_CRUN == this.style || Pointer.IsCtrl(this.style));
+			return -1 == this.atState && (BODY_CRUN == this.style || IsBodyTypeCtrl(this.style));
 		else		//判断是否在物体上,包括连接点
-			return BODY_CRUN == this.style || Pointer.IsCtrl(this.style);
-	},
+			return BODY_CRUN == this.style || IsBodyTypeCtrl(this.style);
+	};
 	//判断是否在结点上
-	IsOnCrun: function() {
+Pointer.prototype.IsOnCrun = function() {
 		return BODY_CRUN == this.style;
-	},
+	};
 	//判断是否在控件上
-	IsOnCtrl: function() {
-		return Pointer.IsCtrl(this.style);
-	},
+Pointer.prototype.IsOnCtrl = function() {
+		return IsBodyTypeCtrl(this.style);
+	};
 	//判断是否在连接点上
-	IsOnConnectPos: function() {
+Pointer.prototype.IsOnConnectPos = function() {
 		return this.atState >= 1 && this.atState <= 4;
-	},
+	};
 	
 	//指向导线
-	SetOnLead: function(lead, isSetAt/*true*/) {
+Pointer.prototype.SetOnLead= function(lead, isSetAt/*true*/) {
 		if (isSetAt == undefined) isSetAt = true;
 		
 		this.p = lead;
 		this.style = BODY_LEAD;
 		if (isSetAt) this.atState = -2;
-	},
+	};
 	//指向结点
-	SetOnCrun: function(crun, isSetAt/*true*/) {
+Pointer.prototype.SetOnCrun= function(crun, isSetAt/*true*/) {
 		if (isSetAt == undefined) isSetAt = true;
 		
 		this.p = crun;
 		this.style = BODY_CRUN;
 		if (isSetAt) this.atState = -1;
-	},
+	};
 	//指向控件
-	SetOnCtrl: function(ctrl, isSetAt) {
+Pointer.prototype.SetOnCtrl= function(ctrl, isSetAt) {
 		this.p = ctrl;
 		this.style = ctrl.style;	//这里控件必须初始化完毕
 		if (isSetAt) this.atState = -1;
-	},
+	};
 	
 	//判断当前物体是否指向这个导线
-	IsLeadSame: function(other) {
+Pointer.prototype.IsLeadSame= function(other) {
 		return this.IsOnLead() && this.p == other;
-	},
+	};
 	//判断当前物体是否指向这个结点
-	IsCrunSame: function(other) {
+Pointer.prototype.IsCrunSame= function(other) {
 		return this.IsOnCrun() && this.p == other;
-	},
+	};
 	//判断当前物体是否指向这个控件
-	IsCtrlSame: function(other) {
+Pointer.prototype.IsCtrlSame= function(other) {
 		return this.IsOnCtrl() && this.p == other;
-	},
+	};
 	//判断两个Pointer是否指向同一个物体,不判断atState
-	IsBodySame: function(other) {
+Pointer.prototype.IsBodySame= function(other) {
 		return (this.style == other.style) && (this.p == other.p);
-	},
+	};
 	//判断两个Pointer结构是否一样,判断atState
-	IsAllSame: function(other) {
+Pointer.prototype.IsAllSame= function(other) {
 		return (this.atState == other.atState)&& (this.style == other.style) && (this.p == other.p);
-	},
+	};
 	//获得连接点对应的导线编号(0,1,2,3)
-	GetLeadIndex: function() {
+Pointer.prototype.GetLeadIndex = function() {
 		return this.atState - 1;
-	},
-	// static函数
-	IsCtrl: function(type) {
-		return (type >= BODY_SOURCE) && (type <= BODY_SWITCH);
-	},
+	};
 
 	//从物体和连接点位置获得导线端点坐标
-	GetPosFromBody: function() {
+Pointer.prototype.GetPosFromBody = function() {
 		var pos = {};
 		var leadIndex = this.GetLeadIndex();
 
@@ -217,7 +216,7 @@ var Pointer = {
 	},
 
 	//获得连接点位置
-	GetConnectPosDir: function() {
+Pointer.prototype.GetConnectPosDir= function() {
 		ASSERT(this.IsOnConnectPos());
 		
 		if (this.IsOnCrun()) {
@@ -251,6 +250,4 @@ var Pointer = {
 
 			return -1;
 		}
-	}
-
-};
+	};

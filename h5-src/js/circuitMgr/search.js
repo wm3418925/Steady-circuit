@@ -3,7 +3,7 @@ Manager.GetSearchStartFocus = function() {
 	if (Manager.focusBody.IsOnBody() || Manager.focusBody.IsOnLead())
 		return Manager.focusBody.Clone();
 	
-	var ssf = Pointer.CreateNew();
+	var ssf = new Pointer();
 	if (Manager.ctrl.length > 0) {
 		ssf.SetOnCtrl(Manager.ctrl[Manager.ctrl.length-1], true);
 		return ssf;
@@ -26,11 +26,11 @@ Manager.SearchNext = function(searchParam) {
 	var round, j;
 	var isSearchLead = (searchParam.range == BODY_ALL || searchParam.range == BODY_LEAD) && searchParam.searchBy == SEARCH_BY_ID;
 	var isSearchCrun = (searchParam.range == BODY_ALL || searchParam.range == BODY_CRUN);
-	var isSearchCtrl = (searchParam.range == BODY_ALL || searchParam.range == BODY_ALLCTRL || Pointer.IsCtrl(searchParam.range));
-	var kmp = KMP.CreateNew(searchParam.keyWord, searchParam.isWholeWord, searchParam.isMatchCase || searchParam.searchBy == SEARCH_BY_ID);	//搜索序号时可以区分大小写, 加快速度
+	var isSearchCtrl = (searchParam.range == BODY_ALL || searchParam.range == BODY_ALLCTRL || IsBodyTypeCtrl(searchParam.range));
+	var kmp = new KMP(searchParam.keyWord, searchParam.isWholeWord, searchParam.isMatchCase || searchParam.searchBy == SEARCH_BY_ID);	//搜索序号时可以区分大小写, 加快速度
 	
 	var ssf = Manager.GetSearchStartFocus();
-	var newFocus = Pointer.CreateNew();
+	var newFocus = new Pointer();
 
 	for (round=0; round<2; ++round) {
 		//search lead ----------------------------------------------------------
@@ -130,11 +130,11 @@ Manager.SearchPre = function(searchParam) {
 	var round, j;
 	var isSearchLead = (searchParam.range == BODY_ALL || searchParam.range == BODY_LEAD) && searchParam.searchBy == SEARCH_BY_ID;
 	var isSearchCrun = (searchParam.range == BODY_ALL || searchParam.range == BODY_CRUN);
-	var isSearchCtrl = (searchParam.range == BODY_ALL || searchParam.range == BODY_ALLCTRL || Pointer.IsCtrl(searchParam.range));
-	var kmp = KMP.CreateNew(searchParam.keyWord, searchParam.isWholeWord, searchParam.isMatchCase || searchParam.searchBy == SEARCH_BY_ID);	//搜索序号时可以区分大小写, 加快速度
+	var isSearchCtrl = (searchParam.range == BODY_ALL || searchParam.range == BODY_ALLCTRL || IsBodyTypeCtrl(searchParam.range));
+	var kmp = new KMP(searchParam.keyWord, searchParam.isWholeWord, searchParam.isMatchCase || searchParam.searchBy == SEARCH_BY_ID);	//搜索序号时可以区分大小写, 加快速度
 	
 	var ssf = Manager.GetSearchStartFocus();
-	var newFocus = Pointer.CreateNew();
+	var newFocus = new Pointer();
 
 	for (round=0; round<2; ++round) {
 		//search ctrl ----------------------------------------------------------

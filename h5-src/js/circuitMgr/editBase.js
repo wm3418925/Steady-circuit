@@ -3,11 +3,11 @@
 Manager.AddCtrl = function(pos, style) {
 	ASSERT(Manager.ctrl.length < MAX_CTRL_COUNT);
 
-	var newElement = CTRL.CreateNew(Manager.ctrl.length, pos.x, pos.y, style);
+	var newElement = new CTRL(Manager.ctrl.length, pos.x, pos.y, style);
 	Manager.ctrl.push(newElement);
 
 	Manager.PaintCtrlText(newElement);
-	var newFocus = Pointer.CreateNew();
+	var newFocus = new Pointer();
 	newFocus.SetOnCtrl(newElement, true);
 	Manager.FocusBodyPaint(newFocus);
 };
@@ -16,11 +16,11 @@ Manager.AddCtrl = function(pos, style) {
 Manager.AddCrun = function(pos) {
 	ASSERT(Manager.crun.length < MAX_CRUN_COUNT);
 
-	var newElement = CRUN.CreateNew(Manager.crun.length, pos.x, pos.y);
+	var newElement = new CRUN(Manager.crun.length, pos.x, pos.y);
 	Manager.crun.push(newElement);
 
 	Manager.PaintCrunText(newElement);
-	var newFocus = Pointer.CreateNew();
+	var newFocus = new Pointer();
 	newFocus.SetOnCrun(newElement, true);
 	Manager.FocusBodyPaint(newFocus);
 };
@@ -32,7 +32,7 @@ Manager.AddLead = function(a, b) {
 	ASSERT(!a.IsBodySame(b));							//不是同一个物体
 
 	//添加导线
-	var newElement = LEAD.CreateNew(Manager.lead.length, null, a, b, true);
+	var newElement = new LEAD(Manager.lead.length, null, a, b, true);
 	Manager.lead.push(newElement);
 
 	//连接物体指向导线
@@ -51,7 +51,7 @@ Manager.DeleteLead = function(l) {
 	var dira = a.GetLeadIndex(), dirb = b.GetLeadIndex();
 
 	//如果删除物体是焦点,清除焦点
-	var pointer = Pointer.CreateNew();
+	var pointer = new Pointer();
 	pointer.SetOnLead(l);
 	Manager.FocusBodyClear(pointer);
 
@@ -161,7 +161,7 @@ Manager.ConnectBodyLead = function(posb) {
 	Manager.DeleteLead(Manager.motiBody[1].p);	//删除原来导线
 	Manager.AddCrun(posb);	//添加结点
 
-	var newCrun = Pointer.CreateNew();
+	var newCrun = new Pointer();
 	newCrun.SetOnCrun(Manager.crun[Manager.crun.length-1], true);	//newCrun指向新添加结点
 
 	newCrun.SetAtState(dir1);

@@ -6,8 +6,6 @@ var FILE_EXTENT_DOT = ".wan";					//文件后缀, 带.
 var DEFAULT_FILE_NAME = "data.wan";				//默认文件名
 var FILE_LIST = "电路文件(*.wan)|*.wan||";		//支持文件列表
 
-var FILE_VERSION = 13;					//文件版本,不同版本文件不予读取
-
 
 
 //指向物体的类型

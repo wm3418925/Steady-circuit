@@ -1,15 +1,5 @@
 var CanvasMgr = {};
 
-/*
-	ON_COMMAND(IDM_FILE_NEW, OnFileNew)
-	ON_COMMAND(IDM_FILE_OPEN, OnFileOpen)
-	ON_COMMAND(IDM_FILE_SAVE, OnFileSave)
-	ON_COMMAND(IDM_FILE_SAVE_AS, OnFileSaveAs)
-	ON_COMMAND(IDM_SAVEASPIC, OnSaveAsPicture)
-	
-	ON_COMMAND(IDM_EXIT, OnExit)
-*/
-// ///////////////////////////////////////////////////////////////////////////
 //  private function
 
 // 输入上锁
@@ -45,10 +35,9 @@ CanvasMgr.PasteByHotKey = function(e) {
 };
 
 // 设置窗口标题
-CanvasMgr.SetWindowText = function() {
+CanvasMgr.SetWindowText = function(filePath) {
 	var title;
 	
-	var filePath = Manager.GetFilePath();
 	if (null == filePath || 0 == filePath.length) {
 		title = "新电路文件" + FILE_EXTENT_DOT;
 	} else {
@@ -61,15 +50,6 @@ CanvasMgr.SetWindowText = function() {
 
 // 关闭文件前用户选择保存当前文件
 CanvasMgr.SaveFileBeforeClose = function(caption, hasCancelButton, yesnoCallback) {
-	var filePath = Manager.GetFilePath();
-	var note;
-
-	if (null == filePath || 0 == filePath.length) {
-		note = "保存文件吗 ?";
-	} else {
-		note = "电路保存到文件 :\n\t" + filePath + "\n吗 ?";
-	}
-
 	var layerParam = {
 		type: 1,
 		scrollbar: false,
@@ -77,7 +57,7 @@ CanvasMgr.SaveFileBeforeClose = function(caption, hasCancelButton, yesnoCallback
 		maxWidth: 500,
 		
 		title: caption,
-		content: note
+		content: "保存文件吗 ?"
 	};
 	if (hasCancelButton) {
 		layerParam.btn = ['保存', '继续编辑', '不保存'];
@@ -100,18 +80,19 @@ CanvasMgr.OnInitDialog = function(canvas) {
 	CanvasMgr.m_inputLock = false;	//初始输入不上锁
 	CanvasMgr.m_mousePos = {x:0, y:0};
 
-	//设置滚动条范围
-	//SetScrollRange(SB_HORZ, 0, 50);	//水平
-	//SetScrollRange(SB_VERT, 0, 30);	//竖直
-
 	//初始化电路 Manager
 	CanvasMgr.canvas = canvas;
 	Manager.Init(canvas);
-	Manager.ReadFile("testData.json");
-	Manager.PaintAll();
 	
-	CanvasMgr.SetWindowText();
+	Manager.PaintAll();
+	CanvasMgr.SetWindowText(null);
 
+	return true;
+};
+CanvasMgr.ReadTempleteFile = function(readFileName) {
+	Manager.ReadFile(readFileName);
+	Manager.PaintAll();
+	CanvasMgr.SetWindowText(readFileName);
 	return true;
 };
 
@@ -173,7 +154,7 @@ CanvasMgr.OnLButtonDblClk = function(e) {
 	if (!e) e = window.event;
 	
 	var point = GetClientPosOfEvent(e, CanvasMgr.canvas);
-	var body = FOCUS_OR_POS.CreateNew(false, point);
+	var body = new FOCUS_OR_POS(false, point);
 
 	if (CanvasMgr.m_inputLock) {	//显示电流或电势差
 		if (Manager.ShowBodyElec(body))
@@ -376,7 +357,7 @@ CanvasMgr.BeforePopupMenu = function(e, ui) {
 			menuArray.push({title: "查看电流 <kbd>Ctrl+L</kbd>", uiIcon: "ui-icon-arrowthick-1-e", action:CanvasMgr.OnPosBodyShowElec});
 		} else if (BODY_CRUN == type) {			//右击结点
 			menuArray.push({title: "查看属性 <kbd>Ctrl+P</kbd>", uiIcon: "ui-icon-info", action:CanvasMgr.OnPosBodyProperty});
-		} else if (Pointer.IsCtrl(type)) {		//右击控件
+		} else if (IsBodyTypeCtrl(type)) {		//右击控件
 			menuArray.push({title: "查看电流 <kbd>Ctrl+L</kbd>", uiIcon: "ui-icon-arrowthick-1-e", action:CanvasMgr.OnPosBodyShowElec});
 			menuArray.push({title: "查看属性 <kbd>Ctrl+P</kbd>", uiIcon: "ui-icon-info", action:CanvasMgr.OnPosBodyProperty});
 		}
@@ -404,7 +385,7 @@ CanvasMgr.BeforePopupMenu = function(e, ui) {
 			menuArray.push({title: "删除 <kbd>Delete</kbd>", uiIcon: "ui-icon-trash", action:CanvasMgr.OnPosBodyDelete});
 		}
 
-		if (Pointer.IsCtrl(type)) {
+		if (IsBodyTypeCtrl(type)) {
 			menuArray.push({title: "------------", disabled: true});
 			menuArray.push({title: "顺时针旋转90° <kbd>Ctrl+1</kbd>", uiIcon: "ui-icon-arrowrefresh-1-s", action:CanvasMgr.OnPosBodyRotateCtrl, cmd:"rotate90"});
 			menuArray.push({title: "旋转180° <kbd>Ctrl+2</kbd>", uiIcon: "ui-icon-refresh", action:CanvasMgr.OnPosBodyRotateCtrl, cmd:"rotate180"});
@@ -413,7 +394,7 @@ CanvasMgr.BeforePopupMenu = function(e, ui) {
 			menuArray.push({title: "电学元件类型", uiIcon: "ui-icon-flag", action:CanvasMgr.OnPosBodyChangeCtrlStyle});
 		}
 
-		if (BODY_LEAD == type || Pointer.IsCtrl(type))	//导线或控件上
+		if (BODY_LEAD == type || IsBodyTypeCtrl(type))	//导线或控件上
 			menuArray.push({title: "查看电流 <kbd>Ctrl+L</kbd>", uiIcon: "ui-icon-arrowthick-1-e", action:CanvasMgr.OnPosBodyShowElec});
 		
 		menuArray.push({title: "------------", disabled: true});
@@ -424,119 +405,6 @@ CanvasMgr.BeforePopupMenu = function(e, ui) {
 	return true;
 };
 
-		
-
-// 文件函数----------------------------------------------------------------↓
-// 新建文件
-CanvasMgr.OnFileNew = function() {
-	if (CanvasMgr.m_inputLock) return;
-
-	var yesnoCallback = function() {
-		//建立新文件
-		Manager.CreateFile();
-		Manager.PaintAll();
-		CanvasMgr.SetWindowText();
-	};
-	
-	//关闭文件前用户选择保存当前文件
-	CanvasMgr.SaveFileBeforeClose("新建文件前", true, yesnoCallback);
-};
-
-// 从磁盘读取指定文件
-CanvasMgr.OnFileOpen = function() {
-	if (CanvasMgr.m_inputLock) return;
-
-	var yesnoCallback = function() {
-		//获得读取文件路径
-		var lpszOpenFile = new CFileDialog(	//生成对话框
-										true, 
-										FILE_EXTENT, 
-										DEFAULT_FILE_NAME, 
-										OFN_FILEMUSTEXIST,
-										FILE_LIST);
-
-		var szGetName;
-		if (lpszOpenFile.DoModal() == IDOK) {	//点击对话框确定按钮
-			szGetName = lpszOpenFile.GetPathName();	//得到文件的路径
-			lpszOpenFile = null;	//释放对话框资源
-		} else {
-			lpszOpenFile = null;	//释放对话框资源
-			return;
-		}
-
-		//读取文件
-		if (Manager.ReadFile(szGetName)) {
-			CanvasMgr.SetWindowText();	//更新窗口标题
-			Manager.PaintAll();		//读取文件后刷新
-		}
-	};
-	
-	//关闭文件前用户选择保存当前文件
-	CanvasMgr.SaveFileBeforeClose("打开文件前", true, yesnoCallback);
-};
-
-// 保存到文件
-CanvasMgr.OnFileSave = function() {
-	if (CanvasMgr.m_inputLock) return;
-
-	var path = Manager.GetFilePath();
-
-	if (path.length == 0) {	//路径为空
-		CanvasMgr.OnFileSaveAs();
-	} else {
-		Manager.SaveFile(path);
-	}
-};
-
-// 另存为文件
-CanvasMgr.OnFileSaveAs = function() {
-	if (CanvasMgr.m_inputLock) return;
-
-	//获得另存路径
-	var lpszOpenFile = new CFileDialog(	//生成对话框
-									false, 
-									FILE_EXTENT, 
-									DEFAULT_FILE_NAME, 
-									OFN_OVERWRITEPROMPT, 
-									FILE_LIST);
-
-	var szGetName;
-	if (lpszOpenFile.DoModal() == IDOK) {	//点击对话框确定按钮
-		szGetName = lpszOpenFile.GetPathName();	//得到文件的路径
-		lpszOpenFile = null;	//释放对话框资源
-	} else {
-		lpszOpenFile = null;	//释放对话框资源
-		return;
-	}
-
-	//另存文件
-	Manager.SaveFile(szGetName);	//保存文件
-	CanvasMgr.SetWindowText();		//更新窗口标题
-};
-
-// 保存电路到图片
-CanvasMgr.OnSaveAsPicture = function() {
-	//获得图片保存路径
-	var lpszOpenFile = new CFileDialog(	//生成对话框
-									false, 
-									"bmp", 
-									"shot.bmp", 
-									OFN_OVERWRITEPROMPT, 
-									"位图文件(*.bmp)|*.bmp||");
-	lpszOpenFile.m_ofn.lpstrTitle = "选择图片路径";
-
-	var szGetName;
-	if (lpszOpenFile.DoModal() == IDOK) {	//点击对话框确定按钮
-		szGetName = lpszOpenFile.GetPathName();	//得到文件的路径
-		lpszOpenFile = null;	//释放对话框资源
-	} else {
-		lpszOpenFile = null;	//释放对话框资源
-		return;
-	}
-
-	//保存图片
-	Manager.SaveAsPicture(szGetName);
-};
 
 
 
@@ -545,7 +413,7 @@ CanvasMgr.OnSaveAsPicture = function() {
 CanvasMgr.OnFocusBodyCut = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(true);
+	var body = new FOCUS_OR_POS(true);
 
 	Manager.CutBody(body);
 };
@@ -554,7 +422,7 @@ CanvasMgr.OnFocusBodyCut = function() {
 CanvasMgr.OnFocusBodyCopy = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(true);
+	var body = new FOCUS_OR_POS(true);
 
 	Manager.CopyBody(body);
 };
@@ -563,7 +431,7 @@ CanvasMgr.OnFocusBodyCopy = function() {
 CanvasMgr.OnFocusBodyDelete = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(true);
+	var body = new FOCUS_OR_POS(true);
 
 	Manager.DeleteFocusOrPosBody(body);
 };
@@ -603,7 +471,7 @@ CanvasMgr.OnSetAddState = function(e, ui) {
 
 // 焦点属性
 CanvasMgr.OnFocusBodyProperty = function() {
-	var body = FOCUS_OR_POS.CreateNew(true);
+	var body = new FOCUS_OR_POS(true);
 
 	Manager.Property(body, CanvasMgr.m_inputLock);
 };
@@ -612,7 +480,7 @@ CanvasMgr.OnFocusBodyProperty = function() {
 CanvasMgr.OnFocusBodyChangeCtrlStyle = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(true);
+	var body = new FOCUS_OR_POS(true);
 
 	Manager.ChangeCtrlStyle(body);
 };
@@ -621,7 +489,7 @@ CanvasMgr.OnFocusBodyChangeCtrlStyle = function() {
 CanvasMgr.OnFocusBodyRotateCtrl = function(nID) {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(true);
+	var body = new FOCUS_OR_POS(true);
 
 	Manager.RotateCtrl(body, nID);
 	Manager.PaintAll();
@@ -629,7 +497,7 @@ CanvasMgr.OnFocusBodyRotateCtrl = function(nID) {
 
 // 显示流过焦点的电流
 CanvasMgr.OnFocusBodyShowElec = function() {
-	var body = FOCUS_OR_POS.CreateNew(true);
+	var body = new FOCUS_OR_POS(true);
 
 	Manager.ShowBodyElec(body);
 };
@@ -638,7 +506,7 @@ CanvasMgr.OnFocusBodyShowElec = function() {
 CanvasMgr.OnSearch = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var dlg = MySearchDlg.CreateNew(CanvasMgr.canvas);
+	var dlg = MySearchDlg.Init(CanvasMgr.canvas);
 	dlg.DoModal();
 };
 
@@ -694,7 +562,7 @@ CanvasMgr.OnShowPressure = function() {
 
 // 显示流过右击物体的电流
 CanvasMgr.OnPosBodyShowElec = function() {
-	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
+	var body = new FOCUS_OR_POS(false, CanvasMgr.m_mousePos);
 
 	Manager.ShowBodyElec(body);
 };
@@ -725,7 +593,7 @@ CanvasMgr.OnUnlock = function() {
 CanvasMgr.OnPosBodyCopy = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
+	var body = new FOCUS_OR_POS(false, CanvasMgr.m_mousePos);
 
 	Manager.CopyBody(body);
 };
@@ -734,7 +602,7 @@ CanvasMgr.OnPosBodyCopy = function() {
 CanvasMgr.OnPosBodyCut = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
+	var body = new FOCUS_OR_POS(false, CanvasMgr.m_mousePos);
 
 	Manager.CutBody(body);
 };
@@ -743,7 +611,7 @@ CanvasMgr.OnPosBodyCut = function() {
 CanvasMgr.OnPosBodyDelete = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
+	var body = new FOCUS_OR_POS(false, CanvasMgr.m_mousePos);
 
 	Manager.DeleteFocusOrPosBody(body);
 };
@@ -758,7 +626,7 @@ CanvasMgr.OnPaste = function() {
 CanvasMgr.OnDeleteLead = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
+	var body = new FOCUS_OR_POS(false, CanvasMgr.m_mousePos);
 
 	Manager.DeleteFocusOrPosBody(body);
 };
@@ -782,7 +650,7 @@ CanvasMgr.OnPosBodyRotateCtrl = function(e, ui) {
 		return false;
 	}
 
-	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
+	var body = new FOCUS_OR_POS(false, CanvasMgr.m_mousePos);
 
 	Manager.RotateCtrl(body, angle90);
 	Manager.PaintAll();
@@ -790,7 +658,7 @@ CanvasMgr.OnPosBodyRotateCtrl = function(e, ui) {
 
 // 右击物体属性
 CanvasMgr.OnPosBodyProperty = function() {
-	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
+	var body = new FOCUS_OR_POS(false, CanvasMgr.m_mousePos);
 
 	Manager.Property(body, CanvasMgr.m_inputLock);
 };
@@ -799,7 +667,7 @@ CanvasMgr.OnPosBodyProperty = function() {
 CanvasMgr.OnPosBodyChangeCtrlStyle = function() {
 	if (CanvasMgr.m_inputLock) return;
 
-	var body = FOCUS_OR_POS.CreateNew(false, CanvasMgr.m_mousePos);
+	var body = new FOCUS_OR_POS(false, CanvasMgr.m_mousePos);
 
 	Manager.ChangeCtrlStyle(body);
 };
