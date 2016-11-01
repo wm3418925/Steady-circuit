@@ -114,7 +114,7 @@ function readFileComplete(xhr, textStatus) {
 Manager.ReadFile = function(newFileName) {
 	ASSERT(newFileName && newFileName.length > 0);
 
-	$.ajax({url:"/file-templete/"+newFileName+".json", async:false, success:readFileCallbackFunc, complete:readFileComplete});
+	$.ajax({url:"/file-templete/"+newFileName+".json", async:false, dataType:"json", success:readFileCallbackFunc, complete:readFileComplete});
 	return true;
 };
 
